@@ -3,6 +3,7 @@ package battleship.network;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.List;
 
 public class Server implements Subject {
 	private int portNumber;
@@ -38,7 +39,7 @@ public class Server implements Subject {
 
 	@Override
 	public void register(Observer obs) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 
