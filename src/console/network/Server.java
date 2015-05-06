@@ -8,7 +8,7 @@ public class Server implements Subject {
 	private int portNumber;
 	private ServerSocket server;
 
-	public Server(int portNumber) throws IOException {
+	public Server(int portNumber) {
 		this.portNumber = portNumber;
 	}
 
@@ -52,5 +52,16 @@ public class Server implements Subject {
 	public void notifyObservers(Observer obs) {
 		// TODO Auto-generated method stub
 		
+	}
+	
+	public static void main(String[] args) {
+		Server server = null;
+		if(args.length != 1) {
+			server = new Server(10001);
+		} else {
+			int port = Integer.parseInt(args[0]);
+			server = new Server(port);
+		}
+		server.openClientConnection();
 	}
 }

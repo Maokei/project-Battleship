@@ -9,6 +9,8 @@ import java.net.Socket;
 public class ClientHandler extends Thread {
 	private Socket socket;
 	private String address;
+	ObjectOutputStream out = null;
+	ObjectInputStream in = null;
 
 	public ClientHandler(Socket socket) {
 		this.socket = socket;
@@ -19,14 +21,15 @@ public class ClientHandler extends Thread {
 	}
 
 	public void run() {
-		ObjectOutputStream out = null;
-		ObjectInputStream in = null;
+		
 		try {
 			out = new ObjectOutputStream(socket.getOutputStream());
 			in = new ObjectInputStream(socket.getInputStream());
 
+			String message = "This is a response from server";
 			while (true) {
-				// do something here TODO
+				receiveMessage();
+				sendMessage(message);
 			}
 		} catch (IOException e) {
 			System.err.println(e.getMessage());
@@ -44,4 +47,27 @@ public class ClientHandler extends Thread {
 			}
 		}
 	}
+	
+	private void sendMessage(String message) {
+		try {
+			out.writeObject(message);
+			out.flush();
+			System.out.println("SERVER SEND >> " + message);
+		} catch (IOException e) {
+			System.err.println(e.getMessage());
+		}
+	}
+	
+	private void receiveMessage() {
+		String message = "";
+		try {
+			message = (String) in.readObject();
+			System.out.println("SERVER RECEIVE >> " + message);
+		} catch (IOException e) {
+			System.err.println(e.getMessage());
+		} catch (ClassNotFoundException e) {
+			System.err.println(e.getMessage());
+		}
+	}
+
 }

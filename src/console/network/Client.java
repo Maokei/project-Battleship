@@ -30,15 +30,16 @@ public class Client implements Observer {
 	/**
 	 * @brief prepare to open connection to server
 	 * */
-	private void openConnection() {
+	public void openConnection() {
 		try {
 			socket = new Socket(address, portNumber);
 			out = new ObjectOutputStream(socket.getOutputStream());
 			out.flush();
 			in = new ObjectInputStream(socket.getInputStream());
-
+			msg = "This is a message from client";
 			while (true) {
-				// do something here TODO
+				sendMessage(msg);
+				receiveMessage();
 			}
 
 		} catch (UnknownHostException e) {
@@ -51,7 +52,28 @@ public class Client implements Observer {
 			closeConnection();
 		}
 	}
+
+	private void sendMessage(String msg) {
+		try {
+			out.writeObject(msg);
+			out.flush();
+			System.out.println("CLIENT SEND >> " + msg);
+		} catch (IOException e) {
+			System.err.println(e.getMessage());
+		}
+	}
 	
+	private void receiveMessage() {
+		try {
+			msg = (String) in.readObject();
+			System.out.println("CLIENT RECEIVE >> " + msg);
+		} catch (IOException e) {
+			System.err.println(e.getMessage());
+		} catch (ClassNotFoundException e) {
+			System.err.println(e.getMessage());
+		}
+	}
+
 	/**
 	 * closeConnection
 	 * @brief Close client socket connections safely.
@@ -82,6 +104,17 @@ public class Client implements Observer {
 	public void setSubject(Subject sub) {
 		// TODO Auto-generated method stub
 		
+	}
+	
+	public static void main(String[] args) {
+		Client client = null;
+		if(args.length != 2) {
+			client = new Client("localhost", 10001);
+		} else {
+			int port = Integer.parseInt(args[1]);
+			client = new Client(args[0], port);
+		}
+		client.openConnection();
 	}
 
 }
