@@ -35,4 +35,22 @@ public class Server implements Subject {
 			}
 		}
 	}
+
+	@Override
+	public void register(Observer obs) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void unregister(Observer obs) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void notifyObservers(Observer obs) {
+		// TODO Auto-generated method stub
+		
+	}
 }

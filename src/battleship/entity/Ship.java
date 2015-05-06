@@ -1,34 +1,42 @@
 /**
  * @file Ship.java
+ * @date 2015-05-05
+ * @author rickard(rijo1001), lars(lama1205)
  * */
 package battleship.entity;
 
-
+/**
+ * 
+ * */
 public abstract class Ship {
-	public static final int NUM_OF_CARRIERS = 1;
-	public static final int NUM_OF_DESTROYERS = 3;
-	public static final int NUM_OF_SUBMARINES = 5;
-
-	protected String id;
 	protected String type;
 	protected int length;
 	protected int health;
+	protected int posX;
+	protected int posY;
 	protected Alignment alignment;
 	protected boolean alive = true;
 	
+	
 	public String toString() {
-		return String.format("%s, %s, %d, %d %s", type, id, length, health, alignment);
+		return String.format("%s, %d, %d, %d, %d, %s", type, length, health, posX, posY, alignment);
 	}
 	
-	public String getId() { return id; }
 	public String getType() { return type; }
 	public int getLength() { return length; }
 	public int getHealth() { return health; }
 	public Alignment getAlignment() { return alignment; }
 	public boolean isAlive() { return alive; }
+	public int getX() {return posX;}
+	public int getY() {return posY;}
 	
 	public void setAlignment(Alignment alignment) {
 		this.alignment = alignment;
+	}
+	
+	public void setPosition(int x, int y) {
+		posX = x;
+		posY = y;
 	}
 	
 	public void hit() {
@@ -39,47 +47,8 @@ public abstract class Ship {
 	public abstract void draw();
 }
 
-class Carrier extends Ship {
-	
-	public Carrier(String id) {
-		this.id = id;
-		type = "Carrier";
-		length = health = 5;
-		alignment = Alignment.HORIZONTAL;
-	}
-	
-	@Override
-	public void draw() {
-		System.out.println("I'm drawing a Carrier");
-	}
-}
 
-class Destroyer extends Ship {
 
-	public Destroyer(String id) {
-		this.id = id;
-		type = "Destroyer";
-		length = health = 3;
-		alignment = Alignment.HORIZONTAL;
-	}
-	@Override
-	public void draw() {
-		System.out.println("I'm drawing a Destroyer");
-	}
-	
-}
 
-class Submarine extends Ship {
 
-	public Submarine(String id) {
-		this.id = id;
-		type = "Submarine";
-		length = health = 1;
-		alignment = Alignment.HORIZONTAL;
-	}
-	@Override
-	public void draw() {
-		System.out.println("I'm drawing a Submarine");
-	}
-	
-}
+

@@ -9,6 +9,11 @@ import java.util.Vector;
 
 import battleship.game.Status;
 import battleship.gameboard.Grid;
+import battleship.entity.ShipType;
+import static battleship.entity.Constants.NUM_OF_SUBMARINES;
+import static battleship.entity.Constants.NUM_OF_DESTROYERS;
+import static battleship.entity.Constants.NUM_OF_CARRIERS;
+
 
 /**
  * @Class Player
@@ -75,20 +80,21 @@ public class Player {
 class ShipBuilder {
 	public static Vector<Ship> buildShips() {
 		Vector<Ship> ships = new Vector<Ship>(9);
+		BattleShipFactory bsf = new BattleShipFactory();
 		String type = "Carrier#";
 		int shipCounter = 1;
 		
-		ships.add(new Carrier(type + shipCounter));
+		ships.add(bsf.getShip(ShipType.CARRIER));
 		
 		type = "Destroyer#";
-		for(int i = 0; i < Ship.NUM_OF_DESTROYERS; i++, shipCounter++) {
-			ships.add(new Destroyer(type + shipCounter));
+		for(int i = 0; i < NUM_OF_DESTROYERS; i++, shipCounter++) {
+			ships.add(bsf.getShip(ShipType.DESTROYER));
 		}
 		
 		type = "Submarine#";
 		shipCounter = 1;
-		for(int i = 0; i < Ship.NUM_OF_SUBMARINES; i++, shipCounter++) {
-			ships.add(new Submarine(type + shipCounter));
+		for(int i = 0; i < NUM_OF_SUBMARINES; i++, shipCounter++) {
+			ships.add(bsf.getShip(ShipType.SUBMARINE));
 		}
 		return ships;
 	}
