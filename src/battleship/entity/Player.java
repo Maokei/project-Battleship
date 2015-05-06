@@ -16,6 +16,7 @@ import static battleship.entity.Constants.NUM_OF_CARRIERS;
 
 
 /**
+ * @package battleship.entity
  * @Class Player
  * @brief Class represent a player human or non-human,
  * */
