@@ -1,7 +1,7 @@
 /**
  * @file Carrier.java
  * @date 2015-05-06
- * @author 
+ * @author rickard(rijo1001), lars(lama1205)
  * */
 package battleship.entity;
 

@@ -1,10 +1,13 @@
 /**
- * @file ShipFactory.java
+ * @file BattleShipFactory.java
+ * @date 2015-05-06
+ * @author rickard(rijo1001), lars(lama1205)
  * */
 package battleship.entity;
 
 /**
- * 
+ * @package battleship.entity
+ * @class BattleShipFactory
  * */
 public class BattleShipFactory {
 	public Ship getShip(ShipType type) {
