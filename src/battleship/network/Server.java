@@ -8,6 +8,7 @@ import java.util.List;
 public class Server implements Subject {
 	private int portNumber;
 	private ServerSocket server;
+	private 
 
 	public Server(int portNumber) throws IOException {
 		this.portNumber = portNumber;

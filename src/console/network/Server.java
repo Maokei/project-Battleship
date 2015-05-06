@@ -3,13 +3,18 @@ package console.network;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Server implements Subject {
 	private int portNumber;
 	private ServerSocket server;
+	private List<Observer> observers;
 
 	public Server(int portNumber) {
 		this.portNumber = portNumber;
+		//initiate observer list
+		this.observers = new ArrayList<Observer>();
 	}
 
 	public void openClientConnection() {
@@ -37,20 +42,26 @@ public class Server implements Subject {
 	}
 
 	@Override
-	public void register(Observer obs) {
-		// TODO Auto-generated method stub
-		
+	public void register(Observer obs, String playerName) {
+		//attach observer
+		observers.add(obs);
 	}
 
 	@Override
-	public void unregister(Observer obs) {
-		// TODO Auto-generated method stub
+	public void unregister(Observer obs, String playerName) {
 		
+		//notify all
+		notifyObservers();
 	}
 
 	@Override
-	public void notifyObservers(Observer obs) {
-		// TODO Auto-generated method stub
+	public void notifyObservers() {
+		for(Observer obs : observers)
+			obs.notify();
+	}
+	
+	@Override
+	public void receiveMessage(ChatMessage message) {
 		
 	}
 	
