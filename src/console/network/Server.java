@@ -5,6 +5,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.TreeSet;
 
 public class Server implements Subject {
 	private int portNumber;
@@ -62,7 +63,14 @@ public class Server implements Subject {
 	
 	@Override
 	public void receiveMessage(ChatMessage message) {
+		//find specific user or send to everyone.
+		if(!(message.getRecevier() == "")) {
+			
+		}
+		//message everyone
 		
+		for(Observer obs : observers)
+			obs.update(message);
 	}
 	
 	public static void main(String[] args) {

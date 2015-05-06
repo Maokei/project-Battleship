@@ -22,6 +22,12 @@ public class ChatMessage {
 		this.message = message;
 	}
 	
+	public ChatMessage(String sender, String message) {
+		this.sender = sender;
+		this.receiver = "";
+		this.message = message;
+	}
+	
 	public String getMessage() {
 		return message;
 	}

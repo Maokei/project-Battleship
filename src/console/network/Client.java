@@ -99,6 +99,12 @@ public class Client implements Observer {
 		// TODO Auto-generated method stub
 		
 	}
+	
+	@Override
+	public void update(ChatMessage message) {
+		// TODO Auto-generated method stub
+		
+	}
 
 	@Override
 	public void setSubject(Subject sub) {
