@@ -15,7 +15,7 @@ public class Gameboard {
 	private void init() {
 		for(int row = 0; row < rows; row++) {
 			for(int col = 0; col < cols; col++) {
-				gameboard.add(new Grid(row, col));
+				gameboard.add(new Grid());
 			}
 		}
 	}

@@ -1,16 +1,41 @@
+/**
+ * @file Grid.java
+ * @date 2015-05-05
+ * @authors Rickard(rijo1001), Lars(lama1203)
+ * */
 package battleship.gameboard;
 
 import java.awt.Color;
 
+/**
+ * @package battleship.gameboad
+ * @class Grid
+ * @brief Class describes a battleship grid.
+ * Grid size: 10 * 10 as give by project specification.
+ * X  = hit 
+ * */
 public class Grid {
 	private static Color color = Color.BLUE;
-	private static final int size = 32;
-	public int row;
-	public int col;
+	private static final int size = 10;
+	private char grid[][];
+	private int row;
+	private int col;
 	
-	public Grid(int row, int col) {
-		this.row = row;
-		this.col = col;
+	public Grid(Integer... newS) {
+		Integer nonDefault;
+		if(newS.length > 1) {
+			nonDefault = newS[0];
+			if(nonDefault > size) {
+				row = nonDefault;
+				col = nonDefault;
+			}
+		}else{
+			row = size;
+			col = size;
+		}
+		
+		
+		grid = new char[row][col];
 	}
 	
 	public Color getColor() {

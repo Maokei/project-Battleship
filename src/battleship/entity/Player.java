@@ -1,3 +1,8 @@
+/**
+ * @file Player.java
+ * @date 2015-05-05
+ * @author Rickard(rijo1001), Lars(lama1203)
+ * */
 package battleship.entity;
 
 import java.util.Vector;
@@ -5,6 +10,10 @@ import java.util.Vector;
 import battleship.game.Status;
 import battleship.gameboard.Grid;
 
+/**
+ * @Class Player
+ * @brief Class represent a player human or non-human,
+ * */
 public class Player {
 	private String id;
 	private String name;
