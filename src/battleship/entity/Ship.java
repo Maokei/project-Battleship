@@ -1,3 +1,6 @@
+/**
+ * @file Ship.java
+ * */
 package battleship.entity;
 
 
