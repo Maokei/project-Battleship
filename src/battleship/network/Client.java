@@ -10,7 +10,7 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
-public class Client implements Observer{
+public class Client implements Observer {
 	private Socket socket;
 	private String address;
 	private int portNumber;
@@ -70,6 +70,18 @@ public class Client implements Observer{
 				System.err.println(e.getMessage());
 			}
 		}
+	}
+
+	@Override
+	public void update() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setSubject(Subject sub) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }
