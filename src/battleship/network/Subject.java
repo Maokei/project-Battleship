@@ -1,5 +1,17 @@
+/**
+ * @file Subject.java
+ * @date 2015-05-05
+ * */
 package battleship.network;
 
-public class Subject {
-	// implement Subject to send messages to all observers/players TODO
+/**
+ * @package battleship.network
+ * @interface Subject
+ * */
+public interface Subject {
+	public void register(Observer obs);
+	public void unregister(Observer obs);
+	
+	public void notifyObservers(Observer obs);
+	
 }

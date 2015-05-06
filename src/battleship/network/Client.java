@@ -1,3 +1,7 @@
+/**
+ * @file Client.java
+ * @date 2015-05-05
+ * */
 package battleship.network;
 
 import java.io.IOException;
@@ -6,7 +10,7 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
-public class Client {
+public class Client implements Observer{
 	private Socket socket;
 	private String address;
 	private int portNumber;
@@ -23,6 +27,9 @@ public class Client {
 	public int getPort() { return portNumber; }
 	public String getMessage() { return msg; }
 	
+	/**
+	 * @brief prepare to open connection to server
+	 * */
 	private void openConnection() {
 		try {
 			socket = new Socket(address, portNumber);
@@ -45,6 +52,10 @@ public class Client {
 		}
 	}
 	
+	/**
+	 * closeConnection
+	 * @brief Close client socket connections safely.
+	 * */
 	private void closeConnection() {
 		if (socket != null) {
 			int port = socket.getPort();
