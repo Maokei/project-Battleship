@@ -1,7 +1,17 @@
+/**
+ * @file Gameboard.java
+ * @author rickard(rijo1001), lars(lama1205)
+ * @date 2015-05-05
+ * */
 package battleship.gameboard;
 
 import java.util.Vector;
 
+/**
+ * @package battleship.gameboard
+ * @class Gameboard
+ * @brief Class describes a battleship board.
+ * */
 public class Gameboard {
 	private int rows, cols;
 	private Vector<Grid> gameboard;
