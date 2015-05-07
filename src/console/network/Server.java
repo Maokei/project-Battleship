@@ -44,8 +44,13 @@ public class Server implements Subject {
 
 	@Override
 	public void register(Observer obs, String playerName) {
+		//player connected to server
+		notifyObservers(new ChatMessage("Server", obs.getName() + " Just connected to server."));
 		//attach observer
 		observers.add(obs);
+		if(observers.size() < 2) {
+			obs.update(new ChatMessage("Server", obs.getName(),"No other active players in except ai opponent."));
+		}
 	}
 
 	@Override
@@ -54,11 +59,24 @@ public class Server implements Subject {
 		//notify all
 		notifyObservers();
 	}
-
+	
 	@Override
 	public void notifyObservers() {
 		for(Observer obs : observers)
 			obs.notify();
+	}
+	
+	public void notifyObservers(ChatMessage message) {
+		if(message.getRecevier() == ""){
+			for(Observer obs: observers) {
+				obs.update(message);
+			}
+		}else{
+			for(Observer obs: observers) {
+				if(obs.getName() == message.getRecevier())
+					obs.update(message);
+			}
+		}
 	}
 	
 	@Override
