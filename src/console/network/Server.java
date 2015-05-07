@@ -81,14 +81,16 @@ public class Server implements Subject {
 	
 	@Override
 	public void receiveMessage(ChatMessage message) {
-		//find specific user or send to everyone.
-		if(!(message.getRecevier() == "")) {
-			
+		if(message.getRecevier() == ""){
+			for(Observer obs: observers) {
+				obs.update(message);
+			}
+		}else{
+			for(Observer obs: observers) {
+				if(obs.getName() == message.getRecevier())
+					obs.update(message);
+			}
 		}
-		//message everyone
-		
-		for(Observer obs : observers)
-			obs.update(message);
 	}
 	
 	public static void main(String[] args) {
