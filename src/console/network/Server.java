@@ -50,7 +50,7 @@ public class Server implements Subject {
 
 	@Override
 	public void unregister(Observer obs, String playerName) {
-		
+		observers.remove(obs);
 		//notify all
 		notifyObservers();
 	}

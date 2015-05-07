@@ -112,6 +112,11 @@ public class Client implements Observer {
 		
 	}
 	
+	@Override 
+	public String getName() {
+		return "";
+	}
+	
 	public static void main(String[] args) {
 		Client client = null;
 		if(args.length != 2) {
