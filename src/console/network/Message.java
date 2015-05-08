@@ -5,6 +5,9 @@
  * */
 package console.network;
 
+import battleship.entity.Alignment;
+import battleship.entity.ShipType;
+
 /**
  * @package console.network
  * @class Message
@@ -67,22 +70,42 @@ class ChatMessage extends Message {
  * @class ShotMessage
  * @brief Class describes a battle message containing information about a shot fired
  * */
-class ShotMessage extends Message {
+class PositionShipMessage extends Message {
 	private int posX;
 	private int posY;
+	private ShipType type;
+	private Alignment shipAlignment;
 	
-	public ShotMessage(String sender, String receiver, int x, int y) {
+	public PositionShipMessage(String sender, String receiver, int x, int y, Alignment a) {
 		super(sender, receiver);
 		posX = x;
 		posY = y;
+		shipAlignment = a;
 	}
 	
 	public int getX() {return posX;}
-	
 	public int getY() {return posY;}
+	public ShipType getShipType() {return type;}
+	public Alignment getAlignment() {return shipAlignment;}
 	
 	@Override
 	public String toString() {
-		return "ChatMessage: " + getSender() + " : " + getReceiver();
+		return "PositionShipMessage: " + getSender() + " : " + getReceiver() + " : " + shipAlignment.toString() + " : " + type.toString();
 	}
+}
+
+/**
+ * @package console.network
+ * @class ValidMoveMessage
+ * @brief Message class that describes the validation of a move
+ * */
+class AnswerMessage extends Message {
+	private boolean answer;
+	
+	public AnswerMessage(String sender, String receiver, boolean v) {
+		super(sender, receiver);
+		answer = v;
+	}
+	
+	public boolean getAnswer() {return answer;}
 }
