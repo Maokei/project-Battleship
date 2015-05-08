@@ -6,6 +6,7 @@
 package battleship.gameboard;
 
 import java.awt.Color;
+import java.util.Arrays;
 
 /**
  * @package battleship.gameboad
@@ -34,8 +35,16 @@ public class Grid {
 			col = size;
 		}
 		
-		
 		grid = new char[row][col];
+		
+		//fill grid
+		/*for(int i = 0; i < row; i++)
+			for(int l = 0; l<col; l++)
+				grid[i][l] = 'o';*/
+		
+		//fill grid
+		for(char[] row: grid)
+			Arrays.fill(row, 'o');
 	}
 	
 	public Color getColor() {

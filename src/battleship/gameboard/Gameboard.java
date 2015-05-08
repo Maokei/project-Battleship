@@ -33,5 +33,8 @@ public class Gameboard {
 		
 	}
 	
-	
+	public boolean placeShip() {
+		
+		return true;
+	}
 }
