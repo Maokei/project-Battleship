@@ -109,3 +109,26 @@ class AnswerMessage extends Message {
 	
 	public boolean getAnswer() {return answer;}
 }
+
+/**
+ * @package console.network
+ * @class RequestMessage
+ * @brief Server reguest message t
+ * */
+class requestMessage extends Message {
+	private String item;
+	public requestMessage(String sender, String receiver, String item) {
+		super(sender, receiver);
+		
+	}
+	
+	public String getItem() {
+		return item;
+	}
+	
+	@Override
+	public String toString() {
+		return "PositionShipMessage: " + getSender() + " : " + getReceiver() + " : " + item;
+	}
+}
+
