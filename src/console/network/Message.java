@@ -54,6 +54,10 @@ class ChatMessage extends Message {
 		this.message = message;
 	}
 	
+	public String getMessageType() {
+		return "ChatMessage";
+	}
+	
 	public String getMessage() {
 		return message;
 	}
