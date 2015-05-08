@@ -96,7 +96,7 @@ class PositionShipMessage extends Message {
 
 /**
  * @package console.network
- * @class ValidMoveMessage
+ * @class AnswerMessage
  * @brief Message class that describes the validation of a move
  * */
 class AnswerMessage extends Message {
