@@ -12,5 +12,5 @@ public interface Subject {
 	public void register(Observer obs , String playerName);
 	public void unregister(Observer obs, String playerName);
 	public void notifyObservers();
-	public void receiveMessage(ChatMessage message);
+	public void receiveMessage(Message message);
 }

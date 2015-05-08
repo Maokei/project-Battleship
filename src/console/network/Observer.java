@@ -11,7 +11,7 @@ package console.network;
  * */
 public interface Observer {
 	public void update();
-	public void update(ChatMessage message);
+	public void update(Message message);
 	public void setSubject(Subject sub);
 	public abstract String getName();
 }

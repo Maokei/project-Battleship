@@ -66,28 +66,28 @@ public class Server implements Subject {
 			obs.notify();
 	}
 	
-	public void notifyObservers(ChatMessage message) {
-		if(message.getRecevier() == ""){
+	public void notifyObservers(Message message) {
+		if(message.getReceiver() == ""){
 			for(Observer obs: observers) {
 				obs.update(message);
 			}
 		}else{
 			for(Observer obs: observers) {
-				if(obs.getName() == message.getRecevier())
+				if(obs.getName() == message.getReceiver())
 					obs.update(message);
 			}
 		}
 	}
 	
 	@Override
-	public void receiveMessage(ChatMessage message) {
-		if(message.getRecevier() == ""){
+	public void receiveMessage(Message message) {
+		if(message.getReceiver() == ""){
 			for(Observer obs: observers) {
 				obs.update(message);
 			}
 		}else{
 			for(Observer obs: observers) {
-				if(obs.getName() == message.getRecevier())
+				if(obs.getName() == message.getReceiver())
 					obs.update(message);
 			}
 		}

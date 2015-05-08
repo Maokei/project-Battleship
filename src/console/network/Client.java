@@ -101,7 +101,7 @@ public class Client implements Observer {
 	}
 	
 	@Override
-	public void update(ChatMessage message) {
+	public void update(Message message) {
 		// TODO Auto-generated method stub
 		
 	}
