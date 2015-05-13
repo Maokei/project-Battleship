@@ -11,7 +11,7 @@ import battleship.entity.*;
 /**
  * @package battleship.gameboard
  * @class Gameboard
- * @brief Class describes a battleship board.
+ * @brief Class describes a battleship game board session.
  * */
 public class Gameboard {
 	private battleship.entity.Player red; //1
@@ -20,21 +20,52 @@ public class Gameboard {
 	private Vector<Ship> blueShips;
 	private Grid redGrid;
 	private Grid blueGrid;
-	
+	private boolean playerTurn; 
 	public Gameboard() {
 		redShips = new Vector<>();
 		blueShips = new Vector<>();
 		//grids
 		redGrid = new Grid();
 		blueGrid = new Grid();
+		//player turn
+		playerTurn = true; //blue player starts always
 	}
 	
-	private void  checkForHits() {
-		
+	private void  checkForHits(int x, int y, Vector<Ship> ships) {
+		for(Ship ship : ships){
+			if(ship.wasHit(x, y)) {
+				
+				//register hit on grid
+				registerShot(x, y);
+				//game over or? let player keep shooting
+			}
+		}
 	}
 	
-	public boolean placeShip() {
+	private boolean checkHit(int x, int y, Ship ship) {
+		int length = ship.getLength();
+		//if()
 		
-		return true;
+		return false;
+	}
+	
+	public boolean placeShip(Ship ship) {
+		boolean valid = false;
+		int x, y;
+		//if()
+		
+		return valid;
+	}
+	
+	/**
+	 * register a shot on the grid
+	 * */
+	private void registerShot(int x, int y) {
+		if(playerTurn) {
+			redGrid.registerHit(x, y);
+		}else{
+			blueGrid.registerHit(x, y);
+			
+		}
 	}
 }
