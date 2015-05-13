@@ -1,38 +1,45 @@
 package console.network;
 
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.TreeSet;
 
-public class Server implements Subject {
+public class Server {
+	private static int id;
 	private int portNumber;
 	private ServerSocket server;
-	private List<Observer> observers;
+	private ArrayList<PlayerProxy> players;
+
+	public static final int DEFAULT_PORT = 10001;
 
 	public Server(int portNumber) {
 		this.portNumber = portNumber;
-		//initiate observer list
-		this.observers = new ArrayList<Observer>();
+		players = new ArrayList<PlayerProxy>();
 	}
 
-	public void openClientConnection() {
-		Socket client = new Socket();
+	public void listen() {
+		Socket socket = new Socket();
 		try {
 			server = new ServerSocket(portNumber);
 			System.out.println("Server Listening on port " + portNumber);
 
 			while (true) {
-				client = server.accept();
-				new ClientHandler(client).start();
+				socket = server.accept();
+				PlayerProxy player = new PlayerProxy(socket);
+				players.add(player);
+				player.start();
 			}
 		} catch (IOException e) {
 			System.err.println(e.getMessage());
 		} finally {
 			if (server != null) {
 				try {
+					for (PlayerProxy player : players) {
+						player.closeConnection();
+					}
 					server.close();
 					System.out.println("The server closed the connection");
 				} catch (IOException e) {
@@ -42,65 +49,102 @@ public class Server implements Subject {
 		}
 	}
 
-	@Override
-	public void register(Observer obs, String playerName) {
-		//player connected to server
-		notifyObservers(new ChatMessage("Server", obs.getName() + " Just connected to server."));
-		//attach observer
-		observers.add(obs);
-		if(observers.size() < 2) {
-			obs.update(new ChatMessage("Server", obs.getName(),"No other active players in except ai opponent."));
+	private void removePlayerProxy(int id) {
+		for (int i = players.size() - 1; i >= 0; i--) {
+			if(players.get(i).playerId == id) {
+				players.get(i).closeConnection();
+				players.remove(i);
+			}
 		}
 	}
 
-	@Override
-	public void unregister(Observer obs, String playerName) {
-		observers.remove(obs);
-		//notify all
-		notifyObservers();
+	private synchronized void sendMessageToAll(Message msg) {
+		for (PlayerProxy player : players) {
+			player.sendMessage(msg);
+		}
 	}
-	
-	@Override
-	public void notifyObservers() {
-		for(Observer obs : observers)
-			obs.notify();
-	}
-	
-	public void notifyObservers(Message message) {
-		if(message.getReceiver() == ""){
-			for(Observer obs: observers) {
-				obs.update(message);
+
+	class PlayerProxy extends Thread {
+		private Socket socket;
+		private String address;
+		private Message msg;
+		private int playerId;
+		private ObjectInputStream in;
+		private ObjectOutputStream out;
+		private boolean running = true;
+
+		public PlayerProxy(Socket socket) {
+			this.socket = socket;
+			playerId = ++id;
+			address = socket.getInetAddress().getHostAddress();
+			System.out.println("Client with address " + address + " and port "
+					+ socket.getPort()
+					+ "\nhas established a connection with the server.\n ");
+		}
+
+		public void run() {
+			try {
+				out = new ObjectOutputStream(socket.getOutputStream());
+				out.flush();
+				in = new ObjectInputStream(socket.getInputStream());
+				while (running) {
+					try {
+						msg = (Message) in.readObject();
+						handleMessage(msg);
+					} catch (ClassNotFoundException e) {
+						System.out.println(e.getMessage());
+						e.printStackTrace();
+					}
+				}
+
+			} catch (IOException e) {
+				System.err.println(e.getMessage());
+			} finally {
+				closeConnection();
 			}
-		}else{
-			for(Observer obs: observers) {
-				if(obs.getName() == message.getReceiver())
-					obs.update(message);
+		}
+
+		private void handleMessage(Message msg) {
+			int type = msg.getType();
+			switch (type) {
+			case Message.LOGOUT:
+				running = false;
+				removePlayerProxy(this.playerId);
+				sendMessageToAll(msg);
+				break;
+			case Message.MESSAGE:
+				sendMessageToAll(msg);
+				break;
+			}
+
+		}
+
+		private void sendMessage(Message msg) {
+			try {
+				out.writeObject(msg);
+			} catch (IOException e) {
+				System.err.println(e.getMessage());
+			}
+		}
+
+		private void closeConnection() {
+			int port = socket.getPort();
+			try {
+				in.close();
+				out.close();
+				socket.close();
+				System.out.println("Client with address " + address
+						+ " and port " + port
+						+ "\nhas closed the connection with the server.\n ");
+			} catch (IOException e) {
+				System.err.println(e.getMessage());
 			}
 		}
 	}
-	
-	@Override
-	public void receiveMessage(Message message) {
-		if(message.getReceiver() == ""){
-			for(Observer obs: observers) {
-				obs.update(message);
-			}
-		}else{
-			for(Observer obs: observers) {
-				if(obs.getName() == message.getReceiver())
-					obs.update(message);
-			}
-		}
-	}
-	
+
 	public static void main(String[] args) {
-		Server server = null;
-		if(args.length != 1) {
-			server = new Server(10001);
-		} else {
-			int port = Integer.parseInt(args[0]);
-			server = new Server(port);
-		}
-		server.openClientConnection();
+		Server server = new Server(DEFAULT_PORT);
+		server.listen();
 	}
+
 }
