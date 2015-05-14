@@ -16,14 +16,13 @@ public class SoundHolder {
 			"rocky", "techno", "dreamy",
 			"march", "explosion1", "tilt", "splash1", "splash2" };
 	
-	static void initSounds() {
+	public static void initSounds() {
 		for(int i = 0; i < filenames.length; i++) {
 			Audio audio = new Audio();
 			audio.loadAudio(path, filenames[i]);
 			mappedAudio.put(mappedNames[i], audio);
 		}
 	}
-	
 	
 	public static Audio getAudio(String name) {
 		return mappedAudio.get(name);

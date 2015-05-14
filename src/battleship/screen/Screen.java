@@ -12,6 +12,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
+import resources.audio.SoundHolder;
+
 public class Screen {
 	private JFrame frame;
 	private MainPanel mainPanel;
@@ -19,6 +21,7 @@ public class Screen {
 	private InputPanel avatarpanel;
 	private JLabel position;
 	private JPanel positionPanel;
+	private static FireButton fireButton;
 	
 	public Screen() {
 		frame = new JFrame("*** Battleship ***");
@@ -36,6 +39,8 @@ public class Screen {
 		mainPanel.add(namePanel);
 		mainPanel.add(positionPanel);
 		mainPanel.add(avatarpanel);
+		fireButton = new FireButton("Fire Missile");
+		mainPanel.add(fireButton);
 		frame.add(mainPanel, BorderLayout.CENTER);
 	}
 	
