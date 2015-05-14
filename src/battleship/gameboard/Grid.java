@@ -6,6 +6,15 @@
 package battleship.gameboard;
 
 import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.GridLayout;
+import java.awt.Image;
+import java.awt.image.BufferedImage;
+import java.io.File;
+
+import javax.imageio.ImageIO;
+import javax.swing.*;
+
 import java.util.Arrays;
 
 import battleship.entity.Alignment;
@@ -25,12 +34,14 @@ import battleship.entity.Alignment;
  *ship hit tiles
  *	'x'
  * */
-public class Grid {
+public class Grid extends JPanel {
+	private static final long serialVersionUID = 13847238970823704L;
 	private static Color color = Color.BLUE;
 	private static final int size = 10;
 	private char grid[][];
 	private int row;
 	private int col;
+	private JLabel[][] lgrid;
 	
 	public Grid(Integer... newS) {
 		Integer nonDefault;
@@ -46,7 +57,7 @@ public class Grid {
 		}
 		
 		grid = new char[row][col];
-		
+		lgrid = new JLabel[size][size];
 		//fill grid
 		/*for(int i = 0; i < row; i++)
 			for(int l = 0; l<col; l++)
@@ -55,6 +66,34 @@ public class Grid {
 		//fill grid
 		for(char[] row: grid)
 			Arrays.fill(row, 'o');
+	}
+	
+	void gridTest() {
+		//initiate
+		setLayout(new GridLayout(size, size));
+		for(int i = 0; i < size; i++){
+			for(int l = 0; l < size; l++){
+				lgrid[i][l] = new JLabel();
+				lgrid[i][l].setIcon(testImg());
+				//add to panel
+				this.add(lgrid[i][l]);
+			}
+		}
+	}
+	
+	private Icon testImg() {
+		BufferedImage image = new BufferedImage(32, 32, BufferedImage.TYPE_INT_RGB);
+		
+		try{
+			image = ImageIO.read(new File("res/sprite/test_sprite.jpg"));
+		}catch(Exception e){
+			
+		}
+		Graphics g = image.getGraphics();
+	      g.setColor(color);
+	      g.fillRect(0, 0, 32, 32);
+	      g.dispose();
+		return new ImageIcon(image);
 	}
 	
 	/**
@@ -97,5 +136,19 @@ public class Grid {
 	public int getGridSize() {
 		return size;
 	}
-
+	
+	private static void createAndShowGui() {
+	      Grid mainPanel = new Grid();
+	      mainPanel.gridTest();
+	      JFrame frame = new JFrame("GridExample");
+	      frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	      frame.getContentPane().add(mainPanel);
+	      frame.setSize(400, 400);
+	      frame.setLocationByPlatform(true);
+	      frame.setVisible(true);
+	   }
+	
+	public static void main(String[] args) {
+		createAndShowGui();
+	}
 }
