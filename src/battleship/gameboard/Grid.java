@@ -112,7 +112,7 @@ public class Grid extends JPanel {
 		BufferedImage image = new BufferedImage(32, 32, BufferedImage.TYPE_INT_RGB);
 		
 		try{
-			image = ImageIO.read(new File("src/res/sprite/test_sprite.jpg"));
+			image = ImageIO.read(new File("src/res/sprite/water_sprite.jpg"));
 			
 		}catch(Exception e){
 			e.printStackTrace();
