@@ -7,8 +7,10 @@ package battleship.gameboard;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.GridLayout;
 import java.awt.Image;
+import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
 import java.io.File;
 
@@ -81,17 +83,43 @@ public class Grid extends JPanel {
 		}
 	}
 	
+	/**
+	 * Converts a given Image into a BufferedImage
+	 *
+	 * @param img The Image to be converted
+	 * @return The converted BufferedImage
+	 */
+	public static BufferedImage toBufferedImage(Image img)
+	{
+	    if (img instanceof BufferedImage)
+	    {
+	        return (BufferedImage) img;
+	    }
+
+	    // Create a buffered image with transparency
+	    BufferedImage bimage = new BufferedImage(img.getWidth(null), img.getHeight(null), BufferedImage.TYPE_INT_ARGB);
+
+	    // Draw the image on to the buffered image
+	    Graphics2D bGr = bimage.createGraphics();
+	    bGr.drawImage(img, 0, 0, null);
+	    bGr.dispose();
+
+	    // Return the buffered image
+	    return bimage;
+	}
+	
 	private Icon testImg() {
 		BufferedImage image = new BufferedImage(32, 32, BufferedImage.TYPE_INT_RGB);
 		
 		try{
-			image = ImageIO.read(new File("res/sprite/test_sprite.jpg"));
-		}catch(Exception e){
+			image = ImageIO.read(new File("src/res/sprite/test_sprite.jpg"));
 			
+		}catch(Exception e){
+			e.printStackTrace();
 		}
 		Graphics g = image.getGraphics();
 	      g.setColor(color);
-	      g.fillRect(0, 0, 32, 32);
+	     // g.fillRect(0, 0, 32, 32);
 	      g.dispose();
 		return new ImageIcon(image);
 	}
@@ -144,6 +172,7 @@ public class Grid extends JPanel {
 	      frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	      frame.getContentPane().add(mainPanel);
 	      frame.setSize(400, 400);
+	      frame.pack();
 	      frame.setLocationByPlatform(true);
 	      frame.setVisible(true);
 	   }
