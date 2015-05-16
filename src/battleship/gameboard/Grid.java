@@ -79,12 +79,18 @@ public class Grid extends JPanel {
 	}
 	
 	void gridTest() {
+		//sub test tile
+		grid[5][5] = 's';
 		//initiate
 		setLayout(new GridLayout(size, size));
 		for(int i = 0; i < size; i++){
 			for(int l = 0; l < size; l++){
 				lgrid[i][l] = new JLabel();
-				lgrid[i][l].setIcon(new ImageIcon(sprites.getSprite("water")));
+				if(grid[i][l] == 'o') {
+					lgrid[i][l].setIcon(new ImageIcon(sprites.getSprite("water")));
+				}else if(grid[i][l] == 's'){
+					lgrid[i][l].setIcon(new ImageIcon(sprites.getSprite("hor_sub")));
+				}
 				//add to panel
 				this.add(lgrid[i][l]);
 			}
