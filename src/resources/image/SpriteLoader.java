@@ -1,3 +1,7 @@
+/**
+ * @authors rijo1001, lama1203
+ * @file SpriteLoader.java
+ * */
 package resources.image;
 
 import java.awt.image.BufferedImage;
@@ -16,8 +20,9 @@ public class SpriteLoader {
 	private int numOfSprites;
 	private Map<String, BufferedImage> sprites;
 	private List<String> names;
+	private static SpriteLoader instance = null;
 
-	public SpriteLoader(int width, int height, int rows, int cols, int numOfSprites) {
+	private SpriteLoader(int width, int height, int rows, int cols, int numOfSprites) {
 		this.width = width;
 		this.height = height;
 		this.rows = rows;
@@ -67,5 +72,11 @@ public class SpriteLoader {
 
 	public BufferedImage getSprite(String name) {
 		return sprites.get(name);
+	}
+	
+	public static SpriteLoader getInstance(int width, int height, int rows, int cols, int numOfSprites) {
+		if(instance == null)
+			instance = new SpriteLoader(width, height, rows, cols, numOfSprites);
+		return instance;
 	}
 }
