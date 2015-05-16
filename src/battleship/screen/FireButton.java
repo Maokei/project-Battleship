@@ -37,6 +37,7 @@ public class FireButton extends JButton {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			SoundHolder.getAudio("explosion1").playAudio();
+			if(t.isRunning()) { t.stop(); t = null; }
 			t = new Timer(delay, new ActionListener() {
 
 				@Override
@@ -48,7 +49,6 @@ public class FireButton extends JButton {
 					repaint();
 				}
 			});
-			t.setRepeats(true);
 			t.setCoalesce(true);
 			t.start();
 		}

@@ -41,6 +41,7 @@ public class Screen {
 		mainPanel.add(avatarpanel);
 		fireButton = new FireButton("Fire Missile");
 		mainPanel.add(fireButton);
+		mainPanel.add(new AvatarPanel());
 		frame.add(mainPanel, BorderLayout.CENTER);
 	}
 	
