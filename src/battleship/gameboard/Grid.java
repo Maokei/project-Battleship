@@ -23,6 +23,7 @@ import java.util.Arrays;
 
 import battleship.entity.Alignment;
 import battleship.entity.Ship;
+import battleship.entity.ShipType;
 
 /**
  * @package battleship.gameboad
@@ -160,8 +161,49 @@ public class Grid extends JPanel {
 		return true;
 	}
 	
+	/**
+	 * PlaceShipOnGrid
+	 * @brief Places valid ship tiles on grid
+	 * @param Takes a ship object
+	 * @return void
+	 * */
 	public void placeShipOnGrid(Ship ship) {
-		//todo
+		int l = 0;
+		int x1 = ship.getX1();
+		int y1 = ship.getY1();
+		//direction to count
+		if(ship.getAlignment() == Alignment.VERTICAL) {
+			for(int i = ship.getY(); i <= y1; i++) {
+				placeShipTile(ship.getX(), ship.getY(), ship.getType());
+			}
+		}else{ //Horizontal
+			for(int i = ship.getX(); i <= x1; i++) {
+				placeShipTile(ship.getX(), ship.getY(), ship.getType());
+			}
+		}
+		
+		
+	}
+	
+	/**
+	 * PlaceShipTile
+	 * @brief help function to place a ship tile in grid
+	 * @param
+	 * @return void
+	 * */
+	private void placeShipTile(int x, int y, String  type) {
+		switch(type) {
+			case "Submarine": 
+				grid[x][y] = 's';
+				break;
+			case "Destroyer": 
+				grid[x][y] = 'd';
+				break;
+			case "Carrier": 
+				grid[x][y] = 'c';
+				break;
+		
+		}
 	}
 	
 	/**

@@ -37,7 +37,7 @@ public abstract class Ship {
 	public int getX() {return posX;}
 	public int getY() {return posY;}
 	public int getX1() {return posX1;}
-	public int getY2() {return posY1;}
+	public int getY1() {return posY1;}
 	public String getShipName() {return shipName;}
 	
 	public void setAlignment(Alignment alignment) {
