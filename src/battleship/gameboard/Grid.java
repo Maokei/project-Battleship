@@ -74,7 +74,7 @@ public class Grid extends JPanel {
 		for(char[] row: grid)
 			Arrays.fill(row, 'o');
 		
-		sprites = new SpriteLoader(32, 32, 8, 8, 11);
+		sprites = SpriteLoader.getInstance(32, 32, 8, 8, 11);
 		sprites.loadSprites("src/res/sprite/spritesheet_battleship.png");
 	}
 	
