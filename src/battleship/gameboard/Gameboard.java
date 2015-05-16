@@ -63,7 +63,7 @@ public class Gameboard {
 		if(player == 1) { //blue player
 			if(blueGrid.isEmpty(x, y, a, length)) {
 				blueGrid.placeShipOnGrid(ship);
-				return false;
+				return true;
 			}
 		}else if(player == 2){ //red player
 			if(redGrid.isEmpty(x, y, a, length)) {
