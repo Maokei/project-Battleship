@@ -49,12 +49,29 @@ public class Gameboard {
 		return false;
 	}
 	
-	public boolean placeShip(Ship ship) {
-		boolean valid = false;
+	/**
+	 * placeShip
+	 * @param Ship object, int player 1 - 2 blue or red player
+	 * @return boolean if ship is valid placement
+	 * */
+	public boolean placeShip(Ship ship, int player) {
 		int x, y;
-		//if()
-		
-		return valid;
+		x = ship.getX();
+		y = ship.getY();
+		Alignment a = ship.getAlignment();
+		int length = ship.getLength();
+		if(player == 1) { //blue player
+			if(blueGrid.isEmpty(x, y, a, length)) {
+				blueGrid.placeShipOnGrid(ship);
+				return false;
+			}
+		}else if(player == 2){ //red player
+			if(redGrid.isEmpty(x, y, a, length)) {
+				redGrid.placeShipOnGrid(ship);
+				return true;
+			}
+		}
+		return false;
 	}
 	
 	/**

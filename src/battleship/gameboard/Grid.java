@@ -22,6 +22,7 @@ import resources.image.SpriteLoader;
 import java.util.Arrays;
 
 import battleship.entity.Alignment;
+import battleship.entity.Ship;
 
 /**
  * @package battleship.gameboad
@@ -157,6 +158,10 @@ public class Grid extends JPanel {
 		}
 		
 		return true;
+	}
+	
+	public void placeShipOnGrid(Ship ship) {
+		//todo
 	}
 	
 	/**
