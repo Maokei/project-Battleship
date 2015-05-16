@@ -153,6 +153,12 @@ public class Grid extends JPanel {
 		return true;
 	}
 	
+	/**
+	 * registerHit
+	 * @brief Update the grid with a hit
+	 * @param X coordinate , Y coordinate
+	 * @return void
+	 * */
 	public void registerHit(int x, int y) {
 		grid[x][y] = 'x';
 	}
