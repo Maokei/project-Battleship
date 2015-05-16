@@ -32,7 +32,7 @@ public class SpriteLoader {
 		names.add("hor_front"); names.add("hor_mid"); names.add("hor_back");
 		names.add("ver_front"); names.add("ver_mid"); names.add("ver_back");
 		names.add("hor_sub"); names.add("ver_sub"); names.add("water1");
-		names.add("water2");
+		names.add("water2"); names.add("water");
 	}
 
 	public boolean loadSprites(String filename) {

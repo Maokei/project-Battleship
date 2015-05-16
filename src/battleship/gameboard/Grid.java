@@ -17,6 +17,8 @@ import java.io.File;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 
+import resources.image.SpriteLoader;
+
 import java.util.Arrays;
 
 import battleship.entity.Alignment;
@@ -44,6 +46,7 @@ public class Grid extends JPanel {
 	private int row;
 	private int col;
 	private JLabel[][] lgrid;
+	private SpriteLoader sprites;
 	
 	public Grid(Integer... newS) {
 		Integer nonDefault;
@@ -68,6 +71,9 @@ public class Grid extends JPanel {
 		//fill grid
 		for(char[] row: grid)
 			Arrays.fill(row, 'o');
+		
+		sprites = new SpriteLoader(32, 32, 8, 8, 11);
+		sprites.loadSprites("src/res/sprite/spritesheet_battleship.png");
 	}
 	
 	void gridTest() {
@@ -76,7 +82,7 @@ public class Grid extends JPanel {
 		for(int i = 0; i < size; i++){
 			for(int l = 0; l < size; l++){
 				lgrid[i][l] = new JLabel();
-				lgrid[i][l].setIcon(testImg());
+				lgrid[i][l].setIcon(new ImageIcon(sprites.getSprite("water")));
 				//add to panel
 				this.add(lgrid[i][l]);
 			}
