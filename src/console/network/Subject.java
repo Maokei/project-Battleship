@@ -2,10 +2,8 @@
  * @file Subject.java
  * @date 2015-05-05
  * */
-package battleship.server;
+package console.network;
 
-import console.network.Message;
-import console.network.Observer;
 
 /**
  * @package battleship.network

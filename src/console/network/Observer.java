@@ -4,7 +4,6 @@
  * */
 package console.network;
 
-import battleship.server.Subject;
 
 /**
  * @package battleship.network
