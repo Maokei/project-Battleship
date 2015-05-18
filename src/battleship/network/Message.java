@@ -1,4 +1,4 @@
-package console.network;
+package battleship.network;
 /**
  * @file Message.java
  * @date 2015-05-06

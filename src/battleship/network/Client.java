@@ -1,4 +1,4 @@
-package console.network;
+package battleship.network;
 
 import java.awt.BorderLayout;
 import java.awt.GridLayout;

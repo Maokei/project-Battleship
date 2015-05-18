@@ -1,4 +1,4 @@
-package console.network;
+package battleship.network;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;

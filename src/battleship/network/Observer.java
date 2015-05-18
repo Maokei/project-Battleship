@@ -2,7 +2,7 @@
  * @file Observer.java
  * @date 2015-05-05
  * */
-package console.network;
+package battleship.network;
 
 
 /**
