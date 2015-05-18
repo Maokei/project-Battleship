@@ -2,7 +2,7 @@
  * @file SimpleShipName.java
  * @authors
  * */
-package battleship.entity;
+package battleship.player;
 
 import java.util.Random;
 

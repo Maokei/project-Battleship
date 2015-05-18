@@ -3,7 +3,7 @@
  * @date 2015-05-05
  * @authors Rickard(rijo1001), Lars(lama1203)
  * */
-package battleship.gameboard;
+package battleship.player;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -20,10 +20,6 @@ import javax.swing.*;
 import resources.image.SpriteLoader;
 
 import java.util.Arrays;
-
-import battleship.entity.Alignment;
-import battleship.entity.Ship;
-import battleship.entity.ShipType;
 
 /**
  * @package battleship.gameboad
@@ -228,21 +224,5 @@ public class Grid extends JPanel {
 	
 	public int getGridSize() {
 		return size;
-	}
-	
-	private static void createAndShowGui() {
-	      Grid mainPanel = new Grid();
-	      mainPanel.gridTest();
-	      JFrame frame = new JFrame("GridExample");
-	      frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	      frame.getContentPane().add(mainPanel);
-	      frame.setSize(400, 400);
-	      frame.pack();
-	      frame.setLocationByPlatform(true);
-	      frame.setVisible(true);
-	   }
-	
-	public static void main(String[] args) {
-		createAndShowGui();
 	}
 }

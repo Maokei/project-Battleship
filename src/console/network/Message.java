@@ -5,8 +5,8 @@ package console.network;
  * @author rickard(rijo1001), lars(lama1205)
  * */
 
-import battleship.entity.Alignment;
-import battleship.entity.ShipType;
+import battleship.player.Alignment;
+import battleship.player.ShipType;
 
 /**
  * @package console.network

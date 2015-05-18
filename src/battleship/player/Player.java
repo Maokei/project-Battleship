@@ -3,18 +3,17 @@
  * @date 2015-05-05
  * @author Rickard(rijo1001), Lars(lama1203)
  * */
-package battleship.entity;
+package battleship.player;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.Vector;
 
 import battleship.game.Status;
-import battleship.gameboard.Grid;
-import battleship.entity.ShipType;
-import static battleship.entity.Constants.NUM_OF_SUBMARINES;
-import static battleship.entity.Constants.NUM_OF_DESTROYERS;
-import static battleship.entity.Constants.NUM_OF_CARRIERS;
+import battleship.player.ShipType;
+import static battleship.player.Constants.NUM_OF_CARRIERS;
+import static battleship.player.Constants.NUM_OF_DESTROYERS;
+import static battleship.player.Constants.NUM_OF_SUBMARINES;
 
 /**
  * @package battleship.entity

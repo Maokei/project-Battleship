@@ -5,12 +5,10 @@
  * */
 package battleship.game;
 
-import battleship.entity.Player;
-import battleship.gameboard.Gameboard;
+import battleship.player.Player;
 import battleship.screen.Screen;
 
 public class Game {
 	private Player player;
-	private Gameboard gameboard;
 	private Screen screen;
 }

@@ -1,4 +1,4 @@
-package battleship.entity;
+package battleship.player;
 
 public enum Alignment {
 	VERTICAL("vertical"),
