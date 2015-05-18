@@ -78,7 +78,7 @@ public class Grid extends JPanel {
 		sprites.loadSprites("src/res/sprite/spritesheet_battleship.png");
 	}
 	
-	void gridTest() {
+	public void gridTest() {
 		//sub test tile
 		grid[5][5] = 's';
 		//initiate

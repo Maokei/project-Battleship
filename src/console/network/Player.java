@@ -126,6 +126,10 @@ public class Player {
 	void appendText(String text) {
 		output.append(text);
 	}
+	
+	void fire(int x, int y) {
+		
+	}
 
 	public void showGUI() {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

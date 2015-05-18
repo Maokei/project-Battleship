@@ -25,12 +25,13 @@ public class AvatarPanel extends JPanel {
 	private JPanel buttonPanel;
 	private JButton leftArrow, rightArrow;
 	private JLabel avatar, description;
+	private JPanel avatarPanel, descriptionPanel;
 	private String path = "src/res/sprite/";
 	private int index = 0;
 	
 	public AvatarPanel() {
 		super(new BorderLayout());
-		setSize(new Dimension(200, 400));
+		setSize(new Dimension(150, 400));
 		buttonPanel = new JPanel(new GridLayout(1, 2, 50, 10));
 		leftArrow = new JButton();
 		leftArrow.addActionListener(new AvatarCycler());
@@ -53,8 +54,13 @@ public class AvatarPanel extends JPanel {
 		readAvatarsFromFile();
 		names = new ArrayList<String>();
 		avatar = new JLabel();
+		avatarPanel = new JPanel(new BorderLayout());
+		avatarPanel.setSize(new Dimension(150, 200));
+		avatarPanel.add(avatar, BorderLayout.CENTER);
 		add(avatar, BorderLayout.CENTER);
 		description = new JLabel();
+		descriptionPanel = new JPanel();
+		descriptionPanel.add(description);
 		add(description, BorderLayout.SOUTH);
 		init();
 	}

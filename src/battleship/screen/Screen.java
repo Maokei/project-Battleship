@@ -12,7 +12,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
-import resources.audio.SoundHolder;
+import battleship.gameboard.Grid;
 
 public class Screen {
 	private JFrame frame;
@@ -22,6 +22,7 @@ public class Screen {
 	private JLabel position;
 	private JPanel positionPanel;
 	private static FireButton fireButton;
+	private Grid playerGrid, enemyGrid;
 	
 	public Screen() {
 		frame = new JFrame("*** Battleship ***");
@@ -42,12 +43,18 @@ public class Screen {
 		fireButton = new FireButton("Fire Missile");
 		mainPanel.add(fireButton);
 		mainPanel.add(new AvatarPanel());
+		playerGrid = new Grid();
+		playerGrid.gridTest();
+		enemyGrid = new Grid();
+		enemyGrid.gridTest();
+		mainPanel.add(playerGrid);
+		mainPanel.add(enemyGrid);
 		frame.add(mainPanel, BorderLayout.CENTER);
 	}
 	
 	public void showGUI() {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setSize(800, 600);
+		frame.setSize(900, 600);
 		frame.setLocationRelativeTo(null);
 		frame.setVisible(true);
 	}
@@ -65,7 +72,7 @@ public class Screen {
 	class GridListener extends MouseAdapter {
 	    @Override
 	    public void mousePressed(MouseEvent e) {
-	    	position.setText("You fired at: " + e.getX() + " " + e.getY());
+	    	position.setText("You fired at Position: " + e.getX() + " " + e.getY());
 	    }
 	}
 	

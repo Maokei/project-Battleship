@@ -14,7 +14,6 @@ import static battleship.entity.Constants.NUM_OF_SUBMARINES;
 import static battleship.entity.Constants.NUM_OF_DESTROYERS;
 import static battleship.entity.Constants.NUM_OF_CARRIERS;
 
-
 /**
  * @package battleship.entity
  * @Class Player
@@ -54,8 +53,7 @@ public class Player {
 	
 	public void fire(Grid grid) {
 		moves++;
-		// implement fire TODO
-		// if enemy hit -> hits++
+		
 	}
 	
 	public void enemyFire(Grid grid) {
