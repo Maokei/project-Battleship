@@ -11,7 +11,7 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 
-public class Player {
+public class Client {
 	private String address;
 	private int portNumber;
 	private String name;
@@ -27,7 +27,7 @@ public class Player {
 	public static final int DEFAULT_PORT = 10001;
 	public static final String DEFAULT_ADDRESS = "localhost";
 
-	public Player(String address, int portNumber) {
+	public Client(String address, int portNumber) {
 		this.address = address;
 		this.portNumber = portNumber;
 		name = "Anonymous";
@@ -80,8 +80,7 @@ public class Player {
 	private void sendMessageEvent() {
 		if (connected) {
 			connection.sendMessage(
-					new Message(
-							Message.MESSAGE, name, messageInput.getText()));
+					new ChatMessage(Message.MESSAGE, name, messageInput.getText()));
 		}
 	}
 
@@ -143,7 +142,7 @@ public class Player {
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
 			public void run() {
-				new Player(DEFAULT_ADDRESS, DEFAULT_PORT).showGUI();
+				new Client(DEFAULT_ADDRESS, DEFAULT_PORT).showGUI();
 			}
 		});
 	}

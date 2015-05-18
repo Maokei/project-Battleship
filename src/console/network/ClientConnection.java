@@ -11,10 +11,10 @@ public class ClientConnection implements Runnable {
 	private Socket socket;
 	private ObjectOutputStream out;
 	private ObjectInputStream in;
-	private Player player;
+	private Client player;
 	private Message msg;
 
-	public ClientConnection(String address, int portNumber, Player player) {
+	public ClientConnection(String address, int portNumber, Client player) {
 		this.address = address;
 		this.portNumber = portNumber;
 		this.player = player;
