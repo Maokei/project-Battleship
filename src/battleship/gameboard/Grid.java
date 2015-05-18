@@ -143,7 +143,7 @@ public class Grid extends JPanel {
 	 * @param Interger x position, Integer y position, Alignment a for ship, Integer length for ship 
 	 * @return true or false if cells are empty or occupied
 	 * */
-	boolean isEmpty(int x, int y, Alignment a, int length) {
+	public boolean isEmpty(int x, int y, Alignment a, int length) {
 		int x1, y1;
 		
 		if(a == Alignment.HORIZONTAL) {

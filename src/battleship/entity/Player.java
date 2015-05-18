@@ -5,6 +5,8 @@
  * */
 package battleship.entity;
 
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.Vector;
 
 import battleship.game.Status;
@@ -26,12 +28,15 @@ public class Player {
 	private int moves;
 	private Vector<Ship> ships;
 	private int remainingShips;
-	
+	private Grid grid;
+	private boolean playerTurn; 
 	public Status status;
 	
 	public Player(String id, String name) {
 		this.id = id;
 		this.name = name;
+		grid = new Grid();
+		grid.addMouseListener(new GridListener());
 	}
 	
 	public void init() {
@@ -52,8 +57,8 @@ public class Player {
 	public int getMoves() { return moves; }
 	
 	public void fire(Grid grid) {
-		moves++;
-		
+		if(playerTurn)
+			moves++;
 	}
 	
 	public void enemyFire(Grid grid) {
@@ -74,6 +79,74 @@ public class Player {
 			}
 		}
 	}
+	
+	private void  checkForHits(int x, int y, Vector<Ship> ships) {
+		for(Ship ship : ships){
+			if(ship.wasHit(x, y)) {
+				
+				//register hit on grid
+				registerShot(x, y);
+				//game over or? let player keep shooting
+			}
+		}
+	}
+	
+	private boolean checkHit(int x, int y, Ship ship) {
+		int length = ship.getLength();
+		//if()
+		
+		return false;
+	}
+	
+	/**
+	 * placeShip
+	 * @param Ship object, int player 1 - 2 blue or red player
+	 * @return boolean if ship is valid placement
+	 * */
+	public boolean placeShip(Ship ship, int player) {
+		int x, y;
+		x = ship.getX();
+		y = ship.getY();
+		Alignment a = ship.getAlignment();
+		int length = ship.getLength();
+		if(player == 1) { //blue player
+			if(grid.isEmpty(x, y, a, length)) {
+				grid.placeShipOnGrid(ship);
+				return true;
+			}
+		}else if(player == 2){ //red player
+			if(grid.isEmpty(x, y, a, length)) {
+				grid.placeShipOnGrid(ship);
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	/**
+	 * register a shot on the grid
+	 * */
+	private void registerShot(int x, int y) {
+		if(playerTurn) {
+			grid.registerHit(x, y);
+		}else{
+			grid.registerHit(x, y);
+			
+		}
+	}
+}
+
+class GridListener extends MouseAdapter {
+    @Override
+    public void mousePressed(MouseEvent e) {
+    	//if(isPlacingShip)
+    	//	player.placeShip(ship, x, y)
+    	// else if(isFiring)
+    	// player.fire(e.getX(), e.getY()) alt.
+    	// client.sendMessage(new FireMessage(player, e.getX(), e.getY())
+    	
+    	// etc ...
+    }
 }
 
 class ShipBuilder {
