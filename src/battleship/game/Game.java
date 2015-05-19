@@ -8,7 +8,7 @@ package battleship.game;
 import battleship.login.LoginDialog;
 import battleship.network.ClientConnection;
 import battleship.network.Server;
-import battleship.player.Grid;
+import battleship.player.Gameboard;
 import battleship.player.Player;
 import battleship.screen.Avatar;
 import battleship.screen.Screen;
@@ -21,12 +21,12 @@ public class Game {
 	private Screen screen;
 	private LoginDialog login;
 	private ClientConnection con;
-	private Grid playerGrid, enemyGrid;
+	private Gameboard playerGrid, enemyGrid;
 	public static final int DEFAULT_PORT = 10001;
 	
 	public Game() {
-		playerGrid = new Grid();
-		enemyGrid = new Grid();
+		playerGrid = new Gameboard();
+		enemyGrid = new Gameboard();
 		screen = new Screen(playerGrid, enemyGrid);
 		login = new LoginDialog(screen, this);		
 		player.setGrid(playerGrid);

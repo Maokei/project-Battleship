@@ -12,23 +12,21 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
-import battleship.player.Grid;
+import battleship.player.Gameboard;
 
 public class Screen {
 	private JFrame frame;
 	private MainPanel mainPanel;
 	private Avatar avatar;
-	private Grid playerGrid, enemyGrid;
+	private Gameboard playerGrid, enemyGrid;
 	
-	public Screen(Grid playerGrid, Grid enemyGrid) {
+	public Screen(Gameboard playerGrid, Gameboard enemyGrid) {
 		frame = new JFrame("*** Battleship ***");
 		mainPanel = new MainPanel();
 		mainPanel.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
 		avatar = new Avatar();
 		this.playerGrid = playerGrid;
-		playerGrid.gridTest();
 		this.enemyGrid = enemyGrid;
-		enemyGrid.gridTest();
 		mainPanel.add(avatar);
 		mainPanel.add(playerGrid);
 		mainPanel.add(enemyGrid);

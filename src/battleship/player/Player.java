@@ -28,7 +28,7 @@ public class Player {
 	private int moves;
 	private Vector<Ship> ships;
 	private int remainingShips;
-	private Grid grid;
+	private Gameboard grid;
 	private boolean playerTurn; 
 	public Status status;
 	private boolean placedAll = false;
@@ -49,7 +49,7 @@ public class Player {
 		initShips();
 	}
 	
-	public void setGrid(Grid grid) {
+	public void setGrid(Gameboard grid) {
 		this.grid = grid;
 		grid.addMouseListener(new GridListener());
 	}
@@ -61,12 +61,12 @@ public class Player {
 	public int getHits() { return hits; }
 	public int getMoves() { return moves; }
 	
-	public void fire(Grid grid) {
+	public void fire(Gameboard grid) {
 		if(playerTurn)
 			moves++;
 	}
 	
-	public void enemyFire(Grid grid) {
+	public void enemyFire(Gameboard grid) {
 		// implement enemy fire
 		// if damage taken, add damage to ship
 		// and call updateShips()
@@ -107,7 +107,7 @@ public class Player {
 		return false;
 	}
 	
-	public Grid getGrid() {
+	public Gameboard getGrid() {
 		return grid;
 	}
 	
