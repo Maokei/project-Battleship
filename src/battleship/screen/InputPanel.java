@@ -60,7 +60,7 @@ public class InputPanel extends JPanel{
 	}
 
 	public void setEditable(boolean editable) {
-		this.editable = editable;
+		setEditable(editable);
 	}
 	
 	class UserInputListener implements FocusListener {

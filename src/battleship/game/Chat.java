@@ -30,7 +30,7 @@ public class Chat {
 	public Chat(String name) {
 		this.name = name;
 		frame = new JFrame("Battleship Chat");
-		input = new InputPanel("Enter message", false);
+		input = new InputPanel("Enter message", true);
 		output = new JTextArea(10, 20);
 		outputPanel = new JPanel();
 		outputPanel.add(new JScrollPane(output));
@@ -69,7 +69,6 @@ public class Chat {
 		if (con.openConnection()) {
 			connected = true;
 			con.setOutput(output);
-			input.setEditable(true);
 			login.setEnabled(false);
 			send.setEnabled(true);
 			player = new Player(name, con);
