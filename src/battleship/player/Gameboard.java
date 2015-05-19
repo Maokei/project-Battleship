@@ -205,7 +205,7 @@ public class Gameboard extends JPanel {
 
 	private void placeHorizontal(Ship ship, int row, int col) {
 		int counter = col;
-		if (ship.length > 0) {
+		if (ship.length > 1) {
 			for (int i = 0; i < ship.length; i++) {
 				if(i == 0) {
 					lgrid[row][counter++].setIcon(new ImageIcon(sprites
@@ -227,7 +227,7 @@ public class Gameboard extends JPanel {
 
 	private void placeVertical(Ship ship, int row, int col) {
 		int counter = row;
-		if (ship.length > 0) {
+		if (ship.length > 1) {
 			for (int i = 0; i < ship.length; i++) {
 				if(i == 0) {
 					lgrid[counter++][col].setIcon(new ImageIcon(sprites
