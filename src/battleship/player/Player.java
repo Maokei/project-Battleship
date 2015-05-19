@@ -5,15 +5,15 @@
  * */
 package battleship.player;
 
+import static battleship.player.Constants.NUM_OF_DESTROYERS;
+import static battleship.player.Constants.NUM_OF_SUBMARINES;
+
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.Vector;
 
 import battleship.game.Status;
-import battleship.player.ShipType;
-import static battleship.player.Constants.NUM_OF_CARRIERS;
-import static battleship.player.Constants.NUM_OF_DESTROYERS;
-import static battleship.player.Constants.NUM_OF_SUBMARINES;
+import battleship.network.ClientConnection;
 
 /**
  * @package battleship.entity
@@ -21,8 +21,8 @@ import static battleship.player.Constants.NUM_OF_SUBMARINES;
  * @brief Class represent a player human or non-human,
  * */
 public class Player {
-	private String id;
 	private String name;
+	private ClientConnection con;
 	private int hits;
 	private int moves;
 	private Vector<Ship> ships;
@@ -31,11 +31,10 @@ public class Player {
 	private boolean playerTurn; 
 	public Status status;
 	
-	public Player(String id, String name) {
-		this.id = id;
+	public Player(String name, ClientConnection con) {
 		this.name = name;
-		grid = new Grid();
-		grid.addMouseListener(new GridListener());
+		this.con = con;
+		con.setPlayer(this);
 	}
 	
 	public void init() {
@@ -46,11 +45,14 @@ public class Player {
 		initShips();
 	}
 	
+	public void setGrid(Grid grid) {
+		this.grid = grid;
+		grid.addMouseListener(new GridListener());
+	}
 	private void initShips() {
 		ships = ShipBuilder.buildShips();
 	}
 	
-	public String getId() { return id; }
 	public String getName() { return name; }
 	public int getHits() { return hits; }
 	public int getMoves() { return moves; }
@@ -64,6 +66,10 @@ public class Player {
 		// implement enemy fire
 		// if damage taken, add damage to ship
 		// and call updateShips()
+	}
+	
+	public void listen() {
+		new Thread(con).start();
 	}
 	
 	public void updateShips() {
@@ -95,6 +101,10 @@ public class Player {
 		//if()
 		
 		return false;
+	}
+	
+	public Grid getGrid() {
+		return grid;
 	}
 	
 	/**

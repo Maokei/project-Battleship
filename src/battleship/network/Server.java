@@ -7,9 +7,6 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 
-import battleship.server.Message;
-
-
 public class Server {
 	private static int id;
 	private int portNumber;
@@ -61,7 +58,7 @@ public class Server {
 		}
 	}
 
-	private synchronized void sendMessageToAll(Message msg) {
+	private synchronized void sendMessageToAll(TmpMessage msg) {
 		for (PlayerProxy player : players) {
 			player.sendMessage(msg);
 		}
@@ -70,7 +67,7 @@ public class Server {
 	class PlayerProxy extends Thread {
 		private Socket socket;
 		private String address;
-		private Message msg;
+		private TmpMessage msg;
 		private int playerId;
 		private ObjectInputStream in;
 		private ObjectOutputStream out;
@@ -92,7 +89,7 @@ public class Server {
 				in = new ObjectInputStream(socket.getInputStream());
 				while (running) {
 					try {
-						msg = (Message) in.readObject();
+						msg = (TmpMessage) in.readObject();
 						handleMessage(msg);
 					} catch (ClassNotFoundException e) {
 						System.out.println(e.getMessage());
@@ -107,22 +104,22 @@ public class Server {
 			}
 		}
 
-		private void handleMessage(Message msg) {
+		private void handleMessage(TmpMessage msg) {
 			int type = msg.getType();
 			switch (type) {
-			case Message.LOGOUT:
+			case TmpMessage.LOGOUT:
 				running = false;
 				removePlayerProxy(this.playerId);
 				sendMessageToAll(msg);
 				break;
-			case Message.MESSAGE:
+			case TmpMessage.MESSAGE:
 				sendMessageToAll(msg);
 				break;
 			}
 
 		}
 
-		private void sendMessage(Message msg) {
+		private void sendMessage(TmpMessage msg) {
 			try {
 				out.writeObject(msg);
 			} catch (IOException e) {

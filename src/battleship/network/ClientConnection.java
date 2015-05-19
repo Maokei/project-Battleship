@@ -5,19 +5,20 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
+import battleship.player.Player;
+
 public class ClientConnection implements Runnable {
 	private String address;
 	private int portNumber;
 	private Socket socket;
 	private ObjectOutputStream out;
 	private ObjectInputStream in;
-	private Client player;
-	private ChatMessage msg;
+	private Player player;
+	private TmpMessage msg;
 
-	public ClientConnection(String address, int portNumber, Client player) {
+	public ClientConnection(String address, int portNumber) {
 		this.address = address;
 		this.portNumber = portNumber;
-		this.player = player;
 	}
 
 	public boolean openConnection() {
@@ -35,12 +36,20 @@ public class ClientConnection implements Runnable {
 		}
 		return true;
 	}
+	
+	public void setPlayer(Player player) {
+		this.player = player;
+	}
 
 	public void run() {
 		try {
 			while (true) {
-				msg = (ChatMessage) in.readObject();
-				player.appendText(msg.getReceiver() + ">> " + msg.getMessage() + "\n");
+
+				msg = (TmpMessage) in.readObject();
+				System.out.println(msg.getName() + ">> " + msg.getMessage() + "\n");
+
+				//msg = (ChatMessage) in.readObject();
+				// player.appendText(msg.getReceiver() + ">> " + msg.getMessage() + "\n");
 			}
 			
 		} catch (IOException e) {
@@ -64,7 +73,7 @@ public class ClientConnection implements Runnable {
 				System.out.println("Client with address " + address
 						+ " and port " + port + "\nhas closed"
 						+ " the connection with the server.\n ");
-				player.reset();
+				// player.reset();
 			} catch (IOException e) {
 				System.err.println(e.getMessage());
 			}

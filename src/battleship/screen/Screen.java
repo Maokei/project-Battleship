@@ -17,35 +17,16 @@ import battleship.player.Grid;
 public class Screen {
 	private JFrame frame;
 	private MainPanel mainPanel;
-	private InputPanel namePanel;
-	private InputPanel avatarpanel;
-	private JLabel position;
-	private JPanel positionPanel;
-	private static FireButton fireButton;
+	
 	private Grid playerGrid, enemyGrid;
 	
-	public Screen() {
+	public Screen(Grid playerGrid, Grid enemyGrid) {
 		frame = new JFrame("*** Battleship ***");
 		mainPanel = new MainPanel();
 		mainPanel.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
-		mainPanel.addMouseListener(new GridListener());
-		namePanel = new InputPanel("Enter name", true);
-		avatarpanel = new InputPanel("choose avatar", true);
-		position = new JLabel("Click on screen to get position");
-		position.setForeground(new Color(255, 255, 255));
-		positionPanel = new JPanel();
-		positionPanel.setSize(new Dimension(100, 120));
-		positionPanel.setBackground(new Color(18, 28, 26));
-		positionPanel.add(position);
-		mainPanel.add(namePanel);
-		mainPanel.add(positionPanel);
-		mainPanel.add(avatarpanel);
-		fireButton = new FireButton("Fire Missile");
-		mainPanel.add(fireButton);
-		mainPanel.add(new AvatarPanel());
-		playerGrid = new Grid();
+		this.playerGrid = playerGrid;
 		playerGrid.gridTest();
-		enemyGrid = new Grid();
+		this.enemyGrid = enemyGrid;
 		enemyGrid.gridTest();
 		mainPanel.add(playerGrid);
 		mainPanel.add(enemyGrid);
@@ -59,21 +40,7 @@ public class Screen {
 		frame.setVisible(true);
 	}
 	
-	public static void main(String[] args) {
-		SwingUtilities.invokeLater(new Runnable() {
-
-			@Override
-			public void run() {
-				new Screen().showGUI();
-			}
-		});
+	public JFrame getScreen() {
+		return frame;
 	}
-	
-	class GridListener extends MouseAdapter {
-	    @Override
-	    public void mousePressed(MouseEvent e) {
-	    	position.setText("You fired at Position: " + e.getX() + " " + e.getY());
-	    }
-	}
-	
 }

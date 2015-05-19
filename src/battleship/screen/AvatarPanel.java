@@ -28,7 +28,7 @@ public class AvatarPanel extends JPanel {
 	private JPanel avatarPanel, descriptionPanel;
 	private String path = "src/res/sprite/";
 	private int index = 0;
-	
+
 	public AvatarPanel() {
 		super(new BorderLayout());
 		setSize(new Dimension(150, 400));
@@ -38,15 +38,17 @@ public class AvatarPanel extends JPanel {
 		leftArrow.setEnabled(false);
 		rightArrow = new JButton();
 		rightArrow.addActionListener(new AvatarCycler());
-		
+
 		try {
-			leftArrow.setIcon(new ImageIcon(ImageIO.read(new File(path + "arrow_left_50x50.png"))));
-			rightArrow.setIcon(new ImageIcon(ImageIO.read(new File(path + "arrow_right_50x50.png"))));
+			leftArrow.setIcon(new ImageIcon(ImageIO.read(new File(path
+					+ "arrow_left_50x50.png"))));
+			rightArrow.setIcon(new ImageIcon(ImageIO.read(new File(path
+					+ "arrow_right_50x50.png"))));
 		} catch (IOException e) {
 			System.err.println(e.getMessage());
 			e.printStackTrace();
 		}
-		
+
 		buttonPanel.add(leftArrow);
 		buttonPanel.add(rightArrow);
 		add(buttonPanel, BorderLayout.NORTH);
@@ -64,60 +66,79 @@ public class AvatarPanel extends JPanel {
 		add(description, BorderLayout.SOUTH);
 		init();
 	}
-	
+
 	private void init() {
 		readAvatarsFromFile();
-		names.add("Pirate Pac"); names.add("Skull 'n Bones");
+		names.add("Pirate Pac");
+		names.add("Skull 'n Bones");
 		avatar.setIcon(new ImageIcon(avatars.get(names.get(index))));
 		description.setText(names.get(index));
 	}
-	
+
+	public void reset() {
+		index = 0;
+		avatar.setIcon(new ImageIcon(avatars.get(names.get(index))));
+		description.setText(names.get(index));
+		leftArrow.setEnabled(false);
+		rightArrow.setEnabled(true);
+	}
+
+	public Avatar getAvatar() {
+		return new Avatar(avatars.get(names.get(index)), names.get(index));
+	}
+
 	private void readAvatarsFromFile() {
 		try {
-			avatars.put("Pirate Pac", ImageIO.read(new File(path + "pacman_150x125.png")));
-			avatars.put("Skull 'n Bones", ImageIO.read(new File(path + "pirate_150x82.png")));
+			avatars.put("Pirate Pac",
+					ImageIO.read(new File(path + "pacman_150x125.png")));
+			avatars.put("Skull 'n Bones",
+					ImageIO.read(new File(path + "pirate_150x82.png")));
 		} catch (IOException e) {
 			System.err.println(e.getMessage());
 			e.printStackTrace();
 		}
 	}
-	
+
 	class AvatarCycler implements ActionListener {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			if(e.getSource() == leftArrow) {
+			if (e.getSource() == leftArrow) {
 				moveLeft();
-			} else if(e.getSource() == rightArrow) {
+			} else if (e.getSource() == rightArrow) {
 				moveRight();
 			}
-			
+
 			checkButtons();
 		}
-		
+
 		private void moveLeft() {
-			if(index > 0) {
+			if (index > 0) {
 				--index;
 				avatar.setIcon(new ImageIcon(avatars.get(names.get(index))));
 				description.setText(names.get(index));
-			} 
+			}
 		}
-		
+
 		private void moveRight() {
-			if(index < avatars.size() - 1) {
+			if (index < avatars.size() - 1) {
 				++index;
 				avatar.setIcon(new ImageIcon(avatars.get(names.get(index))));
 				description.setText(names.get(index));
 			}
 		}
-		
+
 		private void checkButtons() {
-			if(index >= 1) leftArrow.setEnabled(true);
-			else leftArrow.setEnabled(false);
-			
-			if(index == avatars.size() - 1) rightArrow.setEnabled(false);
-			else rightArrow.setEnabled(true);
+			if (index >= 1)
+				leftArrow.setEnabled(true);
+			else
+				leftArrow.setEnabled(false);
+
+			if (index == avatars.size() - 1)
+				rightArrow.setEnabled(false);
+			else
+				rightArrow.setEnabled(true);
 		}
 	}
-	
+
 }

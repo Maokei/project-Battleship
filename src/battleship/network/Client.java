@@ -1,3 +1,4 @@
+/*
 package battleship.network;
 
 import java.awt.BorderLayout;
@@ -148,3 +149,4 @@ public class Client {
 	}
 
 }
+*/

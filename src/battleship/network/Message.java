@@ -14,7 +14,7 @@ import java.io.Serializable;
  * @class Message
  * @brief Class describes a message from a user to to another or everyone. 
  * */
-public abstract class Message {
+public abstract class Message implements Serializable{
 	private static final long serialVersionUID = 7526476844562776147L;
 	private String sender;
 	private String receiver;
@@ -45,7 +45,7 @@ public abstract class Message {
 
 /**
  * @package console.network
- * @class ChatMessage
+ * @class ChatMessag
  * @brief Class describes a ChatMessage from a user to to another or everyone. 
  * */
 class ChatMessage extends Message {
@@ -61,9 +61,6 @@ class ChatMessage extends Message {
 		this.message = message;
 	}
 	
-	public int getType() {
-		return 1;
-	}
 	
 	public String getMessage() {
 		return message;
