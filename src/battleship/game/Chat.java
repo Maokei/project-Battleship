@@ -30,7 +30,7 @@ public class Chat {
 	public Chat(String name) {
 		this.name = name;
 		frame = new JFrame("Battleship Chat");
-		input = new InputPanel("Enter message", true);
+		input = new InputPanel("Enter message", false);
 		output = new JTextArea(10, 20);
 		outputPanel = new JPanel();
 		outputPanel.add(new JScrollPane(output));
@@ -69,9 +69,11 @@ public class Chat {
 		if (con.openConnection()) {
 			connected = true;
 			con.setOutput(output);
+			input.setEditable(true);
 			login.setEnabled(false);
 			send.setEnabled(true);
 			player = new Player(name, con);
+			con.setPlayer(player);
 			con.sendChatMessage("Logged in");
 			new Thread(con).start();
 		}
@@ -82,7 +84,6 @@ public class Chat {
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
 			public void run() {
-				Server server = new Server(10001);
 				new Chat(name).showChat();
 			}
 		});
