@@ -12,6 +12,9 @@ import battleship.player.Player;
 import battleship.screen.Avatar;
 import battleship.screen.Screen;
 
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+
 public class Game {
 	private Player player;
 	private Screen screen;
@@ -35,6 +38,27 @@ public class Game {
 	}
 	
 	public static void main(String[] args) {
-		Game game = new Game();
+		Object[] ob = {"Client", "Server","Cancel"};
+		int choice = optionPane("Start client or server?","Battleship",ob);
+		switch(choice) {
+		case 0:
+			Game game = new Game();
+			break;
+		case 1:
+			//server
+			break;
+		case 2:
+			//do nothing
+			break;
+		
+		}
+	}
+	
+	public static int optionPane(String question, String title, Object[] options) {
+		int n = 0;
+		JFrame frame = new JFrame();
+		n = JOptionPane.showOptionDialog(frame, question, title, JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[2]);
+		return n;
 	}
 }
+
