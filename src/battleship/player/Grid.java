@@ -76,7 +76,6 @@ public class Grid extends JPanel {
 	
 	public void gridTest() {
 		//sub test tile
-		grid[5][5] = 's';
 		//initiate
 		setLayout(new GridLayout(size, size));
 		for(int i = 0; i < size; i++){

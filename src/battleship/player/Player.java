@@ -10,6 +10,7 @@ import static battleship.player.Constants.NUM_OF_SUBMARINES;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.security.AllPermission;
 import java.util.Vector;
 
 import battleship.game.Status;
@@ -30,10 +31,13 @@ public class Player {
 	private Grid grid;
 	private boolean playerTurn; 
 	public Status status;
+	private boolean placedAll = false;
+	private int placeIndex;
 	
 	public Player(String name, ClientConnection con) {
 		this.name = name;
 		this.con = con;
+		placeIndex = 0;
 		con.setPlayer(this);
 	}
 	
@@ -112,12 +116,17 @@ public class Player {
 	 * @param Ship object, int player 1 - 2 blue or red player
 	 * @return boolean if ship is valid placement
 	 * */
-	public boolean placeShip(Ship ship, int player) {
-		int x, y;
-		x = ship.getX();
-		y = ship.getY();
+	public boolean placeShip(Ship ship, int x, int y) {
+		//int x, y;
+		//x = ship.getX();
+		//y = ship.getY();
 		Alignment a = ship.getAlignment();
 		int length = ship.getLength();
+		if(grid.isEmpty(x, y, a, length)) {
+			grid.placeShipOnGrid(ship);
+			return true;
+		}
+		/*
 		if(player == 1) { //blue player
 			if(grid.isEmpty(x, y, a, length)) {
 				grid.placeShipOnGrid(ship);
@@ -129,6 +138,7 @@ public class Player {
 				return true;
 			}
 		}
+		*/
 		return false;
 	}
 	
@@ -143,20 +153,25 @@ public class Player {
 			
 		}
 	}
+	
+	class GridListener extends MouseAdapter {
+	    @Override
+	    public void mousePressed(MouseEvent e) {
+	    	if(!placedAll) {
+	    		placeShip(ships.get(placeIndex++), e.getX(), e.getY());
+	    	}
+	    	//if(isPlacingShip)
+	    	//	player.placeShip(ship, x, y)
+	    	// else if(isFiring)
+	    	// player.fire(e.getX(), e.getY()) alt.
+	    	// client.sendMessage(new FireMessage(player, e.getX(), e.getY())
+	    	
+	    	// etc ...
+	    }
+	}
 }
 
-class GridListener extends MouseAdapter {
-    @Override
-    public void mousePressed(MouseEvent e) {
-    	//if(isPlacingShip)
-    	//	player.placeShip(ship, x, y)
-    	// else if(isFiring)
-    	// player.fire(e.getX(), e.getY()) alt.
-    	// client.sendMessage(new FireMessage(player, e.getX(), e.getY())
-    	
-    	// etc ...
-    }
-}
+
 
 class ShipBuilder {
 	public static Vector<Ship> buildShips() {
