@@ -43,6 +43,8 @@ public abstract class Message implements Serializable{
 	}
 }
 
+
+
 /**
  * @package console.network
  * @class ChatMessag

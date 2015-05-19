@@ -15,6 +15,7 @@ import java.util.Vector;
 
 import battleship.game.Status;
 import battleship.network.ClientConnection;
+import battleship.network.Message;
 
 /**
  * @package battleship.entity
@@ -74,6 +75,10 @@ public class Player {
 	
 	public void listen() {
 		new Thread(con).start();
+	}
+	
+	public void sendMessage(String message) {
+		con.sendChatMessage(message);
 	}
 	
 	public void updateShips() {

@@ -58,7 +58,7 @@ public class Server {
 		}
 	}
 
-	private synchronized void sendMessageToAll(TmpMessage msg) {
+	private synchronized void sendMessageToAll(ChatMessage msg) {
 		for (PlayerProxy player : players) {
 			player.sendMessage(msg);
 		}
@@ -67,7 +67,7 @@ public class Server {
 	class PlayerProxy extends Thread {
 		private Socket socket;
 		private String address;
-		private TmpMessage msg;
+		private ChatMessage msg;
 		private int playerId;
 		private ObjectInputStream in;
 		private ObjectOutputStream out;
@@ -89,8 +89,10 @@ public class Server {
 				in = new ObjectInputStream(socket.getInputStream());
 				while (running) {
 					try {
-						msg = (TmpMessage) in.readObject();
-						handleMessage(msg);
+						msg = (ChatMessage) in.readObject();
+						// msg = (TmpMessage) in.readObject();
+						handleChatMessage(msg);
+						// handleMessage(msg);
 					} catch (ClassNotFoundException e) {
 						System.out.println(e.getMessage());
 						e.printStackTrace();
@@ -104,7 +106,13 @@ public class Server {
 			}
 		}
 
+		private void handleChatMessage(ChatMessage msg) {
+			sendMessageToAll(msg);
+			
+		}
+
 		private void handleMessage(TmpMessage msg) {
+			/*
 			int type = msg.getType();
 			switch (type) {
 			case TmpMessage.LOGOUT:
@@ -116,10 +124,10 @@ public class Server {
 				sendMessageToAll(msg);
 				break;
 			}
-
+		*/
 		}
 
-		private void sendMessage(TmpMessage msg) {
+		private void sendMessage(ChatMessage msg) {
 			try {
 				out.writeObject(msg);
 			} catch (IOException e) {

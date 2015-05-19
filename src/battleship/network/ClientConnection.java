@@ -5,6 +5,8 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
+import javax.swing.JTextArea;
+
 import battleship.player.Player;
 
 public class ClientConnection implements Runnable {
@@ -14,7 +16,8 @@ public class ClientConnection implements Runnable {
 	private ObjectOutputStream out;
 	private ObjectInputStream in;
 	private Player player;
-	private TmpMessage msg;
+	private ChatMessage msg;
+	private JTextArea output; // just for Chat 
 
 	public ClientConnection(String address, int portNumber) {
 		this.address = address;
@@ -40,18 +43,18 @@ public class ClientConnection implements Runnable {
 	public void setPlayer(Player player) {
 		this.player = player;
 	}
+	
+	// just to demonstrate Chat
+	public void setOutput(JTextArea output) {
+		this.output = output;
+	}
 
 	public void run() {
 		try {
 			while (true) {
-
-				msg = (TmpMessage) in.readObject();
-				System.out.println(msg.getName() + ">> " + msg.getMessage() + "\n");
-
-				//msg = (ChatMessage) in.readObject();
-				// player.appendText(msg.getReceiver() + ">> " + msg.getMessage() + "\n");
+				msg = (ChatMessage) in.readObject();
+				output.setText(msg.getSender() + ">> " + msg.getMessage());
 			}
-			
 		} catch (IOException e) {
 			System.err.println(e.getMessage());
 			e.printStackTrace();
@@ -73,7 +76,6 @@ public class ClientConnection implements Runnable {
 				System.out.println("Client with address " + address
 						+ " and port " + port + "\nhas closed"
 						+ " the connection with the server.\n ");
-				// player.reset();
 			} catch (IOException e) {
 				System.err.println(e.getMessage());
 			}
@@ -83,6 +85,15 @@ public class ClientConnection implements Runnable {
 	public void sendMessage(Message message) {
 		try {
 			out.writeObject(message);
+		} catch (IOException e) {
+			System.err.println(e.getMessage());
+			e.printStackTrace();
+		}
+	}
+	
+	public void sendChatMessage(String message) {
+		try {
+			out.writeObject(new ChatMessage(player.getName(), message));
 		} catch (IOException e) {
 			System.err.println(e.getMessage());
 			e.printStackTrace();

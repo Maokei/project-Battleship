@@ -25,6 +25,9 @@ public class Game {
 	public static final int DEFAULT_PORT = 10001;
 	
 	public Game() {
+		String name = JOptionPane.showInputDialog("Enter name");
+		new Chat(name);
+		/*
 		playerGrid = new Gameboard();
 		enemyGrid = new Gameboard();
 		screen = new Screen(playerGrid, enemyGrid);
@@ -33,6 +36,7 @@ public class Game {
 		screen.showGUI();
 		player.init();
 		player.listen();
+		*/
 	}
 	
 	public void setPlayer(Player player) {
@@ -40,6 +44,10 @@ public class Game {
 	}
 	
 	public static void main(String[] args) {
+		
+		
+		
+		/*
 		Object[] ob = {"Client", "Server","Cancel"};
 		int choice = optionPane("Start client or server?","Battleship",ob);
 		switch(choice) {
@@ -55,6 +63,7 @@ public class Game {
 			break;
 		
 		}
+		*/
 	}
 	
 	public static int optionPane(String question, String title, Object[] options) {
