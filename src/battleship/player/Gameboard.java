@@ -65,6 +65,8 @@ public class Gameboard extends JPanel {
 		// fill grid
 		for (char[] row : grid)
 			Arrays.fill(row, 'o');
+		
+		grid[5][5] = 's';
 
 		sprites = SpriteLoader.getInstance(32, 32, 8, 8, 12);
 		sprites.loadSprites("src/res/sprite/spritesheet_battleship.png");
@@ -102,10 +104,11 @@ public class Gameboard extends JPanel {
 	 * @return The converted BufferedImage
 	 */
 	public static BufferedImage toBufferedImage(Image img) {
+	
 		if (img instanceof BufferedImage) {
 			return (BufferedImage) img;
 		}
-
+	
 		// Create a buffered image with transparency
 		BufferedImage bimage = new BufferedImage(img.getWidth(null),
 				img.getHeight(null), BufferedImage.TYPE_INT_ARGB);
@@ -226,6 +229,7 @@ public class Gameboard extends JPanel {
 			lgrid[row][col].setIcon(new ImageIcon(sprites
 					.getSprite("hor_sub")));
 		}
+		repaint();
 	}
 	
 
