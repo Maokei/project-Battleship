@@ -53,7 +53,7 @@ public class ClientConnection implements Runnable {
 		try {
 			while (true) {
 				msg = (ChatMessage) in.readObject();
-				output.append(msg.getSender() + ">> " + msg.getMessage());
+				output.append(msg.getSender() + ">> " + msg.getMessage() + "\n");
 			}
 		} catch (IOException e) {
 			System.err.println(e.getMessage());
