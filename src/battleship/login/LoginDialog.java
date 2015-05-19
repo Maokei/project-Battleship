@@ -57,6 +57,8 @@ public class LoginDialog extends JDialog {
 			if (connection.openConnection()) {
 				connected = true;
 				player = new Player(loginPanel.getName(), connection);
+				setVisible(false);
+				dispose();
 			}
 		}
 		// 

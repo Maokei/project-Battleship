@@ -31,12 +31,13 @@ public class Screen {
 		mainPanel.add(playerGrid);
 		mainPanel.add(enemyGrid);
 		frame.add(mainPanel, BorderLayout.CENTER);
-	}
-	
-	public void showGUI() {
+		
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setSize(900, 600);
 		frame.setLocationRelativeTo(null);
+	}
+	
+	public void showGUI() {
 		frame.setVisible(true);
 	}
 	

@@ -26,7 +26,6 @@ public class Game {
 		login = new LoginDialog(screen, this);
 		player = login.getPlayer();
 		player.setGrid(playerGrid);
-		login.dispose();
 		screen.showGUI();
 		player.init();
 		player.listen();
