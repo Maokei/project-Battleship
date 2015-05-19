@@ -34,6 +34,7 @@ public class Player {
 	public Status status;
 	private boolean placedAll = false;
 	private int placeIndex;
+	private static final int GRID_SIZE = 32;
 	
 	public Player(String name, ClientConnection con) {
 		this.name = name;
@@ -116,6 +117,10 @@ public class Player {
 		return grid;
 	}
 	
+	public boolean placeShipByGrid(Ship ship, int row, int col) {
+		grid.placeShip(ship, row, col);
+		return true;
+	}
 	/**
 	 * placeShip
 	 * @param Ship object, int player 1 - 2 blue or red player
@@ -163,7 +168,13 @@ public class Player {
 	    @Override
 	    public void mousePressed(MouseEvent e) {
 	    	if(!placedAll) {
-	    		placeShip(ships.get(placeIndex++), e.getX(), e.getY());
+	    		Ship carrier = new Carrier();
+	    		int row = e.getY() / GRID_SIZE;
+	    		int col = e.getX() / GRID_SIZE;
+	    		System.out.println("Player fired at Grid[ " + row + ", " + col + "]");
+	    		if(((carrier.length + col) <= 10))
+	    			placeShipByGrid(carrier, row, col);
+	    		// placeShip(ships.get(placeIndex++), e.getX(), e.getY());
 	    	}
 	    	//if(isPlacingShip)
 	    	//	player.placeShip(ship, x, y)

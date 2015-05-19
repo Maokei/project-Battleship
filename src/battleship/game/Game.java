@@ -5,16 +5,15 @@
  * */
 package battleship.game;
 
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+
 import battleship.login.LoginDialog;
 import battleship.network.ClientConnection;
 import battleship.network.Server;
 import battleship.player.Gameboard;
 import battleship.player.Player;
-import battleship.screen.Avatar;
 import battleship.screen.Screen;
-
-import javax.swing.JFrame;
-import javax.swing.JOptionPane;
 
 public class Game {
 	private Player player;
@@ -25,9 +24,6 @@ public class Game {
 	public static final int DEFAULT_PORT = 10001;
 	
 	public Game() {
-		String name = JOptionPane.showInputDialog("Enter name");
-		new Chat(name);
-		/*
 		playerGrid = new Gameboard();
 		enemyGrid = new Gameboard();
 		screen = new Screen(playerGrid, enemyGrid);
@@ -36,7 +32,6 @@ public class Game {
 		screen.showGUI();
 		player.init();
 		player.listen();
-		*/
 	}
 	
 	public void setPlayer(Player player) {
@@ -44,10 +39,6 @@ public class Game {
 	}
 	
 	public static void main(String[] args) {
-		
-		
-		
-		/*
 		Object[] ob = {"Client", "Server","Cancel"};
 		int choice = optionPane("Start client or server?","Battleship",ob);
 		switch(choice) {
@@ -61,9 +52,7 @@ public class Game {
 		case 2:
 			//do nothing
 			break;
-		
 		}
-		*/
 	}
 	
 	public static int optionPane(String question, String title, Object[] options) {

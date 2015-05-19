@@ -11,7 +11,6 @@ import javax.swing.JTextArea;
 import javax.swing.SwingUtilities;
 
 import battleship.network.ClientConnection;
-import battleship.network.Server;
 import battleship.player.Player;
 import battleship.screen.InputPanel;
 
