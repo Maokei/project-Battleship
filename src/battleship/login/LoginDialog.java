@@ -21,9 +21,13 @@ public class LoginDialog extends JDialog {
 	public static final int DEFAULT_PORT = 10001;
 	public static final String DEFAULT_ADDRESS = "localhost";
 	private Player player;
+	private Game game;
+	private Screen screen;
 
 	public LoginDialog(Screen screen, Game game) {
 		super(screen.getScreen(), true);
+		this.screen = screen;
+		this.game = game;
 		setLayout(new GridLayout(2, 1));
 		setSize(300, 600);
 		setTitle("Battleship login options");
@@ -57,14 +61,12 @@ public class LoginDialog extends JDialog {
 			if (connection.openConnection()) {
 				connected = true;
 				player = new Player(loginPanel.getName(), connection);
+				game.setPlayer(player);
+				screen.setAvatar(loginPanel.getAvatar());
 				setVisible(false);
 				dispose();
 			}
 		}
 		// 
-	}
-	
-	public Player getPlayer() {
-		return player;
 	}
 }

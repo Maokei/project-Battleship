@@ -2,7 +2,10 @@ package battleship.screen;
 
 import java.awt.GridLayout;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
+import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -12,14 +15,46 @@ public class Avatar extends JPanel {
 	private BufferedImage img;
 	private String name;
 	private JLabel avatarLabel, nameLabel;
+	private String path = "src/res/sprite/";
 	
+	public Avatar() {
+		super(new GridLayout(2, 1));
+		avatarLabel = new JLabel();
+		try {
+			img = ImageIO.read(new File(path + "pacman_150x125.png"));
+			avatarLabel.setIcon(new ImageIcon(img));
+		} catch (IOException e) {
+			System.err.println(e.getMessage());
+			e.printStackTrace();
+		}
+		nameLabel = new JLabel("Pirate Pac");
+		add(avatarLabel);
+		add(nameLabel);
+	}
 	
 	public Avatar(BufferedImage img, String name) {
 		super(new GridLayout(2, 1));
+		this.img = img;
+		this.name = name;
 		avatarLabel = new JLabel();
 		avatarLabel.setIcon(new ImageIcon(img));
 		nameLabel = new JLabel(name);
 		add(avatarLabel);
 		add(nameLabel);
+	}
+	
+	public void setAvatar(BufferedImage img, String name) {
+		this.img = img;
+		this.name = name;
+		avatarLabel.setIcon(new ImageIcon(img));
+		nameLabel.setText(name);
+	}
+	
+	public BufferedImage getImage() {
+		return img;
+	}
+	
+	public String getName() {
+		return name;
 	}
 }

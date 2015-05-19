@@ -23,12 +23,15 @@ public class Game {
 		playerGrid = new Grid();
 		enemyGrid = new Grid();
 		screen = new Screen(playerGrid, enemyGrid);
-		login = new LoginDialog(screen, this);
-		player = login.getPlayer();
+		login = new LoginDialog(screen, this);		
 		player.setGrid(playerGrid);
 		screen.showGUI();
 		player.init();
 		player.listen();
+	}
+	
+	public void setPlayer(Player player) {
+		this.player = player;
 	}
 	
 	public static void main(String[] args) {
