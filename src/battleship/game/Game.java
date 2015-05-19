@@ -7,6 +7,7 @@ package battleship.game;
 
 import battleship.login.LoginDialog;
 import battleship.network.ClientConnection;
+import battleship.network.Server;
 import battleship.player.Grid;
 import battleship.player.Player;
 import battleship.screen.Avatar;
@@ -21,6 +22,7 @@ public class Game {
 	private LoginDialog login;
 	private ClientConnection con;
 	private Grid playerGrid, enemyGrid;
+	public static final int DEFAULT_PORT = 10001;
 	
 	public Game() {
 		playerGrid = new Grid();
@@ -45,7 +47,8 @@ public class Game {
 			Game game = new Game();
 			break;
 		case 1:
-			//server
+			Server server = new Server(DEFAULT_PORT);
+			server.listen();
 			break;
 		case 2:
 			//do nothing
