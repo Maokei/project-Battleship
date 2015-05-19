@@ -66,7 +66,7 @@ public class Gameboard extends JPanel {
 		for (char[] row : grid)
 			Arrays.fill(row, 'o');
 
-		sprites = SpriteLoader.getInstance(32, 32, 8, 8, 11);
+		sprites = SpriteLoader.getInstance(32, 32, 8, 8, 12);
 		sprites.loadSprites("src/res/sprite/spritesheet_battleship.png");
 		setLayout(new GridLayout(size, size));
 		for (int i = 0; i < size; i++) {
@@ -192,6 +192,10 @@ public class Gameboard extends JPanel {
 				placeShipTile(ship.getX(), ship.getY(), ship.getType());
 			}
 		}
+	}
+	
+	public void fire(int row, int col) {
+		lgrid[row][col].setIcon(new ImageIcon(sprites.getSprite("hit")));
 	}
 
 	public void placeShip(Ship ship, int row, int col) {
