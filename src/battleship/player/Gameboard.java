@@ -231,18 +231,18 @@ public class Gameboard extends JPanel {
 			for (int i = 0; i < ship.length; i++) {
 				if(i == 0) {
 					lgrid[counter++][col].setIcon(new ImageIcon(sprites
-						.getSprite("vert_front")));
+						.getSprite("ver_front")));
 				} else if(i == ship.length - 1) {
 					lgrid[counter++][col].setIcon(new ImageIcon(sprites
-							.getSprite("vert_back")));
+							.getSprite("ver_back")));
 				} else {
 					lgrid[counter++][col].setIcon(new ImageIcon(sprites
-							.getSprite("vert_mid")));
+							.getSprite("ver_mid")));
 				}
 			}
 		} else {
 			lgrid[row][col].setIcon(new ImageIcon(sprites
-					.getSprite("vert_sub")));
+					.getSprite("ver_sub")));
 		}
 	}
 

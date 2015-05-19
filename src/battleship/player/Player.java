@@ -168,12 +168,20 @@ public class Player {
 	    @Override
 	    public void mousePressed(MouseEvent e) {
 	    	if(!placedAll) {
-	    		Ship carrier = new Carrier();
+	    		Ship ship = ships.get(placeIndex);
+	    		if((placeIndex + 1) % 2 == 0)
+	    			ship.alignment = Alignment.VERTICAL;
+	    		if(++placeIndex == ships.size())
+	    			placedAll = true;
 	    		int row = e.getY() / GRID_SIZE;
 	    		int col = e.getX() / GRID_SIZE;
 	    		System.out.println("Player fired at Grid[ " + row + ", " + col + "]");
-	    		if(((carrier.length + col) <= 10))
-	    			placeShipByGrid(carrier, row, col);
+	    		if((ship.alignment == Alignment.HORIZONTAL) && (ship.length + col) <= 10)
+	    			placeShipByGrid(ship, row, col);
+	    		else if(((ship.alignment == Alignment.VERTICAL) && (ship.length + row) <= 10))
+	    			placeShipByGrid(ship, row, col);
+	    		
+	    		
 	    		// placeShip(ships.get(placeIndex++), e.getX(), e.getY());
 	    	}
 	    	//if(isPlacingShip)
