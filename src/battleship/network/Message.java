@@ -7,6 +7,7 @@ package battleship.network;
 
 import battleship.player.Alignment;
 import battleship.player.ShipType;
+import java.io.Serializable;
 
 /**
  * @package console.network
@@ -17,6 +18,8 @@ public abstract class Message {
 	private static final long serialVersionUID = 7526476844562776147L;
 	private String sender;
 	private String receiver;
+	static final int LOGOUT = 0, MESSAGE = 1;
+	private int type;
 	
 	public Message(String sender, String receiver) {
 		this.sender = sender;
@@ -25,6 +28,10 @@ public abstract class Message {
 	
 	public String getMessageType() {
 		return "message";
+	}
+	
+	public int getType() {
+		return type;
 	}
 	
 	public String getSender() {
@@ -52,6 +59,10 @@ class ChatMessage extends Message {
 	public ChatMessage(String sender, String message) {
 		super(sender, "");
 		this.message = message;
+	}
+	
+	public int getType() {
+		return 1;
 	}
 	
 	public String getMessage() {
