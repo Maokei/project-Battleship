@@ -12,7 +12,7 @@ public class ClientConnection implements Runnable {
 	private ObjectOutputStream out;
 	private ObjectInputStream in;
 	private Client player;
-	private Message msg;
+	private ChatMessage msg;
 
 	public ClientConnection(String address, int portNumber, Client player) {
 		this.address = address;
@@ -39,8 +39,8 @@ public class ClientConnection implements Runnable {
 	public void run() {
 		try {
 			while (true) {
-				msg = (Message) in.readObject();
-				player.appendText(msg.getName() + ">> " + msg.getMessage() + "\n");
+				msg = (ChatMessage) in.readObject();
+				player.appendText(msg.getReceiver() + ">> " + msg.getMessage() + "\n");
 			}
 			
 		} catch (IOException e) {
