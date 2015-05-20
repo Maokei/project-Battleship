@@ -10,6 +10,7 @@ import java.util.ArrayList;
 public class Server {
 	private static int id;
 	private int portNumber;
+	private final int numberOfPlayers = 2;
 	private ServerSocket server;
 	private ArrayList<PlayerProxy> players;
 
@@ -27,16 +28,19 @@ public class Server {
 			System.out.println("Server Listening on port " + portNumber);
 
 			while (true) {
-				socket = server.accept();
-				PlayerProxy player = new PlayerProxy(socket);
-				players.add(player);
-				player.start();
+				if (players.size() < numberOfPlayers) {
+					socket = server.accept();
+					PlayerProxy player = new PlayerProxy(socket);
+					players.add(player);
+					player.start();
+				}
 			}
 		} catch (IOException e) {
 			System.err.println(e.getMessage());
 		} finally {
 			if (server != null) {
 				try {
+					System.out.println("I'm in server finally");
 					for (PlayerProxy player : players) {
 						player.closeConnection();
 					}
@@ -51,7 +55,7 @@ public class Server {
 
 	private void removePlayerProxy(int id) {
 		for (int i = players.size() - 1; i >= 0; i--) {
-			if(players.get(i).playerId == id) {
+			if (players.get(i).playerId == id) {
 				players.get(i).closeConnection();
 				players.remove(i);
 			}
@@ -98,33 +102,25 @@ public class Server {
 						e.printStackTrace();
 					}
 				}
-
 			} catch (IOException e) {
 				System.err.println(e.getMessage());
 			} finally {
+				System.out.println("I'm in PlayerProxy finally");
 				closeConnection();
 			}
 		}
 
 		private void handleChatMessage(ChatMessage msg) {
 			sendMessageToAll(msg);
-			
 		}
 
 		private void handleMessage(TmpMessage msg) {
 			/*
-			int type = msg.getType();
-			switch (type) {
-			case TmpMessage.LOGOUT:
-				running = false;
-				removePlayerProxy(this.playerId);
-				sendMessageToAll(msg);
-				break;
-			case TmpMessage.MESSAGE:
-				sendMessageToAll(msg);
-				break;
-			}
-		*/
+			 * int type = msg.getType(); switch (type) { case TmpMessage.LOGOUT:
+			 * running = false; removePlayerProxy(this.playerId);
+			 * sendMessageToAll(msg); break; case TmpMessage.MESSAGE:
+			 * sendMessageToAll(msg); break; }
+			 */
 		}
 
 		private void sendMessage(ChatMessage msg) {

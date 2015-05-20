@@ -7,7 +7,6 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
-import battleship.network.ClientConnection;
 import battleship.player.Player;
 import battleship.screen.InputPanel;
 
