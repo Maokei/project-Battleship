@@ -67,7 +67,7 @@ public class InputPanel extends JPanel{
 
 		@Override
 		public void focusGained(FocusEvent e) {
-			setInputColor(new Color(255, 255, 170));
+			setInputColor(new Color(196, 245, 172));
 		}
 
 		@Override
