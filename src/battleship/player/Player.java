@@ -42,6 +42,10 @@ public class Player {
 		placeIndex = 0;
 		con.setPlayer(this);
 	}
+	
+	public ClientConnection getConnection() {
+		return con;
+	}
 
 	public void init() {
 		status = Status.PLAYING;

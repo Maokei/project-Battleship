@@ -1,37 +1,36 @@
 package battleship.screen;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.ComponentOrientation;
-import java.awt.Dimension;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 
 import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.SwingUtilities;
 
+import resources.image.SpriteLoader;
+import battleship.game.ChatPanel;
 import battleship.player.Gameboard;
+import battleship.player.Player;
 
 public class Screen {
+	private Player player;
 	private JFrame frame;
+	private ChatPanel chat;
 	private MainPanel mainPanel;
 	private Avatar avatar;
 	private Gameboard playerGrid, enemyGrid;
 	
 	public Screen(Gameboard playerGrid, Gameboard enemyGrid) {
+		this.playerGrid = playerGrid;
+		this.enemyGrid = enemyGrid;
 		frame = new JFrame("*** Battleship ***");
 		mainPanel = new MainPanel();
 		mainPanel.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
+		chat = new ChatPanel(); 
 		avatar = new Avatar();
-		this.playerGrid = playerGrid;
-		this.enemyGrid = enemyGrid;
 		mainPanel.add(avatar);
 		mainPanel.add(playerGrid);
 		mainPanel.add(enemyGrid);
+		mainPanel.add(chat);
 		frame.add(mainPanel, BorderLayout.CENTER);
-		
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setSize(900, 600);
 		frame.setLocationRelativeTo(null);
@@ -39,6 +38,11 @@ public class Screen {
 	
 	public void setAvatar(Avatar av) {
 		avatar.setAvatar(av.getImage(), av.getName());
+	}
+	
+	public void setUpChat(Player player) {
+		this.player = player;
+		chat.setPlayer(player);
 	}
 	
 	public void showGUI() {
