@@ -4,6 +4,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.StringTokenizer;
 
 import javax.swing.JTextArea;
 
@@ -53,7 +54,7 @@ public class ClientConnection implements Runnable {
 		try {
 			while (true) {
 				msg = (Message) in.readObject();
-				output.append(msg.getName() + ">> " + msg.getMessage() + "\n");
+				handleMessage(msg);
 			}
 		} catch (IOException e) {
 			System.err.println(e.getMessage());
@@ -81,19 +82,60 @@ public class ClientConnection implements Runnable {
 			}
 		}
 	}
+	
+	private void handleMessage(Message msg) {
+		int type = msg.getType();
+		switch (type) {
+		case Message.LOGIN: // only handled in server
+			break;
+		case Message.LOGOUT: // only handled in server
+			break;
+		case Message.MESSAGE:
+			parseMessage(msg);
+			break;
+		case Message.CHAT:
+			output.append(msg.getName() + ">> " + msg.getMessage() + "\n");
+			break;
+		}
+	}
+
+	private void parseMessage(Message msg) {
+		String[] tokens = msg.getMessage().split(" ");
+		switch(tokens[0].toUpperCase()) {
+		case "FIRE": parseFireMessage(tokens); break;
+		case "HIT": parseHitMessage(tokens); break;
+		case "WIN": parseWinMessage(); break;
+		}
+	}
+
+	// maybe not necessary
+	/*
+	private void parseShipPositionMessage(String[] tokens) {
+		String ship = tokens[1];
+		int row = Integer.parseInt(tokens[2]);
+		int col = Integer.parseInt(tokens[3]);
+		player.setEnemyShip(ship, row, col);
+	}
+	*/
+	private void parseFireMessage(String[] tokens) {
+		int row = Integer.parseInt(tokens[1]);
+		int col = Integer.parseInt(tokens[1]);
+		player.registerHit(row, col);
+	}
+
+	private void parseHitMessage(String[] tokens) {
+		int row = Integer.parseInt(tokens[1]);
+		int col = Integer.parseInt(tokens[1]);
+		player.registerEnemyHit(row, col);
+	}
+
+	private void parseWinMessage() {
+		// TODO Auto-generated method stub
+	}
 
 	public void sendMessage(Message message) {
 		try {
 			out.writeObject(message);
-		} catch (IOException e) {
-			System.err.println(e.getMessage());
-			e.printStackTrace();
-		}
-	}
-	
-	public void sendChatMessage(String message) {
-		try {
-			out.writeObject(new Message(1, player.getName(), message));
 		} catch (IOException e) {
 			System.err.println(e.getMessage());
 			e.printStackTrace();

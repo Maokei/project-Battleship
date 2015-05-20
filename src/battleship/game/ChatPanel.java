@@ -7,6 +7,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
+import battleship.network.Message;
 import battleship.player.Player;
 import battleship.screen.InputPanel;
 
@@ -18,7 +19,7 @@ public class ChatPanel extends JPanel {
 	private JPanel buttonPanel;
 	private JTextArea output;
 	private JButton send;
-	
+
 	public ChatPanel() {
 		super(new BorderLayout());
 		input = new InputPanel("Enter message", true);
@@ -26,24 +27,27 @@ public class ChatPanel extends JPanel {
 		outputPanel = new JPanel();
 		outputPanel.add(new JScrollPane(output));
 		send = new JButton("Send");
-		send.addActionListener(ae -> { sendChatMessage(); });
+		send.addActionListener(ae -> {
+			sendChatMessage();
+		});
 		buttonPanel = new JPanel();
 		buttonPanel.add(send);
 		add(input, BorderLayout.NORTH);
 		add(output, BorderLayout.CENTER);
 		add(buttonPanel, BorderLayout.SOUTH);
 	}
-	
+
 	public void setPlayer(Player player) {
 		this.player = player;
 		player.getConnection().setOutput(output);
-		player.getConnection().sendChatMessage("Logged in");
+		player.sendMessage(new Message(Message.LOGIN, player.getName(), ""));
 	}
-	
+
 	private void sendChatMessage() {
-			player.sendMessage(input.getInput());
+		player.sendMessage(new Message(Message.MESSAGE, player.getName(), input
+				.getInput()));
 	}
-	
+
 	public void clear() {
 		output.setText("");
 	}

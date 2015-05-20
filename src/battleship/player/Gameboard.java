@@ -38,7 +38,7 @@ public class Gameboard extends JPanel {
 	private char grid[][];
 	private int row;
 	private int col;
-	private JLabel[][] lgrid;
+	private Grid[][] lgrid;
 	private SpriteLoader sprites;
 
 	public Gameboard(Integer... newS) {
@@ -55,7 +55,7 @@ public class Gameboard extends JPanel {
 		}
 
 		grid = new char[row][col];
-		lgrid = new JLabel[size][size];
+		lgrid = new Grid[size][size];
 		// fill grid
 		/*
 		 * for(int i = 0; i < row; i++) for(int l = 0; l<col; l++) grid[i][l] =
@@ -65,15 +65,13 @@ public class Gameboard extends JPanel {
 		// fill grid
 		for (char[] row : grid)
 			Arrays.fill(row, 'o');
-		
-		grid[5][5] = 's';
 
 		sprites = SpriteLoader.getInstance(32, 32, 8, 8, 12);
 		sprites.loadSprites("src/res/sprite/spritesheet_battleship.png");
 		setLayout(new GridLayout(size, size));
 		for (int i = 0; i < size; i++) {
 			for (int l = 0; l < size; l++) {
-				lgrid[i][l] = new JLabel();
+				lgrid[i][l] = new Grid(i, l);
 				if (grid[i][l] == 'o') {
 					lgrid[i][l].setIcon(new ImageIcon(sprites
 							.getSprite("water")));
@@ -104,11 +102,11 @@ public class Gameboard extends JPanel {
 	 * @return The converted BufferedImage
 	 */
 	public static BufferedImage toBufferedImage(Image img) {
-	
+
 		if (img instanceof BufferedImage) {
 			return (BufferedImage) img;
 		}
-	
+
 		// Create a buffered image with transparency
 		BufferedImage bimage = new BufferedImage(img.getWidth(null),
 				img.getHeight(null), BufferedImage.TYPE_INT_ARGB);
@@ -196,17 +194,25 @@ public class Gameboard extends JPanel {
 			}
 		}
 	}
+
+	public void playerIsHit(int row, int col) {
+		if (!lgrid[row][col].isEmpty()) {
+			lgrid[row][col].setIcon(new ImageIcon(sprites.getSprite("hit")));
+		}
+	}
 	
-	public void fire(int row, int col) {
+	public void enemyIsHit(int row, int col) {
 		lgrid[row][col].setIcon(new ImageIcon(sprites.getSprite("hit")));
 	}
 
 	public void placeShip(Ship ship, int row, int col) {
 		switch (ship.alignment) {
 		case VERTICAL:
-			placeVertical(ship, row, col); break;
+			placeVertical(ship, row, col);
+			break;
 		case HORIZONTAL:
-			placeHorizontal(ship, row, col); break;
+			placeHorizontal(ship, row, col);
+			break;
 		}
 	}
 
@@ -214,44 +220,55 @@ public class Gameboard extends JPanel {
 		int counter = col;
 		if (ship.length > 1) {
 			for (int i = 0; i < ship.length; i++) {
-				if(i == 0) {
+				if (i == 0) {
+					lgrid[row][counter].setOccupied();
 					lgrid[row][counter++].setIcon(new ImageIcon(sprites
-						.getSprite("hor_front")));
-				} else if(i == ship.length - 1) {
+							.getSprite("hor_front")));
+				} else if (i == ship.length - 1) {
+					lgrid[row][counter].setOccupied();
 					lgrid[row][counter++].setIcon(new ImageIcon(sprites
 							.getSprite("hor_back")));
 				} else {
+					lgrid[row][counter].setOccupied();
 					lgrid[row][counter++].setIcon(new ImageIcon(sprites
 							.getSprite("hor_mid")));
 				}
 			}
 		} else {
-			lgrid[row][col].setIcon(new ImageIcon(sprites
-					.getSprite("hor_sub")));
+			lgrid[row][col].setOccupied();
+			lgrid[row][col]
+					.setIcon(new ImageIcon(sprites.getSprite("hor_sub")));
 		}
 		repaint();
 	}
-	
 
 	private void placeVertical(Ship ship, int row, int col) {
 		int counter = row;
 		if (ship.length > 1) {
 			for (int i = 0; i < ship.length; i++) {
-				if(i == 0) {
+				if (i == 0) {
+					lgrid[row][counter].setOccupied();
 					lgrid[counter++][col].setIcon(new ImageIcon(sprites
-						.getSprite("ver_front")));
-				} else if(i == ship.length - 1) {
+							.getSprite("ver_front")));
+				} else if (i == ship.length - 1) {
+					lgrid[row][counter].setOccupied();
 					lgrid[counter++][col].setIcon(new ImageIcon(sprites
 							.getSprite("ver_back")));
 				} else {
+					lgrid[row][counter].setOccupied();
 					lgrid[counter++][col].setIcon(new ImageIcon(sprites
 							.getSprite("ver_mid")));
 				}
 			}
 		} else {
-			lgrid[row][col].setIcon(new ImageIcon(sprites
-					.getSprite("ver_sub")));
+			lgrid[row][col].setOccupied();
+			lgrid[row][col]
+					.setIcon(new ImageIcon(sprites.getSprite("ver_sub")));
 		}
+	}
+	
+	public void setHit(int row, int col) {
+		
 	}
 
 	/**

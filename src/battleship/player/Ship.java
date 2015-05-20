@@ -5,6 +5,8 @@
  * */
 package battleship.player;
 
+import java.util.Vector;
+
 /**
  * 
  * */
@@ -17,9 +19,9 @@ public abstract class Ship {
 	protected int posY;
 	protected int posX1;
 	protected int posY1;
+	protected Vector<Grid> position;
 	protected Alignment alignment;
 	protected boolean alive = true;
-	
 	
 	public Ship() {
 		shipName = SimpleShipName.getInstance().generateName();
@@ -42,6 +44,20 @@ public abstract class Ship {
 	
 	public void setAlignment(Alignment alignment) {
 		this.alignment = alignment;
+	}
+	
+	public void addPositionGrid(int row, int col) {
+		position.add(new Grid(row, col));
+	}
+	
+	public boolean checkHit(int row, int col) {
+		for(Grid grid : position) {
+			if((grid.getRow() == row) && (grid.getCol() == col)) {
+				hit();
+				return true;
+			}
+		}
+		return false;
 	}
 	
 	public void setPosition(int x, int y) {

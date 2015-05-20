@@ -94,9 +94,7 @@ public class Server {
 				while (running) {
 					try {
 						msg = (Message) in.readObject();
-						// msg = (TmpMessage) in.readObject();
-						handleChatMessage(msg);
-						// handleMessage(msg);
+						handleMessage(msg);
 					} catch (ClassNotFoundException e) {
 						System.out.println(e.getMessage());
 						e.printStackTrace();
@@ -110,17 +108,22 @@ public class Server {
 			}
 		}
 
-		private void handleChatMessage(Message msg) {
-			sendMessageToAll(msg);
-		}
-
 		private void handleMessage(Message msg) {
-			/*
-			 * int type = msg.getType(); switch (type) { case TmpMessage.LOGOUT:
-			 * running = false; removePlayerProxy(this.playerId);
-			 * sendMessageToAll(msg); break; case TmpMessage.MESSAGE:
-			 * sendMessageToAll(msg); break; }
-			 */
+			int type = msg.getType();
+			switch (type) {
+			case Message.LOGIN:
+				sendMessageToAll(new Message(Message.CHAT, msg.getName(), ">> Logged in"));
+			case Message.LOGOUT:
+				running = false;
+				removePlayerProxy(this.playerId);
+				sendMessageToAll(msg);
+				break;
+			case Message.MESSAGE:
+				sendMessageToAll(msg);
+				break;
+			case Message.CHAT:
+				sendMessageToAll(msg);
+			}
 		}
 
 		private void sendMessage(Message msg) {

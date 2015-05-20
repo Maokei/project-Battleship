@@ -43,7 +43,7 @@ public class Player {
 		placeIndex = 0;
 		con.setPlayer(this);
 	}
-	
+
 	public ClientConnection getConnection() {
 		return con;
 	}
@@ -79,23 +79,12 @@ public class Player {
 		return moves;
 	}
 
-	public void fire(Gameboard grid) {
-		if (playerTurn)
-			moves++;
-	}
-
-	public void enemyFire(Gameboard grid) {
-		// implement enemy fire
-		// if damage taken, add damage to ship
-		// and call updateShips()
-	}
-
 	public void listen() {
 		new Thread(con).start();
 	}
 
-	public void sendMessage(String message) {
-		con.sendChatMessage(message);
+	public void sendMessage(Message message) {
+		con.sendMessage(message);
 	}
 
 	public void updateShips() {
@@ -166,30 +155,33 @@ public class Player {
 
 	/**
 	 * getPlaceShip
+	 * 
 	 * @brief get ship position from user
 	 * @param
-	 * @return string array with X Y Alignment 
+	 * @return string array with X Y Alignment
 	 * */
-	public ArrayList<String> getPlaceShip(String shipName, int shipL) throws NullPointerException {
+	public ArrayList<String> getPlaceShip(String shipName, int shipL)
+			throws NullPointerException {
 		String cord = "Enter coordinates for: ";
 		String ex = " format ex:(32V , XYV) or r for random.";
-		String sp = JOptionPane.showInputDialog(new JFrame(), cord + shipName + " Size: " + shipL + ex);
-		/*if(sp.startsWith("r") || sp.startsWith("R")) { //random
-			//random placement of ship
-			return null;
-		}*/
-		ArrayList<String> out = new ArrayList<String>(); //split cords
-		for(String s: sp.split("\\a")) {
+		String sp = JOptionPane.showInputDialog(new JFrame(), cord + shipName
+				+ " Size: " + shipL + ex);
+		/*
+		 * if(sp.startsWith("r") || sp.startsWith("R")) { //random //random
+		 * placement of ship return null; }
+		 */
+		ArrayList<String> out = new ArrayList<String>(); // split cords
+		for (String s : sp.split("\\a")) {
 			out.add(s.toLowerCase());
 		}
-		
-		if(!(out.indexOf(2) == 'v') || !(out.indexOf(2) == 'h')) {
+
+		if (!(out.indexOf(2) == 'v') || !(out.indexOf(2) == 'h')) {
 			return null;
 		}
-		
+
 		return out;
 	}
-	
+
 	/**
 	 * register a shot on the grid
 	 * */
@@ -200,6 +192,20 @@ public class Player {
 			playerGrid.registerHit(x, y);
 
 		}
+	}
+	
+	public void registerHit(int row, int col) {
+		for(Ship ship : ships) {
+			if(ship.isAlive() && ship.checkHit(row, col)) {
+				playerGrid.playerIsHit(row, col);
+				sendMessage(new Message(Message.MESSAGE, name, "HIT"
+						+ Integer.toString(row) + " " + Integer.toString(col)));
+			}
+		}
+	}
+	
+	public void registerEnemyHit(int row, int col) {
+		enemyGrid.enemyIsHit(row, col);
 	}
 
 	class GridListener extends MouseAdapter {
@@ -214,7 +220,7 @@ public class Player {
 						ship.alignment = Alignment.VERTICAL;
 					if (++placeIndex == ships.size())
 						placedAll = true;
-					
+
 					if ((ship.alignment == Alignment.HORIZONTAL)
 							&& (ship.length + col) <= 10)
 						placeShipByGrid(ship, row, col);
@@ -222,15 +228,16 @@ public class Player {
 						placeShipByGrid(ship, row, col);
 				}
 			} else if (enemyGrid == e.getComponent()) {
-				System.out.println("Player fired at Grid[ " + row + ", "
-						+ col + "]");
+				System.out.println("Player fired at Grid[ " + row + ", " + col
+						+ "]");
 				fireByGrid(row, col);
 			}
 		}
 	}
 
 	public void fireByGrid(int row, int col) {
-		enemyGrid.fire(row, col);
+		sendMessage(new Message(Message.MESSAGE, name, "FIRE "
+				+ Integer.toString(row) + " " + Integer.toString(col)));
 	}
 }
 

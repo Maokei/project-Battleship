@@ -11,6 +11,7 @@ import javax.swing.JTextArea;
 import javax.swing.SwingUtilities;
 
 import battleship.network.ClientConnection;
+import battleship.network.Message;
 import battleship.player.Player;
 import battleship.screen.InputPanel;
 
@@ -45,12 +46,12 @@ public class Chat {
 		buttonPanel = new JPanel();
 		buttonPanel.add(login);
 		buttonPanel.add(send);
-		
+
 		frame.add(input, BorderLayout.NORTH);
 		frame.add(outputPanel, BorderLayout.CENTER);
-		frame.add(buttonPanel, BorderLayout.SOUTH );
+		frame.add(buttonPanel, BorderLayout.SOUTH);
 	}
-	
+
 	public void showChat() {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setSize(250, 300);
@@ -59,8 +60,9 @@ public class Chat {
 	}
 
 	private void sendChatMessage() {
-		if(connected)
-			con.sendChatMessage(input.getInput());
+		if (connected)
+			con.sendMessage(new Message(Message.CHAT, player.getName(), input
+					.getInput()));
 	}
 
 	private void login() {
@@ -72,7 +74,7 @@ public class Chat {
 			send.setEnabled(true);
 			player = new Player(name, con);
 			con.setPlayer(player);
-			con.sendChatMessage("Logged in");
+			con.sendMessage(new Message(Message.LOGIN, player.getName(), ""));
 			new Thread(con).start();
 		}
 	}
