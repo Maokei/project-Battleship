@@ -49,7 +49,7 @@ public class LoginDialog extends JDialog {
 		add(avatarChooser, BorderLayout.CENTER);
 		add(buttonPanel, BorderLayout.SOUTH);
 		
-		setSize(200, 300);
+		setSize(250, 300);
 		setTitle("Battleship login options");
 		setResizable(false);
 		setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
