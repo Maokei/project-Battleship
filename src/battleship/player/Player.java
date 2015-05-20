@@ -11,8 +11,9 @@ import static battleship.player.Constants.NUM_OF_SUBMARINES;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.security.AllPermission;
+import java.util.ArrayList;
 import java.util.Vector;
-
+import javax.swing.*;
 import battleship.game.Status;
 import battleship.network.ClientConnection;
 import battleship.network.Message;
@@ -150,6 +151,32 @@ public class Player {
 		}
 		*/
 		return false;
+	}
+	
+	/**
+	 * getPlaceShip
+	 * @brief get ship position from user
+	 * @param
+	 * @return string array with X Y Alignment 
+	 * */
+	public ArrayList<String> getPlaceShip(String shipName, int shipL) throws NullPointerException {
+		String cord = "Enter coordinates for: ";
+		String ex = " format ex:(32V , XYV) or r for random.";
+		String sp = JOptionPane.showInputDialog(new JFrame(), cord + shipName + " Size: " + shipL + ex);
+		/*if(sp.startsWith("r") || sp.startsWith("R")) { //random
+			//random placement of ship
+			return null;
+		}*/
+		ArrayList<String> out = new ArrayList<String>(); //split cords
+		for(String s: sp.split("\\a")) {
+			out.add(s.toLowerCase());
+		}
+		
+		if(!(out.indexOf(2) == 'v') || !(out.indexOf(2) == 'h')) {
+			return null;
+		}
+		
+		return out;
 	}
 	
 	/**
