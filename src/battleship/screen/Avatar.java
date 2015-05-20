@@ -1,6 +1,11 @@
 package battleship.screen;
 
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.GridLayout;
+import java.awt.RadialGradientPaint;
+import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -17,8 +22,10 @@ public class Avatar extends JPanel {
 	private JLabel avatarLabel, nameLabel;
 	private String path = "src/res/sprite/";
 	
+
 	public Avatar() {
-		super(new GridLayout(2, 1));
+		super(new GridLayout(2, 1, 10, 10));
+		setSize(160, 160);
 		avatarLabel = new JLabel();
 		try {
 			img = ImageIO.read(new File(path + "pacman_150x125.png"));
@@ -32,8 +39,9 @@ public class Avatar extends JPanel {
 		add(nameLabel);
 	}
 	
+	
 	public Avatar(BufferedImage img, String name) {
-		super(new GridLayout(2, 1));
+		super(new GridLayout(2, 1, 10, 10));
 		this.img = img;
 		this.name = name;
 		avatarLabel = new JLabel();
@@ -42,19 +50,21 @@ public class Avatar extends JPanel {
 		add(avatarLabel);
 		add(nameLabel);
 	}
-	
+
 	public void setAvatar(BufferedImage img, String name) {
 		this.img = img;
 		this.name = name;
 		avatarLabel.setIcon(new ImageIcon(img));
 		nameLabel.setText(name);
 	}
-	
+
 	public BufferedImage getImage() {
 		return img;
 	}
-	
+
 	public String getName() {
 		return name;
 	}
+
+	
 }

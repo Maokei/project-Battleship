@@ -28,6 +28,7 @@ public class Game {
 		enemyGrid = new Gameboard();
 		screen = new Screen(playerGrid, enemyGrid);
 		login = new LoginDialog(screen, this);
+		if(player == null) System.exit(0);
 		player.setGrid(playerGrid, enemyGrid);
 		screen.setUpChat(player);
 		screen.showGUI();
