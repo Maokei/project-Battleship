@@ -42,12 +42,17 @@ public class AvatarPanel extends JPanel {
 
 	public AvatarPanel() {
 		super(new BorderLayout());
-		setSize(new Dimension(150, 400));
-		buttonPanel = new JPanel(new GridLayout(1, 2, 50, 10));
+		setSize(new Dimension(150, 150));
+		buttonPanel = new JPanel(new GridLayout(1, 2));
+		buttonPanel.setBackground(new Color(0, 0, 0));
 		leftArrow = new JButton();
+		leftArrow.setContentAreaFilled(false);
+		leftArrow.setBorderPainted(false);
 		leftArrow.addActionListener(new AvatarCycler());
 		leftArrow.setEnabled(false);
 		rightArrow = new JButton();
+		rightArrow.setContentAreaFilled(false);
+		rightArrow.setBorderPainted(false);
 		rightArrow.addActionListener(new AvatarCycler());
 
 		try {

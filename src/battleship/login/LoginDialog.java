@@ -1,6 +1,7 @@
 package battleship.login;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -36,11 +37,22 @@ public class LoginDialog extends JDialog {
 		nameInput = new InputPanel("Enter name: ", true);
 		avatarChooser = new AvatarPanel();
 		buttonPanel = new JPanel();
+		buttonPanel.setBackground(new Color(0, 0, 0));
 		cancel = new JButton("Cancel");
+		//cancel.setContentAreaFilled();
+		cancel.setBorderPainted(false);
+		cancel.setBackground(new Color(255, 60, 60));
+		cancel.setForeground(new Color(255, 255, 255));
 		cancel.addActionListener(ae -> { dispose(); });
 		clear = new JButton("Clear");
+		clear.setBorderPainted(false);
+		clear.setBackground(new Color(60, 255, 255));
+		clear.setForeground(new Color(255, 255, 255));
 		clear.addActionListener(ae -> { clear(); });
 		login = new JButton("Login");
+		login.setBorderPainted(false);
+		login.setBackground(new Color(60, 255, 60));
+		login.setForeground(new Color(255, 255, 255));
 		login.addActionListener(ae -> { login(); } ); 
 		buttonPanel.add(cancel);
 		buttonPanel.add(clear);
