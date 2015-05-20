@@ -1,3 +1,8 @@
+/**
+ * @file Server.java
+ * @authors rickard, lars
+ * @date 2015-05-18
+ * */
 package battleship.network;
 
 import java.io.IOException;
@@ -7,6 +12,12 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 
+
+/**
+ * @class Server
+ * @package battleship.network
+ * @brief Battleship server to handle message and relay game play events
+ * */
 public class Server {
 	private static int id;
 	private int portNumber;
@@ -21,6 +32,13 @@ public class Server {
 		players = new ArrayList<PlayerProxy>();
 	}
 
+	/**
+	 * listen
+	 * @name listen
+	 * @brief Listen for clients that connect to server, adds proxie's to players a ArrayList
+	 * @param None
+	 * @return void
+	 * */
 	public void listen() {
 		Socket socket = new Socket();
 		try {
@@ -53,6 +71,13 @@ public class Server {
 		}
 	}
 
+	/**
+	 * removePlayerProxy
+	 * @name removePlayerProxy
+	 * @brief Function to remove a client proxy
+	 * @param int id client proxy id, client to be removed
+	 * @return void
+	 * */
 	private void removePlayerProxy(int id) {
 		for (int i = players.size() - 1; i >= 0; i--) {
 			if (players.get(i).playerId == id) {
@@ -62,6 +87,12 @@ public class Server {
 		}
 	}
 
+	/**
+	 * sendMessageToAll
+	 * @brief Function to handle massage that will be sent to all clients
+	 * @param Message to be send to everyone
+	 * @return void
+	 * */
 	private synchronized void sendMessageToAll(Message msg) {
 		for (PlayerProxy player : players) {
 			if(player.name != msg.getName()) {
@@ -70,6 +101,12 @@ public class Server {
 		}
 	}
 	
+	/**
+	 * sendMessageToOpponent
+	 * @brief Function to handle sending message to opponent in a battleship match
+	 * @param Message to be sent.
+	 * @return void
+	 * */
 	private synchronized void sendMessageToOpponent(Message msg) {
 		for (PlayerProxy player : players) {
 			if(!player.getPlayerName().equalsIgnoreCase(msg.getName())) {
@@ -77,7 +114,12 @@ public class Server {
 			}
 		}
 	}
-
+	
+	/**
+	 * @class PlayerProxy 
+	 * @extends Thread
+	 * @brief Clientproxy class
+	 * */
 	class PlayerProxy extends Thread {
 		private Socket socket;
 		private String address;
@@ -96,7 +138,14 @@ public class Server {
 					+ socket.getPort()
 					+ "\nhas established a connection with the server.\n ");
 		}
-
+		
+		/**
+		 * run
+		 * @name run
+		 * @brief proxy run loop
+		 * @param None
+		 * @return void
+		 * */
 		public void run() {
 			try {
 				out = new ObjectOutputStream(socket.getOutputStream());
@@ -118,7 +167,14 @@ public class Server {
 				closeConnection();
 			}
 		}
-
+		
+		/**
+		 * handleMessage
+		 * @name handleMessage
+		 * @brief Function is responsible for handling messages accordingly. 
+		 * @param Takes a Message.
+		 * @return void
+		 * */
 		private void handleMessage(Message msg) {
 			int type = msg.getType();
 			switch (type) {
@@ -139,7 +195,14 @@ public class Server {
 				break;
 			}
 		}
-
+		
+		/**
+		 * sendMessage
+		 * @name sendMessage
+		 * @brief Function sends messages
+		 * @param Takes a Message
+		 * @return void 
+		 * */
 		private void sendMessage(Message msg) {
 			try {
 				out.writeObject(msg);
@@ -147,7 +210,14 @@ public class Server {
 				System.err.println(e.getMessage());
 			}
 		}
-
+		
+		/**
+		 * closeConnection
+		 * @name closeConnection
+		 * @brief Responsible to closing the connection between server and player
+		 * @param None
+		 * @return void
+		 * */
 		private void closeConnection() {
 			int port = socket.getPort();
 			try {
@@ -162,6 +232,13 @@ public class Server {
 			}
 		}
 		
+		/**
+		 * getPlayerName
+		 * @name getPlaterName
+		 * @brief Return plater names.
+		 * @param None
+		 * @return returns player name as string
+		 * */
 		public String getPlayerName() {
 			return name;
 		}

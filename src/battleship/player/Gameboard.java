@@ -178,7 +178,6 @@ public class Gameboard extends JPanel {
 	 *            a ship object
 	 * @return void
 	 * */
-
 	public void placeShipOnGrid(Ship ship) {
 		int l = 0;
 		int x1 = ship.getX1();
@@ -283,7 +282,7 @@ public class Gameboard extends JPanel {
 	 * PlaceShipTile
 	 * 
 	 * @brief help function to place a ship tile in grid
-	 * @param
+	 * @param int X coordinate, int y coordinate , String tile type
 	 * @return void
 	 * */
 	private void placeShipTile(int x, int y, String type) {
@@ -305,8 +304,7 @@ public class Gameboard extends JPanel {
 	 * registerHit
 	 * 
 	 * @brief Update the grid with a hit
-	 * @param X
-	 *            coordinate , Y coordinate
+	 * @param X coordinate , Y coordinate
 	 * @return void
 	 * */
 	public void registerHit(int x, int y) {
