@@ -62,7 +62,7 @@ public class Server {
 		}
 	}
 
-	private synchronized void sendMessageToAll(ChatMessage msg) {
+	private synchronized void sendMessageToAll(Message msg) {
 		for (PlayerProxy player : players) {
 			player.sendMessage(msg);
 		}
@@ -71,7 +71,7 @@ public class Server {
 	class PlayerProxy extends Thread {
 		private Socket socket;
 		private String address;
-		private ChatMessage msg;
+		private Message msg;
 		private int playerId;
 		private ObjectInputStream in;
 		private ObjectOutputStream out;
@@ -93,7 +93,7 @@ public class Server {
 				in = new ObjectInputStream(socket.getInputStream());
 				while (running) {
 					try {
-						msg = (ChatMessage) in.readObject();
+						msg = (Message) in.readObject();
 						// msg = (TmpMessage) in.readObject();
 						handleChatMessage(msg);
 						// handleMessage(msg);
@@ -110,11 +110,11 @@ public class Server {
 			}
 		}
 
-		private void handleChatMessage(ChatMessage msg) {
+		private void handleChatMessage(Message msg) {
 			sendMessageToAll(msg);
 		}
 
-		private void handleMessage(TmpMessage msg) {
+		private void handleMessage(Message msg) {
 			/*
 			 * int type = msg.getType(); switch (type) { case TmpMessage.LOGOUT:
 			 * running = false; removePlayerProxy(this.playerId);
@@ -123,7 +123,7 @@ public class Server {
 			 */
 		}
 
-		private void sendMessage(ChatMessage msg) {
+		private void sendMessage(Message msg) {
 			try {
 				out.writeObject(msg);
 			} catch (IOException e) {

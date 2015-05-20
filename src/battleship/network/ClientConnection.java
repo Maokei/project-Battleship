@@ -16,7 +16,7 @@ public class ClientConnection implements Runnable {
 	private ObjectOutputStream out;
 	private ObjectInputStream in;
 	private Player player;
-	private ChatMessage msg;
+	private Message msg;
 	private JTextArea output; // just for Chat 
 
 	public ClientConnection(String address, int portNumber) {
@@ -52,8 +52,8 @@ public class ClientConnection implements Runnable {
 	public void run() {
 		try {
 			while (true) {
-				msg = (ChatMessage) in.readObject();
-				output.append(msg.getSender() + ">> " + msg.getMessage() + "\n");
+				msg = (Message) in.readObject();
+				output.append(msg.getName() + ">> " + msg.getMessage() + "\n");
 			}
 		} catch (IOException e) {
 			System.err.println(e.getMessage());
@@ -93,7 +93,7 @@ public class ClientConnection implements Runnable {
 	
 	public void sendChatMessage(String message) {
 		try {
-			out.writeObject(new ChatMessage(player.getName(), message));
+			out.writeObject(new Message(1, player.getName(), message));
 		} catch (IOException e) {
 			System.err.println(e.getMessage());
 			e.printStackTrace();
