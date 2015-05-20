@@ -64,7 +64,17 @@ public class Server {
 
 	private synchronized void sendMessageToAll(Message msg) {
 		for (PlayerProxy player : players) {
-			player.sendMessage(msg);
+			if(player.name != msg.getName()) {
+				player.sendMessage(msg);
+			}
+		}
+	}
+	
+	private synchronized void sendMessageToOpponent(Message msg) {
+		for (PlayerProxy player : players) {
+			if(!player.getPlayerName().equalsIgnoreCase(msg.getName())) {
+				player.sendMessage(msg);
+			}
 		}
 	}
 
@@ -72,6 +82,7 @@ public class Server {
 		private Socket socket;
 		private String address;
 		private Message msg;
+		private String name;
 		private int playerId;
 		private ObjectInputStream in;
 		private ObjectOutputStream out;
@@ -112,15 +123,16 @@ public class Server {
 			int type = msg.getType();
 			switch (type) {
 			case Message.LOGIN:
-				sendMessageToAll(new Message(Message.CHAT, msg.getName(), ">> Logged in"));
+				name = msg.getName();
+				sendMessageToOpponent(new Message(Message.CHAT, msg.getName(), ">> Logged in"));
 				break;
 			case Message.LOGOUT:
 				running = false;
 				removePlayerProxy(this.playerId);
-				sendMessageToAll(msg);
+				sendMessageToOpponent(msg);
 				break;
 			case Message.MESSAGE:
-				sendMessageToAll(msg);
+				sendMessageToOpponent(msg);
 				break;
 			case Message.CHAT:
 				sendMessageToAll(msg);
@@ -149,7 +161,13 @@ public class Server {
 				System.err.println(e.getMessage());
 			}
 		}
+		
+		public String getPlayerName() {
+			return name;
+		}
 	}
+	
+	
 
 	public static void main(String[] args) {
 		Server server = new Server(DEFAULT_PORT);
