@@ -74,7 +74,7 @@ public class Chat {
 			send.setEnabled(true);
 			player = new Player(name, con);
 			con.setPlayer(player);
-			con.sendMessage(new Message(Message.LOGIN, player.getName(), ""));
+			player.sendMessage(new Message(Message.LOGIN, player.getName(), ""));
 			new Thread(con).start();
 		}
 	}

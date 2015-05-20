@@ -44,7 +44,7 @@ public class ChatPanel extends JPanel {
 	}
 
 	private void sendChatMessage() {
-		player.sendMessage(new Message(Message.MESSAGE, player.getName(), input
+		player.sendMessage(new Message(Message.CHAT, player.getName(), input
 				.getInput()));
 	}
 

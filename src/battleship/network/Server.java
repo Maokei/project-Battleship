@@ -113,6 +113,7 @@ public class Server {
 			switch (type) {
 			case Message.LOGIN:
 				sendMessageToAll(new Message(Message.CHAT, msg.getName(), ">> Logged in"));
+				break;
 			case Message.LOGOUT:
 				running = false;
 				removePlayerProxy(this.playerId);
@@ -123,6 +124,7 @@ public class Server {
 				break;
 			case Message.CHAT:
 				sendMessageToAll(msg);
+				break;
 			}
 		}
 

@@ -119,13 +119,13 @@ public class ClientConnection implements Runnable {
 	*/
 	private void parseFireMessage(String[] tokens) {
 		int row = Integer.parseInt(tokens[1]);
-		int col = Integer.parseInt(tokens[1]);
+		int col = Integer.parseInt(tokens[2]);
 		player.registerHit(row, col);
 	}
 
 	private void parseHitMessage(String[] tokens) {
 		int row = Integer.parseInt(tokens[1]);
-		int col = Integer.parseInt(tokens[1]);
+		int col = Integer.parseInt(tokens[2]);
 		player.registerEnemyHit(row, col);
 	}
 
