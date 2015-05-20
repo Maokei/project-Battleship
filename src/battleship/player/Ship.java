@@ -25,6 +25,7 @@ public abstract class Ship {
 	
 	public Ship() {
 		shipName = SimpleShipName.getInstance().generateName();
+		position = new Vector<Grid>();
 	}
 	
 	public String toString() {
