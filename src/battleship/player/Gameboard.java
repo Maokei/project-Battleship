@@ -237,21 +237,21 @@ public class Gameboard extends JPanel {
 						lgrid[row][counter].setIcon(new ImageIcon(sprites
 								.getSprite("hor_front")));
 					}
-				
+
 				} else if (i == ship.length - 1) {
 					lgrid[row][counter].setOccupied();
 					ship.addPositionGrid(row, counter);
-					if(ship.isVisible()) {
-					lgrid[row][counter].setIcon(new ImageIcon(sprites
-							.getSprite("hor_back")));
+					if (ship.isVisible()) {
+						lgrid[row][counter].setIcon(new ImageIcon(sprites
+								.getSprite("hor_back")));
 					}
-					
+
 				} else {
 					lgrid[row][counter].setOccupied();
 					ship.addPositionGrid(row, counter);
-					if(ship.isVisible()) {
-					lgrid[row][counter].setIcon(new ImageIcon(sprites
-							.getSprite("hor_mid")));
+					if (ship.isVisible()) {
+						lgrid[row][counter].setIcon(new ImageIcon(sprites
+								.getSprite("hor_mid")));
 					}
 				}
 				counter++;
@@ -259,9 +259,9 @@ public class Gameboard extends JPanel {
 		} else {
 			lgrid[row][col].setOccupied();
 			ship.addPositionGrid(row, col);
-			if(ship.isVisible()) {
-			lgrid[row][col]
-					.setIcon(new ImageIcon(sprites.getSprite("hor_sub")));
+			if (ship.isVisible()) {
+				lgrid[row][col].setIcon(new ImageIcon(sprites
+						.getSprite("hor_sub")));
 			}
 		}
 	}
@@ -273,25 +273,34 @@ public class Gameboard extends JPanel {
 				if (i == 0) {
 					lgrid[row][counter].setOccupied();
 					ship.addPositionGrid(row, counter);
-					lgrid[counter++][col].setIcon(new ImageIcon(sprites
-							.getSprite("ver_front")));
+					if (ship.isVisible()) {
+						lgrid[counter][col].setIcon(new ImageIcon(sprites
+								.getSprite("ver_front")));
+					}
 				} else if (i == ship.length - 1) {
 					lgrid[row][counter].setOccupied();
 					ship.addPositionGrid(row, counter);
-					lgrid[counter++][col].setIcon(new ImageIcon(sprites
-							.getSprite("ver_back")));
+					if (ship.isVisible()) {
+						lgrid[counter][col].setIcon(new ImageIcon(sprites
+								.getSprite("ver_back")));
+					}
 				} else {
 					lgrid[row][counter].setOccupied();
 					ship.addPositionGrid(row, counter);
-					lgrid[counter++][col].setIcon(new ImageIcon(sprites
-							.getSprite("ver_mid")));
+					if (ship.isVisible()) {
+						lgrid[counter][col].setIcon(new ImageIcon(sprites
+								.getSprite("ver_mid")));
+					}
 				}
+				counter++;
 			}
 		} else {
 			lgrid[row][col].setOccupied();
 			ship.addPositionGrid(row, col);
-			lgrid[row][col]
-					.setIcon(new ImageIcon(sprites.getSprite("ver_sub")));
+			if (ship.isVisible()) {
+				lgrid[row][col].setIcon(new ImageIcon(sprites
+						.getSprite("ver_sub")));
+			}
 		}
 	}
 

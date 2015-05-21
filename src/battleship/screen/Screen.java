@@ -11,9 +11,9 @@ import java.awt.event.WindowEvent;
 
 import javax.swing.JFrame;
 
-import resources.image.SpriteLoader;
 import battleship.game.ChatPanel;
 import battleship.network.Message;
+import battleship.player.Board;
 import battleship.player.Gameboard;
 import battleship.player.Player;
 
@@ -29,6 +29,7 @@ public class Screen {
 	private MainPanel mainPanel;
 	private Avatar avatar;
 	private Gameboard playerGrid, enemyGrid;
+	private Board board;
 	
 	public Screen(Gameboard playerGrid, Gameboard enemyGrid) {
 		this.playerGrid = playerGrid;
@@ -42,6 +43,9 @@ public class Screen {
 		mainPanel.add(playerGrid);
 		mainPanel.add(enemyGrid);
 		mainPanel.add(chat);
+		board = new Board();
+		board.addHit(5,  5);
+		mainPanel.add(board);
 		frame.add(mainPanel, BorderLayout.CENTER);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setSize(900, 600);

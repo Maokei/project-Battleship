@@ -226,16 +226,29 @@ public class Player {
 		public void mousePressed(MouseEvent e) {
 			int row = e.getY() / GRID_SIZE;
 			int col = e.getX() / GRID_SIZE;
+			System.out.println("PlaceIndex: " + placeIndex);
 			if (playerGrid == e.getComponent()) {
-				if (!placedAll && checkIfEmptyGrid(row, col)) {
+				if (!placedAll) {
 					Ship ship = playerShips.get(placeIndex);
+					
+					if(placeIndex > 0)
+						System.out.println("PlaceIndex: " + placeIndex);
 
 					if ((placeIndex + 1) % 2 == 0)
 						ship.alignment = Alignment.VERTICAL;
 
-					if (++placeIndex == playerShips.size())
-						placedAll = true;
-
+					int length = ship.getLength();
+					for (int i = 0; i < length; i++) {
+						if (ship.alignment == Alignment.HORIZONTAL) {
+							int rowCounter = row;
+							if(!checkIfEmptyGrid(rowCounter++, col))
+								return;
+						} else if (ship.alignment == Alignment.VERTICAL) {
+							int colCounter = col;
+							if(!checkIfEmptyGrid(row, colCounter++))
+								return;
+						}
+					}
 					if ((ship.alignment == Alignment.HORIZONTAL)
 							&& (ship.length + col) <= 10) {
 						placeShipByGrid(ship, row, col);
@@ -251,6 +264,10 @@ public class Player {
 								+ Integer.toString(col)));
 					}
 				}
+
+				if (++placeIndex == playerShips.size())
+					placedAll = true;
+
 			} else if (enemyGrid == e.getComponent()) {
 				System.out.println(name + " fired at Grid[ " + row + ", " + col
 						+ "]");
