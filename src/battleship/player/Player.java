@@ -194,6 +194,13 @@ public class Player {
 		}
 	}
 	
+	/**
+	 * registerHit
+	 * @name registerHit
+	 * @brief Function registers a hit on a ship given row and column. 
+	 * @param coresponding integer row and integer column in ship grid
+	 * @return void
+	 * */
 	public void registerHit(int row, int col) {
 		for(Ship ship : ships) {
 			if(ship.isAlive() && ship.checkHit(row, col)) {
@@ -204,6 +211,13 @@ public class Player {
 		}
 	}
 	
+	/**
+	 * registerEnemyHit
+	 * @name registerEnemyHit
+	 * @brief function registers a hit on a ship by an enemy
+	 * @param integer row, integer column in battleship play grid
+	 * @return void
+	 * */
 	public void registerEnemyHit(int row, int col) {
 		enemyGrid.enemyIsHit(row, col);
 	}
@@ -241,6 +255,11 @@ public class Player {
 	}
 }
 
+/**
+ * ShipBuilder
+ * @class ShipBuilder
+ * @brief Class is responsible to producing ships for client, employs factory pattern.
+ * */
 class ShipBuilder {
 	public static Vector<Ship> buildShips() {
 		Vector<Ship> ships = new Vector<Ship>(9);
