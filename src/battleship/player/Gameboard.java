@@ -122,7 +122,7 @@ public class Gameboard extends JPanel {
 
 	private Icon testImg() {
 		BufferedImage image = new BufferedImage(32, 32,
-				BufferedImage.TYPE_INT_RGB);
+		BufferedImage.TYPE_INT_RGB);
 
 		try {
 			image = ImageIO.read(new File("src/res/sprite/water_sprite.jpg"));

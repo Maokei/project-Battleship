@@ -177,6 +177,7 @@ public class Server {
 		 * */
 		private void handleMessage(Message msg) {
 			int type = msg.getType();
+			System.out.println("got message typ: " + type);
 			switch (type) {
 			case Message.LOGIN:
 				name = msg.getName();

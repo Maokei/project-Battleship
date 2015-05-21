@@ -1,15 +1,27 @@
+/**
+ * @file Screen.java
+ * @author rickard, lars
+ * */
 package battleship.screen;
 
 import java.awt.BorderLayout;
 import java.awt.ComponentOrientation;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 import javax.swing.JFrame;
 
 import resources.image.SpriteLoader;
 import battleship.game.ChatPanel;
+import battleship.network.Message;
 import battleship.player.Gameboard;
 import battleship.player.Player;
 
+/**
+ * @class Screen
+ * @package battleship.screen
+ * @brief Class sets up battleship game gui & components.
+ * */
 public class Screen {
 	private Player player;
 	private JFrame frame;
@@ -34,6 +46,15 @@ public class Screen {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setSize(900, 600);
 		frame.setLocationRelativeTo(null);
+		
+		frame.addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosing(WindowEvent e)
+			{
+				player.sendMessage(new Message(3 ,player.getName(), player.getName() + " has disconnected."));
+				e.getWindow().dispose();
+			}
+		});
 	}
 	
 	public void setAvatar(Avatar av) {

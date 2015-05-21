@@ -1,8 +1,18 @@
+/**
+ * @file Message.java
+ * @authors Rickard, Lars
+ * @date 2015-05-19
+ * */
 package battleship.network;
 
 import java.io.Serializable;
 
-
+/**
+ * @class Message
+ * @package battleship.network
+ * @implements Serializable
+ * @brief Class describes a message to be send between server and clients.
+ * */
 public class Message implements Serializable {
 	private static final long serialVersionUID = -1162931686882215029L;
 	private int type;
