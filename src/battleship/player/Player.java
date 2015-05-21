@@ -10,10 +10,12 @@ import static battleship.player.Constants.NUM_OF_SUBMARINES;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.security.AllPermission;
 import java.util.ArrayList;
 import java.util.Vector;
-import javax.swing.*;
+
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+
 import battleship.game.Status;
 import battleship.network.ClientConnection;
 import battleship.network.Message;
@@ -28,7 +30,8 @@ public class Player {
 	private ClientConnection con;
 	private int hits;
 	private int moves;
-	private Vector<Ship> ships;
+	private Vector<Ship> playerShips;
+	private Vector<Ship> enemyShips;
 	private int remainingShips;
 	private Gameboard playerGrid, enemyGrid;
 	private boolean playerTurn;
@@ -64,7 +67,8 @@ public class Player {
 	}
 
 	private void initShips() {
-		ships = ShipBuilder.buildShips();
+		playerShips = ShipBuilder.buildShips();
+		enemyShips = new Vector<Ship>(9);
 	}
 
 	public String getName() {
@@ -88,9 +92,9 @@ public class Player {
 	}
 
 	public void updateShips() {
-		for (Ship ship : ships) {
+		for (Ship ship : playerShips) {
 			if (!ship.isAlive()) {
-				ships.remove(ship);
+				playerShips.remove(ship);
 				if (remainingShips > 0) {
 					remainingShips--;
 				} else {
@@ -122,8 +126,16 @@ public class Player {
 		return playerGrid;
 	}
 
-	public boolean placeShipByGrid(Ship ship, int row, int col) {
+	public void placeShipByGrid(Ship ship, int row, int col) {
 		playerGrid.placeShip(ship, row, col);
+	}
+
+	public boolean checkIfEmptyGrid(int row, int col) {
+		for (Ship other : playerShips) {
+			if (other.isInPosition(row, col)) {
+				return false;
+			}
+		}
 		return true;
 	}
 
@@ -193,19 +205,20 @@ public class Player {
 
 		}
 	}
-	
+
 	public void registerHit(int row, int col) {
-		for(Ship ship : ships) {
-			if(ship.isAlive() && ship.checkHit(row, col)) {
+		for (Ship ship : playerShips) {
+			if (ship.isAlive() && ship.checkHit(row, col)) {
 				playerGrid.playerIsHit(row, col);
 				sendMessage(new Message(Message.MESSAGE, name, "HIT"
-						+ Integer.toString(row) + " " + Integer.toString(col)));
+						+ Integer.toString(row) + " " + Integer.toString(col)
+						+ " " + Integer.toString(ship.getHealth())));
 			}
 		}
 	}
-	
-	public void registerEnemyHit(int row, int col) {
-		enemyGrid.enemyIsHit(row, col);
+
+	public void registerEnemyHit(int row, int col, int health) {
+		enemyGrid.enemyIsHit(row, col, health);
 	}
 
 	class GridListener extends MouseAdapter {
@@ -214,21 +227,32 @@ public class Player {
 			int row = e.getY() / GRID_SIZE;
 			int col = e.getX() / GRID_SIZE;
 			if (playerGrid == e.getComponent()) {
-				if (!placedAll) {
-					Ship ship = ships.get(placeIndex);
+				if (!placedAll && checkIfEmptyGrid(row, col)) {
+					Ship ship = playerShips.get(placeIndex);
+
 					if ((placeIndex + 1) % 2 == 0)
 						ship.alignment = Alignment.VERTICAL;
-					if (++placeIndex == ships.size())
+
+					if (++placeIndex == playerShips.size())
 						placedAll = true;
 
 					if ((ship.alignment == Alignment.HORIZONTAL)
-							&& (ship.length + col) <= 10)
+							&& (ship.length + col) <= 10) {
 						placeShipByGrid(ship, row, col);
-					else if (((ship.alignment == Alignment.VERTICAL) && (ship.length + row) <= 10))
+						sendMessage(new Message(Message.MESSAGE, name, "SHIP "
+								+ ship.getType() + " H "
+								+ Integer.toString(row) + " "
+								+ Integer.toString(col)));
+					} else if (((ship.alignment == Alignment.VERTICAL) && (ship.length + row) <= 10)) {
 						placeShipByGrid(ship, row, col);
+						sendMessage(new Message(Message.MESSAGE, name, "SHIP "
+								+ ship.getType() + " V "
+								+ Integer.toString(row) + " "
+								+ Integer.toString(col)));
+					}
 				}
 			} else if (enemyGrid == e.getComponent()) {
-				System.out.println("Player fired at Grid[ " + row + ", " + col
+				System.out.println(name + " fired at Grid[ " + row + ", " + col
 						+ "]");
 				fireByGrid(row, col);
 			}
@@ -238,6 +262,11 @@ public class Player {
 	public void fireByGrid(int row, int col) {
 		sendMessage(new Message(Message.MESSAGE, name, "FIRE "
 				+ Integer.toString(row) + " " + Integer.toString(col)));
+	}
+
+	public void placeEnemyShip(Ship ship, int row, int col) {
+		enemyGrid.placeShip(ship, row, col);
+		enemyShips.add(ship);
 	}
 }
 

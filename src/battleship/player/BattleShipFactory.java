@@ -10,7 +10,7 @@ package battleship.player;
  * @class BattleShipFactory
  * */
 public class BattleShipFactory {
-	public Ship getShip(ShipType type) {
+	public static Ship getShip(ShipType type) {
 		Ship ship = null;
 		switch(type) {
 		case SUBMARINE: return new Submarine(); 

@@ -122,7 +122,7 @@ public class Gameboard extends JPanel {
 
 	private Icon testImg() {
 		BufferedImage image = new BufferedImage(32, 32,
-		BufferedImage.TYPE_INT_RGB);
+				BufferedImage.TYPE_INT_RGB);
 
 		try {
 			image = ImageIO.read(new File("src/res/sprite/water_sprite.jpg"));
@@ -194,14 +194,25 @@ public class Gameboard extends JPanel {
 		}
 	}
 
-	public void playerIsHit(int row, int col) {
-		if (!lgrid[row][col].isEmpty()) {
+	public boolean playerIsHit(int row, int col) {
+		if (!(lgrid[row][col].isEmpty() && lgrid[row][col].isHit())) {
 			lgrid[row][col].setIcon(new ImageIcon(sprites.getSprite("hit")));
+			lgrid[row][col].setHit(true);
+			return true;
 		}
+		return false;
 	}
-	
-	public void enemyIsHit(int row, int col) {
-		lgrid[row][col].setIcon(new ImageIcon(sprites.getSprite("hit")));
+
+	public boolean enemyIsHit(int row, int col, int health) {
+		if (!(lgrid[row][col].isHit())) {
+			lgrid[row][col].setIcon(new ImageIcon(sprites.getSprite("hit")));
+			lgrid[row][col].setHit(true);
+			if (health == 0)
+				System.out.println("One enemy ship down");
+
+			return true;
+		}
+		return false;
 	}
 
 	public void placeShip(Ship ship, int row, int col) {
@@ -222,27 +233,37 @@ public class Gameboard extends JPanel {
 				if (i == 0) {
 					lgrid[row][counter].setOccupied();
 					ship.addPositionGrid(row, counter);
-					lgrid[row][counter++].setIcon(new ImageIcon(sprites
-							.getSprite("hor_front")));
+					if (ship.isVisible()) {
+						lgrid[row][counter].setIcon(new ImageIcon(sprites
+								.getSprite("hor_front")));
+					}
+				
 				} else if (i == ship.length - 1) {
 					lgrid[row][counter].setOccupied();
 					ship.addPositionGrid(row, counter);
-					lgrid[row][counter++].setIcon(new ImageIcon(sprites
+					if(ship.isVisible()) {
+					lgrid[row][counter].setIcon(new ImageIcon(sprites
 							.getSprite("hor_back")));
+					}
+					
 				} else {
 					lgrid[row][counter].setOccupied();
 					ship.addPositionGrid(row, counter);
-					lgrid[row][counter++].setIcon(new ImageIcon(sprites
+					if(ship.isVisible()) {
+					lgrid[row][counter].setIcon(new ImageIcon(sprites
 							.getSprite("hor_mid")));
+					}
 				}
+				counter++;
 			}
 		} else {
 			lgrid[row][col].setOccupied();
 			ship.addPositionGrid(row, col);
+			if(ship.isVisible()) {
 			lgrid[row][col]
 					.setIcon(new ImageIcon(sprites.getSprite("hor_sub")));
+			}
 		}
-		repaint();
 	}
 
 	private void placeVertical(Ship ship, int row, int col) {
@@ -273,9 +294,9 @@ public class Gameboard extends JPanel {
 					.setIcon(new ImageIcon(sprites.getSprite("ver_sub")));
 		}
 	}
-	
+
 	public void setHit(int row, int col) {
-		
+
 	}
 
 	/**
@@ -304,7 +325,8 @@ public class Gameboard extends JPanel {
 	 * registerHit
 	 * 
 	 * @brief Update the grid with a hit
-	 * @param X coordinate , Y coordinate
+	 * @param X
+	 *            coordinate , Y coordinate
 	 * @return void
 	 * */
 	public void registerHit(int x, int y) {

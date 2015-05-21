@@ -1,14 +1,18 @@
 package battleship.network;
+
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
-import java.util.StringTokenizer;
 
 import javax.swing.JTextArea;
 
+import battleship.player.Alignment;
+import battleship.player.BattleShipFactory;
 import battleship.player.Player;
+import battleship.player.Ship;
+import battleship.player.ShipType;
 
 public class ClientConnection implements Runnable {
 	private String address;
@@ -18,7 +22,7 @@ public class ClientConnection implements Runnable {
 	private ObjectInputStream in;
 	private Player player;
 	private Message msg;
-	private JTextArea output; // just for Chat 
+	private JTextArea output; // just for Chat
 
 	public ClientConnection(String address, int portNumber) {
 		this.address = address;
@@ -40,11 +44,11 @@ public class ClientConnection implements Runnable {
 		}
 		return true;
 	}
-	
+
 	public void setPlayer(Player player) {
 		this.player = player;
 	}
-	
+
 	// just to demonstrate Chat
 	public void setOutput(JTextArea output) {
 		this.output = output;
@@ -82,7 +86,7 @@ public class ClientConnection implements Runnable {
 			}
 		}
 	}
-	
+
 	private void handleMessage(Message msg) {
 		int type = msg.getType();
 		switch (type) {
@@ -101,22 +105,57 @@ public class ClientConnection implements Runnable {
 
 	private void parseMessage(Message msg) {
 		String[] tokens = msg.getMessage().split(" ");
-		switch(tokens[0].toUpperCase()) {
-		case "FIRE": parseFireMessage(tokens); break;
-		case "HIT": parseHitMessage(tokens); break;
-		case "WIN": parseWinMessage(); break;
+		switch (tokens[0].toUpperCase()) {
+		case "SHIP":
+			parseShipMessage(tokens);
+			break;
+		case "FIRE":
+			parseFireMessage(tokens);
+			break;
+		case "HIT":
+			parseHitMessage(tokens);
+			break;
+		case "WIN":
+			parseWinMessage();
+			break;
 		}
+	}
+
+	private void parseShipMessage(String[] tokens) {
+		Ship ship = null;
+		ShipType type;
+		Alignment alignment = Alignment.HORIZONTAL;
+		switch (tokens[1].toUpperCase()) {
+		default:
+		case "CARRIER":
+			type = ShipType.CARRIER;
+			break;
+		case "DESTROYER":
+			type = ShipType.DESTROYER;
+			break;
+		case "SUBMARINE":
+			type = ShipType.SUBMARINE;
+			break;
+		}
+
+		if (tokens[2].equalsIgnoreCase("V")) {
+			alignment = Alignment.VERTICAL;
+		}
+		ship = BattleShipFactory.getShip(type);
+		ship.setAlignment(alignment);
+		int row = Integer.parseInt(tokens[3]);
+		int col = Integer.parseInt(tokens[4]);
+		
+		player.placeEnemyShip(ship, row, col);
+
 	}
 
 	// maybe not necessary
 	/*
-	private void parseShipPositionMessage(String[] tokens) {
-		String ship = tokens[1];
-		int row = Integer.parseInt(tokens[2]);
-		int col = Integer.parseInt(tokens[3]);
-		player.setEnemyShip(ship, row, col);
-	}
-	*/
+	 * private void parseShipPositionMessage(String[] tokens) { String ship =
+	 * tokens[1]; int row = Integer.parseInt(tokens[2]); int col =
+	 * Integer.parseInt(tokens[3]); player.setEnemyShip(ship, row, col); }
+	 */
 	private void parseFireMessage(String[] tokens) {
 		int row = Integer.parseInt(tokens[1]);
 		int col = Integer.parseInt(tokens[2]);
@@ -126,7 +165,8 @@ public class ClientConnection implements Runnable {
 	private void parseHitMessage(String[] tokens) {
 		int row = Integer.parseInt(tokens[1]);
 		int col = Integer.parseInt(tokens[2]);
-		player.registerEnemyHit(row, col);
+		int health = Integer.parseInt(tokens[0]);
+		player.registerEnemyHit(row, col, health);
 	}
 
 	private void parseWinMessage() {

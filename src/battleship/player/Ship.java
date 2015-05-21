@@ -22,6 +22,7 @@ public abstract class Ship {
 	protected Vector<Grid> position;
 	protected Alignment alignment;
 	protected boolean alive = true;
+	protected boolean visible = true;
 	
 	public Ship() {
 		shipName = SimpleShipName.getInstance().generateName();
@@ -42,6 +43,13 @@ public abstract class Ship {
 	public int getX1() {return posX1;}
 	public int getY1() {return posY1;}
 	public String getShipName() {return shipName;}
+	public boolean isVisible() {
+		return visible;
+	}
+	
+	public void setVisible(boolean visible) {
+		this.visible = visible;
+	}
 	
 	public void setAlignment(Alignment alignment) {
 		this.alignment = alignment;
@@ -51,9 +59,18 @@ public abstract class Ship {
 		position.add(new Grid(row, col));
 	}
 	
-	public boolean checkHit(int row, int col) {
+	public boolean isInPosition(int row, int col) {
 		for(Grid grid : position) {
 			if((grid.getRow() == row) && (grid.getCol() == col)) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public boolean checkHit(int row, int col) {
+		for(Grid grid : position) {
+			if(alive && ((grid.getRow() == row) && (grid.getCol() == col))) {
 				hit();
 				return true;
 			}
