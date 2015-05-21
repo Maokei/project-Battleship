@@ -68,7 +68,7 @@ public class Player {
 
 	private void initShips() {
 		playerShips = ShipBuilder.buildShips();
-		enemyShips = new Vector<Ship>(9);
+		enemyShips = new Vector<Ship>();
 	}
 
 	public String getName() {
