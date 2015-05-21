@@ -5,6 +5,10 @@
  * */
 package battleship.network;
 
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -12,22 +16,37 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 
+import javax.swing.AbstractAction;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+import javax.swing.WindowConstants;
+
 
 /**
  * @class Server
  * @package battleship.network
  * @brief Battleship server to handle message and relay game play events
  * */
-public class Server {
+public class Server extends JFrame{
 	private static int id;
 	private int portNumber;
 	private final int numberOfPlayers = 2;
 	private ServerSocket server;
 	private ArrayList<PlayerProxy> players;
+	
+	//gui components
+	private JButton resetBtn;
+	private JTextArea messages;
+	private JTextField input;
 
 	public static final int DEFAULT_PORT = 10001;
 
 	public Server(int portNumber) {
+		super("*** Battleship server ***");
+		setupGui();
 		this.portNumber = portNumber;
 		players = new ArrayList<PlayerProxy>();
 	}
@@ -82,6 +101,7 @@ public class Server {
 		for (int i = players.size() - 1; i >= 0; i--) {
 			if (players.get(i).playerId == id) {
 				players.get(i).closeConnection();
+				messages.append("Removed player :" + players.get(i).getName());
 				players.remove(i);
 			}
 		}
@@ -94,6 +114,7 @@ public class Server {
 	 * @return void
 	 * */
 	private synchronized void sendMessageToAll(Message msg) {
+		messages.append(msg.getName() + " all:" + msg.getMessage()+"\n");
 		for (PlayerProxy player : players) {
 			if(player.name != msg.getName()) {
 				player.sendMessage(msg);
@@ -108,6 +129,7 @@ public class Server {
 	 * @return void
 	 * */
 	private synchronized void sendMessageToOpponent(Message msg) {
+		messages.append(msg.getName() + " MsgOP:" + msg.getMessage()+"\n");
 		for (PlayerProxy player : players) {
 			if(!player.getPlayerName().equalsIgnoreCase(msg.getName())) {
 				player.sendMessage(msg);
@@ -245,8 +267,54 @@ public class Server {
 		}
 	}
 	
+	/**
+	 * setuoGui
+	 * @name setupGui
+	 * @brief Function set's up the server GUI, and button listeners.
+	 * @param none
+	 * @return void
+	 * */
+	private void setupGui() {
+		this.setLayout(new BorderLayout());
+		this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE); //override default behavior
+		this.add(resetBtn = new JButton("Reset server"), BorderLayout.NORTH);
+		//setup text area
+		this.messages = new JTextArea(15,15);
+		this.add(new JScrollPane(messages), BorderLayout.CENTER);
+		this.messages.setLineWrap(true);
+		this.messages.setBackground(Color.ORANGE);
+		this.messages.setEditable(false);
+		this.messages.append("Server started\n");
+		//Input field for server messages
+		this.add(input = new JTextField(), BorderLayout.SOUTH);
+		this.input.addActionListener(new AbstractAction() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				sendMessageToAll(new Message(1,"server",input.getText()));
+				input.setText("");
+			}
+		});
+		//reset server button
+		this.resetBtn.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				resetServer();
+			}
+		});
+		
+		this.setSize(400, 400);
+		this.setVisible(true);
+	}
 	
-
+	private void resetServer() {
+		//add reset message to event log
+		//messages.
+		//closing all connections
+		players =  new ArrayList<PlayerProxy>();
+		this.messages.append("Server reset\n");
+	}
+	
 	public static void main(String[] args) {
 		Server server = new Server(DEFAULT_PORT);
 		server.listen();
