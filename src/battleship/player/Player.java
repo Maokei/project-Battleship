@@ -34,16 +34,19 @@ public class Player {
 	private Vector<Ship> enemyShips;
 	private int remainingShips;
 	private Gameboard playerGrid, enemyGrid;
+	private Board playerBoard;
 	private boolean playerTurn;
 	public Status status;
 	private boolean placedAll = false;
 	private int placeIndex;
+	private int shipPlacementIndex;
 	private static final int GRID_SIZE = 32;
 
 	public Player(String name, ClientConnection con) {
 		this.name = name;
 		this.con = con;
 		placeIndex = 0;
+		shipPlacementIndex = 0;
 		con.setPlayer(this);
 	}
 
@@ -64,6 +67,11 @@ public class Player {
 		this.enemyGrid = enemyGrid;
 		playerGrid.addMouseListener(new GridListener());
 		enemyGrid.addMouseListener(new GridListener());
+	}
+
+	public void setBoard(Board playerBoard) {
+		this.playerBoard = playerBoard;
+		this.playerBoard.addMouseListener(new PlayerBoardListener());
 	}
 
 	private void initShips() {
@@ -230,8 +238,8 @@ public class Player {
 			if (playerGrid == e.getComponent()) {
 				if (!placedAll) {
 					Ship ship = playerShips.get(placeIndex);
-					
-					if(placeIndex > 0)
+
+					if (placeIndex > 0)
 						System.out.println("PlaceIndex: " + placeIndex);
 
 					if ((placeIndex + 1) % 2 == 0)
@@ -241,11 +249,11 @@ public class Player {
 					for (int i = 0; i < length; i++) {
 						if (ship.alignment == Alignment.HORIZONTAL) {
 							int rowCounter = row;
-							if(!checkIfEmptyGrid(rowCounter++, col))
+							if (!checkIfEmptyGrid(rowCounter++, col))
 								return;
 						} else if (ship.alignment == Alignment.VERTICAL) {
 							int colCounter = col;
-							if(!checkIfEmptyGrid(row, colCounter++))
+							if (!checkIfEmptyGrid(row, colCounter++))
 								return;
 						}
 					}
@@ -284,6 +292,25 @@ public class Player {
 	public void placeEnemyShip(Ship ship, int row, int col) {
 		enemyGrid.placeShip(ship, row, col);
 		enemyShips.add(ship);
+	}
+
+	class PlayerBoardListener extends MouseAdapter {
+		@Override
+		public void mousePressed(MouseEvent e) {
+			int row = e.getY() / GRID_SIZE;
+			int col = e.getX() / GRID_SIZE;
+			if (shipPlacementIndex < playerShips.size()) {
+				Ship ship = playerShips.elementAt(shipPlacementIndex);
+				
+				if ((shipPlacementIndex + 1) % 2 == 0)
+					ship.alignment = Alignment.VERTICAL;
+				
+				if (playerBoard.checkShipPlacement(ship, row, col)) {
+					playerBoard.placeShip(ship, row, col);
+					shipPlacementIndex++;
+				}
+			}
+		}
 	}
 }
 

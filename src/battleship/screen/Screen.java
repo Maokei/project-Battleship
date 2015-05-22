@@ -29,23 +29,23 @@ public class Screen {
 	private MainPanel mainPanel;
 	private Avatar avatar;
 	private Gameboard playerGrid, enemyGrid;
-	private Board board;
+	private Board playerBoard;
 	
-	public Screen(Gameboard playerGrid, Gameboard enemyGrid) {
+	public Screen(Gameboard playerGrid, Gameboard enemyGrid, Board playerBoard) {
 		this.playerGrid = playerGrid;
 		this.enemyGrid = enemyGrid;
+		this.playerBoard = playerBoard;
 		frame = new JFrame("*** Battleship ***");
 		mainPanel = new MainPanel();
 		mainPanel.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
 		chat = new ChatPanel(); 
 		avatar = new Avatar();
 		mainPanel.add(avatar);
-		mainPanel.add(playerGrid);
-		mainPanel.add(enemyGrid);
+		// mainPanel.add(playerGrid);
+		// mainPanel.add(enemyGrid);
 		mainPanel.add(chat);
-		board = new Board();
-		board.addHit(5,  5);
-		mainPanel.add(board);
+		playerBoard.addHit(5,  5);
+		mainPanel.add(playerBoard);
 		frame.add(mainPanel, BorderLayout.CENTER);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setSize(900, 600);

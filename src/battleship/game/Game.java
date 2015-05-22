@@ -11,6 +11,7 @@ import javax.swing.JOptionPane;
 import battleship.login.LoginDialog;
 import battleship.network.ClientConnection;
 import battleship.network.Server;
+import battleship.player.Board;
 import battleship.player.Gameboard;
 import battleship.player.Player;
 import battleship.screen.Screen;
@@ -21,15 +22,18 @@ public class Game {
 	private LoginDialog login;
 	private ClientConnection con;
 	private Gameboard playerGrid, enemyGrid;
+	private Board playerBoard;
 	public static final int DEFAULT_PORT = 10001;
 	
 	public Game() {
 		playerGrid = new Gameboard();
 		enemyGrid = new Gameboard();
-		screen = new Screen(playerGrid, enemyGrid);
+		playerBoard = new Board();
+		screen = new Screen(playerGrid, enemyGrid, playerBoard);
 		login = new LoginDialog(screen, this);
 		if(player == null) System.exit(0);
 		player.setGrid(playerGrid, enemyGrid);
+		player.setBoard(playerBoard);
 		screen.setUpChat(player);
 		screen.showGUI();
 		player.init();

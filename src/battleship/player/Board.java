@@ -52,4 +52,81 @@ public class Board extends JPanel {
 			}
 		}
 	}
+
+	public boolean checkShipPlacement(Ship ship, int row, int col) {
+		int length = ship.getLength();
+		int counter;
+		if (ship.alignment == Alignment.HORIZONTAL) {
+			if ((col + length - 1) < SIZE) {
+				counter = col;
+				for (int i = 0; i < length - 1; i++) {
+					if (!gridboard[row][counter].isEmpty()) {
+						return false;
+					}
+					counter++;
+				}
+			} else {
+				return false;
+			}
+				
+		} else if (ship.alignment == Alignment.VERTICAL) {
+			if ((row + length - 1) < SIZE) {
+				counter = row;
+				for (int i = 0; i < length; i++) {
+					if (!gridboard[counter][col].isEmpty()) {
+						return false;
+					}
+					counter++;
+				}
+			} else {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	public void placeShip(Ship ship, int row, int col) {
+		int counter;
+		if (ship.alignment == Alignment.HORIZONTAL) {
+			counter = col;
+			for (int i = 0; i < ship.getLength(); i++) {
+				gridboard[row][counter].setOccupied();
+				addShipSprite(ship, row, counter, i);
+				ship.addPositionGrid(row, counter);
+				counter++;
+			}
+		} else if (ship.alignment == Alignment.VERTICAL) {
+			counter = row;
+			for (int i = 0; i < ship.getLength(); i++) {
+				gridboard[counter][col].setOccupied();
+				addShipSprite(ship, counter, col, i);
+				ship.addPositionGrid(counter, col);
+				counter++;
+			}
+		}
+	}
+
+	private void addShipSprite(Ship ship, int row, int col, int counter) {
+		String pre, post;
+		if (ship.alignment == Alignment.HORIZONTAL)
+			pre = "hor_";
+		else
+			pre = "ver_";
+
+		if (ship.getLength() > 1) {
+			if (counter == 0) {
+				post = "front";
+			} else if (counter == ship.getLength() - 1) {
+				post = "back";
+			} else {
+				post = "mid";
+			}
+		} else {
+			post = "sub";
+		}
+
+		gridboard[row][col]
+				.setIcon(new ImageIcon(sprites.getSprite(pre + post)));
+	}
+
 }
