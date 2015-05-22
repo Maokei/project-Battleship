@@ -22,6 +22,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.SwingConstants;
 
 public class AvatarPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
@@ -73,10 +74,12 @@ public class AvatarPanel extends JPanel {
 		names = new ArrayList<String>();
 		avatar = new JLabel();
 		avatarPanel = new JPanel(new BorderLayout());
-		avatarPanel.setSize(new Dimension(150, 200));
+		avatarPanel.setSize(new Dimension(220, 200));
 		avatarPanel.add(avatar, BorderLayout.CENTER);
 		add(avatar, BorderLayout.CENTER);
 		description = new JLabel();
+		description.setHorizontalAlignment(SwingConstants.CENTER);
+		description.setForeground(new Color(255, 255, 255));
 		descriptionPanel = new JPanel();
 		descriptionPanel.add(description);
 		add(description, BorderLayout.SOUTH);
@@ -114,9 +117,9 @@ public class AvatarPanel extends JPanel {
 	private void readAvatarsFromFile() {
 		try {
 			avatars.put("Pirate Pac",
-					ImageIO.read(new File(path + "pacman_150x125.png")));
+					ImageIO.read(new File(path + "pacman_64x64.png")));
 			avatars.put("Skull 'n Bones",
-					ImageIO.read(new File(path + "pirate_150x82.png")));
+					ImageIO.read(new File(path + "skullnbones_64x64.png")));
 		} catch (IOException e) {
 			System.err.println(e.getMessage());
 			e.printStackTrace();

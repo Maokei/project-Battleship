@@ -23,6 +23,7 @@ public class ClientConnection implements Runnable {
 	private Player player;
 	private Message msg;
 	private JTextArea output; // just for Chat
+	private boolean running = true;
 
 	public ClientConnection(String address, int portNumber) {
 		this.address = address;
@@ -56,13 +57,13 @@ public class ClientConnection implements Runnable {
 
 	public void run() {
 		try {
-			while (true) {
+			while (running) {
 				msg = (Message) in.readObject();
 				handleMessage(msg);
 			}
 		} catch (IOException e) {
-			System.err.println(e.getMessage());
-			e.printStackTrace();
+			// System.err.println(e.getMessage());
+			// e.printStackTrace();
 		} catch (ClassNotFoundException e) {
 			System.err.println(e.getMessage());
 			e.printStackTrace();
@@ -180,5 +181,9 @@ public class ClientConnection implements Runnable {
 			System.err.println(e.getMessage());
 			e.printStackTrace();
 		}
+	}
+
+	public void setRunning(boolean running) {
+		this.running = running;
 	}
 }

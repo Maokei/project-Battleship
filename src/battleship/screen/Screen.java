@@ -56,6 +56,7 @@ public class Screen {
 			public void windowClosing(WindowEvent e)
 			{
 				player.sendMessage(new Message(3 ,player.getName(), player.getName() + " has disconnected."));
+				player.setRunning(false);
 				e.getWindow().dispose();
 			}
 		});

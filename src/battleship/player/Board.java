@@ -20,7 +20,6 @@ public class Board extends JPanel {
 
 	public Board() {
 		super();
-		System.out.println("I'm in Board Ctor");
 		setLayout(new GridLayout(SIZE, SIZE));
 		gridboard = new Grid[SIZE][SIZE];
 		for (int row = 0; row < SIZE; row++) {
@@ -33,7 +32,6 @@ public class Board extends JPanel {
 		sprites = SpriteLoader.getInstance(32, 32, 8, 8, 12);
 		sprites.loadSprites("src/res/sprite/spritesheet_battleship.png");
 		background = sprites.getSprite("water");
-		repaint();
 	}
 
 	public void addHit(int row, int col) {

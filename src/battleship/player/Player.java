@@ -293,6 +293,10 @@ public class Player {
 		enemyGrid.placeShip(ship, row, col);
 		enemyShips.add(ship);
 	}
+	
+	public void setRunning(boolean running) {
+		con.setRunning(running);
+	}
 
 	class PlayerBoardListener extends MouseAdapter {
 		@Override
