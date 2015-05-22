@@ -22,6 +22,8 @@ import javax.swing.JFrame;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
 import javax.swing.WindowConstants;
 
 /**
@@ -311,6 +313,13 @@ public class Server extends JFrame {
 	 * @return void
 	 * */
 	private void setupGui() {
+		//Set system look and feel
+		try{
+			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		//set up componenets
 		this.setLayout(new BorderLayout());
 		this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE); // override
 																		// default

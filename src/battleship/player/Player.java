@@ -15,6 +15,7 @@ import java.util.Vector;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
 
 import battleship.game.Status;
 import battleship.network.ClientConnection;
@@ -299,19 +300,27 @@ public class Player {
 	}
 
 	class PlayerBoardListener extends MouseAdapter {
+		Alignment al = Alignment.HORIZONTAL;
 		@Override
 		public void mousePressed(MouseEvent e) {
-			int row = e.getY() / GRID_SIZE;
-			int col = e.getX() / GRID_SIZE;
-			if (shipPlacementIndex < playerShips.size()) {
-				Ship ship = playerShips.elementAt(shipPlacementIndex);
-				
-				if ((shipPlacementIndex + 1) % 2 == 0)
-					ship.alignment = Alignment.VERTICAL;
-				
-				if (playerBoard.checkShipPlacement(ship, row, col)) {
-					playerBoard.placeShip(ship, row, col);
-					shipPlacementIndex++;
+			if(SwingUtilities.isRightMouseButton(e)) { //change alignment
+				if(al == Alignment.HORIZONTAL)
+					al = Alignment.VERTICAL;
+				else
+					al = Alignment.HORIZONTAL;
+			}else{ //place ship
+				int row = e.getY() / GRID_SIZE;
+				int col = e.getX() / GRID_SIZE;
+				if (shipPlacementIndex < playerShips.size()) {
+					Ship ship = playerShips.elementAt(shipPlacementIndex);
+					
+					//if ((shipPlacementIndex + 1) % 2 == 0)
+					ship.alignment = al;
+					
+					if (playerBoard.checkShipPlacement(ship, row, col)) {
+						playerBoard.placeShip(ship, row, col);
+						shipPlacementIndex++;
+					}
 				}
 			}
 		}
