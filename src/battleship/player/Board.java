@@ -59,7 +59,7 @@ public class Board extends JPanel {
 		if (ship.alignment == Alignment.HORIZONTAL) {
 			if ((col + length - 1) < SIZE) {
 				counter = col;
-				for (int i = 0; i < length - 1; i++) {
+				for (int i = 0; i < length; i++) {
 					if (!gridboard[row][counter].isEmpty()) {
 						return false;
 					}
@@ -87,10 +87,12 @@ public class Board extends JPanel {
 
 	public void placeShip(Ship ship, int row, int col) {
 		int counter;
+		System.out.print("Occupied: [ ");
 		if (ship.alignment == Alignment.HORIZONTAL) {
 			counter = col;
 			for (int i = 0; i < ship.getLength(); i++) {
 				gridboard[row][counter].setOccupied();
+				System.out.print(row + "," + counter + " ");
 				addShipSprite(ship, row, counter, i);
 				ship.addPositionGrid(row, counter);
 				counter++;
@@ -99,11 +101,27 @@ public class Board extends JPanel {
 			counter = row;
 			for (int i = 0; i < ship.getLength(); i++) {
 				gridboard[counter][col].setOccupied();
+				System.out.print(counter + "," + col + " ");
 				addShipSprite(ship, counter, col, i);
 				ship.addPositionGrid(counter, col);
 				counter++;
 			}
 		}
+		System.out.print("]\n");
+		printOccupied();
+		
+	}
+	
+	private void printOccupied() {
+		System.out.print("gridboard occupied: [");
+		for(int row = 0; row < SIZE; row++) {
+			for(int col = 0; col < SIZE; col++) {
+				if(!gridboard[row][col].isEmpty()) {
+					System.out.print(row + "," + col + " ");
+				}
+			}
+		}
+		System.out.print("]\n");
 	}
 
 	private void addShipSprite(Ship ship, int row, int col, int counter) {
