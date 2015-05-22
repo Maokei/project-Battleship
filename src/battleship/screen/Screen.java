@@ -55,7 +55,7 @@ public class Screen {
 			@Override
 			public void windowClosing(WindowEvent e)
 			{
-				player.sendMessage(new Message(3 ,player.getName(), player.getName() + " has disconnected."));
+				player.sendMessage(new Message(Message.LOGOUT ,player.getName(), "Logged out"));
 				player.setRunning(false);
 				e.getWindow().dispose();
 			}

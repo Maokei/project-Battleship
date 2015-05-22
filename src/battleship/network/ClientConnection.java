@@ -6,6 +6,7 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
+import javax.swing.JOptionPane;
 import javax.swing.JTextArea;
 
 import battleship.player.Alignment;
@@ -86,6 +87,7 @@ public class ClientConnection implements Runnable {
 				System.err.println(e.getMessage());
 			}
 		}
+		System.exit(0);
 	}
 
 	private void handleMessage(Message msg) {
@@ -105,6 +107,11 @@ public class ClientConnection implements Runnable {
 	}
 
 	private void parseMessage(Message msg) {
+		if(msg.getMessage().startsWith("Server full")) {
+			JOptionPane.showMessageDialog(null, "The server is full\nTry connecting at a later time.");
+			running = false;
+			return;
+		}
 		String[] tokens = msg.getMessage().split(" ");
 		switch (tokens[0].toUpperCase()) {
 		case "SHIP":

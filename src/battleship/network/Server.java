@@ -69,14 +69,12 @@ public class Server extends JFrame {
 
 			while (true) {
 				socket = server.accept();
-
-				if (players.size() < numberOfPlayers) {
-					PlayerProxy player = new PlayerProxy(socket);
-					players.add(player);
-					messages.append("\nConnected players: " + players.size()
-							+ "\n");
-					player.start();
-				}
+				PlayerProxy player = new PlayerProxy(socket);
+				players.add(player);
+				player.start();
+				messages.append("\nNew connection accepted.\n"
+						+ "Connected players: " + players.size() + "\n");
+				
 			}
 		} catch (IOException e) {
 			System.err.println(e.getMessage());
@@ -107,7 +105,7 @@ public class Server extends JFrame {
 		for (int i = players.size() - 1; i >= 0; i--) {
 			if (players.get(i).playerId == id) {
 				players.get(i).closeConnection();
-				messages.append("Removed player :" + players.get(i).name);
+				messages.append("Removed player: " + players.get(i).name);
 				players.remove(i);
 				messages.append("\nConnected players: " + players.size() + "\n");
 			}
@@ -154,6 +152,14 @@ public class Server extends JFrame {
 		messages.append(msg.getName() + " MsgOP:" + msg.getMessage() + "\n");
 		for (PlayerProxy player : players) {
 			if (!player.getPlayerName().equalsIgnoreCase(msg.getName())) {
+				player.sendMessage(msg);
+			}
+		}
+	}
+
+	private synchronized void sendMessageToSender(Message msg) {
+		for (PlayerProxy player : players) {
+			if (player.getPlayerName().equalsIgnoreCase(msg.getName())) {
 				player.sendMessage(msg);
 			}
 		}
@@ -226,13 +232,22 @@ public class Server extends JFrame {
 			System.out.println("got message typ: " + type);
 			switch (type) {
 			case Message.LOGIN:
-				name = msg.getName();
-				sendMessageToOpponent(new Message(Message.CHAT, msg.getName(),
-						"Logged in"));
+				if (players.size() > 2) {
+					name = msg.getName();
+					sendMessageToSender(new Message(Message.MESSAGE,
+							msg.getName(), "Server full"));
+					this.closeConnection();
+					players.remove(this);
+					messages.append("Server full, attempt to join game failed.\nConnection closed for " + name + "\n");
+				} else {
+					name = msg.getName();
+					sendMessageToOpponent(new Message(Message.CHAT,
+							msg.getName(), "Logged in"));
+				}
 				break;
 			case Message.LOGOUT:
 				removePlayerProxy(this.playerId);
-				sendMessageToOpponent(msg);
+				sendMessageToOpponent(new Message(Message.CHAT, msg.getName(), msg.getMessage()));
 				break;
 			case Message.MESSAGE:
 				sendMessageToOpponent(msg);
@@ -280,14 +295,6 @@ public class Server extends JFrame {
 						+ "\nhas closed the connection with the server.\n ");
 			} catch (IOException e) {
 				// System.err.println(e.getMessage());
-			} finally {
-				try {
-					messages.append("Joining");
-					this.join();
-				} catch (InterruptedException e) {
-					System.out.println(e.getMessage());
-					e.printStackTrace();
-				}
 			}
 		}
 
@@ -313,13 +320,13 @@ public class Server extends JFrame {
 	 * @return void
 	 * */
 	private void setupGui() {
-		//Set system look and feel
-		try{
+		// Set system look and feel
+		try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-		}catch(Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		//set up componenets
+		// set up componenets
 		this.setLayout(new BorderLayout());
 		this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE); // override
 																		// default
