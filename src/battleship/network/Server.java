@@ -171,14 +171,14 @@ public class Server extends JFrame {
 	 * @brief Clientproxy class
 	 * */
 	class PlayerProxy extends Thread {
-		private Socket socket;
-		private String address;
-		private Message msg;
-		private String name;
-		private int playerId;
-		private ObjectInputStream in;
-		private ObjectOutputStream out;
-		private boolean running = true;
+		protected Socket socket;
+		protected String address;
+		protected Message msg;
+		protected String name;
+		protected int playerId;
+		protected ObjectInputStream in;
+		protected ObjectOutputStream out;
+		protected boolean running = true;
 
 		public PlayerProxy(Socket socket) {
 			this.socket = socket;
@@ -284,7 +284,7 @@ public class Server extends JFrame {
 		 * @param None
 		 * @return void
 		 * */
-		private void closeConnection() {
+		protected void closeConnection() {
 			int port = socket.getPort();
 			try {
 				in.close();
@@ -311,8 +311,48 @@ public class Server extends JFrame {
 		}
 	}
 
+	class AiPlayer extends PlayerProxy{
+		public AiPlayer(Socket socket) {
+			super(socket);
+			// TODO Auto-generated constructor stub
+		}
+		
+		
+		private void handleMessage(Message msg) {
+			int type = msg.getType();
+			System.out.println("got message typ: " + type);
+			switch (type) {
+			case Message.LOGIN:
+				if (players.size() > numberOfPlayers) {
+					name = msg.getName();
+					sendMessageToSender(new Message(Message.MESSAGE,
+							msg.getName(), "Server full"));
+					this.closeConnection();
+					players.remove(this);
+					messages.append("Server full, attempt to join game failed.\nConnection closed for " + name + "\n");
+				} else {
+					name = msg.getName();
+					sendMessageToOpponent(new Message(Message.CHAT,
+							msg.getName(), "Logged in"));
+				}
+				break;
+			case Message.LOGOUT:
+				removePlayerProxy(this.playerId);
+				sendMessageToOpponent(new Message(Message.CHAT, msg.getName(), msg.getMessage()));
+				break;
+			case Message.MESSAGE:
+				sendMessageToOpponent(msg);
+				break;
+			case Message.CHAT:
+				sendMessageToAll(msg);
+				break;
+			}
+		}
+		
+	}
+	
 	/**
-	 * setuoGui
+	 * setupGui
 	 * 
 	 * @name setupGui
 	 * @brief Function set's up the server GUI, and button listeners.

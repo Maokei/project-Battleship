@@ -20,7 +20,7 @@ public class Message implements Serializable {
 	private String msg;
 	private String name;
 	public static final int LOGIN = 0, MESSAGE = 1,
-			CHAT = 2, LOGOUT = 3;
+			CHAT = 2, LOGOUT = 3, AIMATCH = 4;
 
 	public Message(int type, String name, String msg) {
 		this.type = type;
