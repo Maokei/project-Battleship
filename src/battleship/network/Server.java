@@ -37,6 +37,7 @@ public class Server extends JFrame {
 	private final int numberOfPlayers = 2;
 	private ServerSocket server;
 	private ArrayList<PlayerProxy> players;
+	private ArrayList<Battle> battles;
 
 	// gui components
 	private JButton resetBtn;

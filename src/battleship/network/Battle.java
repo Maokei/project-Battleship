@@ -1,11 +1,18 @@
 /**
  * @authors rickard, lars
  * @file Battle.java
+ * @date 2015-05-25
  * */
 package battleship.network;
 
 import battleship.network.PlayerProxy;
 
+/**
+ * Battle
+ * @name Battle
+ * @class Battle
+ * @extends Thread
+ * */
 public class Battle extends Thread {
 	//For communicating with server
 	private Server server;
@@ -26,7 +33,7 @@ public class Battle extends Thread {
 		//Match loop
 		while(true) {
 			//ship placement
-			
+			shipPlacementPhase();
 			//battle begins
 			
 			//announce winner
