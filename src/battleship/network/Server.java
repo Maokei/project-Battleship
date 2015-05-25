@@ -69,11 +69,12 @@ public class Server extends JFrame {
 
 			while (true) {
 				socket = server.accept();
-				PlayerProxy player = new PlayerProxy(socket);
+				id++;
+				PlayerProxy player = new PlayerProxy(socket, this, id);
 				players.add(player);
 				player.start();
 				messages.append("\nNew connection accepted.\n"
-						+ "Connected players: " + players.size() + "\n");
+						+ "Connected players: " + players.size() + " id: " + id + "\n");
 				
 			}
 		} catch (IOException e) {
@@ -101,7 +102,7 @@ public class Server extends JFrame {
 	 * @param int id client proxy id, client to be removed
 	 * @return void
 	 * */
-	private void removePlayerProxy(int id) {
+	public void removePlayerProxy(int id) {
 		for (int i = players.size() - 1; i >= 0; i--) {
 			if (players.get(i).playerId == id) {
 				players.get(i).closeConnection();
@@ -109,6 +110,19 @@ public class Server extends JFrame {
 				players.remove(i);
 				messages.append("\nConnected players: " + players.size() + "\n");
 			}
+		}
+	}
+	/**
+	 * removePlayerProxy
+	 * 
+	 * @name removePlayerProxy
+	 * @brief Function to remove a client proxy
+	 * @param Takes a player proxy object, and removes it if it exists
+	 * @return void
+	 * */
+	public void removePlayerProxy(battleship.network.PlayerProxy pp) {
+		if(players.equals(pp)) {
+			players.remove(pp);
 		}
 	}
 	/*
@@ -130,7 +144,7 @@ public class Server extends JFrame {
 	 *            to be send to everyone
 	 * @return void
 	 * */
-	private synchronized void sendMessageToAll(Message msg) {
+	public synchronized void sendMessageToAll(Message msg) {
 		messages.append(msg.getName() + " all:" + msg.getMessage() + "\n");
 		for (PlayerProxy player : players) {
 			if (player.name != msg.getName()) {
@@ -148,7 +162,7 @@ public class Server extends JFrame {
 	 *            to be sent.
 	 * @return void
 	 * */
-	private synchronized void sendMessageToOpponent(Message msg) {
+	public synchronized void sendMessageToOpponent(Message msg) {
 		messages.append(msg.getName() + " MsgOP:" + msg.getMessage() + "\n");
 		for (PlayerProxy player : players) {
 			if (!player.getPlayerName().equalsIgnoreCase(msg.getName())) {
@@ -157,7 +171,7 @@ public class Server extends JFrame {
 		}
 	}
 
-	private synchronized void sendMessageToSender(Message msg) {
+	public synchronized void sendMessageToSender(Message msg) {
 		for (PlayerProxy player : players) {
 			if (player.getPlayerName().equalsIgnoreCase(msg.getName())) {
 				player.sendMessage(msg);
@@ -165,191 +179,7 @@ public class Server extends JFrame {
 		}
 	}
 
-	/**
-	 * @class PlayerProxy
-	 * @extends Thread
-	 * @brief Clientproxy class
-	 * */
-	class PlayerProxy extends Thread {
-		protected Socket socket;
-		protected String address;
-		protected Message msg;
-		protected String name;
-		protected int playerId;
-		protected ObjectInputStream in;
-		protected ObjectOutputStream out;
-		protected boolean running = true;
-
-		public PlayerProxy(Socket socket) {
-			this.socket = socket;
-			playerId = ++id;
-			address = socket.getInetAddress().getHostAddress();
-			System.out.println("Client with address " + address + " and port "
-					+ socket.getPort()
-					+ "\nhas established a connection with the server.\n ");
-		}
-
-		/**
-		 * run
-		 * 
-		 * @name run
-		 * @brief proxy run loop
-		 * @param None
-		 * @return void
-		 * */
-		public void run() {
-			try {
-				out = new ObjectOutputStream(socket.getOutputStream());
-				out.flush();
-				in = new ObjectInputStream(socket.getInputStream());
-				while (running) {
-					try {
-						msg = (Message) in.readObject();
-						handleMessage(msg);
-					} catch (ClassNotFoundException e) {
-						System.out.println(e.getMessage());
-						e.printStackTrace();
-					}
-				}
-			} catch (IOException e) {
-				// System.err.println(e.getMessage());
-			} finally {
-				closeConnection();
-			}
-		}
-
-		/**
-		 * handleMessage
-		 * 
-		 * @name handleMessage
-		 * @brief Function is responsible for handling messages accordingly.
-		 * @param Takes
-		 *            a Message.
-		 * @return void
-		 * */
-		private void handleMessage(Message msg) {
-			int type = msg.getType();
-			System.out.println("got message typ: " + type);
-			switch (type) {
-			case Message.LOGIN:
-				if (players.size() > numberOfPlayers) {
-					name = msg.getName();
-					sendMessageToSender(new Message(Message.MESSAGE,
-							msg.getName(), "Server full"));
-					this.closeConnection();
-					players.remove(this);
-					messages.append("Server full, attempt to join game failed.\nConnection closed for " + name + "\n");
-				} else {
-					name = msg.getName();
-					sendMessageToOpponent(new Message(Message.CHAT,
-							msg.getName(), "Logged in"));
-				}
-				break;
-			case Message.LOGOUT:
-				removePlayerProxy(this.playerId);
-				sendMessageToOpponent(new Message(Message.CHAT, msg.getName(), msg.getMessage()));
-				break;
-			case Message.MESSAGE:
-				sendMessageToOpponent(msg);
-				break;
-			case Message.CHAT:
-				sendMessageToAll(msg);
-				break;
-			}
-		}
-
-		/**
-		 * sendMessage
-		 * 
-		 * @name sendMessage
-		 * @brief Function sends messages
-		 * @param Takes
-		 *            a Message
-		 * @return void
-		 * */
-		private void sendMessage(Message msg) {
-			try {
-				out.writeObject(msg);
-			} catch (IOException e) {
-				System.err.println(e.getMessage());
-			}
-		}
-
-		/**
-		 * closeConnection
-		 * 
-		 * @name closeConnection
-		 * @brief Responsible to closing the connection between server and
-		 *        player
-		 * @param None
-		 * @return void
-		 * */
-		protected void closeConnection() {
-			int port = socket.getPort();
-			try {
-				in.close();
-				out.close();
-				socket.close();
-				System.out.println("Client with address " + address
-						+ " and port " + port
-						+ "\nhas closed the connection with the server.\n ");
-			} catch (IOException e) {
-				// System.err.println(e.getMessage());
-			}
-		}
-
-		/**
-		 * getPlayerName
-		 * 
-		 * @name getPlaterName
-		 * @brief Return plater names.
-		 * @param None
-		 * @return returns player name as string
-		 * */
-		public String getPlayerName() {
-			return name;
-		}
-	}
-
-	class AiPlayer extends PlayerProxy{
-		public AiPlayer(Socket socket) {
-			super(socket);
-			// TODO Auto-generated constructor stub
-		}
-		
-		
-		private void handleMessage(Message msg) {
-			int type = msg.getType();
-			System.out.println("got message typ: " + type);
-			switch (type) {
-			case Message.LOGIN:
-				if (players.size() > numberOfPlayers) {
-					name = msg.getName();
-					sendMessageToSender(new Message(Message.MESSAGE,
-							msg.getName(), "Server full"));
-					this.closeConnection();
-					players.remove(this);
-					messages.append("Server full, attempt to join game failed.\nConnection closed for " + name + "\n");
-				} else {
-					name = msg.getName();
-					sendMessageToOpponent(new Message(Message.CHAT,
-							msg.getName(), "Logged in"));
-				}
-				break;
-			case Message.LOGOUT:
-				removePlayerProxy(this.playerId);
-				sendMessageToOpponent(new Message(Message.CHAT, msg.getName(), msg.getMessage()));
-				break;
-			case Message.MESSAGE:
-				sendMessageToOpponent(msg);
-				break;
-			case Message.CHAT:
-				sendMessageToAll(msg);
-				break;
-			}
-		}
-		
-	}
+	
 	
 	/**
 	 * setupGui
@@ -382,7 +212,7 @@ public class Server extends JFrame {
 		// Input field for server messages
 		this.add(input = new JTextField(), BorderLayout.SOUTH);
 		this.input.addActionListener(new AbstractAction() {
-			private static final long serialVersionUID = 7004163908537705429L;
+			
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -401,12 +231,16 @@ public class Server extends JFrame {
 		this.setSize(400, 400);
 		this.setVisible(true);
 	}
-
+	public int getNumberOfPlayers() {return numberOfPlayers;}
+	public int getNumberOfCurrentPlayers() {return players.size();}
+	
 	private void resetServer() {
 		// add reset message to event log
 		// messages.
 		// closing all connections
 		players = new ArrayList<PlayerProxy>();
+		//reset id counter
+		id = 0;
 		this.messages.append("Server reset\n");
 	}
 
