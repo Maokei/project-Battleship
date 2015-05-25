@@ -192,7 +192,7 @@ public class Player {
 							+ Integer.toString(col) + " "
 							+ Integer.toString(ship.getHealth())));
 					if (!ship.isAlive()) {
-						SoundHolder.getAudio("tilt").playAudio();
+						SoundHolder.getAudio("sinking").playAudio();
 						sendMessage(new Message(Message.MESSAGE, name,
 								"SHIP_DOWN "
 										+ ship.getType() + " "
@@ -201,6 +201,7 @@ public class Player {
 												.getStartPosition().getRow()) + " "
 										+ Integer.toString(ship
 												.getStartPosition().getCol())));
+						sinkShip(ship);
 					}
 				}
 			}
@@ -210,6 +211,15 @@ public class Player {
 			sendMessage(new Message(Message.MESSAGE, name,
 					"MISS " + Integer.toString(row) + " " + Integer.toString(col)));
 		}
+	}
+
+	private void sinkShip(Ship ship) {
+		SoundHolder.getAudio("ship_down").playAudio();
+		playerBoard.placeShip(ship, ship.getStartPosition().getRow(), ship.getStartPosition().getCol());
+		for(Grid pos : ship.getPosition()) {
+			playerBoard.fadeGrid(pos.getRow(), pos.getCol());
+		}
+		
 	}
 
 	public void registerHit(int row, int col, int health) {
@@ -262,7 +272,6 @@ public class Player {
 	public void placeEnemyShip(Ship ship, int row, int col) {
 		System.out.println("Placing enemy ship:\n");
 		System.out.println(ship.getType() + " " + ship.getAlignment() + " Grid[" + row + ", " + col + "]");
-		SoundHolder.getAudio("tilt").playAudio();
 		enemyBoard.placeShip(ship, row, col);
 		// enemyShips.add(ship);
 	}

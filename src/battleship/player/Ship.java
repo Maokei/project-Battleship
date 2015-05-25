@@ -42,6 +42,7 @@ public abstract class Ship {
 	public int getX1() {return posX1;}
 	public int getY1() {return posY1;}
 	public String getShipName() {return shipName;}
+	public Vector<Grid> getPosition() { return position; }
 	public Grid getStartPosition() {
 		return position.elementAt(0);
 	}

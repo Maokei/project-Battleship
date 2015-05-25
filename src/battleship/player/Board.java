@@ -21,17 +21,18 @@ public class Board extends JPanel {
 	public Board() {
 		super();
 		setLayout(new GridLayout(SIZE, SIZE));
+		setSize(new Dimension(SIZE * SPRITE_SIZE, SIZE * SPRITE_SIZE));
+		
 		gridboard = new Grid[SIZE][SIZE];
+		sprites = SpriteLoader.getInstance(32, 32, 8, 8, 13);
+		sprites.loadSprites("src/res/sprite/spritesheet_battleship.png");
+		background = sprites.getSprite("water");
 		for (int row = 0; row < SIZE; row++) {
 			for (int col = 0; col < SIZE; col++) {
 				gridboard[row][col] = new Grid(row, col);
 				add(gridboard[row][col]);
 			}
 		}
-		setSize(new Dimension(SIZE * SPRITE_SIZE, SIZE * SPRITE_SIZE));
-		sprites = SpriteLoader.getInstance(32, 32, 8, 8, 13);
-		sprites.loadSprites("src/res/sprite/spritesheet_battleship.png");
-		background = sprites.getSprite("water");
 	}
 
 	public void addHit(int row, int col) {
@@ -40,6 +41,10 @@ public class Board extends JPanel {
 	
 	public void addMiss(int row, int col) {
 		gridboard[row][col].setIcon(new ImageIcon(sprites.getSprite("miss")));
+	}
+	
+	public void fadeGrid(int row, int col) {
+		gridboard[row][col].fadeDown();
 	}
 
 	protected void paintComponent(Graphics g) {
