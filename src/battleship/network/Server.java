@@ -22,7 +22,6 @@ import javax.swing.JFrame;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
-import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.WindowConstants;
 
@@ -32,6 +31,7 @@ import javax.swing.WindowConstants;
  * @brief Battleship server to handle message and relay game play events
  * */
 public class Server extends JFrame {
+	private static final long serialVersionUID = 6118484193736984812L;
 	private static int id;
 	private int portNumber;
 	private final int numberOfPlayers = 2;
@@ -111,7 +111,7 @@ public class Server extends JFrame {
 			}
 		}
 	}
-
+	/*
 	private void removeByName(Message msg) {
 		for (PlayerProxy player : players) {
 			if (player.name == msg.getName()) {
@@ -121,7 +121,7 @@ public class Server extends JFrame {
 			}
 		}
 	}
-
+	*/
 	/**
 	 * sendMessageToAll
 	 * 
@@ -232,7 +232,7 @@ public class Server extends JFrame {
 			System.out.println("got message typ: " + type);
 			switch (type) {
 			case Message.LOGIN:
-				if (players.size() > 2) {
+				if (players.size() > numberOfPlayers) {
 					name = msg.getName();
 					sendMessageToSender(new Message(Message.MESSAGE,
 							msg.getName(), "Server full"));
@@ -342,6 +342,7 @@ public class Server extends JFrame {
 		// Input field for server messages
 		this.add(input = new JTextField(), BorderLayout.SOUTH);
 		this.input.addActionListener(new AbstractAction() {
+			private static final long serialVersionUID = 7004163908537705429L;
 
 			@Override
 			public void actionPerformed(ActionEvent e) {

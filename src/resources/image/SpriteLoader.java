@@ -40,6 +40,7 @@ public class SpriteLoader {
 		names.add("ver_front"); names.add("ver_mid"); names.add("ver_back");
 		names.add("hor_sub"); names.add("ver_sub"); names.add("water1");
 		names.add("water2"); names.add("water"); names.add("hit");
+		names.add("miss");
 	}
 
 	public boolean loadSprites(String filename) {

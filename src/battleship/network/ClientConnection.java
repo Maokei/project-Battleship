@@ -114,8 +114,8 @@ public class ClientConnection implements Runnable {
 		}
 		String[] tokens = msg.getMessage().split(" ");
 		switch (tokens[0].toUpperCase()) {
-		case "SHIP":
-			parseShipMessage(tokens);
+		case "SHIP_DOWN":
+			parseShipDownMessage(tokens);
 			break;
 		case "FIRE":
 			parseFireMessage(tokens);
@@ -123,13 +123,23 @@ public class ClientConnection implements Runnable {
 		case "HIT":
 			parseHitMessage(tokens);
 			break;
+		case "MISS":
+			System.out.println(msg.getMessage());
+			parseMissMessage(tokens);
+			break;
 		case "WIN":
 			parseWinMessage();
 			break;
 		}
 	}
 
-	private void parseShipMessage(String[] tokens) {
+	private void parseMissMessage(String[] tokens) {
+		int row = Integer.parseInt(tokens[1]);
+		int col = Integer.parseInt(tokens[2]);
+		player.registerMiss(row, col);
+	}
+
+	private void parseShipDownMessage(String[] tokens) {
 		Ship ship = null;
 		ShipType type;
 		Alignment alignment = Alignment.HORIZONTAL;
@@ -146,16 +156,14 @@ public class ClientConnection implements Runnable {
 			break;
 		}
 
-		if (tokens[2].equalsIgnoreCase("V")) {
+		if (tokens[2].equalsIgnoreCase("vertical")) {
 			alignment = Alignment.VERTICAL;
 		}
 		ship = BattleShipFactory.getShip(type);
 		ship.setAlignment(alignment);
 		int row = Integer.parseInt(tokens[3]);
 		int col = Integer.parseInt(tokens[4]);
-		
 		player.placeEnemyShip(ship, row, col);
-
 	}
 
 	// maybe not necessary
@@ -167,14 +175,14 @@ public class ClientConnection implements Runnable {
 	private void parseFireMessage(String[] tokens) {
 		int row = Integer.parseInt(tokens[1]);
 		int col = Integer.parseInt(tokens[2]);
-		player.registerHit(row, col);
+		player.registerFire(row, col);
 	}
 
 	private void parseHitMessage(String[] tokens) {
 		int row = Integer.parseInt(tokens[1]);
 		int col = Integer.parseInt(tokens[2]);
-		int health = Integer.parseInt(tokens[0]);
-		player.registerEnemyHit(row, col, health);
+		int health = Integer.parseInt(tokens[3]);
+		player.registerHit(row, col, health);
 	}
 
 	private void parseWinMessage() {

@@ -29,13 +29,17 @@ public class Board extends JPanel {
 			}
 		}
 		setSize(new Dimension(SIZE * SPRITE_SIZE, SIZE * SPRITE_SIZE));
-		sprites = SpriteLoader.getInstance(32, 32, 8, 8, 12);
+		sprites = SpriteLoader.getInstance(32, 32, 8, 8, 13);
 		sprites.loadSprites("src/res/sprite/spritesheet_battleship.png");
 		background = sprites.getSprite("water");
 	}
 
 	public void addHit(int row, int col) {
 		gridboard[row][col].setIcon(new ImageIcon(sprites.getSprite("hit")));
+	}
+	
+	public void addMiss(int row, int col) {
+		gridboard[row][col].setIcon(new ImageIcon(sprites.getSprite("miss")));
 	}
 
 	protected void paintComponent(Graphics g) {
@@ -145,4 +149,11 @@ public class Board extends JPanel {
 				.setIcon(new ImageIcon(sprites.getSprite(pre + post)));
 	}
 
+	public boolean checkHit(int row, int col) {
+		if(!gridboard[row][col].isEmpty()) {
+			if(!gridboard[row][col].isHit())
+				return true;
+		}
+		return false;
+	}
 }

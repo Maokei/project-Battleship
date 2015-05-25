@@ -17,6 +17,7 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
+import resources.audio.SoundHolder;
 import battleship.game.Status;
 import battleship.network.ClientConnection;
 import battleship.network.Message;
@@ -35,7 +36,7 @@ public class Player {
 	private Vector<Ship> enemyShips;
 	private int remainingShips;
 	private Gameboard playerGrid, enemyGrid;
-	private Board playerBoard;
+	private Board playerBoard, enemyBoard;
 	private boolean playerTurn;
 	public Status status;
 	private boolean placedAll = false;
@@ -46,8 +47,7 @@ public class Player {
 	public Player(String name, ClientConnection con) {
 		this.name = name;
 		this.con = con;
-		placeIndex = 0;
-		shipPlacementIndex = 0;
+		placeIndex = shipPlacementIndex = 0;
 		con.setPlayer(this);
 	}
 
@@ -63,16 +63,17 @@ public class Player {
 		initShips();
 	}
 
-	public void setGrid(Gameboard playerGrid, Gameboard enemyGrid) {
-		this.playerGrid = playerGrid;
-		this.enemyGrid = enemyGrid;
-		playerGrid.addMouseListener(new GridListener());
-		enemyGrid.addMouseListener(new GridListener());
-	}
-
-	public void setBoard(Board playerBoard) {
+	/*
+	 * public void setGrid(Gameboard playerGrid, Gameboard enemyGrid) {
+	 * this.playerGrid = playerGrid; this.enemyGrid = enemyGrid;
+	 * playerGrid.addMouseListener(new GridListener());
+	 * enemyGrid.addMouseListener(new GridListener()); }
+	 */
+	public void setBoard(Board playerBoard, Board enemyBoard) {
 		this.playerBoard = playerBoard;
+		this.enemyBoard = enemyBoard;
 		this.playerBoard.addMouseListener(new PlayerBoardListener());
+		this.enemyBoard.addMouseListener(new EnemyBoardListener());
 	}
 
 	private void initShips() {
@@ -100,53 +101,28 @@ public class Player {
 		con.sendMessage(message);
 	}
 
-	public void updateShips() {
-		for (Ship ship : playerShips) {
-			if (!ship.isAlive()) {
-				playerShips.remove(ship);
-				if (remainingShips > 0) {
-					remainingShips--;
-				} else {
-					status = Status.LOST;
-				}
-			}
-		}
-	}
+	/*
+	 * public void updateShips() { for (Ship ship : playerShips) { if
+	 * (!ship.isAlive()) { playerShips.remove(ship); if (remainingShips > 0) {
+	 * remainingShips--; } else { status = Status.LOST; } } } }
+	 * 
+	 * private void checkForHits(int x, int y, Vector<Ship> ships) { for (Ship
+	 * ship : ships) { if (ship.wasHit(x, y)) {
+	 * 
+	 * // register hit on grid // registerShot(x, y); // game over or? let
+	 * player keep shooting } } }
+	 */
 
-	private void checkForHits(int x, int y, Vector<Ship> ships) {
-		for (Ship ship : ships) {
-			if (ship.wasHit(x, y)) {
-
-				// register hit on grid
-				registerShot(x, y);
-				// game over or? let player keep shooting
-			}
-		}
-	}
-
-	private boolean checkHit(int x, int y, Ship ship) {
-		int length = ship.getLength();
-		// if()
-
-		return false;
-	}
-
-	public Gameboard getGrid() {
-		return playerGrid;
-	}
-
-	public void placeShipByGrid(Ship ship, int row, int col) {
-		playerGrid.placeShip(ship, row, col);
-	}
-
-	public boolean checkIfEmptyGrid(int row, int col) {
-		for (Ship other : playerShips) {
-			if (other.isInPosition(row, col)) {
-				return false;
-			}
-		}
-		return true;
-	}
+	/*
+	 * public Gameboard getGrid() { return playerGrid; }
+	 * 
+	 * public void placeShipByGrid(Ship ship, int row, int col) {
+	 * playerGrid.placeShip(ship, row, col); }
+	 * 
+	 * public boolean checkIfEmptyGrid(int row, int col) { for (Ship other :
+	 * playerShips) { if (other.isInPosition(row, col)) { return false; } }
+	 * return true; }
+	 */
 
 	/**
 	 * placeShip
@@ -155,25 +131,19 @@ public class Player {
 	 *            object, int player 1 - 2 blue or red player
 	 * @return boolean if ship is valid placement
 	 * */
-	public boolean placeShip(Ship ship, int x, int y) {
-		// int x, y;
-		// x = ship.getX();
-		// y = ship.getY();
-		Alignment a = ship.getAlignment();
-		int length = ship.getLength();
-		if (playerGrid.isEmpty(x, y, a, length)) {
-			playerGrid.placeShipOnGrid(ship);
-			return true;
-		}
-		/*
-		 * if(player == 1) { //blue player if(grid.isEmpty(x, y, a, length)) {
-		 * grid.placeShipOnGrid(ship); return true; } }else if(player == 2){
-		 * //red player if(grid.isEmpty(x, y, a, length)) {
-		 * grid.placeShipOnGrid(ship); return true; } }
-		 */
-		return false;
-	}
-
+	/*
+	 * public boolean placeShip(Ship ship, int x, int y) { // int x, y; // x =
+	 * ship.getX(); // y = ship.getY(); Alignment a = ship.getAlignment(); int
+	 * length = ship.getLength(); if (playerGrid.isEmpty(x, y, a, length)) {
+	 * playerGrid.placeShipOnGrid(ship); return true; }
+	 * 
+	 * if(player == 1) { //blue player if(grid.isEmpty(x, y, a, length)) {
+	 * grid.placeShipOnGrid(ship); return true; } }else if(player == 2){ //red
+	 * player if(grid.isEmpty(x, y, a, length)) { grid.placeShipOnGrid(ship);
+	 * return true; } }
+	 * 
+	 * return false; }
+	 */
 	/**
 	 * getPlaceShip
 	 * 
@@ -203,126 +173,139 @@ public class Player {
 		return out;
 	}
 
+	public boolean checkHit(int row, int col) {
+		return playerBoard.checkHit(row, col);
+	}
+
 	/**
 	 * register a shot on the grid
 	 * */
-	private void registerShot(int x, int y) {
-		if (playerTurn) {
-			playerGrid.registerHit(x, y);
-		} else {
-			playerGrid.registerHit(x, y);
-
-		}
-	}
-
-	public void registerHit(int row, int col) {
-		for (Ship ship : playerShips) {
-			if (ship.isAlive() && ship.checkHit(row, col)) {
-				playerGrid.playerIsHit(row, col);
-				sendMessage(new Message(Message.MESSAGE, name, "HIT"
-						+ Integer.toString(row) + " " + Integer.toString(col)
-						+ " " + Integer.toString(ship.getHealth())));
-			}
-		}
-	}
-
-	public void registerEnemyHit(int row, int col, int health) {
-		enemyGrid.enemyIsHit(row, col, health);
-	}
-
-	class GridListener extends MouseAdapter {
-		@Override
-		public void mousePressed(MouseEvent e) {
-			int row = e.getY() / GRID_SIZE;
-			int col = e.getX() / GRID_SIZE;
-			System.out.println("PlaceIndex: " + placeIndex);
-			if (playerGrid == e.getComponent()) {
-				if (!placedAll) {
-					Ship ship = playerShips.get(placeIndex);
-
-					if (placeIndex > 0)
-						System.out.println("PlaceIndex: " + placeIndex);
-
-					if ((placeIndex + 1) % 2 == 0)
-						ship.alignment = Alignment.VERTICAL;
-
-					int length = ship.getLength();
-					for (int i = 0; i < length; i++) {
-						if (ship.alignment == Alignment.HORIZONTAL) {
-							int rowCounter = row;
-							if (!checkIfEmptyGrid(rowCounter++, col))
-								return;
-						} else if (ship.alignment == Alignment.VERTICAL) {
-							int colCounter = col;
-							if (!checkIfEmptyGrid(row, colCounter++))
-								return;
-						}
-					}
-					if ((ship.alignment == Alignment.HORIZONTAL)
-							&& (ship.length + col) <= 10) {
-						placeShipByGrid(ship, row, col);
-						sendMessage(new Message(Message.MESSAGE, name, "SHIP "
-								+ ship.getType() + " H "
-								+ Integer.toString(row) + " "
-								+ Integer.toString(col)));
-					} else if (((ship.alignment == Alignment.VERTICAL) && (ship.length + row) <= 10)) {
-						placeShipByGrid(ship, row, col);
-						sendMessage(new Message(Message.MESSAGE, name, "SHIP "
-								+ ship.getType() + " V "
-								+ Integer.toString(row) + " "
-								+ Integer.toString(col)));
+	public void registerFire(int row, int col) {
+		if (checkHit(row, col)) {
+			for (Ship ship : playerShips) {
+				if (ship.isAlive() && ship.checkHit(row, col)) {
+					ship.hit();
+					SoundHolder.getAudio("explosion1").playAudio();
+					playerBoard.addHit(row, col);
+					sendMessage(new Message(Message.MESSAGE, name, "HIT "
+							+ Integer.toString(row) + " "
+							+ Integer.toString(col) + " "
+							+ Integer.toString(ship.getHealth())));
+					if (!ship.isAlive()) {
+						SoundHolder.getAudio("tilt").playAudio();
+						sendMessage(new Message(Message.MESSAGE, name,
+								"SHIP_DOWN "
+										+ ship.getType() + " "
+										+ ship.getAlignment() + " "
+										+ Integer.toString(ship
+												.getStartPosition().getRow()) + " "
+										+ Integer.toString(ship
+												.getStartPosition().getCol())));
 					}
 				}
-
-				if (++placeIndex == playerShips.size())
-					placedAll = true;
-
-			} else if (enemyGrid == e.getComponent()) {
-				System.out.println(name + " fired at Grid[ " + row + ", " + col
-						+ "]");
-				fireByGrid(row, col);
 			}
+		} else {
+			SoundHolder.getAudio("splash1").playAudio();
+			playerBoard.addMiss(row, col);
+			sendMessage(new Message(Message.MESSAGE, name,
+					"MISS " + Integer.toString(row) + " " + Integer.toString(col)));
 		}
 	}
 
-	public void fireByGrid(int row, int col) {
-		sendMessage(new Message(Message.MESSAGE, name, "FIRE "
-				+ Integer.toString(row) + " " + Integer.toString(col)));
-	}
-
-	public void placeEnemyShip(Ship ship, int row, int col) {
-		enemyGrid.placeShip(ship, row, col);
-		enemyShips.add(ship);
+	public void registerHit(int row, int col, int health) {
+		SoundHolder.getAudio("explosion1").playAudio();
+		enemyBoard.addHit(row, col);
 	}
 	
+	public void registerMiss(int row, int col) {
+		SoundHolder.getAudio("splash1").playAudio();
+		enemyBoard.addMiss(row, col);
+	}
+
+	/*
+	 * class GridListener extends MouseAdapter {
+	 * 
+	 * @Override public void mousePressed(MouseEvent e) { int row = e.getY() /
+	 * GRID_SIZE; int col = e.getX() / GRID_SIZE;
+	 * System.out.println("PlaceIndex: " + placeIndex); if (playerGrid ==
+	 * e.getComponent()) { if (!placedAll) { Ship ship =
+	 * playerShips.get(placeIndex);
+	 * 
+	 * if (placeIndex > 0) System.out.println("PlaceIndex: " + placeIndex);
+	 * 
+	 * if ((placeIndex + 1) % 2 == 0) ship.alignment = Alignment.VERTICAL;
+	 * 
+	 * int length = ship.getLength(); for (int i = 0; i < length; i++) { if
+	 * (ship.alignment == Alignment.HORIZONTAL) { int rowCounter = row; if
+	 * (!checkIfEmptyGrid(rowCounter++, col)) return; } else if (ship.alignment
+	 * == Alignment.VERTICAL) { int colCounter = col; if (!checkIfEmptyGrid(row,
+	 * colCounter++)) return; } } if ((ship.alignment == Alignment.HORIZONTAL)
+	 * && (ship.length + col) <= 10) { placeShipByGrid(ship, row, col);
+	 * sendMessage(new Message(Message.MESSAGE, name, "SHIP " + ship.getType() +
+	 * " H " + Integer.toString(row) + " " + Integer.toString(col))); } else if
+	 * (((ship.alignment == Alignment.VERTICAL) && (ship.length + row) <= 10)) {
+	 * placeShipByGrid(ship, row, col); sendMessage(new Message(Message.MESSAGE,
+	 * name, "SHIP " + ship.getType() + " V " + Integer.toString(row) + " " +
+	 * Integer.toString(col))); } }
+	 * 
+	 * if (++placeIndex == playerShips.size()) placedAll = true;
+	 * 
+	 * } else if (enemyGrid == e.getComponent()) { System.out.println(name +
+	 * " fired at Grid[ " + row + ", " + col + "]"); fireByGrid(row, col); } } }
+	 */
+	/*
+	 * public void fireByGrid(int row, int col) { sendMessage(new
+	 * Message(Message.MESSAGE, name, "FIRE " + Integer.toString(row) + " " +
+	 * Integer.toString(col))); }
+	 */
+
+	public void placeEnemyShip(Ship ship, int row, int col) {
+		System.out.println("Placing enemy ship:\n");
+		System.out.println(ship.getType() + " " + ship.getAlignment() + " Grid[" + row + ", " + col + "]");
+		SoundHolder.getAudio("tilt").playAudio();
+		enemyBoard.placeShip(ship, row, col);
+		// enemyShips.add(ship);
+	}
+
 	public void setRunning(boolean running) {
 		con.setRunning(running);
 	}
 
 	class PlayerBoardListener extends MouseAdapter {
 		Alignment al = Alignment.HORIZONTAL;
+
 		@Override
 		public void mousePressed(MouseEvent e) {
-			if(SwingUtilities.isRightMouseButton(e)) { //change alignment
-				if(al == Alignment.HORIZONTAL)
+			if (SwingUtilities.isRightMouseButton(e)) { // change alignment
+				if (al == Alignment.HORIZONTAL)
 					al = Alignment.VERTICAL;
 				else
 					al = Alignment.HORIZONTAL;
-			}else{ //place ship
+			} else { // place ship
 				int row = e.getY() / GRID_SIZE;
 				int col = e.getX() / GRID_SIZE;
 				if (shipPlacementIndex < playerShips.size()) {
 					Ship ship = playerShips.elementAt(shipPlacementIndex);
-					
-					//if ((shipPlacementIndex + 1) % 2 == 0)
+
+					// if ((shipPlacementIndex + 1) % 2 == 0)
 					ship.alignment = al;
-					
+
 					if (playerBoard.checkShipPlacement(ship, row, col)) {
 						playerBoard.placeShip(ship, row, col);
 						shipPlacementIndex++;
 					}
 				}
 			}
+		}
+	}
+
+	class EnemyBoardListener extends MouseAdapter {
+		public void mousePressed(MouseEvent e) {
+			int row = e.getY() / GRID_SIZE;
+			int col = e.getX() / GRID_SIZE;
+			System.out.println(name + "FIRES at: " + row + ", " + col);
+			sendMessage(new Message(Message.MESSAGE, name, "FIRE "
+					+ Integer.toString(row) + " " + Integer.toString(col)));
 		}
 	}
 }

@@ -22,7 +22,7 @@ public class LoginDialog extends JDialog {
 	private JPanel buttonPanel;
 	private JButton cancel, clear, login;
 	private ClientConnection connection;
-	private boolean connected;
+	private boolean connected = false;
 	public static final int DEFAULT_PORT = 10001;
 	public static final String DEFAULT_ADDRESS = "localhost";
 	private Player player;
@@ -39,7 +39,6 @@ public class LoginDialog extends JDialog {
 		buttonPanel = new JPanel();
 		buttonPanel.setBackground(new Color(0, 0, 0));
 		cancel = new JButton("Cancel");
-		//cancel.setContentAreaFilled();
 		cancel.setBorderPainted(false);
 		cancel.setBackground(new Color(255, 60, 60));
 		cancel.setForeground(new Color(255, 255, 255));
@@ -82,7 +81,7 @@ public class LoginDialog extends JDialog {
 		if (!nameInput.equals("")) {
 			connection = new ClientConnection(DEFAULT_ADDRESS, DEFAULT_PORT);
 			if (connection.openConnection()) {
-				connected = true;
+				setConnected(true);
 				player = new Player(nameInput.getInput(), connection);
 				game.setPlayer(player);
 				screen.setAvatar(getAvatar());
@@ -90,6 +89,13 @@ public class LoginDialog extends JDialog {
 				dispose();
 			}
 		}
-		// 
+	}
+
+	public boolean isConnected() {
+		return connected;
+	}
+
+	public void setConnected(boolean connected) {
+		this.connected = connected;
 	}
 }

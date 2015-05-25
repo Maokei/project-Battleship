@@ -47,11 +47,12 @@ public class Audio {
 		clip.start();
 	}
 	
-	public void setLoop(boolean loop) {
+	public Audio setLoop(boolean loop) {
 		if(loop) {
 			clip.setLoopPoints(0, -1);
 			clip.loop(Clip.LOOP_CONTINUOUSLY);
 		}
+		return this;
 	}
 	
 }

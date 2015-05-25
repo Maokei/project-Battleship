@@ -8,6 +8,7 @@ package battleship.game;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
+import resources.audio.SoundHolder;
 import battleship.login.LoginDialog;
 import battleship.network.ClientConnection;
 import battleship.network.Server;
@@ -22,20 +23,23 @@ public class Game {
 	private LoginDialog login;
 	private ClientConnection con;
 	private Gameboard playerGrid, enemyGrid;
-	private Board playerBoard;
+	private Board playerBoard, enemyBoard;
 	public static final int DEFAULT_PORT = 10001;
 	
 	public Game() {
+		SoundHolder.initSounds();
 		playerGrid = new Gameboard();
 		enemyGrid = new Gameboard();
 		playerBoard = new Board();
-		screen = new Screen(playerGrid, enemyGrid, playerBoard);
+		enemyBoard = new Board();
+		screen = new Screen(playerGrid, enemyGrid, playerBoard, enemyBoard);
 		login = new LoginDialog(screen, this);
 		if(player == null) System.exit(0);
-		player.setGrid(playerGrid, enemyGrid);
-		player.setBoard(playerBoard);
+		// player.setGrid(playerGrid, enemyGrid);
+		player.setBoard(playerBoard, enemyBoard);
 		screen.setUpChat(player);
 		screen.showGUI();
+		SoundHolder.getAudio("ocean1").setLoop(true).playAudio();
 		player.init();
 		player.listen();
 	}

@@ -2,7 +2,6 @@ package battleship.login;
 
 import java.awt.GridLayout;
 
-import javax.swing.JButton;
 import javax.swing.JPanel;
 
 import battleship.screen.Avatar;
@@ -13,7 +12,6 @@ public class LoginPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 	private InputPanel nameInput;
 	private AvatarPanel avatarChooser;
-	private JPanel buttonPanel;
 	
 	public LoginPanel() {
 		super(new GridLayout(2, 1));
