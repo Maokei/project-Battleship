@@ -18,6 +18,8 @@ public class PlayerProxy extends Thread {
 	protected Message msg;
 	protected String name;
 	protected int playerId;
+	private boolean deployed;
+	private boolean playerTurn;
 	protected ObjectInputStream in;
 	protected ObjectOutputStream out;
 	protected boolean running = true;
@@ -96,12 +98,19 @@ public class PlayerProxy extends Thread {
 		case Message.CHAT:
 			server.sendMessageToAll(msg);
 			break;
+		case Message.DEPLOYED:
+			deployed = true;
+			server.randomizePlayerTurn();
+			break;
+		case Message.TURN:
+			server.sendMessageToOpponent(msg);
+			break;
 		}
 	}
 
 	/**
 	 * sendMessage
-	 * 
+	 * 	
 	 * @name sendMessage
 	 * @brief Function sends messages
 	 * @param Takes
@@ -149,5 +158,9 @@ public class PlayerProxy extends Thread {
 	 * */
 	public String getPlayerName() {
 		return name;
+	}
+	
+	public boolean getDeployed() {
+		return deployed;
 	}
 }
