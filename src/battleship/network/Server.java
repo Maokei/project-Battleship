@@ -38,6 +38,7 @@ public class Server extends JFrame {
 	private final int numberOfPlayers = 2;
 	private ServerSocket server;
 	private ArrayList<PlayerProxy> players;
+	private ArrayList<Battle> battles;
 
 	// gui components
 	private JButton resetBtn;
@@ -70,12 +71,12 @@ public class Server extends JFrame {
 
 			while (true) {
 				socket = server.accept();
-				PlayerProxy player = new PlayerProxy(socket);
+				id++;
+				PlayerProxy player = new PlayerProxy(socket, this, id);
 				players.add(player);
 				player.start();
 				messages.append("\nNew connection accepted.\n"
-						+ "Connected players: " + players.size() + "\n");
-
+						+ "Connected players: " + players.size() + " id: " + id + "\n");
 			}
 		} catch (IOException e) {
 			System.err.println(e.getMessage());
@@ -102,7 +103,7 @@ public class Server extends JFrame {
 	 * @param int id client proxy id, client to be removed
 	 * @return void
 	 * */
-	private void removePlayerProxy(int id) {
+	public void removePlayerProxy(int id) {
 		for (int i = players.size() - 1; i >= 0; i--) {
 			if (players.get(i).playerId == id) {
 				players.get(i).closeConnection();
@@ -110,6 +111,19 @@ public class Server extends JFrame {
 				players.remove(i);
 				messages.append("\nConnected players: " + players.size() + "\n");
 			}
+		}
+	}
+	/**
+	 * removePlayerProxy
+	 * 
+	 * @name removePlayerProxy
+	 * @brief Function to remove a client proxy
+	 * @param Takes a player proxy object, and removes it if it exists
+	 * @return void
+	 * */
+	public void removePlayerProxy(battleship.network.PlayerProxy pp) {
+		if(players.equals(pp)) {
+			players.remove(pp);
 		}
 	}
 
@@ -127,7 +141,7 @@ public class Server extends JFrame {
 	 *            to be send to everyone
 	 * @return void
 	 * */
-	private synchronized void sendMessageToAll(Message msg) {
+	public synchronized void sendMessageToAll(Message msg) {
 		messages.append(msg.getName() + " all:" + msg.getMessage() + "\n");
 		for (PlayerProxy player : players) {
 			if (player.name != msg.getName()) {
@@ -145,7 +159,7 @@ public class Server extends JFrame {
 	 *            to be sent.
 	 * @return void
 	 * */
-	private synchronized void sendMessageToOpponent(Message msg) {
+	public synchronized void sendMessageToOpponent(Message msg) {
 		messages.append(msg.getName() + " MsgOP:" + msg.getMessage() + "\n");
 		for (PlayerProxy player : players) {
 			if (!player.getPlayerName().equalsIgnoreCase(msg.getName())) {
@@ -154,7 +168,7 @@ public class Server extends JFrame {
 		}
 	}
 
-	private synchronized void sendMessageToSender(Message msg) {
+	public synchronized void sendMessageToSender(Message msg) {
 		for (PlayerProxy player : players) {
 			if (player.getPlayerName().equalsIgnoreCase(msg.getName())) {
 				player.sendMessage(msg);
@@ -192,7 +206,6 @@ public class Server extends JFrame {
 			player.sendMessage(new Message(Message.DEPLOYED, player.name, ""));
 		}
 	}
-
 	/**
 	 * @class PlayerProxy
 	 * @extends Thread
@@ -351,7 +364,7 @@ public class Server extends JFrame {
 	}
 
 	/**
-	 * setuoGui
+	 * setupGui
 	 * 
 	 * @name setupGui
 	 * @brief Function set's up the server GUI, and button listeners.
@@ -381,7 +394,7 @@ public class Server extends JFrame {
 		// Input field for server messages
 		this.add(input = new JTextField(), BorderLayout.SOUTH);
 		this.input.addActionListener(new AbstractAction() {
-			private static final long serialVersionUID = 7004163908537705429L;
+			
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -400,12 +413,16 @@ public class Server extends JFrame {
 		this.setSize(400, 400);
 		this.setVisible(true);
 	}
-
+	public int getNumberOfPlayers() {return numberOfPlayers;}
+	public int getNumberOfCurrentPlayers() {return players.size();}
+	
 	private void resetServer() {
 		// add reset message to event log
 		// messages.
 		// closing all connections
 		players = new ArrayList<PlayerProxy>();
+		//reset id counter
+		id = 0;
 		this.messages.append("Server reset\n");
 	}
 
