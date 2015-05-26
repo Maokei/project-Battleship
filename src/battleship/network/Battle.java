@@ -35,7 +35,7 @@ public class Battle extends Thread {
 			//ship placement
 			shipPlacementPhase();
 			//battle begins
-			bluePlayer.
+			//bluePlayer.
 			//announce winner
 		
 		}
