@@ -15,6 +15,7 @@ import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Random;
 
 import javax.swing.AbstractAction;
 import javax.swing.JButton;
@@ -74,7 +75,7 @@ public class Server extends JFrame {
 				player.start();
 				messages.append("\nNew connection accepted.\n"
 						+ "Connected players: " + players.size() + "\n");
-				
+
 			}
 		} catch (IOException e) {
 			System.err.println(e.getMessage());
@@ -111,17 +112,13 @@ public class Server extends JFrame {
 			}
 		}
 	}
+
 	/*
-	private void removeByName(Message msg) {
-		for (PlayerProxy player : players) {
-			if (player.name == msg.getName()) {
-				messages.append("Removed player: " + player.name);
-				players.remove(player);
-				player.running = false;
-			}
-		}
-	}
-	*/
+	 * private void removeByName(Message msg) { for (PlayerProxy player :
+	 * players) { if (player.name == msg.getName()) {
+	 * messages.append("Removed player: " + player.name);
+	 * players.remove(player); player.running = false; } } }
+	 */
 	/**
 	 * sendMessageToAll
 	 * 
@@ -165,6 +162,37 @@ public class Server extends JFrame {
 		}
 	}
 
+	public void randomizePlayerTurn() {
+		if (players.size() > 1 && checkDeployment()) {
+			sendAllDeployed();
+
+			Random r = new Random();
+			int value = r.nextInt(100);
+			if (value < 50) {
+				players.get(0).sendMessage(
+						new Message(Message.TURN, players.get(1).name, ""));
+			} else {
+				players.get(1).sendMessage(
+						new Message(Message.TURN, players.get(0).name, ""));
+			}
+		}
+	}
+
+	public boolean checkDeployment() {
+		for (PlayerProxy player : players) {
+			if (!player.deployed == true) {
+				return false;
+			}
+		}
+		return true;
+	}
+	
+	public synchronized void sendAllDeployed() {
+		for (PlayerProxy player : players) {
+			player.sendMessage(new Message(Message.DEPLOYED, player.name, ""));
+		}
+	}
+
 	/**
 	 * @class PlayerProxy
 	 * @extends Thread
@@ -176,6 +204,8 @@ public class Server extends JFrame {
 		private Message msg;
 		private String name;
 		private int playerId;
+		private boolean deployed;
+		private boolean playerTurn;
 		private ObjectInputStream in;
 		private ObjectOutputStream out;
 		private boolean running = true;
@@ -238,7 +268,8 @@ public class Server extends JFrame {
 							msg.getName(), "Server full"));
 					this.closeConnection();
 					players.remove(this);
-					messages.append("Server full, attempt to join game failed.\nConnection closed for " + name + "\n");
+					messages.append("Server full, attempt to join game failed.\nConnection closed for "
+							+ name + "\n");
 				} else {
 					name = msg.getName();
 					sendMessageToOpponent(new Message(Message.CHAT,
@@ -247,13 +278,21 @@ public class Server extends JFrame {
 				break;
 			case Message.LOGOUT:
 				removePlayerProxy(this.playerId);
-				sendMessageToOpponent(new Message(Message.CHAT, msg.getName(), msg.getMessage()));
+				sendMessageToOpponent(new Message(Message.CHAT, msg.getName(),
+						msg.getMessage()));
 				break;
 			case Message.MESSAGE:
 				sendMessageToOpponent(msg);
 				break;
 			case Message.CHAT:
 				sendMessageToAll(msg);
+				break;
+			case Message.DEPLOYED:
+				deployed = true;
+				randomizePlayerTurn();
+				break;
+			case Message.TURN:
+				sendMessageToOpponent(msg);
 				break;
 			}
 		}

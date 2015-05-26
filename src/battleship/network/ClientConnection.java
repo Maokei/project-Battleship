@@ -103,6 +103,14 @@ public class ClientConnection implements Runnable {
 		case Message.CHAT:
 			output.append(msg.getName() + ">> " + msg.getMessage() + "\n");
 			break;
+		case Message.DEPLOYED:
+			player.setOpponentDeployed();
+			break;
+		case Message.TURN:
+			if(!msg.getName().equals(player.getName())) {
+				player.setPlayerTurn(true);
+			}
+			break;
 		}
 	}
 

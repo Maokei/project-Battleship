@@ -1,6 +1,7 @@
 package battleship.screen;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.GridLayout;
@@ -31,8 +32,8 @@ public class Avatar extends JPanel {
 	
 
 	public Avatar() {
-		super(new GridLayout(2, 1, 10, 10));
-		setSize(150, 150);
+		super(new GridLayout(2, 1, 0, 0));
+		setSize(new Dimension(100, 80));
 		setupPaint();
 		avatarLabel = new JLabel();
 		try {

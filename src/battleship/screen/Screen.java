@@ -28,8 +28,10 @@ public class Screen {
 	private ChatPanel chat;
 	private MainPanel mainPanel;
 	private Avatar avatar;
+	private PlayerGUI playergui;
 	private Gameboard playerGrid, enemyGrid;
 	private Board playerBoard, enemyBoard;
+	private MessagePanel msgPanel;
 	
 	public Screen(Gameboard playerGrid, Gameboard enemyGrid, Board playerBoard, Board enemyBoard) {
 		this.playerGrid = playerGrid;
@@ -39,17 +41,21 @@ public class Screen {
 		frame = new JFrame("*** Battleship ***");
 		mainPanel = new MainPanel();
 		mainPanel.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
-		chat = new ChatPanel(); 
-		avatar = new Avatar();
-		mainPanel.add(avatar);
+		// chat = new ChatPanel(); 
+		// avatar = new Avatar();
+		// mainPanel.add(avatar);
 		// mainPanel.add(playerGrid);
 		// mainPanel.add(enemyGrid);
-		mainPanel.add(chat);
+		// mainPanel.add(chat);
+		playergui = new PlayerGUI();
+		mainPanel.add(playergui);
 		mainPanel.add(playerBoard);
 		mainPanel.add(enemyBoard);
+		msgPanel = new MessagePanel();
+		mainPanel.add(msgPanel);
 		frame.add(mainPanel, BorderLayout.CENTER);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setSize(900, 600);
+		frame.setSize(1024, 450);
 		frame.setLocationRelativeTo(null);
 		
 		frame.addWindowListener(new WindowAdapter() {
@@ -64,12 +70,13 @@ public class Screen {
 	}
 	
 	public void setAvatar(Avatar av) {
-		avatar.setAvatar(av.getImage(), av.getName());
+		playergui.setAvatar(av);
 	}
 	
-	public void setUpChat(Player player) {
+	public void setPlayer(Player player) {
 		this.player = player;
-		chat.setPlayer(player);
+		player.setMsgPanel(msgPanel);
+		player.setPlayerGUI(playergui);
 	}
 	
 	public void showGUI() {

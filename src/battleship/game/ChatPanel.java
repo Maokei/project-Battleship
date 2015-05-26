@@ -1,6 +1,7 @@
 package battleship.game;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
@@ -22,6 +23,7 @@ public class ChatPanel extends JPanel {
 
 	public ChatPanel() {
 		super(new BorderLayout());
+		setPreferredSize(new Dimension(150, 100));
 		input = new InputPanel("Enter message", true);
 		output = new JTextArea(6, 10);
 		outputPanel = new JPanel();

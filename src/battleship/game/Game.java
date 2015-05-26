@@ -37,7 +37,7 @@ public class Game {
 		if(player == null) System.exit(0);
 		// player.setGrid(playerGrid, enemyGrid);
 		player.setBoard(playerBoard, enemyBoard);
-		screen.setUpChat(player);
+		screen.setPlayer(player);
 		screen.showGUI();
 		SoundHolder.getAudio("ocean1").setLoop(true).playAudio();
 		player.init();

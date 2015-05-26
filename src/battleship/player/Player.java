@@ -21,6 +21,8 @@ import resources.audio.SoundHolder;
 import battleship.game.Status;
 import battleship.network.ClientConnection;
 import battleship.network.Message;
+import battleship.screen.MessagePanel;
+import battleship.screen.PlayerGUI;
 
 /**
  * @package battleship.entity
@@ -30,23 +32,27 @@ import battleship.network.Message;
 public class Player {
 	private String name;
 	private ClientConnection con;
-	private int hits;
-	private int moves;
+	private PlayerGUI gui;
+	private MessagePanel msgPanel;
+	private int hits, misses;
 	private Vector<Ship> playerShips;
 	private Vector<Ship> enemyShips;
 	private int remainingShips;
 	private Gameboard playerGrid, enemyGrid;
 	private Board playerBoard, enemyBoard;
-	private boolean playerTurn;
 	public Status status;
 	private boolean placedAll = false;
 	private int placeIndex;
 	private int shipPlacementIndex;
 	private static final int GRID_SIZE = 32;
+	private boolean deployed = false;
+	private boolean opponentDeployed = false;
+	private boolean playerTurn = false;
 
 	public Player(String name, ClientConnection con) {
 		this.name = name;
 		this.con = con;
+		hits = misses = 0;
 		placeIndex = shipPlacementIndex = 0;
 		con.setPlayer(this);
 	}
@@ -57,8 +63,7 @@ public class Player {
 
 	public void init() {
 		status = Status.PLAYING;
-		hits = 0;
-		moves = 0;
+		hits = misses = 0;
 		remainingShips = 9;
 		initShips();
 	}
@@ -76,6 +81,11 @@ public class Player {
 		this.enemyBoard.addMouseListener(new EnemyBoardListener());
 	}
 
+	public void setPlayerGUI(PlayerGUI gui) {
+		this.gui = gui;
+		gui.setPlayer(this);
+	}
+
 	private void initShips() {
 		playerShips = ShipBuilder.buildShips();
 		enemyShips = new Vector<Ship>();
@@ -89,8 +99,8 @@ public class Player {
 		return hits;
 	}
 
-	public int getMoves() {
-		return moves;
+	public int getMisses() {
+		return misses;
 	}
 
 	public void listen() {
@@ -195,10 +205,13 @@ public class Player {
 						SoundHolder.getAudio("sinking").playAudio();
 						sendMessage(new Message(Message.MESSAGE, name,
 								"SHIP_DOWN "
-										+ ship.getType() + " "
-										+ ship.getAlignment() + " "
+										+ ship.getType()
+										+ " "
+										+ ship.getAlignment()
+										+ " "
 										+ Integer.toString(ship
-												.getStartPosition().getRow()) + " "
+												.getStartPosition().getRow())
+										+ " "
 										+ Integer.toString(ship
 												.getStartPosition().getCol())));
 						sinkShip(ship);
@@ -208,28 +221,35 @@ public class Player {
 		} else {
 			SoundHolder.getAudio("splash1").playAudio();
 			playerBoard.addMiss(row, col);
-			sendMessage(new Message(Message.MESSAGE, name,
-					"MISS " + Integer.toString(row) + " " + Integer.toString(col)));
+			sendMessage(new Message(Message.MESSAGE, name, "MISS "
+					+ Integer.toString(row) + " " + Integer.toString(col)));
 		}
 	}
 
 	private void sinkShip(Ship ship) {
+		gui.setShips(--remainingShips);
 		SoundHolder.getAudio("ship_down").playAudio();
-		playerBoard.placeShip(ship, ship.getStartPosition().getRow(), ship.getStartPosition().getCol());
-		for(Grid pos : ship.getPosition()) {
+		playerBoard.placeShip(ship, ship.getStartPosition().getRow(), ship
+				.getStartPosition().getCol());
+		for (Grid pos : ship.getPosition()) {
 			playerBoard.fadeGrid(pos.getRow(), pos.getCol());
 		}
-		
+
 	}
 
 	public void registerHit(int row, int col, int health) {
 		SoundHolder.getAudio("explosion1").playAudio();
 		enemyBoard.addHit(row, col);
+		gui.setHits(++hits);
 	}
-	
+
 	public void registerMiss(int row, int col) {
+		playerTurn = false;
 		SoundHolder.getAudio("splash1").playAudio();
 		enemyBoard.addMiss(row, col);
+		gui.setMisses(++misses);
+		sendMessage(new Message(Message.TURN, name, ""));
+		msgPanel.setMessage("Wait for your turn");
 	}
 
 	/*
@@ -271,7 +291,8 @@ public class Player {
 
 	public void placeEnemyShip(Ship ship, int row, int col) {
 		System.out.println("Placing enemy ship:\n");
-		System.out.println(ship.getType() + " " + ship.getAlignment() + " Grid[" + row + ", " + col + "]");
+		System.out.println(ship.getType() + " " + ship.getAlignment()
+				+ " Grid[" + row + ", " + col + "]");
 		enemyBoard.placeShip(ship, row, col);
 		// enemyShips.add(ship);
 	}
@@ -302,6 +323,11 @@ public class Player {
 					if (playerBoard.checkShipPlacement(ship, row, col)) {
 						playerBoard.placeShip(ship, row, col);
 						shipPlacementIndex++;
+
+						if (shipPlacementIndex == playerShips.size()) {
+							gui.setShipsDeployed();
+							msgPanel.setMessage("Press Ready Button");
+						}
 					}
 				}
 			}
@@ -310,13 +336,42 @@ public class Player {
 
 	class EnemyBoardListener extends MouseAdapter {
 		public void mousePressed(MouseEvent e) {
-			int row = e.getY() / GRID_SIZE;
-			int col = e.getX() / GRID_SIZE;
-			System.out.println(name + "FIRES at: " + row + ", " + col);
-			sendMessage(new Message(Message.MESSAGE, name, "FIRE "
-					+ Integer.toString(row) + " " + Integer.toString(col)));
+			System.out.println(name + "\nDeployed: " + deployed + "\n" + "OpponentDeployed: " + opponentDeployed
+					+ "\nPlayerTurn: " + playerTurn);
+			if (deployed && opponentDeployed && playerTurn) {
+				int row = e.getY() / GRID_SIZE;
+				int col = e.getX() / GRID_SIZE;
+				System.out.println(name + "FIRES at: " + row + ", " + col);
+				sendMessage(new Message(Message.MESSAGE, name, "FIRE "
+						+ Integer.toString(row) + " " + Integer.toString(col)));
+				
+			}
 		}
 	}
+
+	public void setMsgPanel(MessagePanel msgPanel) {
+		this.msgPanel = msgPanel;
+		this.msgPanel.setMessage("Deploy your ships");
+	}
+	
+	public void setDeployed() {
+		deployed = true;
+		if(!(opponentDeployed || playerTurn)) {
+			msgPanel.setMessage("Wait for opponent");
+		} else {
+			msgPanel.setMessage("Fire at will!!");
+		}
+	}
+	
+	public void setOpponentDeployed() {
+		opponentDeployed = true;
+	}
+	
+	public void setPlayerTurn(boolean playerTurn) {
+		this.playerTurn = playerTurn;
+		msgPanel.setMessage("Fire at will!!");
+	}
+	
 }
 
 class ShipBuilder {
