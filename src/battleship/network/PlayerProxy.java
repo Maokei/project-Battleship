@@ -105,6 +105,8 @@ public class PlayerProxy extends Thread {
 		case Message.TURN:
 			server.sendMessageToOpponent(msg);
 			break;
+		case Message.LOST:
+			server.sendMessageToOpponent(msg);
 		}
 	}
 

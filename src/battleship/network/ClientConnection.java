@@ -111,6 +111,8 @@ public class ClientConnection implements Runnable {
 				player.setPlayerTurn(true);
 			}
 			break;
+		case Message.LOST:
+			player.battleWon();
 		}
 	}
 

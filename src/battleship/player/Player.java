@@ -228,13 +228,25 @@ public class Player {
 
 	private void sinkShip(Ship ship) {
 		gui.setShips(--remainingShips);
+		if(remainingShips == 0) {
+			battleLost();
+			
+		}
 		SoundHolder.getAudio("ship_down").playAudio();
 		playerBoard.placeShip(ship, ship.getStartPosition().getRow(), ship
 				.getStartPosition().getCol());
 		for (Grid pos : ship.getPosition()) {
 			playerBoard.fadeGrid(pos.getRow(), pos.getCol());
 		}
+		
+	}
 
+	private void battleLost() {
+		SoundHolder.getAudio("march").setLoop(true).playAudio();
+		msgPanel.setMessage("You sir, are a DISGRACE!!");
+		sendMessage(new Message(Message.LOST, name, ""));
+		playerTurn = false;
+		playerBoard.displayDefeat();
 	}
 
 	public void registerHit(int row, int col, int health) {
@@ -371,7 +383,12 @@ public class Player {
 		this.playerTurn = playerTurn;
 		msgPanel.setMessage("Fire at will!!");
 	}
-	
+
+	public void battleWon() {
+		playerTurn = false;
+		msgPanel.setMessage("You are Victorious!!!");
+		playerBoard.displayVictory();
+	}
 }
 
 class ShipBuilder {

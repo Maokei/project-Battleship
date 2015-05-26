@@ -4,7 +4,10 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.GridLayout;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
+import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 
@@ -17,12 +20,14 @@ public class Board extends JPanel {
 	private Grid[][] gridboard;
 	private SpriteLoader sprites;
 	private BufferedImage background;
+	private boolean defeat = false;
+	private boolean victory = false;
 
 	public Board() {
 		super();
+
 		setLayout(new GridLayout(SIZE, SIZE));
 		setSize(new Dimension(SIZE * SPRITE_SIZE, SIZE * SPRITE_SIZE));
-		
 		gridboard = new Grid[SIZE][SIZE];
 		sprites = SpriteLoader.getInstance(32, 32, 8, 8, 13);
 		sprites.loadSprites("src/res/sprite/spritesheet_battleship.png");
@@ -38,24 +43,40 @@ public class Board extends JPanel {
 	public void addHit(int row, int col) {
 		gridboard[row][col].setIcon(new ImageIcon(sprites.getSprite("hit")));
 	}
-	
+
 	public void addMiss(int row, int col) {
 		gridboard[row][col].setIcon(new ImageIcon(sprites.getSprite("miss")));
 	}
-	
+
 	public void fadeGrid(int row, int col) {
 		gridboard[row][col].fadeDown();
 	}
 
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
-		for (int row = 0; row <= SIZE; row++) {
-			int y = row * SPRITE_SIZE;
-			for (int col = 0; col <= SIZE; col++) {
-				int x = col * SPRITE_SIZE;
-				g.drawLine(0, y, SIZE * SPRITE_SIZE, y);
-				g.drawLine(x, 0, x, SIZE * SPRITE_SIZE);
-				g.drawImage(background, x, y, null);
+		if (!(defeat || victory)) {
+			for (int row = 0; row <= SIZE; row++) {
+				int y = row * SPRITE_SIZE;
+				for (int col = 0; col <= SIZE; col++) {
+					int x = col * SPRITE_SIZE;
+					g.drawLine(0, y, SIZE * SPRITE_SIZE, y);
+					g.drawLine(x, 0, x, SIZE * SPRITE_SIZE);
+					g.drawImage(background, x, y, null);
+				}
+			}
+		} else {
+			setGridsNotVisisble();
+			// g.clearRect(0, 0, getWidth(), getHeight());
+			try {
+				if (defeat) {
+					background = ImageIO.read(new File("src/res/sprite/battle_lost.png"));
+				} else if (victory) {
+					background = ImageIO.read(new File("src/res/sprite/battle_won.png"));
+				}
+				g.drawImage(background, 0, 0, null);
+			} catch (IOException e) {
+				System.err.println(e.getMessage());
+				e.printStackTrace();
 			}
 		}
 	}
@@ -75,7 +96,7 @@ public class Board extends JPanel {
 			} else {
 				return false;
 			}
-				
+
 		} else if (ship.alignment == Alignment.VERTICAL) {
 			if ((row + length - 1) < SIZE) {
 				counter = row;
@@ -116,14 +137,14 @@ public class Board extends JPanel {
 		}
 		System.out.print("]\n");
 		printOccupied();
-		
+
 	}
-	
+
 	private void printOccupied() {
 		System.out.print("gridboard occupied: [");
-		for(int row = 0; row < SIZE; row++) {
-			for(int col = 0; col < SIZE; col++) {
-				if(!gridboard[row][col].isEmpty()) {
+		for (int row = 0; row < SIZE; row++) {
+			for (int col = 0; col < SIZE; col++) {
+				if (!gridboard[row][col].isEmpty()) {
 					System.out.print(row + "," + col + " ");
 				}
 			}
@@ -155,10 +176,28 @@ public class Board extends JPanel {
 	}
 
 	public boolean checkHit(int row, int col) {
-		if(!gridboard[row][col].isEmpty()) {
-			if(!gridboard[row][col].isHit())
+		if (!gridboard[row][col].isEmpty()) {
+			if (!gridboard[row][col].isHit())
 				return true;
 		}
 		return false;
+	}
+
+	public void displayDefeat() {
+		defeat = true;
+		repaint();
+	}
+
+	public void displayVictory() {
+		victory = true;
+		repaint();
+	}
+	
+	private void setGridsNotVisisble() {
+		for(int row = 0; row < SIZE; row++) {
+			for(int col = 0; col < SIZE; col++) {
+				gridboard[row][col].setVisible(false);
+			}
+		}
 	}
 }
