@@ -72,7 +72,8 @@ public class Server extends JFrame {
 			while (true) {
 				socket = server.accept();
 				id++;
-				PlayerProxy player = new PlayerProxy(socket, this, id);
+				//PlayerProxy player = new PlayerProxy(socket, this, id);
+				PlayerProxy player = new PlayerProxy(socket);
 				players.add(player);
 				player.start();
 				messages.append("\nNew connection accepted.\n"
