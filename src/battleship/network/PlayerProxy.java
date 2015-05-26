@@ -7,9 +7,10 @@ import java.net.Socket;
 import battleship.network.Message;
 
 /**
+ * PlayerProxy
  * @class PlayerProxy
  * @extends Thread
- * @brief Clientproxy class
+ * @brief Client proxy class of the player.
  * */
 public class PlayerProxy extends Thread {
 	protected Socket socket;
@@ -68,8 +69,7 @@ public class PlayerProxy extends Thread {
 	 * 
 	 * @name handleMessage
 	 * @brief Function is responsible for handling messages accordingly.
-	 * @param Takes
-	 *            a Message.
+	 * @param Takes a Message.
 	 * @return void
 	 * */
 	private void handleMessage(Message msg) {
@@ -113,8 +113,7 @@ public class PlayerProxy extends Thread {
 	 * 	
 	 * @name sendMessage
 	 * @brief Function sends messages
-	 * @param Takes
-	 *            a Message
+	 * @param Takes a Message
 	 * @return void
 	 * */
 	public void sendMessage(Message msg) {
@@ -160,6 +159,11 @@ public class PlayerProxy extends Thread {
 		return name;
 	}
 	
+	/**
+	 * getDeployed
+	 * @name getDeployed
+	 * @return boolean, has player deployed his ships
+	 * */
 	public boolean getDeployed() {
 		return deployed;
 	}
