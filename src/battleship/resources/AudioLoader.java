@@ -3,7 +3,7 @@ package battleship.resources;
 import java.util.HashMap;
 import java.util.Map;
 
-public class SoundHolder {
+public class AudioLoader {
 	private static String path = "src/res/audio/";
 	private static Map<String, Audio> mappedAudio = new HashMap<String, Audio>();
 	private static String[] filenames = {"ambient_melodic_drums.wav", "ambient_ocean1.wav",

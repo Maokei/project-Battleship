@@ -18,7 +18,7 @@ import javax.swing.SwingUtilities;
 import battleship.gameboard.Gameboard;
 import battleship.gameboard.Grid;
 import battleship.network.ClientConnection;
-import battleship.resources.SoundHolder;
+import battleship.resources.AudioLoader;
 import battleship.screen.Avatar;
 import battleship.screen.Screen;
 import battleship.ships.Alignment;
@@ -94,7 +94,7 @@ public class Player {
 			for (Ship ship : playerShips) {
 				if (ship.isAlive() && ship.checkHit(row, col)) {
 					registerEnemyHit(ship, row, col);
-									}
+				}
 			}
 		} else {
 			registerEnemyMiss(row, col);
@@ -102,13 +102,13 @@ public class Player {
 	}
 
 	public void registerPlayerHit(int row, int col) {
-		SoundHolder.getAudio("explosion1").playAudio();
+		AudioLoader.getAudio("explosion1").playAudio();
 		enemyBoard.addHit(row, col);
 		screen.setHits(++hits);
 	}
 
 	public void registerEnemyHit(Ship ship, int row, int col) {
-		SoundHolder.getAudio("explosion1").playAudio();
+		AudioLoader.getAudio("explosion1").playAudio();
 		sendMessage(new Message(Message.MESSAGE, name, "HIT "
 				+ Integer.toString(row) + " " + Integer.toString(col)));
 		playerBoard.addHit(row, col);
@@ -122,7 +122,7 @@ public class Player {
 	}
 
 	private void sinkShip(Ship ship) {
-		SoundHolder.getAudio("ship_down").playAudio();
+		AudioLoader.getAudio("ship_down").playAudio();
 		int row = ship.getStartPosition().getRow();
 		int col = ship.getStartPosition().getCol();
 
@@ -137,7 +137,7 @@ public class Player {
 	}
 
 	public void registerPlayerMiss(int row, int col) {
-		SoundHolder.getAudio("splash1").playAudio();
+		AudioLoader.getAudio("splash1").playAudio();
 		sendMessage(new Message(Message.TURN, name, ""));
 		screen.setMessage("Wait for your turn");
 		enemyBoard.addMiss(row, col);
@@ -146,7 +146,7 @@ public class Player {
 	}
 
 	public void registerEnemyMiss(int row, int col) {
-		SoundHolder.getAudio("splash1").playAudio();
+		AudioLoader.getAudio("splash1").playAudio();
 		sendMessage(new Message(Message.MESSAGE, name, "MISS "
 				+ Integer.toString(row) + " " + Integer.toString(col)));
 		playerBoard.addMiss(row, col);
@@ -191,7 +191,7 @@ public class Player {
 	}
 
 	private void battleLost() {
-		SoundHolder.getAudio("march").setLoop(true).playAudio();
+		AudioLoader.getAudio("march").setLoop(true).playAudio();
 		sendMessage(new Message(Message.LOST, name, ""));
 		screen.setMessage("You sir, are a DISGRACE!!");
 		playerBoard.displayDefeat();

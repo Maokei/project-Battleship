@@ -9,7 +9,7 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 import battleship.network.Server;
-import battleship.resources.SoundHolder;
+import battleship.resources.AudioLoader;
 
 public class Game {
 	private Player player;
@@ -17,7 +17,7 @@ public class Game {
 	public static final int DEFAULT_PORT = 10001;
 	
 	public Game() {
-		SoundHolder.initSounds();
+		AudioLoader.initSounds();
 		login = new LoginDialog(player);
 	}
 	
