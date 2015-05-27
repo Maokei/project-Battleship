@@ -224,6 +224,10 @@ public class Player {
 			if (shipPlacementIndex < playerShips.size()) {
 				Ship ship = playerShips.elementAt(shipPlacementIndex);
 				ship.setAlignment(alignment);
+				
+				sendMessage(new Message(Message.MESSAGE, name, "PLACING "
+						+ ship.getType() + " " + ship.getAlignment() + " "
+						+ Integer.toString(row) + " " + Integer.toString(col)));
 
 				if (playerBoard.checkShipPlacement(ship, row, col)) {
 					playerBoard.placeShip(ship, row, col);

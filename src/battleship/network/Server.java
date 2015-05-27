@@ -5,13 +5,13 @@
  * */
 package battleship.network;
 
+
+
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -27,7 +27,6 @@ import javax.swing.UIManager;
 import javax.swing.WindowConstants;
 
 import battleship.game.Message;
-
 /**
  * @class Server
  * @package battleship.network
@@ -41,7 +40,7 @@ public class Server extends JFrame {
 	private ServerSocket server;
 	private ArrayList<PlayerProxy> players;
 	private ArrayList<Battle> battles;
-
+	
 	// gui components
 	private JButton resetBtn;
 	private JTextArea messages;

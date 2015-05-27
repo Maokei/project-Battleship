@@ -123,11 +123,19 @@ public class Grid extends JLabel {
 		}
 
 		private boolean checkLowerBounds() {
-			return alpha >= 0.0f;
+			if(alpha <= 0.0f) {
+				alpha = 0.0f;
+				return false;
+			}
+			return true;
 		}
 		
 		private boolean checkUpperBounds() {
-			return alpha <= 1.0f;
+			if(alpha >= 1.0f) {
+				alpha = 1.0f;
+				return false;
+			}
+			return true;
 		}
 	}
 	
