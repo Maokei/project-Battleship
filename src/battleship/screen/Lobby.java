@@ -31,14 +31,15 @@ import battleship.network.Server;
 
 public class Lobby extends JFrame{
 	private static final long serialVersionUID = 611848419874984812L;
-	JPanel bottomButtons;
-	ChatPanel chatPanel;
-	JList players;
-	JTextArea chat;
-	JTextField chatInput;
-	JButton chaBtn;
-	JButton playAi;
-	Player player;
+	private JPanel bottomButtons;
+	private ChatPanel chatPanel;
+	private JList players;
+	private JScrollPane pane;
+	private JTextArea chat;
+	private JTextField chatInput;
+	private JButton chaBtn;
+	private JButton playAi;
+	private Player player;
 	
 	public Lobby() {
 		super("*** Battleship lobby ***");
@@ -62,9 +63,7 @@ public class Lobby extends JFrame{
 		chaBtn.setMargin(new Insets(25, 25, 25, 25));
 		playAi.setMargin(new Insets(25, 25, 25, 25));
 		//list
-		
-		
-		JScrollPane pane = new JScrollPane(players);
+		setupPlayersList();
 		//Chat panel
 		chatPanel = new ChatPanel();
 		chatPanel.setPreferredSize(new Dimension(900, 400));
@@ -99,6 +98,7 @@ public class Lobby extends JFrame{
 		players.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		players.setSelectionBackground(Color.BLACK);
 		players.setPreferredSize(new Dimension(300, 300));
+		pane = new JScrollPane(players);
 	}
 	
 	public static void main(String[] args) {
