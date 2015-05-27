@@ -1,4 +1,4 @@
-package battleship.game;
+package battleship.screen;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -8,8 +8,8 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
-import battleship.network.Message;
-import battleship.player.Player;
+import battleship.game.Message;
+import battleship.game.Player;
 import battleship.screen.InputPanel;
 
 public class ChatPanel extends JPanel {

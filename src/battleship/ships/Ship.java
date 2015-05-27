@@ -3,9 +3,11 @@
  * @date 2015-05-05
  * @author rickard(rijo1001), lars(lama1205)
  * */
-package battleship.player;
+package battleship.ships;
 
 import java.util.Vector;
+
+import battleship.gameboard.Grid;
 
 /**
  * 

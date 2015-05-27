@@ -1,4 +1,5 @@
-package battleship.login;
+
+package battleship.game;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -9,7 +10,6 @@ import javax.swing.JPanel;
 
 import battleship.game.Game;
 import battleship.network.ClientConnection;
-import battleship.player.Player;
 import battleship.screen.Avatar;
 import battleship.screen.AvatarPanel;
 import battleship.screen.InputPanel;
@@ -22,17 +22,13 @@ public class LoginDialog extends JDialog {
 	private JPanel buttonPanel;
 	private JButton cancel, clear, login;
 	private ClientConnection connection;
-	private boolean connected = false;
 	public static final int DEFAULT_PORT = 10001;
 	public static final String DEFAULT_ADDRESS = "localhost";
 	private Player player;
-	private Game game;
-	private Screen screen;
 
-	public LoginDialog(Screen screen, Game game) {
-		super(screen.getScreen(), true);
-		this.screen = screen;
-		this.game = game;
+	public LoginDialog(Player player) {
+		super();
+		this.player = player;
 		setLayout(new BorderLayout());
 		nameInput = new InputPanel("Enter name: ", true);
 		avatarChooser = new AvatarPanel();
@@ -64,38 +60,28 @@ public class LoginDialog extends JDialog {
 		setTitle("Battleship login options");
 		setResizable(false);
 		setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
-		setLocationRelativeTo(screen.getScreen());
+		setLocationRelativeTo(null);
 		setVisible(true);
 	}
 	
-	public void clear() {
+	private void clear() {
 		nameInput.setInput("");
 		avatarChooser.reset();
 	}
 	
-	public Avatar getAvatar() {
-		return avatarChooser.getAvatar();
+	private void close() {
+		setVisible(false);
+		dispose();
 	}
 
 	private void login() {
 		if (!nameInput.equals("")) {
 			connection = new ClientConnection(DEFAULT_ADDRESS, DEFAULT_PORT);
 			if (connection.openConnection()) {
-				setConnected(true);
-				player = new Player(nameInput.getInput(), connection);
-				game.setPlayer(player);
-				screen.setAvatar(getAvatar());
-				setVisible(false);
-				dispose();
+				player = new Player(nameInput.getInput(), avatarChooser.getAvatar(), connection);
+				if(player == null) System.exit(0);
+				close();
 			}
 		}
-	}
-
-	public boolean isConnected() {
-		return connected;
-	}
-
-	public void setConnected(boolean connected) {
-		this.connected = connected;
 	}
 }

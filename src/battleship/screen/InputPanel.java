@@ -17,7 +17,6 @@ public class InputPanel extends JPanel{
 	private JLabel textLabel;
 	private JTextField textField;
 	private boolean editable;
-	private Color color;
 	private GridBagConstraints gc;
 	
 	public InputPanel(String text, boolean editable) {

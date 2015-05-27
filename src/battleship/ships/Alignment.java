@@ -1,4 +1,4 @@
-package battleship.player;
+package battleship.ships;
 
 public enum Alignment {
 	VERTICAL("vertical"),

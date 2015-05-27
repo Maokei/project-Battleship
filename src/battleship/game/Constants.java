@@ -3,7 +3,7 @@
  * @date 2015-05-06
  * @author rickard(rijo1001), lars(lama1205)
  * */
-package battleship.player;
+package battleship.game;
 
 /**
  * @package battleship.entity
@@ -22,4 +22,8 @@ public class Constants {
 	public static final int NUM_OF_CARRIERS = 1;
 	public static final int NUM_OF_DESTROYERS = 3;
 	public static final int NUM_OF_SUBMARINES = 5;
+	
+	// Size of each grid in GameBoard
+	public static final int SIZE = 10;
+	public static final int GRID_SIZE = 32;
 }

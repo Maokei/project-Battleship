@@ -3,7 +3,7 @@
  * @authors rickard, lars
  * @date 2015-05-18
  * */
-package battleship.player;
+package battleship.gameboard;
 
 import java.awt.AlphaComposite;
 import java.awt.Dimension;
@@ -13,11 +13,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 
-import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.Timer;
-
-import resources.audio.SoundHolder;
 
 /**
  * @class Grid
@@ -27,26 +24,19 @@ import resources.audio.SoundHolder;
  * */
 public class Grid extends JLabel {
 	private static final long serialVersionUID = 1L;
+	private BufferedImage img = null;
 	private int col, row;
+	private int delay = 40;
+	private float dir = -0.02f, alpha = 1.0f;
 	private boolean empty = true;
 	private boolean hit = false;
-	private BufferedImage img = null;
-	private float level = -0.02f;
-	private int delay = 40;
-	private float alpha = 1.0f;
 
 	public Grid(int row, int col) {
 		super();
+		setPreferredSize(new Dimension(32, 32));
 		this.row = row;
 		this.col = col;
-		this.setPreferredSize(new Dimension(32, 32));
-	}
-
-	public void setImage(BufferedImage img) {
-		this.img = new BufferedImage(img.getWidth(null), img.getHeight(null),
-				BufferedImage.TYPE_INT_ARGB);
-		repaint();
-		// setIcon(new ImageIcon(this.img));
+		
 	}
 
 	public void setOccupied() {
@@ -72,7 +62,15 @@ public class Grid extends JLabel {
 	public int getCol() {
 		return col;
 	}
-
+	
+	public void fadeOut() {
+		new Fader().fadeOut();;
+	}
+	
+	public void fadeIn() {
+		new Fader().fadeIn();
+	}
+	
 	class Fader {
 		private Timer t;
 
@@ -81,37 +79,56 @@ public class Grid extends JLabel {
 				t.stop();
 				t = null;
 			}
+		}
+		
+		public void fadeOut() {
+			dir = -0.02f; 
+			alpha = 1.0f;
+			
 			t = new Timer(delay, new ActionListener() {
-
 				@Override
-				public void actionPerformed(ActionEvent e) {
-					alpha += level;
-					if (checkBounds()) {
+				public void actionPerformed(ActionEvent arg0) {
+					alpha += dir;
+					if (checkLowerBounds()) {
 						repaint();
+					} else {
+						stop();
 					}
 				}
 			});
 			t.setCoalesce(true);
 			t.start();
 		}
-
-		private boolean checkBounds() {
-			if (alpha < 0.0f) {
-				alpha = 0.0f;
-				t.stop();
-				t = null;
-				return false;
-			}
-			return true;
+		
+		public void fadeIn() {
+			dir = 0.02f; 
+			alpha = 0.0f;
+			t = new Timer(delay, new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent arg0) {
+					alpha += dir;
+					if (checkUpperBounds()) {
+						repaint();
+					} else {
+						stop();
+					}
+				}
+			});
+			t.setCoalesce(true);
+			t.start();
+		}
+			
+		private void stop() {
+			t.stop(); t = null;
 		}
 
-		private void changeDirection() {
-			level = -level;
+		private boolean checkLowerBounds() {
+			return alpha >= 0.0f;
 		}
-	}
-
-	public void fadeDown() {
-		new Fader();
+		
+		private boolean checkUpperBounds() {
+			return alpha <= 1.0f;
+		}
 	}
 	
 	@Override
@@ -132,5 +149,4 @@ public class Grid extends JLabel {
 			g2d.dispose();
 		}
 	}
-	
 }

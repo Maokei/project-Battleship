@@ -9,11 +9,12 @@ import java.net.UnknownHostException;
 import javax.swing.JOptionPane;
 import javax.swing.JTextArea;
 
-import battleship.player.Alignment;
-import battleship.player.BattleShipFactory;
-import battleship.player.Player;
-import battleship.player.Ship;
-import battleship.player.ShipType;
+import battleship.game.Message;
+import battleship.game.Player;
+import battleship.ships.Alignment;
+import battleship.ships.BattleShipFactory;
+import battleship.ships.Ship;
+import battleship.ships.ShipType;
 
 public class ClientConnection implements Runnable {
 	private String address;
@@ -137,16 +138,13 @@ public class ClientConnection implements Runnable {
 			System.out.println(msg.getMessage());
 			parseMissMessage(tokens);
 			break;
-		case "WIN":
-			parseWinMessage();
-			break;
 		}
 	}
 
 	private void parseMissMessage(String[] tokens) {
 		int row = Integer.parseInt(tokens[1]);
 		int col = Integer.parseInt(tokens[2]);
-		player.registerMiss(row, col);
+		player.registerPlayerMiss(row, col);
 	}
 
 	private void parseShipDownMessage(String[] tokens) {
@@ -176,12 +174,6 @@ public class ClientConnection implements Runnable {
 		player.placeEnemyShip(ship, row, col);
 	}
 
-	// maybe not necessary
-	/*
-	 * private void parseShipPositionMessage(String[] tokens) { String ship =
-	 * tokens[1]; int row = Integer.parseInt(tokens[2]); int col =
-	 * Integer.parseInt(tokens[3]); player.setEnemyShip(ship, row, col); }
-	 */
 	private void parseFireMessage(String[] tokens) {
 		int row = Integer.parseInt(tokens[1]);
 		int col = Integer.parseInt(tokens[2]);
@@ -191,12 +183,7 @@ public class ClientConnection implements Runnable {
 	private void parseHitMessage(String[] tokens) {
 		int row = Integer.parseInt(tokens[1]);
 		int col = Integer.parseInt(tokens[2]);
-		int health = Integer.parseInt(tokens[3]);
-		player.registerHit(row, col, health);
-	}
-
-	private void parseWinMessage() {
-		// TODO Auto-generated method stub
+		player.registerPlayerHit(row, col);
 	}
 
 	public void sendMessage(Message message) {

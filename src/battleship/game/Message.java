@@ -4,7 +4,7 @@
  * @date 2015-05-19
  * @brief File contains a class Message describing a message.
  * */
-package battleship.network;
+package battleship.game;
 
 import java.io.Serializable;
 

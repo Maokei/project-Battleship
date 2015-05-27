@@ -5,17 +5,14 @@
 package battleship.screen;
 
 import java.awt.BorderLayout;
-import java.awt.ComponentOrientation;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
 import javax.swing.JFrame;
 
-import battleship.game.ChatPanel;
-import battleship.network.Message;
-import battleship.player.Board;
-import battleship.player.Gameboard;
-import battleship.player.Player;
+import battleship.game.Message;
+import battleship.game.Player;
+import battleship.gameboard.Gameboard;
 
 /**
  * @class Screen
@@ -23,41 +20,22 @@ import battleship.player.Player;
  * @brief Class sets up battleship game gui & components.
  * */
 public class Screen {
-	private Player player;
 	private JFrame frame;
-	private ChatPanel chat;
 	private MainPanel mainPanel;
-	private Avatar avatar;
 	private PlayerGUI playergui;
-	private Gameboard playerGrid, enemyGrid;
-	private Board playerBoard, enemyBoard;
 	private MessagePanel msgPanel;
 	
-	public Screen(Gameboard playerGrid, Gameboard enemyGrid, Board playerBoard, Board enemyBoard) {
-		this.playerGrid = playerGrid;
-		this.enemyGrid = enemyGrid;
-		this.playerBoard = playerBoard;
-		this.enemyBoard = enemyBoard;
-		frame = new JFrame("*** Battleship ***");
+	public Screen(Player player, Gameboard playerBoard, Gameboard enemyBoard) {
+		frame = new JFrame("*** " + player.getName() + " ***");
 		mainPanel = new MainPanel();
-		mainPanel.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
-		// chat = new ChatPanel(); 
-		// avatar = new Avatar();
-		// mainPanel.add(avatar);
-		// mainPanel.add(playerGrid);
-		// mainPanel.add(enemyGrid);
-		// mainPanel.add(chat);
-		playergui = new PlayerGUI();
+		playergui = new PlayerGUI(player);
+		msgPanel = new MessagePanel();
 		mainPanel.add(playergui);
 		mainPanel.add(playerBoard);
 		mainPanel.add(enemyBoard);
-		msgPanel = new MessagePanel();
+		
 		mainPanel.add(msgPanel);
 		frame.add(mainPanel, BorderLayout.CENTER);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setSize(1024, 450);
-		frame.setLocationRelativeTo(null);
-		
 		frame.addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent e)
@@ -69,21 +47,30 @@ public class Screen {
 		});
 	}
 	
-	public void setAvatar(Avatar av) {
-		playergui.setAvatar(av);
+	public void setHits(int hits) {
+		playergui.getStats().setHits(hits);
 	}
 	
-	public void setPlayer(Player player) {
-		this.player = player;
-		player.setMsgPanel(msgPanel);
-		player.setPlayerGUI(playergui);
+	public void setMisses(int misses) {
+		playergui.getStats().setMisses(misses);
+	}
+	
+	public void setShips(int ships) {
+		playergui.getStats().setShips(ships);
+	}
+	
+	public void setMessage(String message) {
+		msgPanel.setMessage(message);
 	}
 	
 	public void showGUI() {
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setSize(1200, 600);
+		frame.setLocationRelativeTo(null);
 		frame.setVisible(true);
 	}
-	
-	public JFrame getScreen() {
-		return frame;
+
+	public void setShipsDeployed() {
+		playergui.setShipsDeployed();
 	}
 }

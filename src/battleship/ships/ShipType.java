@@ -3,7 +3,7 @@
  * @date 2015-05-06
  * @author rickard(rijo1001), lars(lama1205)
  * */
-package battleship.player;
+package battleship.ships;
 
 /**
  * @package battleship.entity

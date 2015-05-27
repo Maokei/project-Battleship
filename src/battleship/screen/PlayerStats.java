@@ -9,27 +9,24 @@ import java.awt.GridBagLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import battleship.player.Player;
-
 public class PlayerStats extends JPanel {
-	
+	private static final long serialVersionUID = 5629108795041289152L;
 	private JLabel hitsLabel;
 	private JLabel hitsValue;
 	private JLabel missLabel;
 	private JLabel missValue;
 	private JLabel shipsLabel;
 	private JLabel shipsValue;
-	private GridBagConstraints gc;
 	private Color textColor = new Color(255, 255, 255);
 	private Color labelColor = new Color(15, 15, 15);
 	private Color valueColor = new Color(25, 25, 25);
 	private Font font = new Font("Monospaced", Font.PLAIN, 14);
+	private GridBagConstraints gc;
 	
 	public PlayerStats() {
 		super(new GridBagLayout());
 		setPreferredSize(new Dimension(200, 300));
 		setBackground(labelColor);
-		font = new Font("Monospaced", Font.PLAIN, 14);
 		hitsLabel = new JLabel("Hits: ");
 		hitsLabel.setFont(font);
 		hitsLabel.setBackground(labelColor);

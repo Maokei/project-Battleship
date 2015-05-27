@@ -1,4 +1,4 @@
-package battleship.player;
+package battleship.gameboard;
 
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -11,27 +11,31 @@ import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 
-import resources.image.SpriteLoader;
+import battleship.resources.SpriteLoader;
+import battleship.ships.Alignment;
+import battleship.ships.Ship;
 
-public class Board extends JPanel {
+import static battleship.game.Constants.GRID_SIZE;
+import static battleship.game.Constants.SIZE;
+
+public class Gameboard extends JPanel {
 	private static final long serialVersionUID = 1L;
-	private final int SIZE = 10;
-	private final int SPRITE_SIZE = 32;
 	private Grid[][] gridboard;
 	private SpriteLoader sprites;
 	private BufferedImage background;
 	private boolean defeat = false;
 	private boolean victory = false;
 
-	public Board() {
+	public Gameboard() {
 		super();
-
 		setLayout(new GridLayout(SIZE, SIZE));
-		setSize(new Dimension(SIZE * SPRITE_SIZE, SIZE * SPRITE_SIZE));
+		setSize(new Dimension((SIZE * GRID_SIZE), (SIZE * GRID_SIZE)));
 		gridboard = new Grid[SIZE][SIZE];
+		
 		sprites = SpriteLoader.getInstance(32, 32, 8, 8, 13);
 		sprites.loadSprites("src/res/sprite/spritesheet_battleship.png");
 		background = sprites.getSprite("water");
+		
 		for (int row = 0; row < SIZE; row++) {
 			for (int col = 0; col < SIZE; col++) {
 				gridboard[row][col] = new Grid(row, col);
@@ -48,19 +52,23 @@ public class Board extends JPanel {
 		gridboard[row][col].setIcon(new ImageIcon(sprites.getSprite("miss")));
 	}
 
-	public void fadeGrid(int row, int col) {
-		gridboard[row][col].fadeDown();
+	public void fadeGridOut(int row, int col) {
+		gridboard[row][col].fadeOut();
+	}
+	
+	public void fadeGridIn(int row, int col) {
+		gridboard[row][col].fadeIn();
 	}
 
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		if (!(defeat || victory)) {
 			for (int row = 0; row <= SIZE; row++) {
-				int y = row * SPRITE_SIZE;
+				int y = row * GRID_SIZE;
 				for (int col = 0; col <= SIZE; col++) {
-					int x = col * SPRITE_SIZE;
-					g.drawLine(0, y, SIZE * SPRITE_SIZE, y);
-					g.drawLine(x, 0, x, SIZE * SPRITE_SIZE);
+					int x = col * GRID_SIZE;
+					g.drawLine(0, y, SIZE * GRID_SIZE, y);
+					g.drawLine(x, 0, x, SIZE * GRID_SIZE);
 					g.drawImage(background, x, y, null);
 				}
 			}
@@ -84,7 +92,7 @@ public class Board extends JPanel {
 	public boolean checkShipPlacement(Ship ship, int row, int col) {
 		int length = ship.getLength();
 		int counter;
-		if (ship.alignment == Alignment.HORIZONTAL) {
+		if (ship.getAlignment() == Alignment.HORIZONTAL) {
 			if ((col + length - 1) < SIZE) {
 				counter = col;
 				for (int i = 0; i < length; i++) {
@@ -97,7 +105,7 @@ public class Board extends JPanel {
 				return false;
 			}
 
-		} else if (ship.alignment == Alignment.VERTICAL) {
+		} else if (ship.getAlignment() == Alignment.VERTICAL) {
 			if ((row + length - 1) < SIZE) {
 				counter = row;
 				for (int i = 0; i < length; i++) {
@@ -115,46 +123,28 @@ public class Board extends JPanel {
 
 	public void placeShip(Ship ship, int row, int col) {
 		int counter;
-		System.out.print("Occupied: [ ");
-		if (ship.alignment == Alignment.HORIZONTAL) {
+		if (ship.getAlignment() == Alignment.HORIZONTAL) {
 			counter = col;
 			for (int i = 0; i < ship.getLength(); i++) {
 				gridboard[row][counter].setOccupied();
-				System.out.print(row + "," + counter + " ");
 				addShipSprite(ship, row, counter, i);
 				ship.addPositionGrid(row, counter);
 				counter++;
 			}
-		} else if (ship.alignment == Alignment.VERTICAL) {
+		} else if (ship.getAlignment()== Alignment.VERTICAL) {
 			counter = row;
 			for (int i = 0; i < ship.getLength(); i++) {
 				gridboard[counter][col].setOccupied();
-				System.out.print(counter + "," + col + " ");
 				addShipSprite(ship, counter, col, i);
 				ship.addPositionGrid(counter, col);
 				counter++;
 			}
 		}
-		System.out.print("]\n");
-		printOccupied();
-
-	}
-
-	private void printOccupied() {
-		System.out.print("gridboard occupied: [");
-		for (int row = 0; row < SIZE; row++) {
-			for (int col = 0; col < SIZE; col++) {
-				if (!gridboard[row][col].isEmpty()) {
-					System.out.print(row + "," + col + " ");
-				}
-			}
-		}
-		System.out.print("]\n");
 	}
 
 	private void addShipSprite(Ship ship, int row, int col, int counter) {
 		String pre, post;
-		if (ship.alignment == Alignment.HORIZONTAL)
+		if (ship.getAlignment() == Alignment.HORIZONTAL) 
 			pre = "hor_";
 		else
 			pre = "ver_";
@@ -171,8 +161,7 @@ public class Board extends JPanel {
 			post = "sub";
 		}
 
-		gridboard[row][col]
-				.setIcon(new ImageIcon(sprites.getSprite(pre + post)));
+		gridboard[row][col].setIcon(new ImageIcon(sprites.getSprite(pre + post)));
 	}
 
 	public boolean checkHit(int row, int col) {

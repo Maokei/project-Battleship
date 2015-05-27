@@ -11,9 +11,8 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import battleship.game.ChatPanel;
-import battleship.network.Message;
-import battleship.player.Player;
+import battleship.game.Message;
+import battleship.game.Player;
 
 public class PlayerGUI extends JPanel {
 	private static final long serialVersionUID = 3152977875044360557L;
@@ -27,17 +26,18 @@ public class PlayerGUI extends JPanel {
 	private JButton ready;
 	private GridBagConstraints gc;
 	
-	public PlayerGUI() {
+	public PlayerGUI(Player player) {
 		super(new GridBagLayout());
+		this.player = player;
 		setPreferredSize(new Dimension(280, 320));
 		setBackground(new Color(50, 50, 50));
-		nameLabel = new JLabel("Anonymous");
+		nameLabel = new JLabel(player.getName());
 		nameLabel.setFont(new Font("Monospaced", Font.BOLD, 20));
 		nameLabel.setForeground(new Color(255, 255, 255));
 		stats = new PlayerStats();
-		avatar = new Avatar();
 		chat = new ChatPanel();
-	
+		chat.setPlayer(player);
+		avatar = player.getAvatar();
 		buttonPanel = new JPanel();
 		buttonLabel = new JLabel("All ships placed");
 		ready = new JButton("Ready");
@@ -47,7 +47,6 @@ public class PlayerGUI extends JPanel {
 		buttonPanel.add(buttonLabel);
 		buttonPanel.add(ready);
 		
-		// gc.gridx = 0;
 		gc.gridy = 0;
 		gc.gridwidth = 2;
 		gc.insets = new Insets(10, 40, 10, 20);
@@ -82,30 +81,12 @@ public class PlayerGUI extends JPanel {
 		player.sendMessage(new Message(Message.DEPLOYED, player.getName(), ""));
 		player.setDeployed();
 	}
-
-	public void setAvatar(Avatar av) {
-		avatar.setAvatar(av.getImage(), av.getName());
-	}
-	
-	public void setPlayer(Player player) {
-		this.player = player;
-		chat.setPlayer(player);
-		nameLabel.setText(player.getName());
-	}
 	
 	public void setShipsDeployed() {
 		ready.setEnabled(true);
 	}
 	
-	public void setHits(int hits) {
-		stats.setHits(hits);
-	}
-	
-	public void setMisses(int misses) {
-		stats.setMisses(misses);
-	}
-	
-	public void setShips(int ships) {
-		stats.setShips(ships);
+	public PlayerStats getStats() {
+		return stats;
 	}
 }

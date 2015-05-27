@@ -1,4 +1,4 @@
-package resources.audio;
+package battleship.resources;
 
 import java.io.File;
 import java.io.IOException;

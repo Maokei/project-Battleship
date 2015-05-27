@@ -26,6 +26,8 @@ import javax.swing.JTextField;
 import javax.swing.UIManager;
 import javax.swing.WindowConstants;
 
+import battleship.game.Message;
+
 /**
  * @class Server
  * @package battleship.network

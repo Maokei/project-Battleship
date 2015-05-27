@@ -1,4 +1,5 @@
-package battleship.player;
+package battleship.ships;
+
 
 class Destroyer extends Ship {
 

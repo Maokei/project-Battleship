@@ -2,7 +2,7 @@
  * @authors rijo1001, lama1203
  * @file SpriteLoader.java
  * */
-package resources.image;
+package battleship.resources;
 
 import java.awt.Graphics2D;
 import java.awt.Image;

@@ -1,4 +1,4 @@
-package resources.audio;
+package battleship.resources;
 
 import java.util.HashMap;
 import java.util.Map;
