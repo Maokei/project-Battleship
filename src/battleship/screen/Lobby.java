@@ -29,7 +29,7 @@ import battleship.game.Message;
 import battleship.game.Player;
 import battleship.network.Server;
 
-public class Lobby extends JFrame{
+public class Lobby extends JFrame {
 	private static final long serialVersionUID = 611848419874984812L;
 	private JPanel bottomButtons;
 	private ChatPanel chatPanel;
@@ -66,6 +66,7 @@ public class Lobby extends JFrame{
 		setupPlayersList();
 		//Chat panel
 		chatPanel = new ChatPanel();
+		//chatPanel.setPlayer(player);
 		chatPanel.setPreferredSize(new Dimension(900, 400));
 		//add components
 		add(pane, BorderLayout.WEST);
@@ -77,7 +78,7 @@ public class Lobby extends JFrame{
 		setVisible(true);
 	}
 	
-	//listener class
+	//challange listener class
 	class ChallangeListener implements ActionListener {
 
 		@Override
@@ -90,6 +91,15 @@ public class Lobby extends JFrame{
 			}
 		}
 		
+	}
+	
+	//Ai challange button listener class
+	class AiChallangeListener implements ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			player.sendMessage(new Message(Message.AIMATCH, player.getName(), ""));
+		}
 	}
 	
 	private void setupPlayersList() {
