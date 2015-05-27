@@ -38,7 +38,11 @@ public class PlayerProxy extends Thread {
 	private char occupied = 'o';
 	private char hit = 'h';
 	private char miss = 'm';
-
+	
+	/**
+	 * PlayerProxy Constructor
+	 * @name PlayerProxy
+	 * */
 	public PlayerProxy(Socket socket, Server server, int id) {
 		this.socket = socket;
 		this.server = server;
