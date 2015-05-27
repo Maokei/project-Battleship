@@ -9,6 +9,10 @@ import static battleship.game.Constants.GRID_SIZE;
 import static battleship.game.Constants.NUM_OF_DESTROYERS;
 import static battleship.game.Constants.NUM_OF_SUBMARINES;
 
+import java.awt.Cursor;
+import java.awt.Image;
+import java.awt.Point;
+import java.awt.Toolkit;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.Vector;
@@ -38,6 +42,9 @@ public class Player {
 	private ClientConnection con;
 	private Gameboard playerBoard, enemyBoard;
 	private Vector<Ship> playerShips;
+	private Toolkit toolkit;
+	private Image cursorImg;
+	private Cursor cursor;
 	private int shipPlacementIndex;
 	private int remainingShips;
 	private int hits, misses;
@@ -55,6 +62,12 @@ public class Player {
 		enemyBoard = new Gameboard();
 		playerBoard.addMouseListener(new BoardListener());
 		enemyBoard.addMouseListener(new BoardListener());
+		
+		toolkit = Toolkit.getDefaultToolkit();
+		cursorImg = toolkit.getImage("src/res/sprite/crosshair.png");
+		cursor = toolkit.createCustomCursor(
+				cursorImg , new Point(0, 0), "");
+		enemyBoard.setCursor (cursor);
 		screen = new Screen(this, playerBoard, enemyBoard);
 		playerShips = ShipBuilder.buildShips();
 		remainingShips = 9;
