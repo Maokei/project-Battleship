@@ -16,7 +16,7 @@ public class NetworkDialog extends JDialog {
 	private InputPanel port;
 	private JPanel centerPanel;
 	private JPanel buttonPanel;
-	private JButton cancel, login;
+	private JButton cancel, clear, login;
 	public static final int DEFAULT_PORT = 10001;
 	public static final String DEFAULT_ADDRESS = "localhost";
 
@@ -35,11 +35,14 @@ public class NetworkDialog extends JDialog {
 		login.addActionListener(ae -> {
 			login();
 		});
+		clear = new JButton("Clear");
+		clear.addActionListener(ae -> { clear(); });
 		centerPanel = new JPanel();
 		centerPanel.add(address);
 		centerPanel.add(port);
 		buttonPanel = new JPanel();
 		buttonPanel.add(cancel);
+		buttonPanel.add(clear);
 		buttonPanel.add(login);
 		
 		add(centerPanel, BorderLayout.CENTER);
@@ -50,6 +53,11 @@ public class NetworkDialog extends JDialog {
 		setLocationRelativeTo(null);
 		setVisible(true);
 		pack();
+	}
+
+	private void clear() {
+		address.setInput("");
+		port.setInput("");
 	}
 
 	private void close() {
