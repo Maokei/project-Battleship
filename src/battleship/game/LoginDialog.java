@@ -37,6 +37,7 @@ public class LoginDialog extends JDialog {
 	private JButton cancel, clear, login;
 	private ClientConnection connection;
 	private Font font;
+	private NetworkDialog networkDialog;
 	private GameMode mode;
 	public static final int DEFAULT_PORT = 10001;
 	public static final String DEFAULT_ADDRESS = "localhost";
@@ -125,18 +126,15 @@ public class LoginDialog extends JDialog {
 	private void login() {
 		if (!nameInput.equals("")) {
 			if(mode == GameMode.SinglePlayer) {
-				// launch the singleplayer mode
+				connection = new ClientConnection(DEFAULT_ADDRESS, DEFAULT_PORT);
+				if (connection.openConnection()) {
+					player = new Player(nameInput.getInput(), avatarChooser.getAvatar(), connection);
+					if(player == null) System.exit(0);
+					close();
+				}
 				System.out.println("You choose the single player mode");
 			} else if (mode == GameMode.MultiPlayer) {
-				// launch the multiplayer mode
-				System.out.println("You choose the single player mode");
-			}
-			
-			connection = new ClientConnection(DEFAULT_ADDRESS, DEFAULT_PORT);
-			if (connection.openConnection()) {
-				player = new Player(nameInput.getInput(), avatarChooser.getAvatar(), connection);
-				if(player == null) System.exit(0);
-				close();
+				networkDialog = new NetworkDialog(connection);
 			}
 		}
 	}
