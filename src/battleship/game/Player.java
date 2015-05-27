@@ -57,6 +57,9 @@ public class Player {
 		this.avatar = avatar;
 		this.con = con;
 		con.setPlayer(this);
+	}
+	
+	public void init() {
 		hits = misses = shipPlacementIndex = 0;
 		playerBoard = new Gameboard();
 		enemyBoard = new Gameboard();

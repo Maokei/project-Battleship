@@ -10,9 +10,8 @@ import java.awt.Dimension;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
-import javax.swing.Action;
-import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JList;
@@ -27,7 +26,7 @@ import javax.swing.WindowConstants;
 
 import battleship.game.Message;
 import battleship.game.Player;
-import battleship.network.Server;
+import battleship.network.ClientConnection;
 
 /**
  * Lobby
@@ -38,19 +37,27 @@ import battleship.network.Server;
  * */
 public class Lobby extends JFrame {
 	private static final long serialVersionUID = 611848419874984812L;
+	private Player player;
+	private String name;
+	private Avatar avatar;
+	private ClientConnection con;
 	private JPanel bottomButtons;
 	private ChatPanel chatPanel;
+	private ArrayList<String> names;
 	private JList players;
 	private JScrollPane pane;
 	private JTextArea chat;
 	private JTextField chatInput;
 	private JButton chaBtn;
 	private JButton playAi;
-	private Player player;
 	
-	public Lobby() {
+	public Lobby(Player player) {
 		super("*** Battleship lobby ***");
+		this.player = player;
+		names = new ArrayList<String>();
+		names.add(player.getName());
 		setupGUI();
+		
 	}
 	
 	/**
@@ -118,18 +125,10 @@ public class Lobby extends JFrame {
 	 * @brief to setup the players JList
 	 * */
 	private void setupPlayersList() {
-		String test[] = {"bosse", "olle", "gustav"};
-		players = new JList(test);
+		players = new JList(names.toArray());
 		players.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		players.setSelectionBackground(Color.BLACK);
 		players.setPreferredSize(new Dimension(300, 300));
 		pane = new JScrollPane(players);
-	}
-	
-	/**
-	 * for testing
-	 * */
-	public static void main(String[] args) {
-		new Lobby();
 	}
 }

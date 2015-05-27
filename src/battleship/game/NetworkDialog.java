@@ -7,11 +7,17 @@ import javax.swing.JDialog;
 import javax.swing.JPanel;
 
 import battleship.network.ClientConnection;
+import battleship.screen.Avatar;
 import battleship.screen.InputPanel;
+import battleship.screen.Lobby;
 
 public class NetworkDialog extends JDialog {
 	private static final long serialVersionUID = -1788732779835707017L;
+	private Player player;
+	private String name;
+	private Avatar avatar;
 	private ClientConnection con;
+	private Lobby lobby;
 	private InputPanel address;
 	private InputPanel port;
 	private JPanel centerPanel;
@@ -20,8 +26,11 @@ public class NetworkDialog extends JDialog {
 	public static final int DEFAULT_PORT = 10001;
 	public static final String DEFAULT_ADDRESS = "localhost";
 
-	public NetworkDialog(ClientConnection con) {
+	public NetworkDialog(Player player, String name, Avatar avatar, ClientConnection con) {
 		super();
+		this.name = name;
+		this.avatar = avatar;
+		this.con = con;
 		setLayout(new BorderLayout());
 		address = new InputPanel("Enter IP-address: ", true);
 		address.setInput("localhost");
@@ -69,7 +78,8 @@ public class NetworkDialog extends JDialog {
 			String ipaddress = address.getInput();
 			int portNumber = Integer.parseInt(port.getInput());
 			con = new ClientConnection(ipaddress, portNumber);
-			// add functionality here
+			player = new Player(name, avatar, con);
+			lobby = new Lobby(player);
 		}
 	}
 }
