@@ -111,6 +111,7 @@ public class LoginDialog extends JDialog {
 		setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
 		setLocationRelativeTo(null);
 		setVisible(true);
+		pack();
 	}
 	
 	private void clear() {
