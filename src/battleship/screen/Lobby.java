@@ -29,7 +29,14 @@ import battleship.game.Message;
 import battleship.game.Player;
 import battleship.network.Server;
 
-public class Lobby extends JFrame{
+/**
+ * Lobby
+ * @class Lobby 
+ * @brief describes a player lobby where players can chat and send battle challenges to each other.
+ * @extends JFrame
+ * @param Player , takes a player object
+ * */
+public class Lobby extends JFrame {
 	private static final long serialVersionUID = 611848419874984812L;
 	private JPanel bottomButtons;
 	private ChatPanel chatPanel;
@@ -46,6 +53,9 @@ public class Lobby extends JFrame{
 		setupGUI();
 	}
 	
+	/**
+	 * Constructor
+	 * */
 	private void setupGUI() {
 		try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
@@ -66,6 +76,7 @@ public class Lobby extends JFrame{
 		setupPlayersList();
 		//Chat panel
 		chatPanel = new ChatPanel();
+		//chatPanel.setPlayer(player);
 		chatPanel.setPreferredSize(new Dimension(900, 400));
 		//add components
 		add(pane, BorderLayout.WEST);
@@ -77,8 +88,8 @@ public class Lobby extends JFrame{
 		setVisible(true);
 	}
 	
-	//listener class
-	class ChallangeListener implements ActionListener {
+	//challange listener class
+	private class ChallangeListener implements ActionListener {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
@@ -92,6 +103,20 @@ public class Lobby extends JFrame{
 		
 	}
 	
+	//Ai challange button listener class
+	private class AiChallangeListener implements ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			player.sendMessage(new Message(Message.AIMATCH, player.getName(), ""));
+		}
+	}
+	
+	/**
+	 * setupPlayersList
+	 * @name setupPlayersList
+	 * @brief to setup the players JList
+	 * */
 	private void setupPlayersList() {
 		String test[] = {"bosse", "olle", "gustav"};
 		players = new JList(test);
@@ -101,6 +126,9 @@ public class Lobby extends JFrame{
 		pane = new JScrollPane(players);
 	}
 	
+	/**
+	 * for testing
+	 * */
 	public static void main(String[] args) {
 		new Lobby();
 	}
