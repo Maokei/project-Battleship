@@ -77,6 +77,11 @@ public class PlayerProxy extends Thread {
 		fillGridList(nonShotOrMissedGrids);
 	}
 
+	/**
+	 * initGrid
+	 * @name initGrid
+	 * @brief Function initiates a playerGrid with empty cells aka water
+	 * */
 	private void initGrid(char[][] grid) {
 		for (int row = 0; row < SIZE; row++) {
 			for (int col = 0; col < SIZE; col++) {

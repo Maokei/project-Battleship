@@ -102,6 +102,9 @@ public class Lobby extends JFrame {
 		public void actionPerformed(ActionEvent e) {
 			if(!players.isSelectionEmpty()) {
 				String sel = (String)players.getSelectedValue();
+				//Don't allow player to match himself
+				if(sel.equals(player.getName()))
+					return;
 				JOptionPane.showMessageDialog(new JFrame(), "Sending battle challange to opponent, " + sel);
 				player.sendMessage(new Message(Message.CHALLENGE, player.getName(), sel));
 				players.clearSelection();
@@ -117,6 +120,25 @@ public class Lobby extends JFrame {
 		public void actionPerformed(ActionEvent e) {
 			player.sendMessage(new Message(Message.AIMATCH, player.getName(), ""));
 		}
+	}
+	
+	/**
+	 * setNames
+	 * @name setName
+	 * @param Takes an ArrayList containing strings, player names
+	 * */
+	public void setNames(ArrayList<String> n) {
+		names = n;
+	}
+	
+	/**
+	 * updateNames
+	 * @name updateNames
+	 * @brief Set new names into list from names.
+	 * */
+	public void updateNames() {
+		//players.clearSelection();
+		players.setListData(names.toArray());
 	}
 	
 	/**
