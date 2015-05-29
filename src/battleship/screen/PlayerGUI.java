@@ -8,6 +8,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.GridLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -33,15 +34,17 @@ public class PlayerGUI extends JPanel {
 	private Avatar avatar;
 	private ChatPanel chat;
 	private JPanel buttonPanel;
-	private JLabel buttonLabel;
+	private JLabel readyLabel;
+	private JLabel randomLabel;
 	private ReadyButton ready;
+	private JButton random;
 	private GridBagConstraints gc;
 	private boolean deployed = false;
 
 	public PlayerGUI(Player player) {
 		super(new GridBagLayout());
 		this.player = player;
-		setPreferredSize(new Dimension(280, 320));
+		setPreferredSize(new Dimension(280, 360));
 		setBackground(new Color(50, 50, 50));
 		nameLabel = new JLabel(player.getName());
 		nameLabel.setFont(new Font("Monospaced", Font.BOLD, 20));
@@ -50,19 +53,30 @@ public class PlayerGUI extends JPanel {
 		chat = new ChatPanel();
 		chat.setPlayer(player);
 		avatar = player.getAvatar();
-		buttonPanel = new JPanel();
+		buttonPanel = new JPanel(new GridLayout(2, 2));
 		buttonPanel.setBackground(new Color(30, 30, 30));
-		buttonLabel = new JLabel("All ships placed");
-		buttonLabel.setForeground(new Color(255, 255, 255));
+		readyLabel = new JLabel("All ships placed");
+		readyLabel.setForeground(new Color(255, 255, 255));
 		ready = new ReadyButton();
 		ready.setBackground(new Color(15, 15, 15));
 		ready.setEnabled(false);
 		ready.addActionListener(ae -> {
 			shipsPlaced();
 		});
+
+		randomLabel = new JLabel("Randomize ships");
+		randomLabel.setForeground(new Color(255, 255, 255));
+		random = new JButton("Random");
+		random.setBackground(new Color(15, 15, 15));
+		random.addActionListener(ae -> {
+			randomizeShipPlacement();
+		});
+
 		gc = new GridBagConstraints();
-		buttonPanel.add(buttonLabel);
+		buttonPanel.add(readyLabel);
 		buttonPanel.add(ready);
+		buttonPanel.add(randomLabel);
+		buttonPanel.add(random);
 
 		gc.gridy = 0;
 		gc.gridwidth = 2;
@@ -94,9 +108,14 @@ public class PlayerGUI extends JPanel {
 		add(stats, gc);
 	}
 
+	private void randomizeShipPlacement() {
+		player.randomizeShipPlacement();
+	}
+
 	private void shipsPlaced() {
 		if (!deployed) {
-			player.sendMessage(new Message(Message.DEPLOYED, player.getName(), ""));
+			player.sendMessage(new Message(Message.DEPLOYED, player.getName(),
+					""));
 			player.setDeployed();
 			deployed = true;
 			ready.stop();

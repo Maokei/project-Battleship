@@ -129,14 +129,14 @@ public class LoginDialog extends JDialog {
 			if(mode == GameMode.SinglePlayer) {
 				connection = new ClientConnection(DEFAULT_ADDRESS, DEFAULT_PORT);
 				if (connection.openConnection()) {
-					player = new Player(nameInput.getInput(), avatarChooser.getAvatar(), connection);
+					player = new Player(nameInput.getInput(), avatarChooser.getAvatar(), connection, mode);
 					player.init();
 					if(player == null) System.exit(0);
 					close();
 				}
 				System.out.println("You choose the single player mode");
 			} else if (mode == GameMode.MultiPlayer) {
-				networkDialog = new NetworkDialog(player, nameInput.getInput(), avatarChooser.getAvatar(), connection);
+				networkDialog = new NetworkDialog(player, nameInput.getInput(), avatarChooser.getAvatar(), connection, mode);
 			}
 		}
 	}

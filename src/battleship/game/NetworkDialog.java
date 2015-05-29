@@ -17,6 +17,7 @@ public class NetworkDialog extends JDialog {
 	private String name;
 	private Avatar avatar;
 	private ClientConnection con;
+	private GameMode mode;
 	private Lobby lobby;
 	private InputPanel address;
 	private InputPanel port;
@@ -26,11 +27,12 @@ public class NetworkDialog extends JDialog {
 	public static final int DEFAULT_PORT = 10001;
 	public static final String DEFAULT_ADDRESS = "localhost";
 
-	public NetworkDialog(Player player, String name, Avatar avatar, ClientConnection con) {
+	public NetworkDialog(Player player, String name, Avatar avatar, ClientConnection con, GameMode mode) {
 		super();
 		this.name = name;
 		this.avatar = avatar;
 		this.con = con;
+		this.mode = mode;
 		setLayout(new BorderLayout());
 		address = new InputPanel("Enter IP-address: ", true);
 		address.setInput("localhost");
@@ -78,7 +80,7 @@ public class NetworkDialog extends JDialog {
 			String ipaddress = address.getInput();
 			int portNumber = Integer.parseInt(port.getInput());
 			con = new ClientConnection(ipaddress, portNumber);
-			player = new Player(name, avatar, con);
+			player = new Player(name, avatar, con, mode);
 			lobby = new Lobby(player);
 		}
 	}

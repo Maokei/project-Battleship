@@ -1,15 +1,16 @@
 package battleship.game;
 
 public enum GameMode {
-	SinglePlayer("Single player"),
-	MultiPlayer("Multi player");
+	SinglePlayer("Singleplayer"),
+	MultiPlayer("Multiplayer");
 	
 	private final String mode;
 	
-	private GameMode(String type) {
-		this.mode = type;
+	private GameMode(String mode) {
+		this.mode = mode;
 	}
-	public String toString() {
+	
+	public String getMode() {
 		return mode;
 	}
 	

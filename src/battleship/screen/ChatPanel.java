@@ -8,6 +8,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
+import battleship.game.GameMode;
 import battleship.game.Message;
 import battleship.game.Player;
 import battleship.screen.InputPanel;
@@ -42,7 +43,8 @@ public class ChatPanel extends JPanel {
 	public void setPlayer(Player player) {
 		this.player = player;
 		player.getConnection().setOutput(output);
-		player.sendMessage(new Message(Message.LOGIN, player.getName(), ""));
+		
+		player.sendMessage(new Message(Message.LOGIN, player.getName(), player.getGameMode()));
 	}
 
 	private void sendChatMessage() {

@@ -28,6 +28,7 @@ import battleship.screen.Screen;
 import battleship.ships.Alignment;
 import battleship.ships.BattleShipFactory;
 import battleship.ships.Ship;
+import battleship.ships.ShipBuilder;
 import battleship.ships.ShipType;
 
 /**
@@ -40,6 +41,7 @@ public class Player {
 	private Avatar avatar;
 	private Screen screen;
 	private ClientConnection con;
+	private GameMode mode;
 	private Gameboard playerBoard, enemyBoard;
 	private Vector<Ship> playerShips;
 	private Toolkit toolkit;
@@ -52,10 +54,11 @@ public class Player {
 	private boolean deployed = false;
 	private boolean playerTurn = false;
 
-	public Player(String name, Avatar avatar, ClientConnection con) {
+	public Player(String name, Avatar avatar, ClientConnection con, GameMode mode) {
 		this.name = name;
 		this.avatar = avatar;
 		this.con = con;
+		this.mode = mode;
 		con.setPlayer(this);
 	}
 	
@@ -96,6 +99,10 @@ public class Player {
 
 	public Avatar getAvatar() {
 		return avatar;
+	}
+	
+	public String getGameMode() {
+		return mode.getMode();
 	}
 
 	public boolean checkHit(int row, int col) {
@@ -176,6 +183,10 @@ public class Player {
 		for (Grid pos : ship.getPosition()) {
 			enemyBoard.fadeGridIn(pos.getRow(), pos.getCol());
 		}
+	}
+	
+	public void randomizeShipPlacement() {
+		playerBoard.randomizeShipPlacement(playerShips);
 	}
 
 	public void setRunning(boolean running) {
@@ -266,16 +277,3 @@ public class Player {
 	}
 }
 
-class ShipBuilder {
-	public static Vector<Ship> buildShips() {
-		Vector<Ship> ships = new Vector<Ship>(9);
-		ships.add(BattleShipFactory.getShip(ShipType.CARRIER));
-		for (int i = 0; i < NUM_OF_DESTROYERS; i++) {
-			ships.add(BattleShipFactory.getShip(ShipType.DESTROYER));
-		}
-		for (int i = 0; i < NUM_OF_SUBMARINES; i++) {
-			ships.add(BattleShipFactory.getShip(ShipType.SUBMARINE));
-		}
-		return ships;
-	}
-}

@@ -1,22 +1,24 @@
 package battleship.gameboard;
 
+import static battleship.game.Constants.GRID_SIZE;
+import static battleship.game.Constants.SIZE;
+
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.GridLayout;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.Vector;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 
+import battleship.network.RandomShipPlacer;
 import battleship.resources.SpriteLoader;
 import battleship.ships.Alignment;
 import battleship.ships.Ship;
-
-import static battleship.game.Constants.GRID_SIZE;
-import static battleship.game.Constants.SIZE;
 
 public class Gameboard extends JPanel {
 	private static final long serialVersionUID = 1L;
@@ -186,6 +188,16 @@ public class Gameboard extends JPanel {
 		for(int row = 0; row < SIZE; row++) {
 			for(int col = 0; col < SIZE; col++) {
 				gridboard[row][col].setVisible(false);
+			}
+		}
+	}
+	
+	public void randomizeShipPlacement(Vector<Ship> ships) {
+		ships = RandomShipPlacer.getRandomShips();
+		for(Ship ship : ships) {
+			for(int i = 0; i < ship.getPosition().size(); i++) {
+				gridboard[ship.getPosition().elementAt(i).getRow()][ship.getPosition().elementAt(i).getCol()].setOccupied();
+				addShipSprite(ship, ship.getPosition().elementAt(i).getRow(), ship.getPosition().elementAt(i).getCol(), i);
 			}
 		}
 	}
