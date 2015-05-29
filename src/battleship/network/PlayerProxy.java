@@ -63,7 +63,7 @@ public class PlayerProxy extends Thread {
 	}
 	
 	private void initProxyDummy() {
-		proxyGrid = RandomShipPlacer.getRandomShipGrid();
+		proxyGrid = new RandomShipPlacer().getRandomShipGrid();
 		for(int row = 0; row < SIZE; row++) {
 			System.out.print("[");
 			for(int col = 0; col < SIZE; col++) {

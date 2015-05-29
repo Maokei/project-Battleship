@@ -110,6 +110,7 @@ public class PlayerGUI extends JPanel {
 
 	private void randomizeShipPlacement() {
 		player.randomizeShipPlacement();
+		random.setEnabled(false);
 	}
 
 	private void shipsPlaced() {

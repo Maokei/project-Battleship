@@ -187,6 +187,9 @@ public class Player {
 	
 	public void randomizeShipPlacement() {
 		playerBoard.randomizeShipPlacement(playerShips);
+		shipPlacementIndex = playerShips.size();
+		screen.setShipsDeployed();
+		screen.setMessage("Press Ready Button");
 	}
 
 	public void setRunning(boolean running) {

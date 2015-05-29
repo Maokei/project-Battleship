@@ -193,12 +193,18 @@ public class Gameboard extends JPanel {
 	}
 	
 	public void randomizeShipPlacement(Vector<Ship> ships) {
-		ships = RandomShipPlacer.getRandomShips();
+		ships = new RandomShipPlacer().getRandomShips();
 		for(Ship ship : ships) {
-			for(int i = 0; i < ship.getPosition().size(); i++) {
-				gridboard[ship.getPosition().elementAt(i).getRow()][ship.getPosition().elementAt(i).getCol()].setOccupied();
-				addShipSprite(ship, ship.getPosition().elementAt(i).getRow(), ship.getPosition().elementAt(i).getCol(), i);
+			String type = ship.getType();
+			System.out.print(type + "[ ");
+			for(int i = 0; i < ship.getLength(); i++) {
+				int row = ship.getPosition().elementAt(i).getRow();
+				int col = ship.getPosition().elementAt(i).getCol();
+				System.out.print(row + "," + col + " ");
+				gridboard[row][col].setOccupied();;
+				addShipSprite(ship, row, col, i);
 			}
+			System.out.print(" ]\n");
 		}
 	}
 }
