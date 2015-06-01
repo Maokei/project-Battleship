@@ -141,7 +141,6 @@ public class ClientConnection implements Runnable, NetworkOperations {
 			parseHitMessage(tokens);
 			break;
 		case "MISS":
-			System.out.println(msg.getMessage());
 			parseMissMessage(tokens);
 			break;
 		}

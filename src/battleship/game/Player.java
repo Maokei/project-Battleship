@@ -140,16 +140,16 @@ public class Player implements BattlePlayer{
 
 	public void registerEnemyHit(Ship ship, int row, int col) {
 		AudioLoader.getAudio("explosion1").playAudio();
-		sendMessage(new Message(Message.MESSAGE, name, "HIT "
-				+ Integer.toString(row) + " " + Integer.toString(col)));
 		playerBoard.addHit(row, col);
 		ship.hit();
 		if (!ship.isAlive()) {
 			sinkShip(ship);
 			screen.setShips(--remainingShips);
-			if (remainingShips == 0)
-				battleLost();
 		}
+		sendMessage(new Message(Message.MESSAGE, name, "HIT "
+				+ Integer.toString(row) + " " + Integer.toString(col)));
+		if (remainingShips == 0)
+			battleLost();
 	}
 
 	public void sinkShip(Ship ship) {
@@ -157,11 +157,9 @@ public class Player implements BattlePlayer{
 		int row = ship.getStartPosition().getRow();
 		int col = ship.getStartPosition().getCol();
 
-		if(mode == GameMode.MultiPlayer) { 
-			sendMessage(new Message(Message.MESSAGE, name, "SHIP_DOWN "
+		sendMessage(new Message(Message.MESSAGE, name, "SHIP_DOWN "
 				+ ship.getType() + " " + ship.getAlignment() + " "
 				+ Integer.toString(row) + " " + Integer.toString(col)));
-		}
 
 		playerBoard.placeShip(ship, row, col);
 		for (Grid pos : ship.getPosition()) {

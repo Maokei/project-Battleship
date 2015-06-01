@@ -83,7 +83,7 @@ public class Lobby extends JFrame {
 		setupPlayersList();
 		//Chat panel
 		chatPanel = new ChatPanel();
-		//chatPanel.setPlayer(player);
+		chatPanel.setPlayer(player);
 		chatPanel.setPreferredSize(new Dimension(900, 400));
 		//add components
 		add(pane, BorderLayout.WEST);

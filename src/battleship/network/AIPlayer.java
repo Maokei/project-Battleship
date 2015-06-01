@@ -27,6 +27,7 @@ public class AIPlayer implements BattlePlayer {
 	private int remainingShips;
 	private ArrayList<Grid> validTargets;
 	protected boolean running = true;
+	private Set<Grid> probableTargets;
 	private boolean playerTurn;
 	private boolean opponentDeployed = false;
 
@@ -44,6 +45,7 @@ public class AIPlayer implements BattlePlayer {
 		playerShips = shipPlacer.getRandomShips();
 		remainingShips = playerShips.size();
 		validTargets = new ArrayList<Grid>(SIZE * SIZE);
+		probableTargets = new HashSet<Grid>();
 		initEnemyGrid();
 		displayPlayerGrid();
 		displayPlayerShips();
@@ -90,16 +92,49 @@ public class AIPlayer implements BattlePlayer {
 	}
 
 	public void fire() {
-		Grid grid = validTargets.get(r.nextInt(validTargets.size()));
+		if (checkProbableTargets()) {
+			calculateNextTarget();
+		} else {
+			Grid grid = validTargets.get(r.nextInt(validTargets.size()));
+			int row = grid.getRow();
+			int col = grid.getCol();
+			if (checkBounds(row, col)) {
+				System.out.println("FIRE " + row + ", " + col);
+				sendMessage(new Message(Message.MESSAGE, "AI", "FIRE "
+						+ Integer.toString(row) + " " + Integer.toString(col)));
+				System.out.println("Removing grid [ " + row + "," + col + "]");
+				validTargets.remove(grid);
+			}
+		}
+	}
+
+	private boolean checkProbableTargets() {
+		if(probableTargets.size() > 0) {
+			return true;
+		}
+		return false;
+ 	}
+
+	private void calculateNextTarget() {
+		System.out.print("ProbableTargets [ ");
+		for(Grid grid: probableTargets) {
+			System.out.print(grid.getRow() + "," + grid.getCol() + " ");
+		}
+		System.out.print("]");
+		int randomProbable = r.nextInt(probableTargets.size());
+		Grid grid = (Grid) probableTargets.toArray()[randomProbable];
+		probableTargets.remove(randomProbable);
 		int row = grid.getRow();
 		int col = grid.getCol();
-		if (checkBounds(row, col)) {
-			System.out.println("FIRE " + row + ", " + col);
-			sendMessage(new Message(Message.MESSAGE, "AI", "FIRE "
-					+ Integer.toString(row) + " " + Integer.toString(col)));
-			System.out.println("Removing grid [ " + row + "," + col + "]");
+		System.out.println("FIRE " + row + ", " + col);
+		sendMessage(new Message(Message.MESSAGE, "AI", "FIRE "
+				+ Integer.toString(row) + " " + Integer.toString(col)));
 			validTargets.remove(grid);
+			/*
+		if (checkBounds(row, col)) {
+			
 		}
+		*/
 	}
 
 	public boolean checkHit(int row, int col) {
@@ -126,11 +161,13 @@ public class AIPlayer implements BattlePlayer {
 	public void registerPlayerHit(int row, int col) {
 		if (checkBounds(row, col)) {
 			enemyGrid[row][col] = hit;
-			// addNextPossibleTargets(new Grid(row, col));
-			new GameTimer(1, 1000).run();
+			
+			System.out.println("HIT " + row + "," + col);
+			addNextPossibleTargets(new Grid(row, col));
+			new GameTimer(2, 1000).run();
 		}
 	}
-	/*
+
 	private void addNextPossibleTargets(Grid grid) {
 		if (checkLeftGrid(grid))
 			probableTargets.add(new Grid(grid.getRow(), grid.getCol() - 1));
@@ -181,7 +218,7 @@ public class AIPlayer implements BattlePlayer {
 		}
 		return false;
 	}
-	*/
+
 	public void registerEnemyHit(Ship ship, int row, int col) {
 		if (checkBounds(row, col)) {
 			sendMessage(new Message(Message.MESSAGE, "AI", "HIT "
@@ -214,6 +251,7 @@ public class AIPlayer implements BattlePlayer {
 		if (checkBounds(row, col)) {
 			playerTurn = false;
 			enemyGrid[row][col] = miss;
+			probableTargets.remove(new Grid(row, col));
 			sendMessage(new Message(Message.TURN, "AI", ""));
 		}
 	}
@@ -271,13 +309,18 @@ public class AIPlayer implements BattlePlayer {
 	public void setPlayerTurn(boolean playerTurn) {
 		this.playerTurn = playerTurn;
 		if (playerTurn) {
-			new GameTimer(1, 1000).run();
+			new GameTimer(2, 1000).run();
 		}
 	}
 
 	@Override
 	public void placeEnemyShip(Ship ship, int row, int col) {
-		// not implemented in AI
+		probableTargets.clear();
+		for(Grid grid : ship.getPosition()) {
+			if(!(enemyGrid[grid.getRow()][grid.getCol()] == hit)) {
+				enemyGrid[grid.getRow()][grid.getCol()] = hit;
+			}
+		}
 	}
 	
 	class GameTimer {
