@@ -9,6 +9,7 @@ import java.net.UnknownHostException;
 import javax.swing.JOptionPane;
 import javax.swing.JTextArea;
 
+import battleship.game.BattlePlayer;
 import battleship.game.Message;
 import battleship.game.Player;
 import battleship.ships.Alignment;
@@ -16,13 +17,13 @@ import battleship.ships.BattleShipFactory;
 import battleship.ships.Ship;
 import battleship.ships.ShipType;
 
-public class ClientConnection implements Runnable {
+public class ClientConnection implements Runnable, NetworkOperations {
 	private String address;
 	private int portNumber;
 	private Socket socket;
 	private ObjectOutputStream out;
 	private ObjectInputStream in;
-	private Player player;
+	private BattlePlayer player;
 	private Message msg;
 	private JTextArea output; // just for Chat
 	private boolean running = true;
@@ -48,7 +49,7 @@ public class ClientConnection implements Runnable {
 		return true;
 	}
 
-	public void setPlayer(Player player) {
+	public void setBattlePlayer(BattlePlayer player) {
 		this.player = player;
 	}
 
@@ -64,9 +65,11 @@ public class ClientConnection implements Runnable {
 				handleMessage(msg);
 			}
 		} catch (IOException e) {
-			// System.err.println(e.getMessage());
-			// e.printStackTrace();
+			System.out.println(player.getName() + " IOException");
+			System.err.println(e.getMessage());
+			e.printStackTrace();
 		} catch (ClassNotFoundException e) {
+			System.out.println(player.getName() + " ClassNotFoundException");
 			System.err.println(e.getMessage());
 			e.printStackTrace();
 		} finally {
@@ -102,24 +105,27 @@ public class ClientConnection implements Runnable {
 			parseMessage(msg);
 			break;
 		case Message.CHAT:
-			output.append(msg.getName() + ">> " + msg.getMessage() + "\n");
+			if (!msg.getName().equalsIgnoreCase("AI"))
+				output.append(msg.getName() + ">> " + msg.getMessage() + "\n");
 			break;
 		case Message.DEPLOYED:
 			player.setOpponentDeployed();
 			break;
 		case Message.TURN:
-			if(!msg.getName().equals(player.getName())) {
+			if (!msg.getName().equals(player.getName())) {
 				player.setPlayerTurn(true);
 			}
 			break;
 		case Message.LOST:
-			player.battleWon();
+			if (msg.getName().equalsIgnoreCase("AI"))
+				((Player) player).battleWon();
 		}
 	}
 
 	private void parseMessage(Message msg) {
-		if(msg.getMessage().startsWith("Server full")) {
-			JOptionPane.showMessageDialog(null, "The server is full\nTry connecting at a later time.");
+		if (msg.getMessage().startsWith("Server full")) {
+			JOptionPane.showMessageDialog(null,
+					"The server is full\nTry connecting at a later time.");
 			running = false;
 			return;
 		}

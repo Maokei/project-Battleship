@@ -1,6 +1,6 @@
 package battleship.network;
 
-import static battleship.game.Constants.SIZE;
+import static battleship.game.Constants.*;
 
 import java.util.Random;
 import java.util.Vector;
@@ -15,13 +15,14 @@ public class RandomShipPlacer {
 	private Vector<Ship> ships;
 	private Random r = new Random();
 
-	public char[][] getRandomShipGrid() {
+	public RandomShipPlacer() {
 		randomizeShipGrid();
+	}
+	public char[][] getRandomShipGrid() {
 		return gridboard;
 	}
 
 	public Vector<Ship> getRandomShips() {
-		randomizeShipGrid();
 		return ships;
 	}
 
@@ -30,10 +31,9 @@ public class RandomShipPlacer {
 		ships = ShipBuilder.buildShips();
 		for (int row = 0; row < SIZE; row++) {
 			for (int col = 0; col < SIZE; col++) {
-				gridboard[row][col] = 'e';
+				gridboard[row][col] = empty;
 			}
 		}
-
 		placeAllShips();
 	}
 
@@ -55,7 +55,7 @@ public class RandomShipPlacer {
 			counter = grid.getCol();
 			for (int i = 0; i < ship.getLength(); i++) {
 				ship.addPositionGrid(row, counter);
-				gridboard[row][counter] = 'o';
+				gridboard[row][counter] = occupied;
 				counter++;
 			}
 		} else if (ship.getAlignment() == Alignment.VERTICAL) {
@@ -64,7 +64,7 @@ public class RandomShipPlacer {
 
 			for (int i = 0; i < ship.getLength(); i++) {
 				ship.addPositionGrid(counter, col);
-				gridboard[counter][col] = 'o';
+				gridboard[counter][col] = occupied;
 				counter++;
 			}
 		}
@@ -119,7 +119,7 @@ public class RandomShipPlacer {
 	}
 
 	private boolean checkEmptyGrid(int row, int col) {
-		return (gridboard[row][col] == 'e');
+		return (gridboard[row][col] == empty);
 	}
 
 }

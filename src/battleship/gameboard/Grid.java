@@ -36,7 +36,6 @@ public class Grid extends JLabel {
 		setPreferredSize(new Dimension(32, 32));
 		this.row = row;
 		this.col = col;
-		
 	}
 
 	public void setOccupied() {
@@ -62,15 +61,20 @@ public class Grid extends JLabel {
 	public int getCol() {
 		return col;
 	}
-	
+
 	public void fadeOut() {
-		new Fader().fadeOut();;
+		new Fader().fadeOut();
+		;
 	}
-	
+
 	public void fadeIn() {
 		new Fader().fadeIn();
 	}
-	
+
+	public void fastFade() {
+		new Fader().fastFade();
+	}
+
 	class Fader {
 		private Timer t;
 
@@ -80,11 +84,11 @@ public class Grid extends JLabel {
 				t = null;
 			}
 		}
-		
+
 		public void fadeOut() {
-			dir = -0.02f; 
+			dir = -0.02f;
 			alpha = 1.0f;
-			
+
 			t = new Timer(delay, new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent arg0) {
@@ -99,9 +103,9 @@ public class Grid extends JLabel {
 			t.setCoalesce(true);
 			t.start();
 		}
-		
+
 		public void fadeIn() {
-			dir = 0.02f; 
+			dir = 0.02f;
 			alpha = 0.0f;
 			t = new Timer(delay, new ActionListener() {
 				@Override
@@ -117,36 +121,56 @@ public class Grid extends JLabel {
 			t.setCoalesce(true);
 			t.start();
 		}
-			
+
+		public void fastFade() {
+			dir = -0.20f;
+			alpha = 1.0f;
+
+			t = new Timer(40, new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent arg0) {
+					alpha += dir;
+					if (checkLowerBounds()) {
+						repaint();
+					} else {
+						stop();
+					}
+				}
+			});
+			t.setCoalesce(true);
+			t.start();
+		}
+
 		private void stop() {
-			t.stop(); t = null;
+			t.stop();
+			t = null;
 		}
 
 		private boolean checkLowerBounds() {
-			if(alpha <= 0.0f) {
+			if (alpha <= 0.0f) {
 				alpha = 0.0f;
 				return false;
 			}
 			return true;
 		}
-		
+
 		private boolean checkUpperBounds() {
-			if(alpha >= 1.0f) {
+			if (alpha >= 1.0f) {
 				alpha = 1.0f;
 				return false;
 			}
 			return true;
 		}
 	}
-	
+
 	@Override
-    public void paint(Graphics g) {
-        Graphics2D g2d = (Graphics2D) g.create();
-        g2d.setComposite(AlphaComposite.SrcOver.derive(alpha));
-        super.paint(g2d);
-        g2d.dispose();
-    }
-	
+	public void paint(Graphics g) {
+		Graphics2D g2d = (Graphics2D) g.create();
+		g2d.setComposite(AlphaComposite.SrcOver.derive(alpha));
+		super.paint(g2d);
+		g2d.dispose();
+	}
+
 	@Override
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
@@ -156,5 +180,28 @@ public class Grid extends JLabel {
 			g2d.drawImage(img, 0, 0, null);
 			g2d.dispose();
 		}
+	}
+
+	@Override
+	public boolean equals(Object otherGrid) {
+		if (otherGrid == null)
+			return false;
+		if (otherGrid == this)
+			return true;
+		if (!(otherGrid instanceof Grid))
+			return false;
+		Grid grid = (Grid) otherGrid;
+		if (this.getRow() == grid.getRow() && this.getCol() == grid.getCol())
+			return true;
+
+		return false;
+	}
+
+	@Override
+	public int hashCode() {
+		int hash = 13;
+		hash = 37 * hash + this.row;
+		hash = 37 * hash + this.col;
+		return hash;
 	}
 }

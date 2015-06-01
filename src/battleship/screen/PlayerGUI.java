@@ -124,8 +124,13 @@ public class PlayerGUI extends JPanel {
 	}
 
 	public void setShipsDeployed() {
+		random.setEnabled(false);
 		ready.setEnabled(true);
 		ready.blink();
+	}
+	
+	public void disableRandom() {
+		random.setEnabled(false);
 	}
 
 	public PlayerStats getStats() {

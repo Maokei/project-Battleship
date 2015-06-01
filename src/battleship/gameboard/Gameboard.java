@@ -33,11 +33,15 @@ public class Gameboard extends JPanel {
 		setLayout(new GridLayout(SIZE, SIZE));
 		setSize(new Dimension((SIZE * GRID_SIZE), (SIZE * GRID_SIZE)));
 		gridboard = new Grid[SIZE][SIZE];
-		
+
 		sprites = SpriteLoader.getInstance(32, 32, 8, 8, 13);
 		sprites.loadSprites("src/res/sprite/spritesheet_battleship.png");
 		background = sprites.getSprite("water");
-		
+		initGrid();
+
+	}
+
+	private void initGrid() {
 		for (int row = 0; row < SIZE; row++) {
 			for (int col = 0; col < SIZE; col++) {
 				gridboard[row][col] = new Grid(row, col);
@@ -57,7 +61,7 @@ public class Gameboard extends JPanel {
 	public void fadeGridOut(int row, int col) {
 		gridboard[row][col].fadeOut();
 	}
-	
+
 	public void fadeGridIn(int row, int col) {
 		gridboard[row][col].fadeIn();
 	}
@@ -79,9 +83,11 @@ public class Gameboard extends JPanel {
 			// g.clearRect(0, 0, getWidth(), getHeight());
 			try {
 				if (defeat) {
-					background = ImageIO.read(new File("src/res/sprite/battle_lost.png"));
+					background = ImageIO.read(new File(
+							"src/res/sprite/battle_lost.png"));
 				} else if (victory) {
-					background = ImageIO.read(new File("src/res/sprite/battle_won.png"));
+					background = ImageIO.read(new File(
+							"src/res/sprite/battle_won.png"));
 				}
 				g.drawImage(background, 0, 0, null);
 			} catch (IOException e) {
@@ -133,7 +139,7 @@ public class Gameboard extends JPanel {
 				ship.addPositionGrid(row, counter);
 				counter++;
 			}
-		} else if (ship.getAlignment()== Alignment.VERTICAL) {
+		} else if (ship.getAlignment() == Alignment.VERTICAL) {
 			counter = row;
 			for (int i = 0; i < ship.getLength(); i++) {
 				gridboard[counter][col].setOccupied();
@@ -146,7 +152,7 @@ public class Gameboard extends JPanel {
 
 	private void addShipSprite(Ship ship, int row, int col, int counter) {
 		String pre, post;
-		if (ship.getAlignment() == Alignment.HORIZONTAL) 
+		if (ship.getAlignment() == Alignment.HORIZONTAL)
 			pre = "hor_";
 		else
 			pre = "ver_";
@@ -163,7 +169,8 @@ public class Gameboard extends JPanel {
 			post = "sub";
 		}
 
-		gridboard[row][col].setIcon(new ImageIcon(sprites.getSprite(pre + post)));
+		gridboard[row][col]
+				.setIcon(new ImageIcon(sprites.getSprite(pre + post)));
 	}
 
 	public boolean checkHit(int row, int col) {
@@ -183,25 +190,35 @@ public class Gameboard extends JPanel {
 		victory = true;
 		repaint();
 	}
-	
+
 	private void setGridsNotVisisble() {
-		for(int row = 0; row < SIZE; row++) {
-			for(int col = 0; col < SIZE; col++) {
+		for (int row = 0; row < SIZE; row++) {
+			for (int col = 0; col < SIZE; col++) {
 				gridboard[row][col].setVisible(false);
 			}
 		}
 	}
-	
+
+	public void clear() {
+		for (int row = 0; row < SIZE; row++) {
+			for (int col = 0; col < SIZE; col++) {
+				if (!gridboard[row][col].isEmpty()) {
+					gridboard[row][col].fastFade();
+				}
+			}
+		}
+	}
+
 	public void randomizeShipPlacement(Vector<Ship> ships) {
 		ships = new RandomShipPlacer().getRandomShips();
-		for(Ship ship : ships) {
+		for (Ship ship : ships) {
 			String type = ship.getType();
 			System.out.print(type + "[ ");
-			for(int i = 0; i < ship.getLength(); i++) {
+			for (int i = 0; i < ship.getLength(); i++) {
 				int row = ship.getPosition().elementAt(i).getRow();
 				int col = ship.getPosition().elementAt(i).getCol();
 				System.out.print(row + "," + col + " ");
-				gridboard[row][col].setOccupied();;
+				gridboard[row][col].setOccupied();
 				addShipSprite(ship, row, col, i);
 			}
 			System.out.print(" ]\n");

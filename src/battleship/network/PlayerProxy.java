@@ -1,6 +1,6 @@
 package battleship.network;
 
-import static battleship.game.Constants.SIZE;
+import static battleship.game.Constants.*;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -31,22 +31,18 @@ public class PlayerProxy extends Thread {
 	protected String name;
 	protected int playerId;
 	private GameMode mode;
-	private ArrayList<Ship> playerProxyShips;
-	private char[][] playerGrid, proxyGrid;
-	private ArrayList<Integer> nonDeployedGrids;
-	private ArrayList<Integer> nonShotOrMissedGrids;
+	private char[][] playerGrid;
+	private AIPlayer aiPlayer;
+	private boolean aiMatch;
 	private boolean deployed;
 	private boolean playerTurn;
 	protected ObjectInputStream in;
 	protected ObjectOutputStream out;
 	protected boolean running = true;
-	private char empty = 'e';
-	private char occupied = 'o';
-	private char hit = 'h';
-	private char miss = 'm';
-	
+
 	/**
 	 * PlayerProxy Constructor
+	 * 
 	 * @name PlayerProxy
 	 * */
 	public PlayerProxy(Socket socket, Server server, int id) {
@@ -59,26 +55,34 @@ public class PlayerProxy extends Thread {
 				+ "\nhas established a connection with the server.\n ");
 		playerGrid = new char[SIZE][SIZE];
 		initGrid(playerGrid);
-		initProxyDummy();
+		aiMatch = false;
 	}
-	
-	private void initProxyDummy() {
-		proxyGrid = new RandomShipPlacer().getRandomShipGrid();
-		for(int row = 0; row < SIZE; row++) {
-			System.out.print("[");
-			for(int col = 0; col < SIZE; col++) {
-				System.out.print(proxyGrid[row][col]);
-			}
-			System.out.print("]\n");
-		}
-		nonDeployedGrids = new ArrayList<Integer>(100);
-		nonShotOrMissedGrids = new ArrayList<Integer>(100);
-		fillGridList(nonDeployedGrids);
-		fillGridList(nonShotOrMissedGrids);
+
+	/**
+	 * getPlayerName
+	 * 
+	 * @name getPlayerName
+	 * @brief Return player names.
+	 * @param None
+	 * @return returns player name as string
+	 * */
+	public String getPlayerName() {
+		return name;
+	}
+
+	/**
+	 * getDeployed
+	 * 
+	 * @name getDeployed
+	 * @return boolean, has player deployed his ships
+	 * */
+	public boolean getDeployed() {
+		return deployed;
 	}
 
 	/**
 	 * initGrid
+	 * 
 	 * @name initGrid
 	 * @brief Function initiates a playerGrid with empty cells aka water
 	 * */
@@ -89,16 +93,6 @@ public class PlayerProxy extends Thread {
 			}
 		}
 	}
-	
-	private void fillGridList(ArrayList<Integer> grid) {
-		int counter = 0;
-		for(Integer i : grid) {
-			grid.add(i, counter++);
-		}
-	}
-	
-	
-	
 
 	/**
 	 * run
@@ -118,12 +112,15 @@ public class PlayerProxy extends Thread {
 					msg = (Message) in.readObject();
 					handleMessage(msg);
 				} catch (ClassNotFoundException e) {
-					System.out.println(e.getMessage());
+					System.out.println(name + " ClassNotFoundException");
+					System.err.println(e.getMessage());
 					e.printStackTrace();
 				}
 			}
 		} catch (IOException e) {
-			// System.err.println(e.getMessage());
+			System.out.println(name + " IOException");
+			System.err.println(e.getMessage());
+			e.printStackTrace();
 		} finally {
 			closeConnection();
 		}
@@ -139,42 +136,20 @@ public class PlayerProxy extends Thread {
 	 * @return void
 	 * */
 	private void handleMessage(Message msg) {
-		int type = msg.getType();
-		System.out.println("got message typ: " + type);
-		switch (type) {
+		switch (msg.getType()) {
 		case Message.LOGIN:
-			if (server.getNumberOfCurrentPlayers() > server
-					.getNumberOfPlayers()) {
-				name = msg.getName();
-				server.sendMessageToSender(new Message(Message.MESSAGE, msg
-						.getName(), "Server full"));
-				this.closeConnection();
-				server.removePlayerProxy(this);
-				// messages.append("Server full, attempt to join game failed.\nConnection closed for "
-				// + name + "\n");
-			} else {
-				name = msg.getName();
-				if(msg.getMessage().equalsIgnoreCase("Singleplayer")) {
-					mode = GameMode.SinglePlayer;
-					System.out.println(name + "Choosed to play a singlePlayer game");
-				} else if(msg.getMessage().equalsIgnoreCase("Multiplayer")) {
-					mode = GameMode.MultiPlayer;
-					System.out.println(name + "Choosed to play a MultiPlayer game");
-				}
-				// sendMessageToOpponent(new Message(Message.CHAT,msg.getName(),
-				// "Logged in"));
-			}
+			handleLogin();
 			break;
 		case Message.LOGOUT:
-			server.removePlayerProxy(this.playerId);
-			server.sendMessageToOpponent(new Message(Message.CHAT, msg
-					.getName(), msg.getMessage()));
+			handleLogout();
 			break;
 		case Message.MESSAGE:
+			server.sendMessageToOpponent(msg);
+			/*
 			if (checkMessage()) {
-				System.out.println("Checking " + msg.getName() + " message");
 				server.sendMessageToOpponent(msg);
 			}
+			*/
 			break;
 		case Message.CHAT:
 			server.sendMessageToAll(msg);
@@ -188,7 +163,33 @@ public class PlayerProxy extends Thread {
 			break;
 		case Message.LOST:
 			server.sendMessageToOpponent(msg);
+			break;
 		}
+	}
+
+	private void handleLogin() {
+		if (server.getNumberOfCurrentPlayers() > server.getNumberOfPlayers()) {
+			name = msg.getName();
+			server.sendMessageToSender(new Message(Message.MESSAGE, msg
+					.getName(), "Server full"));
+			this.closeConnection();
+			server.removePlayerProxy(this);
+		} else {
+			name = msg.getName();
+			if (msg.getMessage().equalsIgnoreCase("Singleplayer")) {
+				mode = GameMode.SinglePlayer;
+				aiPlayer = new AIPlayer();
+				aiMatch = true;
+			} else if (msg.getMessage().equalsIgnoreCase("Multiplayer")) {
+				mode = GameMode.MultiPlayer;
+			}
+		}
+	}
+
+	private void handleLogout() {
+		server.removePlayerProxy(this.playerId);
+		server.sendMessageToOpponent(new Message(Message.CHAT, msg.getName(),
+				msg.getMessage()));
 	}
 
 	private boolean checkMessage() {
@@ -326,7 +327,8 @@ public class PlayerProxy extends Thread {
 		grid[row][col] = miss;
 	}
 
-	private boolean checkShipPlacement(Ship ship, int row, int col, char[][] grid) {
+	private boolean checkShipPlacement(Ship ship, int row, int col,
+			char[][] grid) {
 		int length = ship.getLength();
 		int counter;
 		if (ship.getAlignment() == Alignment.HORIZONTAL) {
@@ -378,6 +380,7 @@ public class PlayerProxy extends Thread {
 				counter++;
 			}
 		}
+
 		return true;
 	}
 
@@ -429,32 +432,11 @@ public class PlayerProxy extends Thread {
 			in.close();
 			out.close();
 			socket.close();
-			System.out.println("Client with address " + address + " and port "
+			System.out.println("Client " + name + " with address " + address + " and port "
 					+ port + "\nhas closed the connection with the server.\n ");
 		} catch (IOException e) {
 			// System.err.println(e.getMessage());
 		}
 	}
 
-	/**
-	 * getPlayerName
-	 * 
-	 * @name getPlaterName
-	 * @brief Return plater names.
-	 * @param None
-	 * @return returns player name as string
-	 * */
-	public String getPlayerName() {
-		return name;
-	}
-
-	/**
-	 * getDeployed
-	 * 
-	 * @name getDeployed
-	 * @return boolean, has player deployed his ships
-	 * */
-	public boolean getDeployed() {
-		return deployed;
-	}
 }

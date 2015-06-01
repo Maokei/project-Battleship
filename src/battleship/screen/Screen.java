@@ -21,11 +21,14 @@ import battleship.gameboard.Gameboard;
  * */
 public class Screen {
 	private JFrame frame;
+	private Gameboard playerBoard, enemyBoard;
 	private MainPanel mainPanel;
 	private PlayerGUI playergui;
 	private MessagePanel msgPanel;
 	
 	public Screen(Player player, Gameboard playerBoard, Gameboard enemyBoard) {
+		this.playerBoard = playerBoard;
+		this.enemyBoard = enemyBoard;
 		frame = new JFrame("*** " + player.getName() + " ***");
 		mainPanel = new MainPanel();
 		playergui = new PlayerGUI(player);
@@ -45,6 +48,10 @@ public class Screen {
 				e.getWindow().dispose();
 			}
 		});
+	}
+	
+	public void disableRandom() {
+		playergui.disableRandom();
 	}
 	
 	public void setHits(int hits) {

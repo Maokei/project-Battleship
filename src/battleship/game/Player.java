@@ -6,37 +6,38 @@
 package battleship.game;
 
 import static battleship.game.Constants.GRID_SIZE;
-import static battleship.game.Constants.NUM_OF_DESTROYERS;
-import static battleship.game.Constants.NUM_OF_SUBMARINES;
 
 import java.awt.Cursor;
 import java.awt.Image;
 import java.awt.Point;
 import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.Vector;
 
 import javax.swing.SwingUtilities;
+import javax.swing.Timer;
 
 import battleship.gameboard.Gameboard;
 import battleship.gameboard.Grid;
 import battleship.network.ClientConnection;
+import battleship.network.NetworkOperations;
 import battleship.resources.AudioLoader;
 import battleship.screen.Avatar;
+import battleship.screen.PlayerGUI;
 import battleship.screen.Screen;
 import battleship.ships.Alignment;
-import battleship.ships.BattleShipFactory;
 import battleship.ships.Ship;
 import battleship.ships.ShipBuilder;
-import battleship.ships.ShipType;
 
 /**
  * @package battleship.entity
  * @Class Player
  * @brief Class represent a player human or non-human,
  * */
-public class Player {
+public class Player implements BattlePlayer{
 	private String name;
 	private Avatar avatar;
 	private Screen screen;
@@ -54,35 +55,42 @@ public class Player {
 	private boolean deployed = false;
 	private boolean playerTurn = false;
 
-	public Player(String name, Avatar avatar, ClientConnection con, GameMode mode) {
+	public Player(String name, Avatar avatar, ClientConnection con,
+			GameMode mode) {
 		this.name = name;
 		this.avatar = avatar;
 		this.con = con;
 		this.mode = mode;
-		con.setPlayer(this);
+		con.setBattlePlayer(this);
 	}
-	
+
 	public void init() {
 		hits = misses = shipPlacementIndex = 0;
 		playerBoard = new Gameboard();
 		enemyBoard = new Gameboard();
 		playerBoard.addMouseListener(new BoardListener());
 		enemyBoard.addMouseListener(new BoardListener());
-		
-		toolkit = Toolkit.getDefaultToolkit();
-		cursorImg = toolkit.getImage("src/res/sprite/crosshair.png");
-		cursor = toolkit.createCustomCursor(
-				cursorImg , new Point(0, 0), "");
-		enemyBoard.setCursor (cursor);
+
+		//toolkit = Toolkit.getDefaultToolkit();
+		//cursorImg = toolkit.getImage("src/res/sprite/crosshair.png");
+		//cursor = toolkit.createCustomCursor(cursorImg, new Point(0, 0), "");
+		//enemyBoard.setCursor(cursor);
 		screen = new Screen(this, playerBoard, enemyBoard);
 		playerShips = ShipBuilder.buildShips();
 		remainingShips = 9;
 		screen.showGUI();
-		listen();
+		openConnection();
+	}
+	
+	@Override
+	public boolean openConnection() {
+		new Thread(con).start();
+		return true;
 	}
 
-	private void listen() {
-		new Thread(con).start();
+	@Override
+	public void closeConnection() {
+		con.closeConnection();
 	}
 
 	public void sendMessage(Message message) {
@@ -100,7 +108,7 @@ public class Player {
 	public Avatar getAvatar() {
 		return avatar;
 	}
-	
+
 	public String getGameMode() {
 		return mode.getMode();
 	}
@@ -144,14 +152,16 @@ public class Player {
 		}
 	}
 
-	private void sinkShip(Ship ship) {
+	public void sinkShip(Ship ship) {
 		AudioLoader.getAudio("ship_down").playAudio();
 		int row = ship.getStartPosition().getRow();
 		int col = ship.getStartPosition().getCol();
 
-		sendMessage(new Message(Message.MESSAGE, name, "SHIP_DOWN "
+		if(mode == GameMode.MultiPlayer) { 
+			sendMessage(new Message(Message.MESSAGE, name, "SHIP_DOWN "
 				+ ship.getType() + " " + ship.getAlignment() + " "
 				+ Integer.toString(row) + " " + Integer.toString(col)));
+		}
 
 		playerBoard.placeShip(ship, row, col);
 		for (Grid pos : ship.getPosition()) {
@@ -184,12 +194,12 @@ public class Player {
 			enemyBoard.fadeGridIn(pos.getRow(), pos.getCol());
 		}
 	}
-	
+
 	public void randomizeShipPlacement() {
-		playerBoard.randomizeShipPlacement(playerShips);
 		shipPlacementIndex = playerShips.size();
 		screen.setShipsDeployed();
 		screen.setMessage("Press Ready Button");
+		playerBoard.randomizeShipPlacement(playerShips);
 	}
 
 	public void setRunning(boolean running) {
@@ -220,12 +230,42 @@ public class Player {
 		playerBoard.displayVictory();
 	}
 
-	private void battleLost() {
+	public void battleLost() {
 		AudioLoader.getAudio("march").setLoop(true).playAudio();
 		sendMessage(new Message(Message.LOST, name, ""));
 		screen.setMessage("You sir, are a DISGRACE!!");
 		playerBoard.displayDefeat();
 		playerTurn = false;
+	}
+	
+	class GameTimer {
+		private Timer t;
+		private int seconds;
+		private final int delay;
+		
+		public GameTimer(int seconds, int delay) {
+			this.seconds = seconds;
+			this.delay = delay;
+		}
+		
+		public void run() {
+			t = new Timer(delay, new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					--seconds;
+					screen.setMessage("AI incoming projectile in "+ seconds);
+					checkTime();
+				}
+			});
+			t.start();
+		}
+
+		private void checkTime() {
+			if (seconds <= 0) {			
+				t.stop();
+				t = null;
+			}
+		}
 	}
 
 	class BoardListener extends MouseAdapter {
@@ -243,6 +283,7 @@ public class Player {
 					else
 						alignment = Alignment.HORIZONTAL;
 				} else { // place ship
+					
 					placePlayerShip(row, col);
 				}
 			} else if (e.getComponent() == enemyBoard) {
@@ -251,10 +292,12 @@ public class Player {
 		}
 
 		private void placePlayerShip(int row, int col) {
+			if(shipPlacementIndex == 0) { screen.disableRandom(); }
+			
 			if (shipPlacementIndex < playerShips.size()) {
 				Ship ship = playerShips.elementAt(shipPlacementIndex);
 				ship.setAlignment(alignment);
-				
+
 				sendMessage(new Message(Message.MESSAGE, name, "PLACING "
 						+ ship.getType() + " " + ship.getAlignment() + " "
 						+ Integer.toString(row) + " " + Integer.toString(col)));
@@ -273,10 +316,13 @@ public class Player {
 
 		private void fire(int row, int col) {
 			if (deployed && opponentDeployed && playerTurn) {
+				System.out.println("Firing");
 				sendMessage(new Message(Message.MESSAGE, name, "FIRE "
 						+ Integer.toString(row) + " " + Integer.toString(col)));
 			}
 		}
 	}
-}
 
+	
+
+}

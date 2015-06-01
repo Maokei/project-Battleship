@@ -26,4 +26,9 @@ public class Constants {
 	// Size of each grid in GameBoard
 	public static final int SIZE = 10;
 	public static final int GRID_SIZE = 32;
+	
+	public static final char empty = 'e';
+	public static final char occupied = 'o';
+	public static final char hit = 'h';
+	public static final char miss = 'm';
 }

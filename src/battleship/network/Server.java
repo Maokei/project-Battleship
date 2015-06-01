@@ -192,10 +192,12 @@ public class Server extends JFrame {
 			}
 		}
 	}
+	
 
 	public boolean checkDeployment() {
 		for (PlayerProxy player : players) {
 			if (!player.getDeployed() == true) {
+				System.out.println(player.getName() + " is not deployed");
 				return false;
 			}
 		}
