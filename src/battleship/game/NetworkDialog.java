@@ -80,10 +80,11 @@ public class NetworkDialog extends JDialog {
 			String ipaddress = address.getInput();
 			int portNumber = Integer.parseInt(port.getInput());
 			con = new ClientConnection(ipaddress, portNumber);
-			player = new Player(name, avatar, con, mode);
-			lobby = new Lobby(player);
+			//player = new Player(name, avatar, con, mode);
+			
 			if (con.openConnection()) {
 				player = new Player(name, avatar, con, mode);
+				lobby = new Lobby(player);
 				player.init();
 				if(player == null) System.exit(0);
 				close();
