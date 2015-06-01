@@ -79,18 +79,12 @@ public class Player implements BattlePlayer{
 		playerShips = ShipBuilder.buildShips();
 		remainingShips = 9;
 		screen.showGUI();
-		openConnection();
+		listen();
 	}
 	
 	@Override
-	public boolean openConnection() {
+	public void listen() {
 		new Thread(con).start();
-		return true;
-	}
-
-	@Override
-	public void closeConnection() {
-		con.closeConnection();
 	}
 
 	public void sendMessage(Message message) {

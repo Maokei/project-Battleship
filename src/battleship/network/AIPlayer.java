@@ -17,7 +17,7 @@ import battleship.game.Message;
 import battleship.gameboard.Grid;
 import battleship.ships.Ship;
 
-public class AIPlayer implements BattlePlayer {
+public class AIPlayer implements BattlePlayer, NetworkOperations {
 	private String name = "AI";
 	private ClientConnection con;
 	private RandomShipPlacer shipPlacer;
@@ -49,7 +49,7 @@ public class AIPlayer implements BattlePlayer {
 		initEnemyGrid();
 		displayPlayerGrid();
 		displayPlayerShips();
-		openConnection();
+		listen();
 	}
 
 	private void initEnemyGrid() {
@@ -285,14 +285,19 @@ public class AIPlayer implements BattlePlayer {
 	public String getName() {
 		return name;
 	}
-
+	
 	@Override
 	public boolean openConnection() {
 		con = new ClientConnection("localhost", 10001);
 		con.openConnection();
 		con.setBattlePlayer(this);
-		new Thread(con).start();
 		return true;
+	}
+
+	@Override
+	public void listen() {
+		if(openConnection())
+			new Thread(con).start();
 	}
 
 	@Override
@@ -352,5 +357,7 @@ public class AIPlayer implements BattlePlayer {
 			}
 		}
 	}
+
+
 
 }
