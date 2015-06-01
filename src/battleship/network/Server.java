@@ -77,7 +77,7 @@ public class Server extends JFrame {
 				players.add(player);
 				player.start();
 				messages.append("\nNew connection accepted.\n"
-						+ "Connected players: " + players.size() + " id: " + id + "\n");
+						+ "Connected players: " + players.size() + " id: " + id + " Name: " + player.getName()  + "\n");
 			}
 		} catch (IOException e) {
 			System.err.println(e.getMessage());
