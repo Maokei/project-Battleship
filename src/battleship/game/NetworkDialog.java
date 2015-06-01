@@ -82,6 +82,12 @@ public class NetworkDialog extends JDialog {
 			con = new ClientConnection(ipaddress, portNumber);
 			player = new Player(name, avatar, con, mode);
 			lobby = new Lobby(player);
+			if (con.openConnection()) {
+				player = new Player(name, avatar, con, mode);
+				player.init();
+				if(player == null) System.exit(0);
+				close();
+			}
 		}
 	}
 }
