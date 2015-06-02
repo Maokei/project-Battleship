@@ -16,6 +16,7 @@ import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JDialog;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.border.TitledBorder;
@@ -39,6 +40,8 @@ public class LoginDialog extends JDialog {
 	private Font font;
 	private NetworkDialog networkDialog;
 	private GameMode mode;
+	private String ip;
+	private int port;
 	public static final int DEFAULT_PORT = 10001;
 	public static final String DEFAULT_ADDRESS = "localhost";
 
@@ -112,6 +115,9 @@ public class LoginDialog extends JDialog {
 		setLocationRelativeTo(null);
 		setVisible(true);
 		pack();
+		//ip & port
+		ip = DEFAULT_ADDRESS;
+		port = 10001;
 	}
 	
 	private void clear() {
@@ -123,7 +129,35 @@ public class LoginDialog extends JDialog {
 		setVisible(false);
 		dispose();
 	}
-
+	
+	private void getIpAndPort() {
+		ip = (String)JOptionPane.showInputDialog(
+                this,
+                "Enter ip",
+                "Server Ip",
+                JOptionPane.PLAIN_MESSAGE,
+                null,
+               null,
+                DEFAULT_ADDRESS);
+		//port
+		String temp = (String)JOptionPane.showInputDialog(
+                this,
+                "Enter port",
+                "Server Port",
+                JOptionPane.PLAIN_MESSAGE,
+                null,
+               null,
+                DEFAULT_PORT);
+		port = Integer.parseInt(temp);
+	}
+	
+	private void waitingDialog() {
+		JOptionPane optionPane = new JOptionPane("Waiting for players!"); 
+		JDialog wait = optionPane.createDialog(this, "Waiting");
+		wait.setModal(false);
+		wait.setVisible(true);
+	}
+	
 	private void login() {
 		if (!nameInput.equals("")) {
 			if(mode == GameMode.SinglePlayer) {
@@ -136,7 +170,15 @@ public class LoginDialog extends JDialog {
 				}
 				System.out.println("You choose the single player mode");
 			} else if (mode == GameMode.MultiPlayer) {
-				networkDialog = new NetworkDialog(player, nameInput.getInput(), avatarChooser.getAvatar(), connection, mode);
+				//networkDialog = new NetworkDialog(player, nameInput.getInput(), avatarChooser.getAvatar(), connection, mode);
+				getIpAndPort();
+				//make connection
+				connection = new ClientConnection(ip, port);
+				if (connection.openConnection()) {
+					player = new Player(nameInput.getInput(), avatarChooser.getAvatar(), connection, mode);
+					//if(player == null) System.exit(0);
+					//close();
+				}
 			}
 		}
 	}
