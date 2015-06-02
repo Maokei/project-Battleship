@@ -5,6 +5,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
 
 import javax.swing.JOptionPane;
 import javax.swing.JTextArea;
@@ -25,12 +26,14 @@ public class ClientConnection implements Runnable, NetworkOperations {
 	private ObjectInputStream in;
 	private BattlePlayer player;
 	private Message msg;
+	private ArrayList<String> players;
 	private JTextArea output; // just for Chat
 	private boolean running = true;
 
 	public ClientConnection(String address, int portNumber) {
 		this.address = address;
 		this.portNumber = portNumber;
+		this.players = new ArrayList<String>();
 	}
 
 	public boolean openConnection() {
@@ -97,9 +100,11 @@ public class ClientConnection implements Runnable, NetworkOperations {
 	private void handleMessage(Message msg) {
 		int type = msg.getType();
 		switch (type) {
-		case Message.LOGIN: // only handled in server
+		case Message.LOGIN:
+			parseLogin(msg);
 			break;
-		case Message.LOGOUT: // only handled in server
+		case Message.LOGOUT:
+			players.remove(msg.getName());
 			break;
 		case Message.MESSAGE:
 			parseMessage(msg);
@@ -120,6 +125,23 @@ public class ClientConnection implements Runnable, NetworkOperations {
 			if (msg.getName().equalsIgnoreCase("AI"))
 				((Player) player).battleWon();
 		}
+	}
+
+	private void parseLogin(Message msg) {
+		System.out.print("parseLogin " + player.getName() + ": ");
+		
+		if(msg.getName().equalsIgnoreCase("Server")) {
+			String[] tokens = msg.getMessage().split(" ");
+			for(String name : tokens) {
+				System.out.print(name);
+				players.add(name);
+			}
+			System.out.print("\n");
+		}
+	}
+	
+	public ArrayList<String> getConnectedPlayers() {
+		return players;
 	}
 
 	private void parseMessage(Message msg) {

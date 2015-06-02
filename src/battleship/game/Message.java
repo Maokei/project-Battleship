@@ -21,7 +21,7 @@ public class Message implements Serializable {
 	private String name;
 	public static final int LOGIN = 0, MESSAGE = 1,
 			CHAT = 2, LOGOUT = 3, DEPLOYED = 4, TURN = 5,
-			AIMATCH = 6, CHALLENGE = 7, LOST = 8;
+			AIMATCH = 6, CHALLENGE = 7, LOST = 8, RETRIEVE = 9;
 
 	public Message(int type, String name, String msg) {
 		if(type == 0) 

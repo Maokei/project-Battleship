@@ -193,6 +193,17 @@ public class Server extends JFrame {
 		}
 	}
 	
+	public synchronized void sendPlayers(String name) {
+		StringBuilder builder = new StringBuilder();
+		for(PlayerProxy player : players) {
+			if (!player.getPlayerName().equalsIgnoreCase(name)) {
+				builder.append(player.getName());
+				builder.append(' ');
+			}
+		}
+		sendMessageToAll(new Message(Message.LOGIN, "Server", builder.toString().trim()));
+	}
+	
 
 	public boolean checkDeployment() {
 		for (PlayerProxy player : players) {
@@ -278,5 +289,7 @@ public class Server extends JFrame {
 		Server server = new Server(DEFAULT_PORT);
 		server.listen();
 	}
+
+	
 
 }

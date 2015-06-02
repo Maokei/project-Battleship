@@ -9,12 +9,12 @@ import static battleship.game.Constants.GRID_SIZE;
 
 import java.awt.Cursor;
 import java.awt.Image;
-import java.awt.Point;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 import java.util.Vector;
 
 import javax.swing.SwingUtilities;
@@ -23,10 +23,9 @@ import javax.swing.Timer;
 import battleship.gameboard.Gameboard;
 import battleship.gameboard.Grid;
 import battleship.network.ClientConnection;
-import battleship.network.NetworkOperations;
 import battleship.resources.AudioLoader;
 import battleship.screen.Avatar;
-import battleship.screen.PlayerGUI;
+import battleship.screen.Lobby;
 import battleship.screen.Screen;
 import battleship.ships.Alignment;
 import battleship.ships.Ship;
@@ -105,6 +104,10 @@ public class Player implements BattlePlayer{
 
 	public String getGameMode() {
 		return mode.getMode();
+	}
+	
+	public ArrayList<String> getConnectedPlayers() {
+		return con.getConnectedPlayers();
 	}
 
 	public boolean checkHit(int row, int col) {
@@ -314,7 +317,4 @@ public class Player implements BattlePlayer{
 			}
 		}
 	}
-
-	
-
 }

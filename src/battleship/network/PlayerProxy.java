@@ -182,6 +182,7 @@ public class PlayerProxy extends Thread {
 				aiMatch = true;
 			} else if (msg.getMessage().equalsIgnoreCase("Multiplayer")) {
 				mode = GameMode.MultiPlayer;
+				server.sendPlayers(name);
 			}
 		}
 	}
@@ -438,5 +439,4 @@ public class PlayerProxy extends Thread {
 			// System.err.println(e.getMessage());
 		}
 	}
-
 }

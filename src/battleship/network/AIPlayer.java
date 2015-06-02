@@ -15,6 +15,7 @@ import javax.swing.Timer;
 import battleship.game.BattlePlayer;
 import battleship.game.Message;
 import battleship.gameboard.Grid;
+import battleship.ships.Alignment;
 import battleship.ships.Ship;
 
 public class AIPlayer implements BattlePlayer, NetworkOperations {
@@ -28,8 +29,10 @@ public class AIPlayer implements BattlePlayer, NetworkOperations {
 	private ArrayList<Grid> validTargets;
 	protected boolean running = true;
 	private Set<Grid> probableTargets;
+	private Vector<Ship> shipsDown;
 	private boolean playerTurn;
 	private boolean opponentDeployed = false;
+	private boolean enemyShipDown = false;
 
 	public AIPlayer() {
 		init();
@@ -46,6 +49,7 @@ public class AIPlayer implements BattlePlayer, NetworkOperations {
 		remainingShips = playerShips.size();
 		validTargets = new ArrayList<Grid>(SIZE * SIZE);
 		probableTargets = new HashSet<Grid>();
+		shipsDown = new Vector<Ship>();
 		initEnemyGrid();
 		displayPlayerGrid();
 		displayPlayerShips();
@@ -109,32 +113,27 @@ public class AIPlayer implements BattlePlayer, NetworkOperations {
 	}
 
 	private boolean checkProbableTargets() {
-		if(probableTargets.size() > 0) {
+		if (probableTargets.size() > 0) {
 			return true;
 		}
 		return false;
- 	}
+	}
 
 	private void calculateNextTarget() {
 		System.out.print("ProbableTargets [ ");
-		for(Grid grid: probableTargets) {
+		for (Grid grid : probableTargets) {
 			System.out.print(grid.getRow() + "," + grid.getCol() + " ");
 		}
 		System.out.print("]");
 		int randomProbable = r.nextInt(probableTargets.size());
 		Grid grid = (Grid) probableTargets.toArray()[randomProbable];
-		probableTargets.remove(randomProbable);
+		probableTargets.remove(grid);
+		validTargets.remove(grid);
 		int row = grid.getRow();
 		int col = grid.getCol();
 		System.out.println("FIRE " + row + ", " + col);
 		sendMessage(new Message(Message.MESSAGE, "AI", "FIRE "
 				+ Integer.toString(row) + " " + Integer.toString(col)));
-			validTargets.remove(grid);
-			/*
-		if (checkBounds(row, col)) {
-			
-		}
-		*/
 	}
 
 	public boolean checkHit(int row, int col) {
@@ -161,9 +160,11 @@ public class AIPlayer implements BattlePlayer, NetworkOperations {
 	public void registerPlayerHit(int row, int col) {
 		if (checkBounds(row, col)) {
 			enemyGrid[row][col] = hit;
-			
 			System.out.println("HIT " + row + "," + col);
 			addNextPossibleTargets(new Grid(row, col));
+			if (enemyShipDown) {
+				checkEnemyDownProbableTargets();
+			}
 			new GameTimer(2, 1000).run();
 		}
 	}
@@ -285,7 +286,7 @@ public class AIPlayer implements BattlePlayer, NetworkOperations {
 	public String getName() {
 		return name;
 	}
-	
+
 	@Override
 	public boolean openConnection() {
 		con = new ClientConnection("localhost", 10001);
@@ -296,7 +297,7 @@ public class AIPlayer implements BattlePlayer, NetworkOperations {
 
 	@Override
 	public void listen() {
-		if(openConnection())
+		if (openConnection())
 			new Thread(con).start();
 	}
 
@@ -320,24 +321,102 @@ public class AIPlayer implements BattlePlayer, NetworkOperations {
 
 	@Override
 	public void placeEnemyShip(Ship ship, int row, int col) {
-		probableTargets.clear();
-		for(Grid grid : ship.getPosition()) {
-			if(!(enemyGrid[grid.getRow()][grid.getCol()] == hit)) {
-				enemyGrid[grid.getRow()][grid.getCol()] = hit;
+		if (ship == null) {
+			System.out.println("Ship is NULL!!!!");
+		} else {
+			enemyShipDown = true;
+			setShipPositions(ship, row, col);
+			System.out.print("Adding ship " + ship.getType() + " [" );
+			for(Grid grid : ship.getPosition()) {
+				System.out.print(grid.getRow() + "," + grid.getCol() + " ");
 			}
+			System.out.print("]\n");
+			shipsDown.add(ship);
 		}
 	}
 	
+	public void setShipPositions(Ship ship, int row, int col) {
+		int counter;
+		if (ship.getAlignment() == Alignment.HORIZONTAL) {
+			counter = col;
+			for (int i = 0; i < ship.getLength(); i++) {
+				ship.addPositionGrid(row, counter);
+				counter++;
+			}
+		} else if (ship.getAlignment() == Alignment.VERTICAL) {
+			counter = row;
+			for (int i = 0; i < ship.getLength(); i++) {
+				ship.addPositionGrid(counter, col);
+				counter++;
+			}
+		}
+	}
+
+	public void checkEnemyDownProbableTargets() {
+		if (!probableTargets.isEmpty()) {
+			for (Ship ship : shipsDown) {
+				if (ship.getAlignment() == Alignment.HORIZONTAL) {
+					removeVerticalAdjacent(ship.getStartPosition());
+					removeVerticalAdjacent(ship.getPosition().lastElement());
+					for (Grid grid : ship.getPosition()) {
+						removeHorizontalAdjacent(grid);
+					}
+				} else if (ship.getAlignment() == Alignment.VERTICAL) {
+					removeHorizontalAdjacent(ship.getStartPosition());
+					removeHorizontalAdjacent(ship.getPosition().lastElement());
+					for (Grid grid : ship.getPosition()) {
+						removeVerticalAdjacent(grid);
+					}
+				}
+			}
+			shipsDown.clear();
+			enemyShipDown = false;
+		}
+	}
+
+	private void removeHorizontalAdjacent(Grid grid) {
+		int row = grid.getRow();
+		int col = grid.getCol();
+		if (checkBounds(row, col)) {
+			if (row > 0 && (enemyGrid[row - 1][col] == empty)) {
+				if (probableTargets.remove(new Grid(row - 1, col)))
+					System.out.println("Removing " + (row - 1) + "," + col);
+			}
+			if (row < (SIZE - 1) && (enemyGrid[row + 1][col] == empty)) {
+				if (probableTargets.remove(new Grid(row + 1, col))) {
+					System.out.println("Removing " + (row + 1) + "," + col);
+				}
+			}
+		}
+	}
+
+	private void removeVerticalAdjacent(Grid grid) {
+		int row = grid.getRow();
+		int col = grid.getCol();
+		if (checkBounds(row, col)) {
+			if (col > 0 && (enemyGrid[row][col - 1] == empty)) {
+				if (probableTargets.remove(new Grid(row, col - 1))) {
+					System.out.println("Removing " + row + "," + (col - 1));
+				}
+			}
+			if (col < (SIZE - 1) && (enemyGrid[row][col + 1] == empty)) {
+				if (probableTargets.remove(new Grid(row, col + 1))) {
+					System.out.println("Removing " + row + "," + (col + 1));
+				}
+			}
+		}
+	}
+
 	class GameTimer {
 		private Timer t;
 		private int seconds;
 		private final int delay;
-		
+
 		public GameTimer(int seconds, int delay) {
 			this.seconds = seconds;
 			this.delay = delay;
 		}
-		
+
 		public void run() {
 			t = new Timer(delay, new ActionListener() {
 				@Override
@@ -357,7 +436,4 @@ public class AIPlayer implements BattlePlayer, NetworkOperations {
 			}
 		}
 	}
-
-
-
 }

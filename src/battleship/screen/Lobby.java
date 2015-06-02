@@ -57,7 +57,6 @@ public class Lobby extends JFrame {
 		names = new ArrayList<String>();
 		names.add(player.getName());
 		setupGUI();
-		
 	}
 	
 	/**
@@ -79,6 +78,7 @@ public class Lobby extends JFrame {
 		bottomButtons.add(playAi = new JButton("Play vs AI"), BorderLayout.EAST);
 		chaBtn.setMargin(new Insets(25, 25, 25, 25));
 		playAi.setMargin(new Insets(25, 25, 25, 25));
+		addPlayerNames();
 		//list
 		setupPlayersList();
 		//Chat panel
@@ -152,5 +152,9 @@ public class Lobby extends JFrame {
 		players.setSelectionBackground(Color.BLACK);
 		players.setPreferredSize(new Dimension(300, 300));
 		pane = new JScrollPane(players);
+	}
+
+	private void addPlayerNames() {
+		names.addAll(player.getConnectedPlayers());
 	}
 }
