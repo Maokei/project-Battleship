@@ -98,29 +98,66 @@ public class Gameboard extends JPanel {
 	}
 
 	public boolean checkShipPlacement(Ship ship, int row, int col) {
-		int length = ship.getLength();
-		int counter;
 		if (ship.getAlignment() == Alignment.HORIZONTAL) {
-			if ((col + length - 1) < SIZE) {
-				counter = col;
-				for (int i = 0; i < length; i++) {
-					if (!gridboard[row][counter].isEmpty()) {
-						return false;
+			int width = ship.getLength() + 2;
+			int height = 3;
+			if ((col + ship.getLength() - 1) < SIZE) {
+				if (col > 0) {
+					--col;
+				}
+				if(!(col + ship.getLength() < SIZE - 1)) {
+					--width;
+				}
+				if (!(row < (SIZE - 1))) {
+					--height;
+				}
+				
+				if (row > 0) {
+					--row;
+				}
+				
+				int rowCounter = row;
+				int colCounter = col;
+				for(int i = 0; i < height; i++) {
+					colCounter = col;
+					for(int j = 0; j < width; j++) {
+						if(!gridboard[rowCounter][colCounter++].isEmpty()) {
+							return false;
+						}
 					}
-					counter++;
+					rowCounter++;
 				}
 			} else {
 				return false;
 			}
 
-		} else if (ship.getAlignment() == Alignment.VERTICAL) {
-			if ((row + length - 1) < SIZE) {
-				counter = row;
-				for (int i = 0; i < length; i++) {
-					if (!gridboard[counter][col].isEmpty()) {
-						return false;
+		} else if(ship.getAlignment() == Alignment.VERTICAL) {
+			int width = 3;
+			int height = ship.getLength() + 2;
+			if ((row + ship.getLength() - 1) < SIZE) {
+				if (row > 0) {
+					--row;
+				}
+				if(!(row + ship.getLength() < SIZE - 1)) {
+					--height;
+				}
+				if (!(col < (SIZE - 1))) {
+					--width;
+				}
+				if (col > 0) {
+					--col;
+					
+				}
+				int rowCounter = row;
+				int colCounter = col;
+				for(int i = 0; i < width; i++) {
+					rowCounter = row;
+					for(int j = 0; j < height; j++) {
+						if(!gridboard[rowCounter++][colCounter].isEmpty()) {
+							return false;
+						}
 					}
-					counter++;
+					colCounter++;
 				}
 			} else {
 				return false;
@@ -129,6 +166,7 @@ public class Gameboard extends JPanel {
 		return true;
 	}
 
+	
 	public void placeShip(Ship ship, int row, int col) {
 		int counter;
 		if (ship.getAlignment() == Alignment.HORIZONTAL) {
