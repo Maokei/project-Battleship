@@ -11,6 +11,9 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.regex.PatternSyntaxException;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -50,6 +53,7 @@ public class Lobby extends JFrame {
 	private JTextField chatInput;
 	private JButton chaBtn;
 	private JButton playAi;
+	private JButton refresh;
 	
 	public Lobby(Player player) {
 		super("*** Battleship lobby ***");
@@ -76,6 +80,8 @@ public class Lobby extends JFrame {
 		bottomButtons.setLayout(new BorderLayout());
 		bottomButtons.add(chaBtn = new JButton("Challange"),BorderLayout.WEST);
 		bottomButtons.add(playAi = new JButton("Play vs AI"), BorderLayout.EAST);
+		bottomButtons.add(refresh = new JButton("Refresh"), BorderLayout.CENTER);
+		refresh.setMargin(new Insets(25, 25, 25, 25));
 		chaBtn.setMargin(new Insets(25, 25, 25, 25));
 		playAi.setMargin(new Insets(25, 25, 25, 25));
 		addPlayerNames();
@@ -90,6 +96,7 @@ public class Lobby extends JFrame {
 		add(chatPanel, BorderLayout.EAST);
 		add(bottomButtons, BorderLayout.SOUTH);
 		chaBtn.addActionListener(new ChallangeListener());
+		refresh.addActionListener(new RefreshListener());
 		//
 		setSize(1200, 600);
 		setVisible(true);
@@ -122,6 +129,15 @@ public class Lobby extends JFrame {
 		}
 	}
 	
+	//Refresh button
+	private class RefreshListener implements ActionListener {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				
+			}
+		}
+	
 	/**
 	 * setNames
 	 * @name setName
@@ -129,6 +145,24 @@ public class Lobby extends JFrame {
 	 * */
 	public void setNames(ArrayList<String> n) {
 		names = n;
+	}
+	
+	/**
+	 * setNames
+	 * @name setNames
+	 * @param String takes a string of names in the format "name1 name2 name3 name4" sets them 
+	 * to names J-list
+	 * */
+	public void setNames(String namess) {
+		try {
+			String temp[] = namess.split("\\s+");
+		    Collection<? extends String> n = Arrays.asList(temp);
+		    //clear list
+			names.clear();
+			names.addAll(n);
+		} catch (PatternSyntaxException ex) {
+		    ex.printStackTrace();
+		}
 	}
 	
 	/**
