@@ -33,6 +33,8 @@ public class AIPlayer implements BattlePlayer, NetworkOperations {
 	private boolean playerTurn;
 	private boolean opponentDeployed = false;
 	private boolean enemyShipDown = false;
+	private Grid prevHit, currHit;
+	private Alignment enemyShipAlignment;
 
 	public AIPlayer() {
 		init();
@@ -50,6 +52,8 @@ public class AIPlayer implements BattlePlayer, NetworkOperations {
 		validTargets = new ArrayList<Grid>(SIZE * SIZE);
 		probableTargets = new HashSet<Grid>();
 		shipsDown = new Vector<Ship>();
+		prevHit = new Grid(-1, -1);
+		currHit = new Grid(-1, -1);
 		initEnemyGrid();
 		displayPlayerGrid();
 		displayPlayerShips();
@@ -161,6 +165,7 @@ public class AIPlayer implements BattlePlayer, NetworkOperations {
 		if (checkBounds(row, col)) {
 			enemyGrid[row][col] = hit;
 			System.out.println("HIT " + row + "," + col);
+			comparePrevHits(new Grid(row, col));
 			addNextPossibleTargets(new Grid(row, col));
 			if (enemyShipDown) {
 				checkEnemyDownProbableTargets();
@@ -169,15 +174,43 @@ public class AIPlayer implements BattlePlayer, NetworkOperations {
 		}
 	}
 
+	private void comparePrevHits(Grid grid) {
+		if ((prevHit.getRow() == -1 && prevHit.getCol() == -1)) {
+			prevHit = currHit = grid;
+		} else {
+			prevHit = currHit;
+			currHit = grid;
+			if (prevHit.getRow() == currHit.getRow()) {
+				enemyShipAlignment = Alignment.HORIZONTAL;
+			} else if (prevHit.getCol() == currHit.getCol()) {
+				enemyShipAlignment = Alignment.VERTICAL;
+			}
+		}
+	}
+
 	private void addNextPossibleTargets(Grid grid) {
-		if (checkLeftGrid(grid))
-			probableTargets.add(new Grid(grid.getRow(), grid.getCol() - 1));
-		if (checkTopGrid(grid))
-			probableTargets.add(new Grid(grid.getRow() - 1, grid.getCol()));
-		if (checkRightGrid(grid))
-			probableTargets.add(new Grid(grid.getRow(), grid.getCol() + 1));
-		if (checkBottomGrid(grid))
-			probableTargets.add(new Grid(grid.getRow() + 1, grid.getCol()));
+		if (prevHit == currHit) {
+			if (checkLeftGrid(grid))
+				probableTargets.add(new Grid(grid.getRow(), grid.getCol() - 1));
+			if (checkTopGrid(grid))
+				probableTargets.add(new Grid(grid.getRow() - 1, grid.getCol()));
+			if (checkRightGrid(grid))
+				probableTargets.add(new Grid(grid.getRow(), grid.getCol() + 1));
+			if (checkBottomGrid(grid))
+				probableTargets.add(new Grid(grid.getRow() + 1, grid.getCol()));
+		} else {
+			if (enemyShipAlignment == Alignment.HORIZONTAL) {
+				if (checkLeftGrid(grid))
+					probableTargets.add(new Grid(grid.getRow(), grid.getCol() - 1));
+				if (checkRightGrid(grid))
+					probableTargets.add(new Grid(grid.getRow(), grid.getCol() + 1));
+			} else if (enemyShipAlignment == Alignment.VERTICAL) {
+				if (checkTopGrid(grid))
+					probableTargets.add(new Grid(grid.getRow() - 1, grid.getCol()));
+				if (checkBottomGrid(grid))
+					probableTargets.add(new Grid(grid.getRow() + 1, grid.getCol()));
+			}
+		}
 	}
 
 	private boolean checkLeftGrid(Grid grid) {
@@ -326,15 +359,15 @@ public class AIPlayer implements BattlePlayer, NetworkOperations {
 		} else {
 			enemyShipDown = true;
 			setShipPositions(ship, row, col);
-			System.out.print("Adding ship " + ship.getType() + " [" );
-			for(Grid grid : ship.getPosition()) {
+			System.out.print("Adding ship " + ship.getType() + " [");
+			for (Grid grid : ship.getPosition()) {
 				System.out.print(grid.getRow() + "," + grid.getCol() + " ");
 			}
 			System.out.print("]\n");
 			shipsDown.add(ship);
 		}
 	}
-	
+
 	public void setShipPositions(Ship ship, int row, int col) {
 		int counter;
 		if (ship.getAlignment() == Alignment.HORIZONTAL) {
@@ -355,17 +388,68 @@ public class AIPlayer implements BattlePlayer, NetworkOperations {
 	public void checkEnemyDownProbableTargets() {
 		if (!probableTargets.isEmpty()) {
 			for (Ship ship : shipsDown) {
+				int row = ship.getStartPosition().getRow();
+				int col = ship.getStartPosition().getCol();
 				if (ship.getAlignment() == Alignment.HORIZONTAL) {
-					removeVerticalAdjacent(ship.getStartPosition());
-					removeVerticalAdjacent(ship.getPosition().lastElement());
-					for (Grid grid : ship.getPosition()) {
-						removeHorizontalAdjacent(grid);
+					int width = ship.getLength() + 2;
+					int height = 3;
+					if ((col + ship.getLength() - 1) < SIZE) {
+						if (col > 0) {
+							--col;
+						}
+						if (!(col + ship.getLength() < SIZE - 1)) {
+							--width;
+						}
+						if (!(row < (SIZE - 1))) {
+							--height;
+						}
+
+						if (row > 0) {
+							--row;
+						}
+
+						int rowCounter = row;
+						int colCounter = col;
+						for (int i = 0; i < height; i++) {
+							colCounter = col;
+							for (int j = 0; j < width; j++) {
+								probableTargets.remove(new Grid(rowCounter,
+										colCounter));
+								validTargets.remove(new Grid(rowCounter,
+										colCounter++));
+							}
+							rowCounter++;
+						}
 					}
 				} else if (ship.getAlignment() == Alignment.VERTICAL) {
-					removeHorizontalAdjacent(ship.getStartPosition());
-					removeHorizontalAdjacent(ship.getPosition().lastElement());
-					for (Grid grid : ship.getPosition()) {
-						removeVerticalAdjacent(grid);
+					int width = 3;
+					int height = ship.getLength() + 2;
+					if ((row + ship.getLength() - 1) < SIZE) {
+						if (row > 0) {
+							--row;
+						}
+						if (!(row + ship.getLength() < SIZE - 1)) {
+							--height;
+						}
+						if (!(col < (SIZE - 1))) {
+							--width;
+						}
+						if (col > 0) {
+							--col;
+
+						}
+						int rowCounter = row;
+						int colCounter = col;
+						for (int i = 0; i < width; i++) {
+							rowCounter = row;
+							for (int j = 0; j < height; j++) {
+								probableTargets.remove(new Grid(rowCounter,
+										colCounter));
+								validTargets.remove(new Grid(rowCounter++,
+										colCounter));
+							}
+							colCounter++;
+						}
 					}
 				}
 			}
