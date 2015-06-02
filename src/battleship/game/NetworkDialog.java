@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import battleship.network.ClientConnection;
@@ -42,6 +43,7 @@ public class NetworkDialog extends JDialog {
 		cancel.addActionListener(ae -> {
 			close();
 		});
+		
 		login = new JButton("Login");
 		login.addActionListener(ae -> {
 			login();
@@ -85,7 +87,8 @@ public class NetworkDialog extends JDialog {
 				if(player == null) System.exit(0);
 				close();
 			}
-			lobby = new Lobby(player);
+			JOptionPane.showOptionDialog(null, "Waiting for player","Waiting", JOptionPane.DEFAULT_OPTION,JOptionPane.INFORMATION_MESSAGE, null, new Object[]{}, null);
+			//lobby = new Lobby(player);
 		}
 	}
 }

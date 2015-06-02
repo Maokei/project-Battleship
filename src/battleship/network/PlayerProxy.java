@@ -187,6 +187,11 @@ public class PlayerProxy extends Thread {
 		}
 	}
 
+	/**
+	 * handleLogin
+	 * @name handleLogin
+	 * @brief handles the client login procedure, depending on selected GameMode
+	 * */
 	private void handleLogin() {
 		if (server.getNumberOfCurrentPlayers() > server.getNumberOfPlayers()) {
 			name = msg.getName();
@@ -205,6 +210,12 @@ public class PlayerProxy extends Thread {
 				playing = false;
 				mode = GameMode.MultiPlayer;
 				server.sendPlayers(name);
+				//see if there is players to start a match
+				if(!server.lookForPlayerMulti()) {
+					playing = false; //wait
+				}else{
+					//get opponent and start match
+				}
 			}
 		}
 	}
