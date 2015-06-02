@@ -31,6 +31,7 @@ public class PlayerProxy extends Thread {
 	protected String name;
 	protected int playerId;
 	private GameMode mode;
+	private boolean playing;
 	private char[][] playerGrid;
 	private AIPlayer aiPlayer;
 	private boolean aiMatch;
@@ -56,6 +57,7 @@ public class PlayerProxy extends Thread {
 		playerGrid = new char[SIZE][SIZE];
 		initGrid(playerGrid);
 		aiMatch = false;
+		playing = false;
 	}
 
 	/**
@@ -80,6 +82,24 @@ public class PlayerProxy extends Thread {
 		return deployed;
 	}
 
+	/**
+	 * getMode
+	 * @name getMode
+	 * @return return the player mode for playerProxy
+	 * */
+	public GameMode getMode() {
+		return mode;
+	}
+	
+	/**
+	 * getPlayering 
+	 * @name getPlaying
+	 * @return boolean
+	 * */
+	public boolean getPlaying() {
+		return playing;
+	}
+	
 	/**
 	 * initGrid
 	 * 
@@ -180,7 +200,9 @@ public class PlayerProxy extends Thread {
 				mode = GameMode.SinglePlayer;
 				aiPlayer = new AIPlayer();
 				aiMatch = true;
+				playing = true;
 			} else if (msg.getMessage().equalsIgnoreCase("Multiplayer")) {
+				playing = false;
 				mode = GameMode.MultiPlayer;
 				server.sendPlayers(name);
 			}
