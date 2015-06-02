@@ -255,7 +255,6 @@ public class Gameboard extends JPanel {
 	}
 
 	public void randomizeShipPlacement(Vector<Ship> ships) {
-		ships = new RandomShipPlacer().getRandomShips();
 		for (Ship ship : ships) {
 			String type = ship.getType();
 			System.out.print(type + "[ ");

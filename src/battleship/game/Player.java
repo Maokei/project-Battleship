@@ -23,6 +23,7 @@ import javax.swing.Timer;
 import battleship.gameboard.Gameboard;
 import battleship.gameboard.Grid;
 import battleship.network.ClientConnection;
+import battleship.network.RandomShipPlacer;
 import battleship.resources.AudioLoader;
 import battleship.screen.Avatar;
 import battleship.screen.Lobby;
@@ -194,6 +195,7 @@ public class Player implements BattlePlayer{
 		shipPlacementIndex = playerShips.size();
 		screen.setShipsDeployed();
 		screen.setMessage("Press Ready Button");
+		playerShips = new RandomShipPlacer().getRandomShips();
 		playerBoard.randomizeShipPlacement(playerShips);
 	}
 

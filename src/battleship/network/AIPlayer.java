@@ -470,39 +470,6 @@ public class AIPlayer implements BattlePlayer, NetworkOperations {
 		}
 	}
 
-	private void removeHorizontalAdjacent(Grid grid) {
-		int row = grid.getRow();
-		int col = grid.getCol();
-		if (checkBounds(row, col)) {
-			if (row > 0 && (enemyGrid[row - 1][col] == empty)) {
-				if (probableTargets.remove(new Grid(row - 1, col)))
-					System.out.println("Removing " + (row - 1) + "," + col);
-			}
-			if (row < (SIZE - 1) && (enemyGrid[row + 1][col] == empty)) {
-				if (probableTargets.remove(new Grid(row + 1, col))) {
-					System.out.println("Removing " + (row + 1) + "," + col);
-				}
-			}
-		}
-	}
-
-	private void removeVerticalAdjacent(Grid grid) {
-		int row = grid.getRow();
-		int col = grid.getCol();
-		if (checkBounds(row, col)) {
-			if (col > 0 && (enemyGrid[row][col - 1] == empty)) {
-				if (probableTargets.remove(new Grid(row, col - 1))) {
-					System.out.println("Removing " + row + "," + (col - 1));
-				}
-			}
-			if (col < (SIZE - 1) && (enemyGrid[row][col + 1] == empty)) {
-				if (probableTargets.remove(new Grid(row, col + 1))) {
-					System.out.println("Removing " + row + "," + (col + 1));
-				}
-			}
-		}
-	}
-
 	class GameTimer {
 		private Timer t;
 		private int seconds;
