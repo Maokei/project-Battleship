@@ -5,8 +5,6 @@
  * */
 package battleship.network;
 
-
-
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
@@ -26,6 +24,7 @@ import javax.swing.JTextField;
 import javax.swing.UIManager;
 import javax.swing.WindowConstants;
 
+import battleship.game.GameMode;
 import battleship.game.Message;
 /**
  * @class Server
@@ -204,6 +203,20 @@ public class Server extends JFrame {
 		sendMessageToAll(new Message(Message.LOGIN, "Server", builder.toString().trim()));
 	}
 	
+	/**
+	 * lookForPlayerMulti
+	 * @name lookForPlayerMulti
+	 * @return boolean if a player is found that is in multiplayer mode and not player.
+	 * */
+	public boolean lookForPlayerMulti() {
+		for(PlayerProxy p : players) {
+			if(p.getMode() == GameMode.MultiPlayer){
+				if(p.getPlaying() == false)
+					return true;
+			}
+		}
+		return false;
+	}
 
 	public boolean checkDeployment() {
 		for (PlayerProxy player : players) {
