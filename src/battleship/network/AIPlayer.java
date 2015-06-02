@@ -104,8 +104,7 @@ public class AIPlayer implements BattlePlayer, NetworkOperations {
 			calculateNextTarget();
 		} else {
 			System.out.println("Valid target size: " + validTargets.size());
-			Grid grid = validTargets.get((validTargets.size() > 0) ? r
-					.nextInt(validTargets.size()) : 0);
+			Grid grid = validTargets.get((validTargets.size() > 0) ? r.nextInt(validTargets.size()) : 0);
 			int row = grid.getRow();
 			int col = grid.getCol();
 			if (checkBounds(row, col)) {
@@ -409,17 +408,18 @@ public class AIPlayer implements BattlePlayer, NetworkOperations {
 					if ((col + ship.getLength() - 1) < SIZE) {
 						if (col > 0) {
 							--col;
-						} 
-						if(col == 0 || !((col + ship.getLength()) < SIZE - 1)) {
+						}
+						if (!(col + ship.getLength() < SIZE - 1)) {
 							--width;
 						}
-						if (row == 0 || !(row < (SIZE - 1))) {
+						if (!(row < (SIZE - 1))) {
 							--height;
 						}
+
 						if (row > 0) {
 							--row;
 						}
-						
+
 						int rowCounter = row;
 						int colCounter = col;
 						for (int i = 0; i < height; i++) {
@@ -439,15 +439,16 @@ public class AIPlayer implements BattlePlayer, NetworkOperations {
 					if ((row + ship.getLength() - 1) < SIZE) {
 						if (row > 0) {
 							--row;
-						} 
-						if(row == 0 || !(row + ship.getLength() < SIZE - 1)) {
+						}
+						if (!(row + ship.getLength() < SIZE - 1)) {
 							--height;
 						}
-						if (col == 0 || !(col < (SIZE - 1))) {
+						if (!(col < (SIZE - 1))) {
 							--width;
 						}
 						if (col > 0) {
 							--col;
+
 						}
 						int rowCounter = row;
 						int colCounter = col;
@@ -467,6 +468,39 @@ public class AIPlayer implements BattlePlayer, NetworkOperations {
 			shipsDown.clear();
 			enemyShipDown = false;
 			prevHit = currHit = new Grid(-1, -1);
+		}
+	}
+
+	private void removeHorizontalAdjacent(Grid grid) {
+		int row = grid.getRow();
+		int col = grid.getCol();
+		if (checkBounds(row, col)) {
+			if (row > 0 && (enemyGrid[row - 1][col] == empty)) {
+				if (probableTargets.remove(new Grid(row - 1, col)))
+					System.out.println("Removing " + (row - 1) + "," + col);
+			}
+			if (row < (SIZE - 1) && (enemyGrid[row + 1][col] == empty)) {
+				if (probableTargets.remove(new Grid(row + 1, col))) {
+					System.out.println("Removing " + (row + 1) + "," + col);
+				}
+			}
+		}
+	}
+
+	private void removeVerticalAdjacent(Grid grid) {
+		int row = grid.getRow();
+		int col = grid.getCol();
+		if (checkBounds(row, col)) {
+			if (col > 0 && (enemyGrid[row][col - 1] == empty)) {
+				if (probableTargets.remove(new Grid(row, col - 1))) {
+					System.out.println("Removing " + row + "," + (col - 1));
+				}
+			}
+			if (col < (SIZE - 1) && (enemyGrid[row][col + 1] == empty)) {
+				if (probableTargets.remove(new Grid(row, col + 1))) {
+					System.out.println("Removing " + row + "," + (col + 1));
+				}
+			}
 		}
 	}
 

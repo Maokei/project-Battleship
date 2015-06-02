@@ -89,30 +89,27 @@ public class RandomShipPlacer {
 			if ((col + ship.getLength() - 1) < SIZE) {
 				if (col > 0) {
 					--col;
-				} 
-				if(col == 0 || !((col + ship.getLength()) < SIZE - 1)) {
+				}
+				if(!(col + ship.getLength() < SIZE - 1)) {
 					--width;
 				}
-				if (row == 0 || !(row < (SIZE - 1))) {
+				if (!(row < (SIZE - 1))) {
 					--height;
 				}
+				
 				if (row > 0) {
 					--row;
 				}
 				
 				int rowCounter = row;
 				int colCounter = col;
-				System.out.println("\nChecking grids:");
 				for(int i = 0; i < height; i++) {
 					colCounter = col;
-					System.out.print("[ ");
 					for(int j = 0; j < width; j++) {
-						System.out.print(rowCounter + "," + colCounter + " ");
 						if(!(gridboard[rowCounter][colCounter++] == empty)) {
 							return false;
 						}
 					}
-					System.out.print("]\n");
 					rowCounter++;
 				}
 			} else {
@@ -125,32 +122,28 @@ public class RandomShipPlacer {
 			if ((row + ship.getLength() - 1) < SIZE) {
 				if (row > 0) {
 					--row;
-				} 
-				if(row == 0 || !(row + ship.getLength() < SIZE - 1)) {
+				}
+				if(!(row + ship.getLength() < SIZE - 1)) {
 					--height;
 				}
-				if (col == 0 || !(col < (SIZE - 1))) {
+				if (!(col < (SIZE - 1))) {
 					--width;
 				}
 				if (col > 0) {
 					--col;
+					
 				}
 				int rowCounter = row;
 				int colCounter = col;
-				System.out.println("\nChecking grids:");
 				for(int i = 0; i < width; i++) {
 					rowCounter = row;
-					System.out.print("[ ");
 					for(int j = 0; j < height; j++) {
-						System.out.print(rowCounter + "," + colCounter + " ");
 						if(!(gridboard[rowCounter++][colCounter] == empty)) {
 							return false;
 						}
 					}
 					colCounter++;
-					System.out.print("]\n");
 				}
-				
 			} else {
 				return false;
 			}

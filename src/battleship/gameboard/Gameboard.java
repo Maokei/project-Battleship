@@ -104,15 +104,20 @@ public class Gameboard extends JPanel {
 			if ((col + ship.getLength() - 1) < SIZE) {
 				if (col > 0) {
 					--col;
-				} 
-				if(col == 0 || !((col + ship.getLength()) < SIZE - 1)) {
+				} else {
 					--width;
 				}
-				if (row == 0 || !(row < (SIZE - 1))) {
+				if(!((col + ship.getLength()) < SIZE - 1)) {
+					--width;
+				}
+				if (!(row < (SIZE - 1))) {
 					--height;
 				}
+				
 				if (row > 0) {
 					--row;
+				} else {
+					--height;
 				}
 				
 				int rowCounter = row;
@@ -140,15 +145,19 @@ public class Gameboard extends JPanel {
 			if ((row + ship.getLength() - 1) < SIZE) {
 				if (row > 0) {
 					--row;
-				} 
-				if(row == 0 || !(row + ship.getLength() < SIZE - 1)) {
+				} else {
 					--height;
 				}
-				if (col == 0 || !(col < (SIZE - 1))) {
+				if(!(row + ship.getLength() < SIZE - 1)) {
+					--height;
+				}
+				if (!(col < (SIZE - 1))) {
 					--width;
 				}
 				if (col > 0) {
 					--col;
+				} else {
+					--width;
 				}
 				int rowCounter = row;
 				int colCounter = col;
@@ -163,9 +172,8 @@ public class Gameboard extends JPanel {
 						}
 					}
 					colCounter++;
-					System.out.print("]\n");
 				}
-				
+				System.out.print("]\n");
 			} else {
 				return false;
 			}
