@@ -409,18 +409,17 @@ public class AIPlayer implements BattlePlayer, NetworkOperations {
 					if ((col + ship.getLength() - 1) < SIZE) {
 						if (col > 0) {
 							--col;
-						}
-						if (!(col + ship.getLength() < SIZE - 1)) {
+						} 
+						if(col == 0 || !((col + ship.getLength()) < SIZE - 1)) {
 							--width;
 						}
-						if (!(row < (SIZE - 1))) {
+						if (row == 0 || !(row < (SIZE - 1))) {
 							--height;
 						}
-
 						if (row > 0) {
 							--row;
 						}
-
+						
 						int rowCounter = row;
 						int colCounter = col;
 						for (int i = 0; i < height; i++) {
@@ -440,16 +439,15 @@ public class AIPlayer implements BattlePlayer, NetworkOperations {
 					if ((row + ship.getLength() - 1) < SIZE) {
 						if (row > 0) {
 							--row;
-						}
-						if (!(row + ship.getLength() < SIZE - 1)) {
+						} 
+						if(row == 0 || !(row + ship.getLength() < SIZE - 1)) {
 							--height;
 						}
-						if (!(col < (SIZE - 1))) {
+						if (col == 0 || !(col < (SIZE - 1))) {
 							--width;
 						}
 						if (col > 0) {
 							--col;
-
 						}
 						int rowCounter = row;
 						int colCounter = col;
