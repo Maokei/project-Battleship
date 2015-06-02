@@ -103,6 +103,7 @@ public class AIPlayer implements BattlePlayer, NetworkOperations {
 		if (checkProbableTargets()) {
 			calculateNextTarget();
 		} else {
+			System.out.println("Valid target size: " + validTargets.size());
 			Grid grid = validTargets.get(r.nextInt(validTargets.size()));
 			int row = grid.getRow();
 			int col = grid.getCol();
@@ -128,10 +129,11 @@ public class AIPlayer implements BattlePlayer, NetworkOperations {
 		for (Grid grid : probableTargets) {
 			System.out.print(grid.getRow() + "," + grid.getCol() + " ");
 		}
-		System.out.print("]");
+		System.out.print("]\n");
 		int randomProbable = r.nextInt(probableTargets.size());
 		Grid grid = (Grid) probableTargets.toArray()[randomProbable];
 		probableTargets.remove(grid);
+		System.out.println("Caluclate Valid target size: " + validTargets.size());
 		validTargets.remove(grid);
 		int row = grid.getRow();
 		int col = grid.getCol();
@@ -175,11 +177,16 @@ public class AIPlayer implements BattlePlayer, NetworkOperations {
 	}
 
 	private void comparePrevHits(Grid grid) {
-		if ((prevHit.getRow() == -1 && prevHit.getCol() == -1)) {
-			prevHit = currHit = grid;
+		if (prevHit.getRow() == -1 && prevHit.getCol() == -1) {
+			prevHit = grid;
 		} else {
-			prevHit = currHit;
-			currHit = grid;
+			if(currHit.getRow() == -1 && currHit.getCol() == -1) {
+				currHit = grid;
+			} else {
+				prevHit = currHit;
+				currHit = grid;
+			}
+			
 			if (prevHit.getRow() == currHit.getRow()) {
 				enemyShipAlignment = Alignment.HORIZONTAL;
 			} else if (prevHit.getCol() == currHit.getCol()) {
@@ -189,7 +196,7 @@ public class AIPlayer implements BattlePlayer, NetworkOperations {
 	}
 
 	private void addNextPossibleTargets(Grid grid) {
-		if (prevHit == currHit) {
+		if (prevHit.getRow() == - 1 || currHit.getRow() == -1) {
 			if (checkLeftGrid(grid))
 				probableTargets.add(new Grid(grid.getRow(), grid.getCol() - 1));
 			if (checkTopGrid(grid))
@@ -216,7 +223,7 @@ public class AIPlayer implements BattlePlayer, NetworkOperations {
 	private boolean checkLeftGrid(Grid grid) {
 		int row = grid.getRow();
 		int col = grid.getCol();
-		if (col > 0
+		if (col > 0 
 				&& !(enemyGrid[row][col - 1] == miss || enemyGrid[row][col - 1] == hit)) {
 			return true;
 		}
@@ -226,8 +233,8 @@ public class AIPlayer implements BattlePlayer, NetworkOperations {
 	private boolean checkTopGrid(Grid grid) {
 		int row = grid.getRow();
 		int col = grid.getCol();
-		if (row > 0
-				&& !(enemyGrid[row - 1][col] == miss || enemyGrid[row - 1][col] == hit)) {
+		if (row > 0 &&
+				 !(enemyGrid[row - 1][col] == miss || enemyGrid[row - 1][col] == hit)) {
 			return true;
 		}
 		return false;
@@ -246,7 +253,7 @@ public class AIPlayer implements BattlePlayer, NetworkOperations {
 	private boolean checkBottomGrid(Grid grid) {
 		int row = grid.getRow();
 		int col = grid.getCol();
-		if (row < (SIZE - 1)
+		if (row < (SIZE - 1) 
 				&& !(enemyGrid[row + 1][col] == miss || enemyGrid[row + 1][col] == hit)) {
 			return true;
 		}
@@ -455,6 +462,7 @@ public class AIPlayer implements BattlePlayer, NetworkOperations {
 			}
 			shipsDown.clear();
 			enemyShipDown = false;
+			prevHit = currHit = new Grid(-1, -1);
 		}
 	}
 
