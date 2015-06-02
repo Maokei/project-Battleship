@@ -81,29 +81,71 @@ public class RandomShipPlacer {
 	}
 
 	private boolean checkGrid(Ship ship, Grid grid) {
-		int counter;
+		int row = grid.getRow();
+		int col = grid.getCol();
 		if (ship.getAlignment() == Alignment.HORIZONTAL) {
-			int row = grid.getRow();
-			counter = grid.getCol();
-			if (!(grid.getCol() + ship.getLength() < SIZE))
-				return false;
-
-			for (int i = 0; i < ship.getLength(); i++) {
-				if (!checkEmptyGrid(row, counter)) {
-					return false;
+			int width = ship.getLength() + 2;
+			int height = 3;
+			if ((col + ship.getLength() - 1) < SIZE) {
+				if (col > 0) {
+					--col;
 				}
-				counter++;
+				if(!(col + ship.getLength() < SIZE - 1)) {
+					--width;
+				}
+				if (!(row < (SIZE - 1))) {
+					--height;
+				}
+				
+				if (row > 0) {
+					--row;
+				}
+				
+				int rowCounter = row;
+				int colCounter = col;
+				for(int i = 0; i < height; i++) {
+					colCounter = col;
+					for(int j = 0; j < width; j++) {
+						if(!(gridboard[rowCounter][colCounter++] == empty)) {
+							return false;
+						}
+					}
+					rowCounter++;
+				}
+			} else {
+				return false;
 			}
-		} else if (ship.getAlignment() == Alignment.VERTICAL) {
-			counter = grid.getRow();
-			int col = grid.getCol();
-			if (!(grid.getRow() + ship.getLength() < SIZE))
-				return false;
-			for (int i = 0; i < ship.getLength(); i++) {
-				if (!checkEmptyGrid(counter, col)) {
-					return false;
+
+		} else if(ship.getAlignment() == Alignment.VERTICAL) {
+			int width = 3;
+			int height = ship.getLength() + 2;
+			if ((row + ship.getLength() - 1) < SIZE) {
+				if (row > 0) {
+					--row;
 				}
-				counter++;
+				if(!(row + ship.getLength() < SIZE - 1)) {
+					--height;
+				}
+				if (!(col < (SIZE - 1))) {
+					--width;
+				}
+				if (col > 0) {
+					--col;
+					
+				}
+				int rowCounter = row;
+				int colCounter = col;
+				for(int i = 0; i < width; i++) {
+					rowCounter = row;
+					for(int j = 0; j < height; j++) {
+						if(!(gridboard[rowCounter++][colCounter] == empty)) {
+							return false;
+						}
+					}
+					colCounter++;
+				}
+			} else {
+				return false;
 			}
 		}
 		return true;
