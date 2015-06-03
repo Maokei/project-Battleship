@@ -43,11 +43,12 @@ public class ChatPanel extends JPanel {
 	public void setPlayer(Player player) {
 		this.player = player;
 		player.getConnection().setOutput(output);
-		player.sendMessage(new Message(Message.LOGIN, player.getName(), player.getOpponent(), player.getGameMode()));
+		
+		player.sendMessage(new Message(Message.LOGIN, player.getName(), player.getGameMode()));
 	}
 
 	private void sendChatMessage() {
-		player.sendMessage(new Message(Message.CHAT, player.getName(), player.getOpponent(), input
+		player.sendMessage(new Message(Message.CHAT, player.getName(), input
 				.getInput()));
 	}
 

@@ -28,17 +28,17 @@ import battleship.screen.InputPanel;
 public class LoginDialog extends JDialog {
 	private static final long serialVersionUID = 1L;
 	private Player player;
-	//private InputPanel nameInput;
+	private InputPanel nameInput;
 	private AvatarPanel avatarChooser;
 	private JPanel buttonPanel;
 	private JPanel radioPanel;
 	private JPanel centerPanel;
 	private JRadioButton single, multi;
 	private ButtonGroup group;
-	private JButton cancel, clear, start;
+	private JButton cancel, clear, login;
 	private ClientConnection connection;
 	private Font font;
-	private MultiPlayerDialog multiDialog;
+	private NetworkDialog networkDialog;
 	private GameMode mode;
 	private String ip;
 	private int port;
@@ -51,7 +51,7 @@ public class LoginDialog extends JDialog {
 		mode = GameMode.SinglePlayer;
 		setLayout(new BorderLayout());
 		font = new Font("Monospaced", Font.PLAIN, 12);
-		//nameInput = new InputPanel("Enter name: ", true);
+		nameInput = new InputPanel("Enter name: ", true);
 		radioPanel = new JPanel(new GridLayout(1, 2));
 		radioPanel.setBorder(BorderFactory.createTitledBorder(null, "Single- or multiplayer",TitledBorder.CENTER, TitledBorder.TOP, font, new Color(255, 255, 255)));
 		radioPanel.setBackground(new Color(120, 100, 120));
@@ -92,19 +92,19 @@ public class LoginDialog extends JDialog {
 		clear.setBackground(new Color(62, 60, 250));
 		clear.setForeground(new Color(255, 255, 255));
 		clear.addActionListener(ae -> { clear(); });
-		start = new JButton("Start");
-		start.setBorderPainted(false);
-		start.setBackground(new Color(90, 191, 7));
-		start.setForeground(new Color(255, 255, 255));
-		start.addActionListener(ae -> { startGame(); } ); 
+		login = new JButton("Login");
+		login.setBorderPainted(false);
+		login.setBackground(new Color(90, 191, 7));
+		login.setForeground(new Color(255, 255, 255));
+		login.addActionListener(ae -> { login(); } ); 
 		buttonPanel.add(cancel);
 		buttonPanel.add(clear);
-		buttonPanel.add(start);
+		buttonPanel.add(login);
 		centerPanel = new JPanel(new BorderLayout());
 		centerPanel.setBackground(new Color(0,0,0));
 		centerPanel.add(radioPanel, BorderLayout.NORTH);
 		centerPanel.add(avatarChooser, BorderLayout.CENTER);
-		//add(nameInput, BorderLayout.NORTH);
+		add(nameInput, BorderLayout.NORTH);
 		add(centerPanel, BorderLayout.CENTER);
 		add(buttonPanel, BorderLayout.SOUTH);
 		
@@ -120,25 +120,8 @@ public class LoginDialog extends JDialog {
 		port = 10001;
 	}
 	
-	private void startGame() {
-		player.setAvatar(avatarChooser.getAvatar());
-		player.setMode(mode);
-		if(mode == GameMode.MultiPlayer) {
-			setVisible(false);
-			multiDialog = new MultiPlayerDialog(this, true, player);
-			if(!player.getOpponent().equals("")) {
-				player.startGame();
-				close();
-			}
-		} else {
-			player.startGame();
-			close();
-		}
-			
-	}
-
 	private void clear() {
-		//nameInput.setInput("");
+		nameInput.setInput("");
 		avatarChooser.reset();
 	}
 	
@@ -147,8 +130,34 @@ public class LoginDialog extends JDialog {
 		dispose();
 	}
 	
+	private void getIpAndPort() {
+		ip = (String)JOptionPane.showInputDialog(
+                this,
+                "Enter ip",
+                "Server Ip",
+                JOptionPane.PLAIN_MESSAGE,
+                null,
+               null,
+                DEFAULT_ADDRESS);
+		//port
+		String temp = (String)JOptionPane.showInputDialog(
+                this,
+                "Enter port",
+                "Server Port",
+                JOptionPane.PLAIN_MESSAGE,
+                null,
+               null,
+                DEFAULT_PORT);
+		port = Integer.parseInt(temp);
+	}
 	
-	/*
+	private void waitingDialog() {
+		JOptionPane optionPane = new JOptionPane("Waiting for players!"); 
+		JDialog wait = optionPane.createDialog(this, "Waiting");
+		wait.setModal(false);
+		wait.setVisible(true);
+	}
+	
 	private void login() {
 		if (!nameInput.equals("")) {
 			if(mode == GameMode.SinglePlayer) {
@@ -162,7 +171,7 @@ public class LoginDialog extends JDialog {
 				System.out.println("You choose the single player mode");
 			} else if (mode == GameMode.MultiPlayer) {
 				//networkDialog = new NetworkDialog(player, nameInput.getInput(), avatarChooser.getAvatar(), connection, mode);
-				
+				getIpAndPort();
 				//make connection
 				connection = new ClientConnection(ip, port);
 				if (connection.openConnection()) {
@@ -173,7 +182,7 @@ public class LoginDialog extends JDialog {
 			}
 		}
 	}
-	*/
+	
 	class PlayerModeListener implements ActionListener {
 
 		@Override

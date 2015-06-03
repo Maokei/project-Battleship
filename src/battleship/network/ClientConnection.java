@@ -17,7 +17,6 @@ import battleship.ships.Alignment;
 import battleship.ships.BattleShipFactory;
 import battleship.ships.Ship;
 import battleship.ships.ShipType;
-import static battleship.game.Constants.*;
 
 public class ClientConnection implements Runnable, NetworkOperations {
 	private String address;
@@ -111,11 +110,8 @@ public class ClientConnection implements Runnable, NetworkOperations {
 			parseMessage(msg);
 			break;
 		case Message.CHAT:
-			if (!msg.getName().contains("AI"))
+			if (!msg.getName().equalsIgnoreCase("AI"))
 				output.append(msg.getName() + ">> " + msg.getMessage() + "\n");
-			break;
-		case Message.CHALLENGE:
-			parseChallengeMessage(msg);
 			break;
 		case Message.DEPLOYED:
 			player.setOpponentDeployed();
@@ -131,56 +127,19 @@ public class ClientConnection implements Runnable, NetworkOperations {
 		}
 	}
 
-	private void parseChallengeMessage(Message msg) {
-		if (msg.getMessage().equalsIgnoreCase(Challenge_Request)) {
-			if (!player.getName().contains("AI")) {
-				String message = msg.getName()
-						+ " want's to battle with you\n\nDo you accept the challenge?";
-				String title = "CHALLENGE REQUEST";
-				int reply = JOptionPane.showConfirmDialog(null, message, title,
-						JOptionPane.YES_NO_OPTION);
-				if (reply == JOptionPane.YES_OPTION) {
-					sendMessage(new Message(Message.CHALLENGE,
-							player.getName(), msg.getReciever(),
-							Challenge_Accept));
-				} else {
-					sendMessage(new Message(Message.CHALLENGE,
-							player.getName(), msg.getReciever(), Challenge_Deny));
-				}
-			} else {
-				sendMessage(new Message(Message.CHALLENGE, player.getName(),
-						msg.getReciever(), Challenge_Accept));
-			}
-		} else if (msg.getMessage().equalsIgnoreCase(Challenge_Accept)) {
-			if (!player.getName().contains("AI")) {
-				String message = msg.getName() + " has accepted your request.";
-				String title = "CHALLENGE ACCEPT";
-				JOptionPane.showMessageDialog(null, message, title,
-						JOptionPane.INFORMATION_MESSAGE);
-				((Player) player).setChallengeAccepted(true);
-			}
-		} else if (msg.getMessage().equalsIgnoreCase(Challenge_Deny)) {
-			if (!player.getName().contains("AI")) {
-			String message = msg.getName() + " has denied your request.";
-			String title = "CHALLENGE ACCEPT";
-			JOptionPane.showMessageDialog(null, message, title,
-					JOptionPane.INFORMATION_MESSAGE);
-			((Player) player).setChallengeAccepted(false);
-			}
-		}
-	}
-
 	private void parseLogin(Message msg) {
 		System.out.print("parseLogin " + player.getName() + ": ");
-		String[] tokens = msg.getMessage().split(" ");
-		for (String name : tokens) {
-			if (!name.contains("AI")) {
+		
+		if(msg.getName().equalsIgnoreCase("Server")) {
+			String[] tokens = msg.getMessage().split(" ");
+			for(String name : tokens) {
+				System.out.print(name);
 				players.add(name);
 			}
+			System.out.print("\n");
 		}
-		((Player) player).setPlayersConnected(players);
 	}
-
+	
 	public ArrayList<String> getConnectedPlayers() {
 		return players;
 	}

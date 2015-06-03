@@ -1,7 +1,5 @@
-
 /**
- 
-*@file Lobby.java
+ *@file Lobby.java
  *@author rickard, lars 
  **/
 package battleship.screen;
@@ -115,7 +113,7 @@ public class Lobby extends JFrame {
 				if(sel.equals(player.getName()))
 					return;
 				JOptionPane.showMessageDialog(new JFrame(), "Sending battle challange to opponent, " + sel);
-				player.sendMessage(new Message(Message.CHALLENGE, player.getName(), player.getOpponent(), sel));
+				player.sendMessage(new Message(Message.CHALLENGE, player.getName(), sel));
 				players.clearSelection();
 			}
 		}
@@ -127,7 +125,7 @@ public class Lobby extends JFrame {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			player.sendMessage(new Message(Message.AIMATCH, player.getName(), player.getOpponent(), ""));
+			player.sendMessage(new Message(Message.AIMATCH, player.getName(), ""));
 		}
 	}
 	

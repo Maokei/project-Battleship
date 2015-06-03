@@ -143,7 +143,9 @@ public class Server extends JFrame {
 	public synchronized void sendMessageToAll(Message msg) {
 		messages.append(msg.getName() + " all:" + msg.getMessage() + "\n");
 		for (PlayerProxy player : players) {
-			player.sendMessage(msg);
+			if (player.name != msg.getName()) {
+				player.sendMessage(msg);
+			}
 		}
 	}
 
@@ -181,10 +183,10 @@ public class Server extends JFrame {
 			int value = r.nextInt(100);
 			if (value < 50) {
 				players.get(0).sendMessage(
-						new Message(Message.TURN, players.get(0).name, players.get(1).name, ""));
+						new Message(Message.TURN, players.get(1).name, ""));
 			} else {
 				players.get(1).sendMessage(
-						new Message(Message.TURN, players.get(1).name, players.get(0).name, ""));
+						new Message(Message.TURN, players.get(0).name, ""));
 			}
 		}
 	}
@@ -192,21 +194,13 @@ public class Server extends JFrame {
 	public synchronized void sendPlayers(String name) {
 		StringBuilder builder = new StringBuilder();
 		for(PlayerProxy player : players) {
-				builder.append(player.name);
+			if (!player.getPlayerName().equalsIgnoreCase(name)) {
+				builder.append(player.getName());
 				builder.append(' ');
-		}
-		sendMessageToAll(new Message(Message.LOGIN, "Server", name, builder.toString().trim()));
-	}
-	
-	public void sendChallengeRequest(Message msg) {
-		for(PlayerProxy p : players) {
-			if(msg.getReciever().equalsIgnoreCase(p.getName())) {
-				p.sendMessage(msg);
 			}
 		}
+		sendMessageToAll(new Message(Message.LOGIN, "Server", builder.toString().trim()));
 	}
-
-
 	
 	/**
 	 * lookForPlayerMulti
@@ -226,7 +220,7 @@ public class Server extends JFrame {
 	public boolean checkDeployment() {
 		for (PlayerProxy player : players) {
 			if (!player.getDeployed() == true) {
-				System.out.println(player.name + " is not deployed");
+				System.out.println(player.getName() + " is not deployed");
 				return false;
 			}
 		}
@@ -235,7 +229,7 @@ public class Server extends JFrame {
 	
 	public synchronized void sendAllDeployed() {
 		for (PlayerProxy player : players) {
-			player.sendMessage(new Message(Message.DEPLOYED, player.name, "Server", ""));
+			player.sendMessage(new Message(Message.DEPLOYED, player.name, ""));
 		}
 	}
 	
@@ -275,7 +269,7 @@ public class Server extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				sendMessageToAll(new Message(1, "server", "Server", input.getText()));
+				sendMessageToAll(new Message(1, "server", input.getText()));
 				input.setText("");
 			}
 		});
@@ -307,7 +301,6 @@ public class Server extends JFrame {
 		server.listen();
 	}
 
-	
 	
 
 }
