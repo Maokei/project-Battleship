@@ -151,7 +151,7 @@ public class Player implements BattlePlayer{
 	}
 
 	public void sinkShip(Ship ship) {
-		AudioLoader.getAudio("ship_down").playAudio();
+		AudioLoader.getAudio("tilt").playAudio();
 		int row = ship.getStartPosition().getRow();
 		int col = ship.getStartPosition().getCol();
 
@@ -182,6 +182,7 @@ public class Player implements BattlePlayer{
 	}
 
 	public void placeEnemyShip(Ship ship, int row, int col) {
+		AudioLoader.getAudio("ship_down").playAudio();
 		System.out.println("Placing enemy ship:\n");
 		System.out.println(ship.getType() + " " + ship.getAlignment()
 				+ " Grid[" + row + ", " + col + "]");

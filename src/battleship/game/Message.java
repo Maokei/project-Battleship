@@ -24,8 +24,6 @@ public class Message implements Serializable {
 			AIMATCH = 6, CHALLENGE = 7, LOST = 8, RETRIEVE = 9;
 
 	public Message(int type, String name, String msg) {
-		if(type == 0) 
-			System.out.println(name + "LOGGING IN!!!");
 		this.type = type;
 		this.name = name;
 		this.msg = msg;

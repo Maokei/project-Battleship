@@ -6,6 +6,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Random;
 import java.util.Set;
 import java.util.Vector;
@@ -190,8 +191,28 @@ public class AIPlayer implements BattlePlayer, NetworkOperations {
 
 			if (prevHit.getRow() == currHit.getRow()) {
 				enemyShipAlignment = Alignment.HORIZONTAL;
+				updateProbableTargets();
 			} else if (prevHit.getCol() == currHit.getCol()) {
 				enemyShipAlignment = Alignment.VERTICAL;
+				updateProbableTargets();
+			}
+		}
+	}
+	
+	private void updateProbableTargets() {
+		if(enemyShipAlignment == Alignment.HORIZONTAL) {
+			for (Iterator<Grid> i = probableTargets.iterator(); i.hasNext();) {
+				 Grid grid = i.next();
+				 if(grid.getRow() != currHit.getRow()) {
+					 i.remove();
+				 }
+			}
+		} else if(enemyShipAlignment == Alignment.VERTICAL) {
+			for (Iterator<Grid> i = probableTargets.iterator(); i.hasNext();) {
+				 Grid grid = i.next();
+				 if(grid.getCol() != currHit.getCol()) {
+					 i.remove();
+				 }
 			}
 		}
 	}
