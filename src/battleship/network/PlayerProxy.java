@@ -22,7 +22,6 @@ import battleship.game.BattlePlayer;
 import battleship.game.GameMode;
 import battleship.game.Message;
 import battleship.gameboard.Grid;
-import battleship.network.AIPlayer.GameTimer;
 import battleship.ships.Alignment;
 import battleship.ships.BattleShipFactory;
 import battleship.ships.Ship;
@@ -178,14 +177,15 @@ public class PlayerProxy extends Thread {
 			handleLogout();
 			break;
 		case Message.MESSAGE:
-			if(mode == GameMode.SinglePlayer) {
+			if (mode == GameMode.SinglePlayer) {
 				if (checkMessage(msg)) {
 					parseMessage(msg);
 				} else {
 					sendMessage(new Message(Message.MESSAGE, "ERROR", ""));
 				}
+			} else {
+				server.sendMessageToOpponent(msg);
 			}
-			server.sendMessageToOpponent(msg);
 			/*
 			 * if (checkMessage()) { server.sendMessageToOpponent(msg); }
 			 */
@@ -195,7 +195,11 @@ public class PlayerProxy extends Thread {
 			break;
 		case Message.DEPLOYED:
 			deployed = true;
-			server.randomizePlayerTurn();
+			if(mode == GameMode.SinglePlayer) {
+			randomizePlayerTurn();
+			} else if(mode == GameMode.MultiPlayer) {
+				server.randomizePlayerTurn();
+			}
 			break;
 		case Message.TURN:
 			server.sendMessageToOpponent(msg);
@@ -220,6 +224,7 @@ public class PlayerProxy extends Thread {
 			aiMatch = true;
 			playing = true;
 			deployed = true;
+			
 		} else if (msg.getMessage().equalsIgnoreCase("Multiplayer")) {
 			playing = false;
 			mode = GameMode.MultiPlayer;
@@ -230,6 +235,17 @@ public class PlayerProxy extends Thread {
 			} else {
 				// get opponent and start match
 			}
+		}
+	}
+	
+	private void randomizePlayerTurn() {
+		Random r = new Random();
+		int value = r.nextInt(100);
+		if (value < 50) {
+			sendMessage(new Message(Message.TURN, name, ""));
+		} else {
+			sendMessage(new Message(Message.TURN, "AI", ""));
+			aiPlayer.setPlayerTurn(true);
 		}
 	}
 
@@ -447,7 +463,7 @@ public class PlayerProxy extends Thread {
 			}
 		}
 	}
-	
+
 	private void parseMessage(Message msg) {
 		String[] tokens = msg.getMessage().split(" ");
 		switch (tokens[0].toUpperCase()) {
@@ -511,8 +527,6 @@ public class PlayerProxy extends Thread {
 		aiPlayer.registerPlayerHit(row, col);
 	}
 
-
-
 	/**
 	 * sendMessage
 	 * 
@@ -551,7 +565,7 @@ public class PlayerProxy extends Thread {
 			// System.err.println(e.getMessage());
 		}
 	}
-	
+
 	class AIPlayer {
 		// private String AIName = "AI";
 		private ClientConnection con;
@@ -572,7 +586,7 @@ public class PlayerProxy extends Thread {
 
 		public AIPlayer() {
 			init();
-			//sendMessage(new Message(Message.LOGIN, name, "MultiPlayer"));
+			// sendMessage(new Message(Message.LOGIN, name, "MultiPlayer"));
 			sendMessage(new Message(Message.DEPLOYED, "AI", ""));
 		}
 
@@ -591,6 +605,7 @@ public class PlayerProxy extends Thread {
 			initEnemyGrid();
 			displayPlayerGrid();
 			displayPlayerShips();
+			
 		}
 
 		private void initEnemyGrid() {
@@ -601,6 +616,8 @@ public class PlayerProxy extends Thread {
 				}
 			}
 		}
+		
+		
 
 		public void displayPlayerGrid() {
 			for (int row = 0; row < SIZE; row++) {
@@ -636,17 +653,21 @@ public class PlayerProxy extends Thread {
 			if (checkProbableTargets()) {
 				calculateNextTarget();
 			} else {
-				
-				Grid grid = validTargets.get((validTargets.size() > 0) ? r.nextInt(validTargets.size()) : 0);
+
+				Grid grid = validTargets.get((validTargets.size() > 0) ? r
+						.nextInt(validTargets.size()) : 0);
 				int row = grid.getRow();
 				int col = grid.getCol();
 				if (checkBounds(row, col)) {
 					System.out.println("FIRE " + row + ", " + col);
 					sendMessage(new Message(Message.MESSAGE, "AI", "FIRE "
-							+ Integer.toString(row) + " " + Integer.toString(col)));
-					System.out.println("Removing grid [ " + row + "," + col + "]");
+							+ Integer.toString(row) + " "
+							+ Integer.toString(col)));
+					System.out.println("Removing grid [ " + row + "," + col
+							+ "]");
 					validTargets.remove(grid);
-					System.out.println("Valid target size: " + validTargets.size());
+					System.out.println("Valid target size: "
+							+ validTargets.size());
 				}
 			}
 		}
@@ -731,21 +752,21 @@ public class PlayerProxy extends Thread {
 				}
 			}
 		}
-		
+
 		private void updateProbableTargets() {
-			if(enemyShipAlignment == Alignment.HORIZONTAL) {
+			if (enemyShipAlignment == Alignment.HORIZONTAL) {
 				for (Iterator<Grid> i = probableTargets.iterator(); i.hasNext();) {
-					 Grid grid = i.next();
-					 if(grid.getRow() != currHit.getRow()) {
-						 i.remove();
-					 }
+					Grid grid = i.next();
+					if (grid.getRow() != currHit.getRow()) {
+						i.remove();
+					}
 				}
-			} else if(enemyShipAlignment == Alignment.VERTICAL) {
+			} else if (enemyShipAlignment == Alignment.VERTICAL) {
 				for (Iterator<Grid> i = probableTargets.iterator(); i.hasNext();) {
-					 Grid grid = i.next();
-					 if(grid.getCol() != currHit.getCol()) {
-						 i.remove();
-					 }
+					Grid grid = i.next();
+					if (grid.getCol() != currHit.getCol()) {
+						i.remove();
+					}
 				}
 			}
 		}
@@ -753,21 +774,25 @@ public class PlayerProxy extends Thread {
 		private void addNextPossibleTargets(Grid grid) {
 			if (prevHit.getRow() == -1 || currHit.getRow() == -1) {
 				if (checkLeftGrid(grid))
-					probableTargets.add(new Grid(grid.getRow(), grid.getCol() - 1));
+					probableTargets.add(new Grid(grid.getRow(),
+							grid.getCol() - 1));
 				if (checkTopGrid(grid))
-					probableTargets.add(new Grid(grid.getRow() - 1, grid.getCol()));
+					probableTargets.add(new Grid(grid.getRow() - 1, grid
+							.getCol()));
 				if (checkRightGrid(grid))
-					probableTargets.add(new Grid(grid.getRow(), grid.getCol() + 1));
+					probableTargets.add(new Grid(grid.getRow(),
+							grid.getCol() + 1));
 				if (checkBottomGrid(grid))
-					probableTargets.add(new Grid(grid.getRow() + 1, grid.getCol()));
+					probableTargets.add(new Grid(grid.getRow() + 1, grid
+							.getCol()));
 			} else {
 				if (enemyShipAlignment == Alignment.HORIZONTAL) {
 					if (checkLeftGrid(grid))
-						probableTargets.add(new Grid(grid.getRow(),
-								grid.getCol() - 1));
+						probableTargets.add(new Grid(grid.getRow(), grid
+								.getCol() - 1));
 					if (checkRightGrid(grid))
-						probableTargets.add(new Grid(grid.getRow(),
-								grid.getCol() + 1));
+						probableTargets.add(new Grid(grid.getRow(), grid
+								.getCol() + 1));
 				} else if (enemyShipAlignment == Alignment.VERTICAL) {
 					if (checkTopGrid(grid))
 						probableTargets.add(new Grid(grid.getRow() - 1, grid
@@ -876,20 +901,14 @@ public class PlayerProxy extends Thread {
 			sendMessage(new Message(Message.LOST, "AI", ""));
 		}
 
-		
-
-		
 		public String getName() {
 			return name;
 		}
 
-
-		
 		public void setOpponentDeployed() {
 			opponentDeployed = true;
 		}
 
-	
 		public void setPlayerTurn(boolean playerTurn) {
 			// this.playerTurn = playerTurn;
 			if (playerTurn) {
@@ -988,8 +1007,10 @@ public class PlayerProxy extends Thread {
 							for (int i = 0; i < width; i++) {
 								rowCounter = row;
 								for (int j = 0; j < height; j++) {
-									probableTargets.remove(new Grid(rowCounter,colCounter));
-									validTargets.remove(new Grid(rowCounter,colCounter));
+									probableTargets.remove(new Grid(rowCounter,
+											colCounter));
+									validTargets.remove(new Grid(rowCounter,
+											colCounter));
 									rowCounter++;
 								}
 								colCounter++;

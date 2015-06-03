@@ -1,3 +1,4 @@
+/*
 package battleship.network;
 
 import static battleship.game.Constants.*;
@@ -523,3 +524,4 @@ public class AIPlayer implements BattlePlayer, NetworkOperations {
 		}
 	}
 }
+*/
