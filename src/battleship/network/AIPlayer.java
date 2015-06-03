@@ -21,6 +21,7 @@ import battleship.ships.Ship;
 
 public class AIPlayer implements BattlePlayer, NetworkOperations {
 	private String name = "AI";
+	private String opname = "";
 	private ClientConnection con;
 	private RandomShipPlacer shipPlacer;
 	private Random r;
@@ -39,13 +40,26 @@ public class AIPlayer implements BattlePlayer, NetworkOperations {
 	private String reciever, server;
 
 	public AIPlayer(String name) {
-		init();
 		reciever = name;
 		server = "Server";
+		init();
 		sendMessage(new Message(Message.LOGIN, name, reciever, "MultiPlayer"));
 		sendMessage(new Message(Message.DEPLOYED, "AI", reciever, ""));
 	}
-
+	/*
+	public AIPlayer(String opname) {
+		this.opname = opname;
+		init();
+		StringBuilder sb = new StringBuilder();
+		Random r = new Random();
+		sb.append(opname);
+		sb.append(name);
+		sb.append(r.nextInt(10) + 1);
+		name = sb.toString();
+		//sendMessage(new Message(Message.LOGIN, name, "MultiPlayer"));
+		//sendMessage(new Message(Message.DEPLOYED, "AI", ""));
+	}
+	*/
 	public void init() {
 		r = new Random();
 		shipPlacer = new RandomShipPlacer();

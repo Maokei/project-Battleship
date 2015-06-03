@@ -200,7 +200,7 @@ public class PlayerProxy extends Thread {
 		/*
 		if (msg.getMessage().equalsIgnoreCase("Singleplayer")) {
 			mode = GameMode.SinglePlayer;
-			aiPlayer = new AIPlayer();
+			aiPlayer = new AIPlayer(name);
 			aiMatch = true;
 			playing = true;
 		} else if (msg.getMessage().equalsIgnoreCase("Multiplayer")) {
