@@ -17,6 +17,4 @@ public interface BattlePlayer extends PlayerOperations {
 	public void placeEnemyShip(Ship ship, int row, int col);
 	public void battleLost();
 	public void listen();
-	
-	
 }

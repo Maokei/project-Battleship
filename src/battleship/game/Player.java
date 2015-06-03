@@ -55,6 +55,7 @@ public class Player implements BattlePlayer{
 	private boolean deployed = false;
 	private boolean playerTurn = false;
 	private String reciever, server;
+	private ArrayList<String> playersConnected;
 
 	public Player(String name, Avatar avatar, ClientConnection con,
 			GameMode mode) {
@@ -68,9 +69,12 @@ public class Player implements BattlePlayer{
 	public Player(String name, ClientConnection con) {
 		this.name = name;
 		this.con = con;
+		this.con.setBattlePlayer(this);
+		playersConnected = new ArrayList<String>();
 		reciever = server = "Server";
 		listen();
 		sendMessage(new Message(Message.LOGIN, name, server, ""));
+		
 	}
 
 	public void init() {
@@ -337,5 +341,9 @@ public class Player implements BattlePlayer{
 						+ Integer.toString(row) + " " + Integer.toString(col)));
 			}
 		}
+	}
+
+	public void setPlayersConnected(ArrayList<String> playersConnected) {
+		this.playersConnected = playersConnected;
 	}
 }
