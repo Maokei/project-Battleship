@@ -130,33 +130,7 @@ public class LoginDialog extends JDialog {
 		dispose();
 	}
 	
-	private void getIpAndPort() {
-		ip = (String)JOptionPane.showInputDialog(
-                this,
-                "Enter ip",
-                "Server Ip",
-                JOptionPane.PLAIN_MESSAGE,
-                null,
-               null,
-                DEFAULT_ADDRESS);
-		//port
-		String temp = (String)JOptionPane.showInputDialog(
-                this,
-                "Enter port",
-                "Server Port",
-                JOptionPane.PLAIN_MESSAGE,
-                null,
-               null,
-                DEFAULT_PORT);
-		port = Integer.parseInt(temp);
-	}
 	
-	private void waitingDialog() {
-		JOptionPane optionPane = new JOptionPane("Waiting for players!"); 
-		JDialog wait = optionPane.createDialog(this, "Waiting");
-		wait.setModal(false);
-		wait.setVisible(true);
-	}
 	
 	private void login() {
 		if (!nameInput.equals("")) {
@@ -171,7 +145,7 @@ public class LoginDialog extends JDialog {
 				System.out.println("You choose the single player mode");
 			} else if (mode == GameMode.MultiPlayer) {
 				//networkDialog = new NetworkDialog(player, nameInput.getInput(), avatarChooser.getAvatar(), connection, mode);
-				getIpAndPort();
+				
 				//make connection
 				connection = new ClientConnection(ip, port);
 				if (connection.openConnection()) {

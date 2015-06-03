@@ -5,6 +5,7 @@
  * */
 package battleship.game;
 
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
@@ -14,12 +15,45 @@ import battleship.resources.AudioLoader;
 public class Game {
 	private Player player;
 	private LoginDialog login;
+	private String ip;
+	private int port;
+	public static final String DEFAULT_ADDRESS = "localhost";
 	public static final int DEFAULT_PORT = 10001;
 	
 	public Game() {
 		AudioLoader.initSounds();
-		
-		login = new LoginDialog(player);
+		getIpAndPort();
+		// login = new LoginDialog(player);
+	}
+	
+	private void getIpAndPort() {
+		new NetworkDialog(player);
+		/*
+		ip = (String)JOptionPane.showInputDialog(
+                "Enter ip",
+                "Server Ip",
+                JOptionPane.PLAIN_MESSAGE,
+                DEFAULT_ADDRESS);
+		//port
+		String temp = (String)JOptionPane.showInputDialog(
+                this,
+                "Enter port",
+                "Server Port",
+                JOptionPane.PLAIN_MESSAGE,
+                null,
+               null,
+                DEFAULT_PORT);
+		port = Integer.parseInt(temp);
+		*/
+	}
+	
+	
+	
+	private void waitingDialog() {
+		JOptionPane optionPane = new JOptionPane("Waiting for players!"); 
+		JDialog wait = optionPane.createDialog("Waiting");
+		wait.setModal(false);
+		wait.setVisible(true);
 	}
 	
 	public static void main(String[] args) {

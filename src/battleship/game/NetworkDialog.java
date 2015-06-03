@@ -1,25 +1,22 @@
 package battleship.game;
 
 import java.awt.BorderLayout;
+import java.awt.GridLayout;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import battleship.network.ClientConnection;
 import battleship.screen.Avatar;
 import battleship.screen.InputPanel;
-import battleship.screen.Lobby;
 
 public class NetworkDialog extends JDialog {
 	private static final long serialVersionUID = -1788732779835707017L;
 	private Player player;
-	private String name;
 	private Avatar avatar;
-	private ClientConnection con;
 	private GameMode mode;
-	private Lobby lobby;
+	private InputPanel name;
 	private InputPanel address;
 	private InputPanel port;
 	private JPanel centerPanel;
@@ -28,13 +25,10 @@ public class NetworkDialog extends JDialog {
 	public static final int DEFAULT_PORT = 10001;
 	public static final String DEFAULT_ADDRESS = "localhost";
 
-	public NetworkDialog(Player player, String name, Avatar avatar, ClientConnection con, GameMode mode) {
+	public NetworkDialog(Player player) {
 		super();
-		this.name = name;
-		this.avatar = avatar;
-		this.con = con;
-		this.mode = mode;
 		setLayout(new BorderLayout());
+		name = new InputPanel("Enter name: ", true);
 		address = new InputPanel("Enter IP-address: ", true);
 		address.setInput("localhost");
 		port = new InputPanel("Enter portnumber: ", true);
@@ -50,7 +44,8 @@ public class NetworkDialog extends JDialog {
 		});
 		clear = new JButton("Clear");
 		clear.addActionListener(ae -> { clear(); });
-		centerPanel = new JPanel();
+		centerPanel = new JPanel(new GridLayout(3, 1));
+		centerPanel.add(name);
 		centerPanel.add(address);
 		centerPanel.add(port);
 		buttonPanel = new JPanel();
@@ -61,7 +56,7 @@ public class NetworkDialog extends JDialog {
 		add(centerPanel, BorderLayout.CENTER);
 		add(buttonPanel, BorderLayout.SOUTH);
 		
-		setSize(200, 100);
+		setSize(200, 120);
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		setLocationRelativeTo(null);
 		setVisible(true);
@@ -69,6 +64,7 @@ public class NetworkDialog extends JDialog {
 	}
 
 	private void clear() {
+		name.setInput("");
 		address.setInput("");
 		port.setInput("");
 	}
@@ -78,16 +74,18 @@ public class NetworkDialog extends JDialog {
 	}
 
 	private void login() {
-		if (!(address.getInput().equals("") && port.getInput().equals(""))) {
+		if (!(name.getInput().equals("") && address.getInput().equals("") && port.getInput().equals(""))) {
+			String playerName = name.getInput();
 			String ipaddress = address.getInput();
 			int portNumber = Integer.parseInt(port.getInput());
-			con = new ClientConnection(ipaddress, portNumber);
+			ClientConnection con = new ClientConnection(ipaddress, portNumber);
 			if (con.openConnection()) {
-				player = new Player(name, avatar, con, mode);
+				player = new Player(playerName, con);
 				if(player == null) System.exit(0);
+				
 				close();
 			}
-			JOptionPane.showOptionDialog(null, "Waiting for player","Waiting", JOptionPane.DEFAULT_OPTION,JOptionPane.INFORMATION_MESSAGE, null, new Object[]{}, null);
+			// JOptionPane.showOptionDialog(null, "Waiting for player","Waiting", JOptionPane.DEFAULT_OPTION,JOptionPane.INFORMATION_MESSAGE, null, new Object[]{}, null);
 			//lobby = new Lobby(player);
 		}
 	}

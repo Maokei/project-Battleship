@@ -64,6 +64,14 @@ public class Player implements BattlePlayer{
 		this.mode = mode;
 		con.setBattlePlayer(this);
 	}
+	
+	public Player(String name, ClientConnection con) {
+		this.name = name;
+		this.con = con;
+		reciever = server = "Server";
+		listen();
+		sendMessage(new Message(Message.LOGIN, name, server, ""));
+	}
 
 	public void init() {
 		hits = misses = shipPlacementIndex = 0;
@@ -91,6 +99,10 @@ public class Player implements BattlePlayer{
 
 	public void sendMessage(Message message) {
 		con.sendMessage(message);
+	}
+	
+	public void setConnection(ClientConnection con) {
+		this.con = con;
 	}
 
 	public ClientConnection getConnection() {
