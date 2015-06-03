@@ -143,9 +143,7 @@ public class Server extends JFrame {
 	public synchronized void sendMessageToAll(Message msg) {
 		messages.append(msg.getName() + " all:" + msg.getMessage() + "\n");
 		for (PlayerProxy player : players) {
-			if (player.name != msg.getName()) {
-				player.sendMessage(msg);
-			}
+			player.sendMessage(msg);
 		}
 	}
 
@@ -194,10 +192,8 @@ public class Server extends JFrame {
 	public synchronized void sendPlayers(String name) {
 		StringBuilder builder = new StringBuilder();
 		for(PlayerProxy player : players) {
-			if (!player.getPlayerName().equalsIgnoreCase(name)) {
-				builder.append(player.getName());
+				builder.append(player.name);
 				builder.append(' ');
-			}
 		}
 		sendMessageToAll(new Message(Message.LOGIN, "Server", name, builder.toString().trim()));
 	}

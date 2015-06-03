@@ -357,12 +357,14 @@ public class Player implements BattlePlayer{
 	}
 
 	public void startGame() {
-		initPlayer();
+		
 		if(mode == GameMode.SinglePlayer) {
 			new AIPlayer(name);
+			initPlayer();
 		} else {
 			new MultiPlayerDialog(this);
 			sendMessage(new Message(Message.CHALLENGE, name, opponent, ""));
+			initPlayer();
 		}
 	}
 	

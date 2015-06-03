@@ -129,22 +129,17 @@ public class ClientConnection implements Runnable, NetworkOperations {
 
 	private void parseLogin(Message msg) {
 		System.out.print("parseLogin " + player.getName() + ": ");
-		
-		if(msg.getName().equalsIgnoreCase(player.getName())) {
-			String[] tokens = msg.getMessage().split(" ");
-			for(String name : tokens) {
-				System.out.print(name);
-				if(!name.equalsIgnoreCase(player.getName()))
-					players.add(name);
-			}
-			((Player) player).setPlayersConnected(players);
+		String[] tokens = msg.getMessage().split(" ");
+		for (String name : tokens) {
+			players.add(name);
 		}
+		((Player) player).setPlayersConnected(players);
+
 	}
-	
+
 	public ArrayList<String> getConnectedPlayers() {
 		return players;
 	}
-	
 
 	private void parseMessage(Message msg) {
 		if (msg.getMessage().startsWith("Server full")) {

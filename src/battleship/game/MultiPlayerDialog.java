@@ -1,6 +1,7 @@
 package battleship.game;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.MouseAdapter;
@@ -34,27 +35,41 @@ public class MultiPlayerDialog extends JDialog {
 		ok = new JButton("OK");
 		ok.addActionListener(ae -> { setOpponent(player); });
 		ok.setEnabled(false);
-		font = new Font("Monospaced", Font.PLAIN, 14);
+		buttonPanel.add(cancel);
+		buttonPanel.add(ok);
+		buttonPanel.setBackground(new Color(10, 10, 10));
+		centerPanel.setBackground(new Color(40, 40, 40));
+		font = new Font("Monospaced", Font.BOLD, 14);
 		players = player.getConnectedPlayers();
 		playerLabels = new ArrayList<JLabel>(players.size());
 		if(players.size() > 0) {
 			centerPanel.setLayout(new GridLayout(players.size(), players.size()));
 			for(String name : players) {
-				centerPanel.add(new JLabel("Name: "));
+				JLabel nameLabel = new JLabel("Name: ");
+				nameLabel.setFont(font);
+				nameLabel.setBackground(new Color(40, 40, 40));
+				nameLabel.setForeground(new Color(255, 255, 255));
+				centerPanel.add(nameLabel);
 				JLabel tmp = new JLabel(name);
+				tmp.setFont(font);
+				tmp.setBackground(new Color(20, 20, 20));
+				tmp.setForeground(new Color(255, 255, 255));
 				tmp.addMouseListener(new NameListener());
 				playerLabels.add(tmp);
 				centerPanel.add(tmp);
 			}
 		} else {
 			centerPanel.setLayout(new BorderLayout());
-			centerPanel.add(new JLabel(noPlayers), BorderLayout.CENTER);
+			JLabel noPlayersLabel = new JLabel(noPlayers);
+			noPlayersLabel.setFont(font);
+			noPlayersLabel.setForeground(new Color(255, 255, 255));
+			centerPanel.add(noPlayersLabel, BorderLayout.CENTER);
 		}
 		
 		add(new JScrollPane(centerPanel), BorderLayout.CENTER);
 		add(buttonPanel, BorderLayout.SOUTH);
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-		setSize(200, 300);
+		setSize(150, 250);
 		setLocationRelativeTo(null);
 		setVisible(true);
 	}
@@ -66,7 +81,9 @@ public class MultiPlayerDialog extends JDialog {
 
 	class NameListener extends MouseAdapter {
 		public void mousePressed(MouseEvent e) {
-			opponent = ((JLabel) e.getSource()).getText();
+			JLabel choosen = ((JLabel) e.getSource());
+			choosen.setForeground(new Color(0, 255, 0));
+			opponent = choosen.getText();
 			ok.setEnabled(true);
 		}
 	}

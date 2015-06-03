@@ -124,9 +124,12 @@ public class LoginDialog extends JDialog {
 		player.setAvatar(avatarChooser.getAvatar());
 		player.setMode(mode);
 		if(mode == GameMode.MultiPlayer) {
+			setVisible(false);
 			multiDialog = new MultiPlayerDialog(player);
+			close();
 		} else {
 			player.startGame();
+			close();
 		}
 			
 	}
