@@ -129,6 +129,9 @@ public class ClientConnection implements Runnable, NetworkOperations {
 		case Message.CHALLENGE:
 			player.handleChallenge(msg.getName(), msg.getMessage());
 			break;
+		case Message.AIMATCH:
+			player.handleAIMatch();
+			break;
 		}
 	}
 

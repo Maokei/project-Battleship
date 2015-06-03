@@ -367,4 +367,18 @@ public class Player implements BattlePlayer {
 
 	}
 
+	@Override
+	public void handleAIMatch() {
+		String msgText = "There are no available players at this time\n\nDo you want to play singleplayer?";
+		String title = "No Available Players";
+		int reply = JOptionPane.showConfirmDialog(null, msgText, title,
+				JOptionPane.YES_NO_OPTION);
+		if (reply == JOptionPane.YES_OPTION) {
+			sendMessage(new Message(Message.MODE, name,
+					"SinglePlayer"));
+		} else {
+			sendMessage(new Message(Message.CHALLENGE, name + " " + opponent, Challenge_Deny));
+		}
+	}
+
 }

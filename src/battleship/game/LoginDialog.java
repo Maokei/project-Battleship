@@ -176,6 +176,7 @@ public class LoginDialog extends JDialog {
 				connection = new ClientConnection(ip, port);
 				if (connection.openConnection()) {
 					player = new Player(nameInput.getInput(), avatarChooser.getAvatar(), connection, mode);
+					player.init();
 					//if(player == null) System.exit(0);
 					//close();
 				}

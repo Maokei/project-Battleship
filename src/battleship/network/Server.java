@@ -106,7 +106,16 @@ public class Server extends JFrame {
 		}
 	}
 	
+	public void sendMessageToPlayer(String name, Message msg) {
+		for (PlayerProxy player : players) {
+			if (player.name == name) {
+				player.sendMessage(msg);
+			}
+		}
+	}
+	
 	public void setUpBattle(String challenger1, String challenger2) {
+		System.out.println("Trying to find " + challenger1 + " and " + challenger2 + " in playersList");
 		PlayerProxy player1 = null, player2 = null;
 		for (PlayerProxy player : players) {
 			if (player.name.equalsIgnoreCase(challenger1)) {
@@ -118,7 +127,8 @@ public class Server extends JFrame {
 				player2 = player;
 			}
 		}
-		battles.add(new Battle(this, player1, player2));
+		System.out.println(challenger1 + " is now battling " + challenger2);
+		// TODO -> battles.add(new Battle(this, player1, player2));
 	}
 
 	/**
@@ -331,6 +341,8 @@ public class Server extends JFrame {
 		Server server = new Server(DEFAULT_PORT);
 		server.listen();
 	}
+
+	
 
 	
 

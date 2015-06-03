@@ -18,6 +18,7 @@ public interface BattlePlayer extends PlayerOperations {
 	public void battleLost();
 	public void listen();
 	public void handleChallenge(String name, String message);
+	public void handleAIMatch();
 	
 	
 }

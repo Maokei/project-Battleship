@@ -35,21 +35,22 @@ import battleship.ships.ShipType;
  * @brief Client proxy class of the player.
  * */
 public class PlayerProxy extends Thread {
-	protected Socket socket;
-	protected Server server;
-	protected String address;
-	protected Message msg;
+	private Socket socket;
+	private Server server;
+	private String address;
+	private Message msg;
 	protected String name;
+	protected String opponent;
 	protected int playerId;
-	private GameMode mode;
-	private boolean playing;
+	protected GameMode mode;
+	protected boolean playing;
 	private char[][] playerGrid;
 	private AIPlayer aiPlayer;
 	private boolean aiMatch;
-	private boolean deployed;
+	protected boolean deployed;
 	private boolean playerTurn;
-	protected ObjectInputStream in;
-	protected ObjectOutputStream out;
+	private ObjectInputStream in;
+	private ObjectOutputStream out;
 	protected boolean running = true;
 
 	/**
@@ -179,7 +180,8 @@ public class PlayerProxy extends Thread {
 		case Message.MESSAGE:
 			if (mode == GameMode.SinglePlayer) {
 				if (!checkMessage(msg)) {
-					// TODO -> sendMessage(new Message(Message.MESSAGE, "ERROR", ""));
+					// TODO -> sendMessage(new Message(Message.MESSAGE, "ERROR",
+					// ""));
 				}
 				parseMessage(msg);
 			} else {
@@ -208,17 +210,39 @@ public class PlayerProxy extends Thread {
 			server.sendMessageToOpponent(msg);
 			break;
 		case Message.CHALLENGE:
-			
-			if(msg.getMessage().equals(Challenge_Accept)) {
-				parseChallengeMessage(msg.getName());
-				
+			parseChallengeMessage(msg);
+			break;
+		case Message.MODE:
+			parseModeMessage(msg); 
+			break;
+		}
+	}
+
+	private void parseModeMessage(Message msg2) {
+		if(msg.getName().equalsIgnoreCase(name)) {
+			if(msg.getMessage().equalsIgnoreCase("SinglePlayer")) {
+				mode = GameMode.SinglePlayer;
+				aiPlayer = new AIPlayer();
+				aiMatch = true;
+				playing = true;
 			}
 		}
 	}
 
-	private void parseChallengeMessage(String name) {
-		String[] names = name.split(" ");
-		server.setUpBattle(names[0],names[1]);
+	private void parseChallengeMessage(Message msg) {
+		String[] names = msg.getName().split(" ");
+		if (names[0].equalsIgnoreCase(name)) {
+			if (msg.getMessage().equals(Challenge_Accept)) {
+				server.sendMessageToPlayer(names[1], new Message(
+						Message.CHALLENGE, names[0], Challenge_Accept));
+				server.setUpBattle(names[0], names[1]);
+				playing = true;
+				opponent = names[1];
+			} else if (msg.getMessage().equals(Challenge_Deny)) {
+				server.sendMessageToPlayer(names[1], new Message(
+						Message.CHALLENGE, names[0], Challenge_Deny));
+			} 
+		}
 	}
 
 	/**
@@ -237,8 +261,10 @@ public class PlayerProxy extends Thread {
 		} else if (msg.getMessage().equalsIgnoreCase("Multiplayer")) {
 			playing = false;
 			mode = GameMode.MultiPlayer;
-			if(server.getPlayerCount() > 1) {
+			if (server.getPlayerCount() > 1) {
 				server.checkForOpponentTo(name);
+			} else {
+				sendMessage(new Message(Message.AIMATCH, name, ""));
 			}
 			// server.sendPlayers(name);
 			// see if there is players to start a match
