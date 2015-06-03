@@ -1,13 +1,15 @@
 package battleship.network;
 
-import static battleship.game.Constants.*;
+import static battleship.game.Constants.SIZE;
+import static battleship.game.Constants.empty;
+import static battleship.game.Constants.hit;
+import static battleship.game.Constants.miss;
+import static battleship.game.Constants.occupied;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
-import java.util.ArrayList;
-import java.util.Vector;
 
 import battleship.game.GameMode;
 import battleship.game.Message;
@@ -175,6 +177,9 @@ public class PlayerProxy extends Thread {
 		case Message.CHAT:
 			server.sendMessageToAll(msg);
 			break;
+		case Message.CHALLENGE:
+			parseChallengeMessage(msg);
+			break;
 		case Message.DEPLOYED:
 			deployed = true;
 			server.randomizePlayerTurn();
@@ -185,6 +190,28 @@ public class PlayerProxy extends Thread {
 		case Message.LOST:
 			server.sendMessageToOpponent(msg);
 			break;
+		case Message.MODE: 
+			parseModeMessage(msg);
+			break;
+		}
+	}
+
+	private void parseModeMessage(Message msg) {
+		if(msg.getMessage().equalsIgnoreCase("SinglePlayer")) {
+			System.out.println(msg.getName() + " wants a singlePalyer game");
+			mode = GameMode.SinglePlayer;
+			aiPlayer = new AIPlayer(msg.getName());
+		} else if (msg.getMessage().equalsIgnoreCase("MultiPlayer")) {
+			mode = GameMode.MultiPlayer;
+		}
+	}
+
+	private void parseChallengeMessage(Message msg2) {
+		System.out.println(msg.getName() + " sends a Challenge");
+		if (msg.getReciever().equalsIgnoreCase("AI")) {
+			aiPlayer = new AIPlayer(msg.getName());
+		} else {
+			server.sendChallengeRequest(msg);
 		}
 	}
 
@@ -196,31 +223,22 @@ public class PlayerProxy extends Thread {
 	 * */
 	private void handleLogin() {
 		name = msg.getName();
-		server.sendPlayers(name);
+		// server.sendPlayers(name);
 		/*
-		if (msg.getMessage().equalsIgnoreCase("Singleplayer")) {
-			mode = GameMode.SinglePlayer;
-			aiPlayer = new AIPlayer(name);
-			aiMatch = true;
-			playing = true;
-		} else if (msg.getMessage().equalsIgnoreCase("Multiplayer")) {
-			playing = false;
-			mode = GameMode.MultiPlayer;
-			// server.sendPlayers(name);
-			// see if there is players to start a match
-			if (!server.lookForPlayerMulti()) {
-				playing = false; // wait
-			} else {
-				// get opponent and start match
-			}
-		}
-		*/
+		 * if (msg.getMessage().equalsIgnoreCase("Singleplayer")) { mode =
+		 * GameMode.SinglePlayer; aiPlayer = new AIPlayer(name); aiMatch = true;
+		 * playing = true; } else if
+		 * (msg.getMessage().equalsIgnoreCase("Multiplayer")) { playing = false;
+		 * mode = GameMode.MultiPlayer; // server.sendPlayers(name); // see if
+		 * there is players to start a match if (!server.lookForPlayerMulti()) {
+		 * playing = false; // wait } else { // get opponent and start match } }
+		 */
 	}
 
 	private void handleLogout() {
 		server.removePlayerProxy(this.playerId);
-		server.sendMessageToOpponent(new Message(Message.CHAT, msg.getName(), toServer,
-				msg.getMessage()));
+		server.sendMessageToOpponent(new Message(Message.CHAT, msg.getName(),
+				toServer, msg.getMessage()));
 	}
 
 	private boolean checkMessage() {
@@ -446,6 +464,7 @@ public class PlayerProxy extends Thread {
 			out.writeObject(msg);
 		} catch (IOException e) {
 			System.err.println(e.getMessage());
+			e.printStackTrace();
 		}
 	}
 

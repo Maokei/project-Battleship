@@ -22,13 +22,13 @@ public class Message implements Serializable {
 	private String reciever;
 	public static final int LOGIN = 0, MESSAGE = 1,
 			CHAT = 2, LOGOUT = 3, DEPLOYED = 4, TURN = 5,
-			AIMATCH = 6, CHALLENGE = 7, LOST = 8, RETRIEVE = 9;
+			AIMATCH = 6, CHALLENGE = 7, LOST = 8, MODE = 9;
 
 	
 	public Message(int type, String sender, String reciever,  String msg) {
 		this.type = type;
 		this.sender = sender;
-		this.setReciever(reciever);
+		this.reciever = reciever;
 		this.msg = msg;
 	}
 	/*

@@ -5,7 +5,7 @@
  * */
 package battleship.game;
 
-import static battleship.game.Constants.GRID_SIZE;
+import static battleship.game.Constants.*;
 
 import java.awt.Cursor;
 import java.awt.Image;
@@ -57,6 +57,7 @@ public class Player implements BattlePlayer{
 	private boolean playerTurn = false;
 	private String opponent, server;
 	private ArrayList<String> playersConnected;
+	private boolean challengeAccepted;
 
 	public Player(String name, Avatar avatar, ClientConnection con,
 			GameMode mode) {
@@ -358,10 +359,10 @@ public class Player implements BattlePlayer{
 
 	public void startGame() {
 		if(mode == GameMode.SinglePlayer) {
-			new AIPlayer(name);
+			sendMessage(new Message(Message.MODE, name, "Server", "SinglePlayer"));
 			initPlayer();
-		} else {
-			sendMessage(new Message(Message.CHALLENGE, name, opponent, ""));
+		} else if(mode == GameMode.MultiPlayer) {
+			sendMessage(new Message(Message.MODE, name, opponent, Challenge_Request));
 			initPlayer();
 		}
 	}
@@ -374,10 +375,11 @@ public class Player implements BattlePlayer{
 		playerBoard.addMouseListener(new BoardListener());
 		enemyBoard.addMouseListener(new BoardListener());
 		server = "Server";
+		challengeAccepted = false;
 		//toolkit = Toolkit.getDefaultToolkit();
 		//cursorImg = toolkit.getImage("src/res/sprite/crosshair.png");
 		//cursor = toolkit.createCustomCursor(cursorImg, new Point(0, 0), "");
-		//enemyBoard.setCursor(cursor);
+		//enemyBoard.setCursor(cursor);S
 		screen = new Screen(this, playerBoard, enemyBoard);
 		playerShips = ShipBuilder.buildShips();
 		remainingShips = 9;
@@ -387,5 +389,9 @@ public class Player implements BattlePlayer{
 
 	public void setOpponent(String opponent) {
 		this.opponent = opponent;
+	}
+
+	public void setChallengeAccepted(boolean accepted) {
+		challengeAccepted = accepted;
 	}
 }

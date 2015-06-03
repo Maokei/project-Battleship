@@ -37,14 +37,20 @@ public class AIPlayer implements BattlePlayer, NetworkOperations {
 	private boolean enemyShipDown = false;
 	private Grid prevHit, currHit;
 	private Alignment enemyShipAlignment;
-	private String reciever, server;
+	private String receiver, server;
 
-	public AIPlayer(String name) {
-		reciever = name;
+	public AIPlayer(String receiver) {
+		this.receiver = receiver;
+		StringBuilder sb = new StringBuilder();
+		Random r = new Random();
+		sb.append(receiver);
+		sb.append(name);
+		sb.append(r.nextInt(10) + 1);
+		name = sb.toString();
 		server = "Server";
 		init();
-		sendMessage(new Message(Message.LOGIN, name, reciever, "MultiPlayer"));
-		sendMessage(new Message(Message.DEPLOYED, "AI", reciever, ""));
+		sendMessage(new Message(Message.LOGIN, name, this.receiver, ""));
+		sendMessage(new Message(Message.DEPLOYED, name, this.receiver, ""));
 	}
 	/*
 	public AIPlayer(String opname) {
@@ -127,7 +133,7 @@ public class AIPlayer implements BattlePlayer, NetworkOperations {
 			int col = grid.getCol();
 			if (checkBounds(row, col)) {
 				System.out.println("FIRE " + row + ", " + col);
-				sendMessage(new Message(Message.MESSAGE, "AI", reciever, "FIRE "
+				sendMessage(new Message(Message.MESSAGE, "AI", receiver, "FIRE "
 						+ Integer.toString(row) + " " + Integer.toString(col)));
 				System.out.println("Removing grid [ " + row + "," + col + "]");
 				validTargets.remove(grid);
@@ -158,7 +164,7 @@ public class AIPlayer implements BattlePlayer, NetworkOperations {
 		int row = grid.getRow();
 		int col = grid.getCol();
 		System.out.println("FIRE " + row + ", " + col);
-		sendMessage(new Message(Message.MESSAGE, "AI", reciever, "FIRE "
+		sendMessage(new Message(Message.MESSAGE, "AI", receiver, "FIRE "
 				+ Integer.toString(row) + " " + Integer.toString(col)));
 	}
 
@@ -306,7 +312,7 @@ public class AIPlayer implements BattlePlayer, NetworkOperations {
 
 	public void registerEnemyHit(Ship ship, int row, int col) {
 		if (checkBounds(row, col)) {
-			sendMessage(new Message(Message.MESSAGE, "AI", reciever,"HIT "
+			sendMessage(new Message(Message.MESSAGE, "AI", receiver,"HIT "
 					+ Integer.toString(row) + " " + Integer.toString(col)));
 			aiPlayerGrid[row][col] = hit;
 			ship.hit();
@@ -325,7 +331,7 @@ public class AIPlayer implements BattlePlayer, NetworkOperations {
 		int col = ship.getStartPosition().getCol();
 		if (checkBounds(row, col)) {
 			System.out.println("Player SHIP DOWN " + ship.getType());
-			sendMessage(new Message(Message.MESSAGE, "AI", reciever, "SHIP_DOWN "
+			sendMessage(new Message(Message.MESSAGE, "AI", receiver, "SHIP_DOWN "
 					+ ship.getType() + " " + ship.getAlignment() + " "
 					+ Integer.toString(row) + " " + Integer.toString(col)));
 		}
@@ -337,7 +343,7 @@ public class AIPlayer implements BattlePlayer, NetworkOperations {
 			playerTurn = false;
 			enemyGrid[row][col] = miss;
 			probableTargets.remove(new Grid(row, col));
-			sendMessage(new Message(Message.TURN, "AI", reciever, ""));
+			sendMessage(new Message(Message.TURN, "AI", receiver, ""));
 		}
 	}
 
@@ -353,12 +359,12 @@ public class AIPlayer implements BattlePlayer, NetworkOperations {
 	public void registerEnemyMiss(int row, int col) {
 		aiPlayerGrid[row][col] = miss;
 		System.out.println("Enemy MISS " + row + ", " + col);
-		sendMessage(new Message(Message.MESSAGE, "AI", reciever, "MISS "
+		sendMessage(new Message(Message.MESSAGE, "AI", receiver, "MISS "
 				+ Integer.toString(row) + " " + Integer.toString(col)));
 	}
 
 	public void battleLost() {
-		sendMessage(new Message(Message.LOST, "AI", reciever,""));
+		sendMessage(new Message(Message.LOST, "AI", receiver,""));
 	}
 
 	@Override

@@ -76,7 +76,7 @@ public class MultiPlayerDialog extends JDialog {
 	
 	private void setOpponent(Player player) {
 		player.setOpponent(opponent);
-		this.dispose();
+		// this.dispose();
 	}
 
 	class NameListener extends MouseAdapter {

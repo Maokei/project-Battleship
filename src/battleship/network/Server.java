@@ -197,6 +197,15 @@ public class Server extends JFrame {
 		}
 		sendMessageToAll(new Message(Message.LOGIN, "Server", name, builder.toString().trim()));
 	}
+	
+	public void sendChallengeRequest(Message msg) {
+		for(PlayerProxy p : players) {
+			if(msg.getReciever().equalsIgnoreCase(p.getName())) {
+				p.sendMessage(msg);
+			}
+		}
+	}
+
 
 	
 	/**
@@ -217,7 +226,7 @@ public class Server extends JFrame {
 	public boolean checkDeployment() {
 		for (PlayerProxy player : players) {
 			if (!player.getDeployed() == true) {
-				System.out.println(player.getName() + " is not deployed");
+				System.out.println(player.name + " is not deployed");
 				return false;
 			}
 		}
@@ -298,6 +307,7 @@ public class Server extends JFrame {
 		server.listen();
 	}
 
+	
 	
 
 }

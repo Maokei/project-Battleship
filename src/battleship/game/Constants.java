@@ -31,4 +31,8 @@ public class Constants {
 	public static final char occupied = 'o';
 	public static final char hit = 'h';
 	public static final char miss = 'm';
+	
+	public static final String Challenge_Request = "Request";
+	public static final String Challenge_Accept = "Accept";
+	public static final String Challenge_Deny = "Deny";
 }
