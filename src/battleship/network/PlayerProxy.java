@@ -178,31 +178,31 @@ public class PlayerProxy extends Thread {
 			break;
 		case Message.MESSAGE:
 			if (mode == GameMode.SinglePlayer) {
-				if (checkMessage(msg)) {
-					parseMessage(msg);
-				} else {
+				if (!checkMessage(msg)) {
 					sendMessage(new Message(Message.MESSAGE, "ERROR", ""));
 				}
+				parseMessage(msg);
 			} else {
 				server.sendMessageToOpponent(msg);
 			}
-			/*
-			 * if (checkMessage()) { server.sendMessageToOpponent(msg); }
-			 */
 			break;
 		case Message.CHAT:
 			server.sendMessageToAll(msg);
 			break;
 		case Message.DEPLOYED:
 			deployed = true;
-			if(mode == GameMode.SinglePlayer) {
-			randomizePlayerTurn();
-			} else if(mode == GameMode.MultiPlayer) {
+			if (mode == GameMode.SinglePlayer) {
+				randomizePlayerTurn();
+			} else if (mode == GameMode.MultiPlayer) {
 				server.randomizePlayerTurn();
 			}
 			break;
 		case Message.TURN:
-			server.sendMessageToOpponent(msg);
+			if (mode == GameMode.SinglePlayer) {
+				aiPlayer.setPlayerTurn(true);
+			} else {
+				server.sendMessageToOpponent(msg);
+			}
 			break;
 		case Message.LOST:
 			server.sendMessageToOpponent(msg);
@@ -223,8 +223,6 @@ public class PlayerProxy extends Thread {
 			aiPlayer = new AIPlayer();
 			aiMatch = true;
 			playing = true;
-			deployed = true;
-			
 		} else if (msg.getMessage().equalsIgnoreCase("Multiplayer")) {
 			playing = false;
 			mode = GameMode.MultiPlayer;
@@ -237,15 +235,16 @@ public class PlayerProxy extends Thread {
 			}
 		}
 	}
-	
+
 	private void randomizePlayerTurn() {
-		Random r = new Random();
-		int value = r.nextInt(100);
-		if (value < 50) {
-			sendMessage(new Message(Message.TURN, name, ""));
-		} else {
-			sendMessage(new Message(Message.TURN, "AI", ""));
-			aiPlayer.setPlayerTurn(true);
+		if (deployed) {
+			Random r = new Random();
+			int value = r.nextInt(100);
+			if (value < 50) {
+				sendMessage(new Message(Message.TURN, "AI", ""));
+			} else {
+				aiPlayer.setPlayerTurn(true);
+			}
 		}
 	}
 
@@ -578,7 +577,7 @@ public class PlayerProxy extends Thread {
 		protected boolean running = true;
 		private Set<Grid> probableTargets;
 		private Vector<Ship> shipsDown;
-		// private boolean playerTurn;
+		private boolean playerTurn;
 		private boolean opponentDeployed = false;
 		private boolean enemyShipDown = false;
 		private Grid prevHit, currHit;
@@ -605,7 +604,7 @@ public class PlayerProxy extends Thread {
 			initEnemyGrid();
 			displayPlayerGrid();
 			displayPlayerShips();
-			
+
 		}
 
 		private void initEnemyGrid() {
@@ -616,8 +615,6 @@ public class PlayerProxy extends Thread {
 				}
 			}
 		}
-		
-		
 
 		public void displayPlayerGrid() {
 			for (int row = 0; row < SIZE; row++) {
@@ -910,10 +907,7 @@ public class PlayerProxy extends Thread {
 		}
 
 		public void setPlayerTurn(boolean playerTurn) {
-			// this.playerTurn = playerTurn;
-			if (playerTurn) {
-				new GameTimer(2, 1000).run();
-			}
+			new GameTimer(2, 1000).run();
 		}
 
 		public void placeEnemyShip(Ship ship, int row, int col) {
