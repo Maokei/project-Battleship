@@ -38,9 +38,10 @@ public class AIPlayer implements BattlePlayer, NetworkOperations {
 	private Alignment enemyShipAlignment;
 	private String reciever, server;
 
-	public AIPlayer() {
+	public AIPlayer(String name) {
 		init();
-		reciever = server = "Server";
+		reciever = name;
+		server = "Server";
 		sendMessage(new Message(Message.LOGIN, name, reciever, "MultiPlayer"));
 		sendMessage(new Message(Message.DEPLOYED, "AI", reciever, ""));
 	}

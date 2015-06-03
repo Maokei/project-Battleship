@@ -35,7 +35,7 @@ public class LoginDialog extends JDialog {
 	private JPanel centerPanel;
 	private JRadioButton single, multi;
 	private ButtonGroup group;
-	private JButton cancel, clear, login;
+	private JButton cancel, clear, start;
 	private ClientConnection connection;
 	private Font font;
 	private NetworkDialog networkDialog;
@@ -92,14 +92,14 @@ public class LoginDialog extends JDialog {
 		clear.setBackground(new Color(62, 60, 250));
 		clear.setForeground(new Color(255, 255, 255));
 		clear.addActionListener(ae -> { clear(); });
-		login = new JButton("Login");
-		login.setBorderPainted(false);
-		login.setBackground(new Color(90, 191, 7));
-		login.setForeground(new Color(255, 255, 255));
-		login.addActionListener(ae -> { login(); } ); 
+		start = new JButton("Start");
+		start.setBorderPainted(false);
+		start.setBackground(new Color(90, 191, 7));
+		start.setForeground(new Color(255, 255, 255));
+		start.addActionListener(ae -> { startGame(); } ); 
 		buttonPanel.add(cancel);
 		buttonPanel.add(clear);
-		buttonPanel.add(login);
+		buttonPanel.add(start);
 		centerPanel = new JPanel(new BorderLayout());
 		centerPanel.setBackground(new Color(0,0,0));
 		centerPanel.add(radioPanel, BorderLayout.NORTH);
@@ -120,6 +120,13 @@ public class LoginDialog extends JDialog {
 		port = 10001;
 	}
 	
+	private void startGame() {
+		player.setAvatar(avatarChooser.getAvatar());
+		player.setMode(mode);
+		player.startGame();
+			
+	}
+
 	private void clear() {
 		nameInput.setInput("");
 		avatarChooser.reset();

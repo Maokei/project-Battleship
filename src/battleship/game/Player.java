@@ -22,6 +22,7 @@ import javax.swing.Timer;
 
 import battleship.gameboard.Gameboard;
 import battleship.gameboard.Grid;
+import battleship.network.AIPlayer;
 import battleship.network.ClientConnection;
 import battleship.network.RandomShipPlacer;
 import battleship.resources.AudioLoader;
@@ -74,7 +75,7 @@ public class Player implements BattlePlayer{
 		reciever = server = "Server";
 		listen();
 		sendMessage(new Message(Message.LOGIN, name, server, ""));
-		
+		new LoginDialog(this);
 	}
 
 	public void init() {
@@ -128,13 +129,17 @@ public class Player implements BattlePlayer{
 	public String getGameMode() {
 		return mode.getMode();
 	}
-	
-	public ArrayList<String> getConnectedPlayers() {
-		return con.getConnectedPlayers();
-	}
 
 	public boolean checkHit(int row, int col) {
 		return playerBoard.checkHit(row, col);
+	}
+	
+	public void setPlayersConnected(ArrayList<String> playersConnected) {
+		this.playersConnected = playersConnected;
+	}
+	
+	public ArrayList<String> getConnectedPlayers() {
+		return playersConnected;
 	}
 
 	/**
@@ -343,7 +348,36 @@ public class Player implements BattlePlayer{
 		}
 	}
 
-	public void setPlayersConnected(ArrayList<String> playersConnected) {
-		this.playersConnected = playersConnected;
+	public void setAvatar(Avatar avatar) {
+		this.avatar = avatar;
 	}
+
+	public void setMode(GameMode mode) {
+		this.mode = mode;
+	}
+
+	public void startGame() {
+		initPlayer();
+		if(mode == GameMode.SinglePlayer) {
+			new AIPlayer(name);
+		}
+	}
+	
+	private void initPlayer() {
+		hits = misses = shipPlacementIndex = 0;
+		playerBoard = new Gameboard();
+		enemyBoard = new Gameboard();
+		playerBoard.addMouseListener(new BoardListener());
+		enemyBoard.addMouseListener(new BoardListener());
+		//toolkit = Toolkit.getDefaultToolkit();
+		//cursorImg = toolkit.getImage("src/res/sprite/crosshair.png");
+		//cursor = toolkit.createCustomCursor(cursorImg, new Point(0, 0), "");
+		//enemyBoard.setCursor(cursor);
+		screen = new Screen(this, playerBoard, enemyBoard);
+		playerShips = ShipBuilder.buildShips();
+		remainingShips = 9;
+		screen.showGUI();
+		AudioLoader.getAudio("ocean1").setLoop(true).playAudio();
+	}
+	
 }
