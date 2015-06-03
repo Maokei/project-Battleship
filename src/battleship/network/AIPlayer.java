@@ -41,12 +41,12 @@ public class AIPlayer implements BattlePlayer, NetworkOperations {
 	public AIPlayer(String opname) {
 		this.opname = opname;
 		init();
-		StringBuilder sb = new StringBuilder();
+		/*StringBuilder sb = new StringBuilder();
 		Random r = new Random();
 		sb.append(opname);
 		sb.append(name);
 		sb.append(r.nextInt(10) + 1);
-		name = sb.toString();
+		name = sb.toString();*/
 		sendMessage(new Message(Message.LOGIN, name, "MultiPlayer"));
 		sendMessage(new Message(Message.DEPLOYED, "AI", ""));
 	}
