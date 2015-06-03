@@ -19,6 +19,7 @@ public class Message implements Serializable {
 	private int type;
 	private String msg;
 	private String name;
+	private String receiver;
 	public static final int LOGIN = 0, MESSAGE = 1,
 			CHAT = 2, LOGOUT = 3, DEPLOYED = 4, TURN = 5,
 			AIMATCH = 6, CHALLENGE = 7, LOST = 8, RETRIEVE = 9;
@@ -27,6 +28,13 @@ public class Message implements Serializable {
 		this.type = type;
 		this.name = name;
 		this.msg = msg;
+	}
+	
+	public Message(int type, String name, String msg, String receiver) {
+		this.type = type;
+		this.name = name;
+		this.msg = msg;
+		this.receiver = receiver;
 	}
 	
 	/**
@@ -56,5 +64,14 @@ public class Message implements Serializable {
 	 * */
 	public String getName() {
 		return name;
+	}
+	
+	/**
+	 * getName
+	 * @name getRecevier
+	 * @return return the receiver name as a string player name that sent the message or server
+	 * */
+	public String getReeiver() {
+		return receiver;
 	}
 }
