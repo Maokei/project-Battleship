@@ -15,6 +15,7 @@ import java.util.Random;
 import java.util.Set;
 import java.util.Vector;
 
+import javax.swing.JOptionPane;
 import javax.swing.Timer;
 
 import battleship.game.BattlePlayer;
@@ -177,6 +178,13 @@ public class PlayerProxy extends Thread {
 			handleLogout();
 			break;
 		case Message.MESSAGE:
+			if(mode == GameMode.SinglePlayer) {
+				if (checkMessage(msg)) {
+					parseMessage(msg);
+				} else {
+					sendMessage(new Message(Message.MESSAGE, "ERROR", ""));
+				}
+			}
 			server.sendMessageToOpponent(msg);
 			/*
 			 * if (checkMessage()) { server.sendMessageToOpponent(msg); }
@@ -211,6 +219,7 @@ public class PlayerProxy extends Thread {
 			aiPlayer = new AIPlayer();
 			aiMatch = true;
 			playing = true;
+			deployed = true;
 		} else if (msg.getMessage().equalsIgnoreCase("Multiplayer")) {
 			playing = false;
 			mode = GameMode.MultiPlayer;
@@ -230,7 +239,7 @@ public class PlayerProxy extends Thread {
 				msg.getMessage()));
 	}
 
-	private boolean checkMessage() {
+	private boolean checkMessage(Message msg) {
 		boolean checked = false;
 		String[] tokens = msg.getMessage().split(" ");
 		switch (tokens[0].toUpperCase()) {
@@ -438,6 +447,71 @@ public class PlayerProxy extends Thread {
 			}
 		}
 	}
+	
+	private void parseMessage(Message msg) {
+		String[] tokens = msg.getMessage().split(" ");
+		switch (tokens[0].toUpperCase()) {
+		case "SHIP_DOWN":
+			parseShipDownMessage(tokens);
+			break;
+		case "FIRE":
+			parseFireMessage(tokens);
+			break;
+		case "HIT":
+			parseHitMessage(tokens);
+			break;
+		case "MISS":
+			parseMissMessage(tokens);
+			break;
+		}
+	}
+
+	private void parseMissMessage(String[] tokens) {
+		int row = Integer.parseInt(tokens[1]);
+		int col = Integer.parseInt(tokens[2]);
+		aiPlayer.registerPlayerMiss(row, col);
+	}
+
+	private void parseShipDownMessage(String[] tokens) {
+		Ship ship = null;
+		ShipType type;
+		Alignment alignment = Alignment.HORIZONTAL;
+		switch (tokens[1].toUpperCase()) {
+		default:
+		case "CARRIER":
+			type = ShipType.CARRIER;
+			break;
+		case "DESTROYER":
+			type = ShipType.DESTROYER;
+			break;
+		case "SUBMARINE":
+			type = ShipType.SUBMARINE;
+			break;
+		}
+
+		if (tokens[2].equalsIgnoreCase("vertical")) {
+			alignment = Alignment.VERTICAL;
+		}
+		ship = BattleShipFactory.getShip(type);
+		ship.setAlignment(alignment);
+		int row = Integer.parseInt(tokens[3]);
+		int col = Integer.parseInt(tokens[4]);
+		aiPlayer.placeEnemyShip(ship, row, col);
+	}
+
+	private void parseFireMessage(String[] tokens) {
+		int row = Integer.parseInt(tokens[1]);
+		int col = Integer.parseInt(tokens[2]);
+		aiPlayer.registerFire(row, col);
+	}
+
+	private void parseHitMessage(String[] tokens) {
+		int row = Integer.parseInt(tokens[1]);
+		int col = Integer.parseInt(tokens[2]);
+		aiPlayer.registerPlayerHit(row, col);
+	}
+
+
 
 	/**
 	 * sendMessage
