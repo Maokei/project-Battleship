@@ -478,8 +478,8 @@ public class PlayerProxy extends Thread {
 		}
 	}
 	
-	class AIPlayer implements BattlePlayer, NetworkOperations {
-		private String name = "AI";
+	class AIPlayer {
+		// private String AIName = "AI";
 		private ClientConnection con;
 		private RandomShipPlacer shipPlacer;
 		private Random r;
@@ -490,7 +490,7 @@ public class PlayerProxy extends Thread {
 		protected boolean running = true;
 		private Set<Grid> probableTargets;
 		private Vector<Ship> shipsDown;
-		private boolean playerTurn;
+		// private boolean playerTurn;
 		private boolean opponentDeployed = false;
 		private boolean enemyShipDown = false;
 		private Grid prevHit, currHit;
@@ -498,8 +498,8 @@ public class PlayerProxy extends Thread {
 
 		public AIPlayer() {
 			init();
-			// sendMessage(new Message(Message.LOGIN, name, "MultiPlayer"));
-			// sendMessage(new Message(Message.DEPLOYED, "AI", ""));
+			//sendMessage(new Message(Message.LOGIN, name, "MultiPlayer"));
+			sendMessage(new Message(Message.DEPLOYED, "AI", ""));
 		}
 
 		public void init() {
@@ -517,7 +517,6 @@ public class PlayerProxy extends Thread {
 			initEnemyGrid();
 			displayPlayerGrid();
 			displayPlayerShips();
-			listen();
 		}
 
 		private void initEnemyGrid() {
@@ -803,49 +802,27 @@ public class PlayerProxy extends Thread {
 			sendMessage(new Message(Message.LOST, "AI", ""));
 		}
 
-		@Override
-		public void sendMessage(Message message) {
-			con.sendMessage(message);
-		}
+		
 
-		@Override
+		
 		public String getName() {
 			return name;
 		}
 
-		@Override
-		public boolean openConnection() {
-			con = new ClientConnection("localhost", 10001);
-			con.openConnection();
-			con.setBattlePlayer(this);
-			return true;
-		}
 
-		@Override
-		public void listen() {
-			if (openConnection())
-				new Thread(con).start();
-		}
-
-		@Override
-		public void closeConnection() {
-			con.closeConnection();
-		}
-
-		@Override
+		
 		public void setOpponentDeployed() {
 			opponentDeployed = true;
 		}
 
-		@Override
+	
 		public void setPlayerTurn(boolean playerTurn) {
-			this.playerTurn = playerTurn;
+			// this.playerTurn = playerTurn;
 			if (playerTurn) {
 				new GameTimer(2, 1000).run();
 			}
 		}
 
-		@Override
 		public void placeEnemyShip(Ship ship, int row, int col) {
 			if (ship == null) {
 				System.out.println("Ship is NULL!!!!");
