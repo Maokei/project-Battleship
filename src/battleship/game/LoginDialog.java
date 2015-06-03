@@ -38,7 +38,7 @@ public class LoginDialog extends JDialog {
 	private JButton cancel, clear, start;
 	private ClientConnection connection;
 	private Font font;
-	private NetworkDialog networkDialog;
+	private MultiPlayerDialog multiDialog;
 	private GameMode mode;
 	private String ip;
 	private int port;
@@ -123,7 +123,11 @@ public class LoginDialog extends JDialog {
 	private void startGame() {
 		player.setAvatar(avatarChooser.getAvatar());
 		player.setMode(mode);
-		player.startGame();
+		if(mode == GameMode.MultiPlayer) {
+			multiDialog = new MultiPlayerDialog(player);
+		} else {
+			player.startGame();
+		}
 			
 	}
 

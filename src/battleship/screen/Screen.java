@@ -43,7 +43,7 @@ public class Screen {
 			@Override
 			public void windowClosing(WindowEvent e)
 			{
-				player.sendMessage(new Message(Message.LOGOUT ,player.getName(), player.getReciever(), "Logged out"));
+				player.sendMessage(new Message(Message.LOGOUT ,player.getName(), player.getOpponent(), "Logged out"));
 				player.setRunning(false);
 				e.getWindow().dispose();
 			}

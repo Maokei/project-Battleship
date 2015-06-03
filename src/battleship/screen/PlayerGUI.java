@@ -115,7 +115,7 @@ public class PlayerGUI extends JPanel {
 
 	private void shipsPlaced() {
 		if (!deployed) {
-			player.sendMessage(new Message(Message.DEPLOYED, player.getName(), player.getReciever(), 
+			player.sendMessage(new Message(Message.DEPLOYED, player.getName(), player.getOpponent(), 
 					""));
 			player.setDeployed();
 			deployed = true;
