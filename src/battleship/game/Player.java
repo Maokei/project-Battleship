@@ -5,7 +5,11 @@
  * */
 package battleship.game;
 
+
 import static battleship.game.Constants.*;
+
+
+//import constants
 
 import java.awt.Cursor;
 import java.awt.Image;
@@ -36,7 +40,8 @@ import battleship.ships.ShipBuilder;
 /**
  * @package battleship.entity
  * @Class Player
- * @brief Class represent a player human or non-human,
+ * @brief Class represent a player human battleship player, class also contains many of the core gameplay mechanics.
+ * @implements BattlePlayer interface
  * */
 public class Player implements BattlePlayer{
 	private String name;
@@ -59,6 +64,11 @@ public class Player implements BattlePlayer{
 	private ArrayList<String> playersConnected;
 	private boolean challengeAccepted;
 
+	/**
+	 * Player
+	 * @brief Player constructor
+	 * @param String player name, Avatar object player picture, ClientConnection for talk to server.
+	 * */
 	public Player(String name, Avatar avatar, ClientConnection con,
 			GameMode mode) {
 		this.name = name;
@@ -68,6 +78,11 @@ public class Player implements BattlePlayer{
 		con.setBattlePlayer(this);
 	}
 	
+	/**
+	 * Player
+	 * @brief Player constructor
+	 * @param String player name, ClientConnection to talk to server and handle messages. 
+	 * */
 	public Player(String name, ClientConnection con) {
 		this.name = name;
 		this.con = con;
@@ -79,6 +94,12 @@ public class Player implements BattlePlayer{
 		new LoginDialog(this);
 	}
 
+	/**
+	 * init
+	 * @name init 
+	 * @brief Player class initiation function.
+	 * @return void function
+	 * */
 	public void init() {
 		hits = misses = shipPlacementIndex = 0;
 		playerBoard = new Gameboard();
@@ -98,53 +119,116 @@ public class Player implements BattlePlayer{
 		listen();
 	}
 	
+	/**
+	 * listen
+	 * @name listen
+	 * @brief Start a new thread to listen for incoming events with ClientConnection.
+	 * */
 	@Override
 	public void listen() {
 		new Thread(con).start();
 	}
 
+	/**
+	 * sendMessage
+	 * @name sendMessage
+	 * @param Message object to be sent to server.
+	 * @return void function.
+	 * */
 	public void sendMessage(Message message) {
 		con.sendMessage(message);
 	}
 	
+	/**
+	 * setConnection
+	 * @name setConnection
+	 * @param ClientConnection object, to set clientConnection.
+	 * */
 	public void setConnection(ClientConnection con) {
 		this.con = con;
 	}
 
+	
+	/**
+	 * getConnection
+	 * @name getConnection
+	 * @return ClientConnection pointer.
+	 * */
 	public ClientConnection getConnection() {
 		return con;
 	}
 
+	/**
+	 * getName
+	 * @name getName
+	 * @return String object player name.
+	 **/
 	public String getName() {
 		return name;
 	}
 	
+	/**
+	 * getopponent
+	 * @name getOpponent
+	 * @return String object opponent name;
+	 * */
 	public String getOpponent() {
 		return opponent;
 	}
 
+	/**
+	 * getAvatar 
+	 * @name getAvatar
+	 * @return avatar pointer used by player.
+	 * */
 	public Avatar getAvatar() {
 		return avatar;
 	}
 
+	/**
+	 * getGameMode
+	 * @name getGameMode
+	 * @return GameMode enum.
+	 * */
 	public String getGameMode() {
 		return mode.getMode();
 	}
 
+	/**
+	 * checkHit
+	 * @name checkHit
+	 * @brief Check for a hit in given position.
+	 * @param Integer row and integer column in grid.
+	 * @true True for hit false for no hit.
+	 * */
 	public boolean checkHit(int row, int col) {
 		return playerBoard.checkHit(row, col);
 	}
 	
+	/**
+	 * setPlatersConnected 
+	 * @name setPlayersConnected
+	 * @param Array of strings of players connected to the server.
+	 * @return void function.
+	 * */
 	public void setPlayersConnected(ArrayList<String> playersConnected) {
 		this.playersConnected = playersConnected;
 	}
 	
+	/**
+	 * getConnectedPlayers
+	 * @name getConnectedPlayers
+	 * @param ArrayList<String> of connected players.
+	 * */
 	public ArrayList<String> getConnectedPlayers() {
 		return playersConnected;
 	}
 
 	/**
-	 * register a shot on the grid
+	 * registerFire
+	 * @name registerFire
+	 * @brief register a shot on the grid.
+	 * @param intger row and integer column in a grid.
 	 * */
 	public void registerFire(int row, int col) {
 		if (checkHit(row, col)) {
@@ -158,12 +242,24 @@ public class Player implements BattlePlayer{
 		}
 	}
 
+	/**
+	 * registerPlayerHit
+	 * @name registerPlayerHit
+	 * @param integer row and integer column in grid.
+	 * */
 	public void registerPlayerHit(int row, int col) {
 		AudioLoader.getAudio("explosion1").playAudio();
 		enemyBoard.addHit(row, col);
 		screen.setHits(++hits);
 	}
 
+	/**
+	 * registerEnemyHit
+	 * @name registerEnemyHit
+	 * @brief Function register and enemy hit on a grid.
+	 * @param Ship object, integer row and integer column.
+	 * @return void function.
+	 * */
 	public void registerEnemyHit(Ship ship, int row, int col) {
 		AudioLoader.getAudio("explosion1").playAudio();
 		playerBoard.addHit(row, col);
@@ -178,6 +274,11 @@ public class Player implements BattlePlayer{
 			battleLost();
 	}
 
+	/**
+	 * sikShip
+	 * @name sinkShip
+	 * @param Takes a ship pointer for a ship to be sunk.
+	 * */
 	public void sinkShip(Ship ship) {
 		AudioLoader.getAudio("tilt").playAudio();
 		int row = ship.getStartPosition().getRow();
@@ -193,8 +294,16 @@ public class Player implements BattlePlayer{
 		}
 	}
 
+	/**
+	 * registerPlayerMiss
+	 * @name registerPlayerMiss
+	 * @brief register a miss by player.
+	 * @param interger row and integer column.
+	 * */
 	public void registerPlayerMiss(int row, int col) {
+		//play sound
 		AudioLoader.getAudio("splash1").playAudio();
+		//sends out message
 		sendMessage(new Message(Message.TURN, opponent, name, ""));
 		screen.setMessage("Wait for your turn");
 		enemyBoard.addMiss(row, col);
@@ -202,6 +311,12 @@ public class Player implements BattlePlayer{
 		playerTurn = false;
 	}
 
+	/**
+	 * registerEnemyMiss
+	 * @name registerEnemyMiss
+	 * @brief registers a miss by the enemy.
+	 * @param integer row and integer column on grid.
+	 * */
 	public void registerEnemyMiss(int row, int col) {
 		AudioLoader.getAudio("splash1").playAudio();
 		sendMessage(new Message(Message.MESSAGE, name, opponent, "MISS "
@@ -209,6 +324,12 @@ public class Player implements BattlePlayer{
 		playerBoard.addMiss(row, col);
 	}
 
+	/**
+	 * placeEnemyShip
+	 * @name placeEnemyShip
+	 * @brief register an enemy ship on enemy grid to be drawn.
+	 * @param Ship object, integer row and integer column.
+	 * */
 	public void placeEnemyShip(Ship ship, int row, int col) {
 		AudioLoader.getAudio("ship_down").playAudio();
 		System.out.println("Placing enemy ship:\n");
@@ -220,6 +341,12 @@ public class Player implements BattlePlayer{
 		}
 	}
 
+	/**
+	 * randomizeShipPlacement
+	 * @name randomizeShipPlacement
+	 * @brief  meta function to start randomization of ships
+	 * @return void function
+	 **/
 	public void randomizeShipPlacement() {
 		shipPlacementIndex = playerShips.size();
 		screen.setShipsDeployed();
@@ -228,14 +355,29 @@ public class Player implements BattlePlayer{
 		playerBoard.randomizeShipPlacement(playerShips);
 	}
 
+	/**
+	 * setRunning
+	 * @name setRunning
+	 * @param set running state clientConnection takes boolean value.
+	 * */
 	public void setRunning(boolean running) {
 		con.setRunning(running);
 	}
 
+	/**
+	 * setOpponentDeployed
+	 * @name setOpponentDeployed
+	 * @brief set opponent deployed state true.
+	 * */
 	public void setOpponentDeployed() {
 		opponentDeployed = true;
 	}
 
+	/**
+	 * setDeployed
+	 * @name setDeployed
+	 * @brief setDeployed state true and appropriate screen message for player.
+	 * */
 	public void setDeployed() {
 		deployed = true;
 		if (!(opponentDeployed || playerTurn)) {
@@ -245,17 +387,33 @@ public class Player implements BattlePlayer{
 		}
 	}
 
+	/**
+	 * setPlayerTurn
+	 * @name setPlayerTurn 
+	 * @brief set turn state and appropriate screen message.
+	 * @param boolean value to set player turn state.
+	 * */
 	public void setPlayerTurn(boolean playerTurn) {
 		this.playerTurn = playerTurn;
 		screen.setMessage("Fire at will!!");
 	}
 
+	/**
+	 * battleWon
+	 * @name battleWon
+	 * @brief stop turns and display victory message.
+	 * */
 	public void battleWon() {
 		playerTurn = false;
 		screen.setMessage("You are Victorious!!!");
 		playerBoard.displayVictory();
 	}
 
+	/**
+	 * battleLost
+	 * @name battleLost
+	 * @brief player lost sound and stop turn, display battle lost message.
+	 * */
 	public void battleLost() {
 		AudioLoader.getAudio("march").setLoop(true).playAudio();
 		sendMessage(new Message(Message.LOST, opponent, name, ""));
@@ -264,6 +422,12 @@ public class Player implements BattlePlayer{
 		playerTurn = false;
 	}
 	
+	/**
+	 * GameTimer
+	 * @class GameTimer
+	 * @brief And inner help class to help with timing of events.
+	 * @param integer seconds and integer amount of delay.
+	 * */
 	class GameTimer {
 		private Timer t;
 		private int seconds;
@@ -274,6 +438,11 @@ public class Player implements BattlePlayer{
 			this.delay = delay;
 		}
 		
+		/**
+		 * run
+		 * @name run
+		 * @brief start's thread
+		 * */
 		public void run() {
 			t = new Timer(delay, new ActionListener() {
 				@Override
@@ -286,6 +455,11 @@ public class Player implements BattlePlayer{
 			t.start();
 		}
 
+		/**
+		 * checkTime
+		 * @name checkTime
+		 * @brief if no time left stop.
+		 * */
 		private void checkTime() {
 			if (seconds <= 0) {			
 				t.stop();
@@ -294,6 +468,12 @@ public class Player implements BattlePlayer{
 		}
 	}
 
+	/**
+	 * BoardListener
+	 * @class BoardListener
+	 * @extends MouseAdapter
+	 * @brief Event listener class for a player board.
+	 * */
 	class BoardListener extends MouseAdapter {
 		Alignment alignment = Alignment.HORIZONTAL;
 
@@ -349,14 +529,29 @@ public class Player implements BattlePlayer{
 		}
 	}
 
+	/**
+	 * setAvatar 
+	 * @name setAvatar
+	 * @param Avatr pointer ,set avatar to be used.
+	 * */
 	public void setAvatar(Avatar avatar) {
 		this.avatar = avatar;
 	}
 
+	/**
+	 * setMode
+	 * @name setMode
+	 * @param GameMode to be played.
+	 * */
 	public void setMode(GameMode mode) {
 		this.mode = mode;
 	}
 
+	/**
+	 * startGame
+	 * @name startGame
+	 * @brief start a single player match.
+	 * */
 	public void startGame() {
 		if(mode == GameMode.SinglePlayer) {
 			sendMessage(new Message(Message.MODE, name, "Server", "SinglePlayer"));
@@ -367,6 +562,11 @@ public class Player implements BattlePlayer{
 		}
 	}
 	
+	/**
+	 * initPlayer
+	 * @name initPlayer
+	 * @brief initialization function for player class. Add listeners and show gui.
+	 * */
 	private void initPlayer() {
 		System.out.println("In initPlayer");
 		hits = misses = shipPlacementIndex = 0;
@@ -387,6 +587,10 @@ public class Player implements BattlePlayer{
 		AudioLoader.getAudio("ocean1").setLoop(true).playAudio();
 	}
 
+	/**
+	 * setOpponent
+	 * @name setOpponent
+	 * */
 	public void setOpponent(String opponent) {
 		this.opponent = opponent;
 	}
