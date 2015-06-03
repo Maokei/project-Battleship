@@ -196,6 +196,8 @@ public class PlayerProxy extends Thread {
 	 * */
 	private void handleLogin() {
 		name = msg.getName();
+		server.sendPlayers(name);
+		/*
 		if (msg.getMessage().equalsIgnoreCase("Singleplayer")) {
 			mode = GameMode.SinglePlayer;
 			aiPlayer = new AIPlayer();
@@ -212,6 +214,7 @@ public class PlayerProxy extends Thread {
 				// get opponent and start match
 			}
 		}
+		*/
 	}
 
 	private void handleLogout() {

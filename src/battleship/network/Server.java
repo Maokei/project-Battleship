@@ -191,7 +191,6 @@ public class Server extends JFrame {
 		}
 	}
 	
-	/*
 	public synchronized void sendPlayers(String name) {
 		StringBuilder builder = new StringBuilder();
 		for(PlayerProxy player : players) {
@@ -200,9 +199,9 @@ public class Server extends JFrame {
 				builder.append(' ');
 			}
 		}
-		sendMessageToAll(new Message(Message.LOGIN, "Server", builder.toString().trim()));
+		sendMessageToAll(new Message(Message.LOGIN, "Server", name, builder.toString().trim()));
 	}
-	*/
+
 	
 	/**
 	 * lookForPlayerMulti
