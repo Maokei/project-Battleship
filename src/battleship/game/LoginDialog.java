@@ -28,7 +28,7 @@ import battleship.screen.InputPanel;
 public class LoginDialog extends JDialog {
 	private static final long serialVersionUID = 1L;
 	private Player player;
-	private InputPanel nameInput;
+	//private InputPanel nameInput;
 	private AvatarPanel avatarChooser;
 	private JPanel buttonPanel;
 	private JPanel radioPanel;
@@ -51,7 +51,7 @@ public class LoginDialog extends JDialog {
 		mode = GameMode.SinglePlayer;
 		setLayout(new BorderLayout());
 		font = new Font("Monospaced", Font.PLAIN, 12);
-		nameInput = new InputPanel("Enter name: ", true);
+		//nameInput = new InputPanel("Enter name: ", true);
 		radioPanel = new JPanel(new GridLayout(1, 2));
 		radioPanel.setBorder(BorderFactory.createTitledBorder(null, "Single- or multiplayer",TitledBorder.CENTER, TitledBorder.TOP, font, new Color(255, 255, 255)));
 		radioPanel.setBackground(new Color(120, 100, 120));
@@ -104,7 +104,7 @@ public class LoginDialog extends JDialog {
 		centerPanel.setBackground(new Color(0,0,0));
 		centerPanel.add(radioPanel, BorderLayout.NORTH);
 		centerPanel.add(avatarChooser, BorderLayout.CENTER);
-		add(nameInput, BorderLayout.NORTH);
+		//add(nameInput, BorderLayout.NORTH);
 		add(centerPanel, BorderLayout.CENTER);
 		add(buttonPanel, BorderLayout.SOUTH);
 		
@@ -125,8 +125,11 @@ public class LoginDialog extends JDialog {
 		player.setMode(mode);
 		if(mode == GameMode.MultiPlayer) {
 			setVisible(false);
-			multiDialog = new MultiPlayerDialog(player);
-			close();
+			multiDialog = new MultiPlayerDialog(this, true, player);
+			if(!player.getOpponent().equals("")) {
+				player.startGame();
+				close();
+			}
 		} else {
 			player.startGame();
 			close();
@@ -135,7 +138,7 @@ public class LoginDialog extends JDialog {
 	}
 
 	private void clear() {
-		nameInput.setInput("");
+		//nameInput.setInput("");
 		avatarChooser.reset();
 	}
 	
@@ -145,7 +148,7 @@ public class LoginDialog extends JDialog {
 	}
 	
 	
-	
+	/*
 	private void login() {
 		if (!nameInput.equals("")) {
 			if(mode == GameMode.SinglePlayer) {
@@ -170,7 +173,7 @@ public class LoginDialog extends JDialog {
 			}
 		}
 	}
-	
+	*/
 	class PlayerModeListener implements ActionListener {
 
 		@Override

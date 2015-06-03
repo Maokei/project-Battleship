@@ -25,8 +25,8 @@ public class MultiPlayerDialog extends JDialog {
 	private final String noPlayers = "There are currently no other players connected";
 	
 	
-	public MultiPlayerDialog(Player player) {
-		super();
+	public MultiPlayerDialog(LoginDialog loginDialog, boolean b, Player player) {
+		super(loginDialog, true);
 		setLayout(new BorderLayout());
 		centerPanel = new JPanel();
 		buttonPanel = new JPanel();
@@ -70,7 +70,7 @@ public class MultiPlayerDialog extends JDialog {
 		add(buttonPanel, BorderLayout.SOUTH);
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		setSize(150, 250);
-		setLocationRelativeTo(null);
+		setLocationRelativeTo(loginDialog);
 		setVisible(true);
 	}
 	

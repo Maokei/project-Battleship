@@ -72,7 +72,7 @@ public class Player implements BattlePlayer{
 		this.con = con;
 		this.con.setBattlePlayer(this);
 		playersConnected = new ArrayList<String>();
-		opponent = server = "Server";
+		server = "Server";
 		listen();
 		sendMessage(new Message(Message.LOGIN, name, server, ""));
 		new LoginDialog(this);
@@ -84,7 +84,7 @@ public class Player implements BattlePlayer{
 		enemyBoard = new Gameboard();
 		playerBoard.addMouseListener(new BoardListener());
 		enemyBoard.addMouseListener(new BoardListener());
-		opponent = server = "Server";
+		server = "Server";
 		//toolkit = Toolkit.getDefaultToolkit();
 		//cursorImg = toolkit.getImage("src/res/sprite/crosshair.png");
 		//cursor = toolkit.createCustomCursor(cursorImg, new Point(0, 0), "");
@@ -357,23 +357,23 @@ public class Player implements BattlePlayer{
 	}
 
 	public void startGame() {
-		
 		if(mode == GameMode.SinglePlayer) {
 			new AIPlayer(name);
 			initPlayer();
 		} else {
-			new MultiPlayerDialog(this);
 			sendMessage(new Message(Message.CHALLENGE, name, opponent, ""));
 			initPlayer();
 		}
 	}
 	
 	private void initPlayer() {
+		System.out.println("In initPlayer");
 		hits = misses = shipPlacementIndex = 0;
 		playerBoard = new Gameboard();
 		enemyBoard = new Gameboard();
 		playerBoard.addMouseListener(new BoardListener());
 		enemyBoard.addMouseListener(new BoardListener());
+		server = "Server";
 		//toolkit = Toolkit.getDefaultToolkit();
 		//cursorImg = toolkit.getImage("src/res/sprite/crosshair.png");
 		//cursor = toolkit.createCustomCursor(cursorImg, new Point(0, 0), "");
@@ -388,5 +388,4 @@ public class Player implements BattlePlayer{
 	public void setOpponent(String opponent) {
 		this.opponent = opponent;
 	}
-	
 }
