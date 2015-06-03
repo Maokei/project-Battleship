@@ -5,6 +5,8 @@
  * */
 package battleship.network;
 
+import static battleship.game.Constants.*;
+
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
@@ -89,6 +91,16 @@ public class Server extends JFrame {
 					System.out.println("The server closed the connection");
 				} catch (IOException e) {
 					System.err.println(e.getMessage());
+				}
+			}
+		}
+	}
+	
+	public void checkForOpponentTo(String name) {
+		for (PlayerProxy player : players) {
+			if (player.name != name) {
+				if(!player.getPlaying()) {
+					player.sendMessage(new Message(Message.CHALLENGE, name, Challenge_Request));
 				}
 			}
 		}
@@ -233,6 +245,10 @@ public class Server extends JFrame {
 		}
 	}
 	
+	public int getPlayerCount() {
+		return players.size();
+	}
+	
 
 	/**
 	 * setupGui
@@ -300,6 +316,13 @@ public class Server extends JFrame {
 		Server server = new Server(DEFAULT_PORT);
 		server.listen();
 	}
+
+	public void setUpBattle(String string, String string2) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	
 
 	
 

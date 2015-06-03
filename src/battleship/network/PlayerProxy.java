@@ -179,7 +179,7 @@ public class PlayerProxy extends Thread {
 		case Message.MESSAGE:
 			if (mode == GameMode.SinglePlayer) {
 				if (!checkMessage(msg)) {
-					sendMessage(new Message(Message.MESSAGE, "ERROR", ""));
+					// TODO -> sendMessage(new Message(Message.MESSAGE, "ERROR", ""));
 				}
 				parseMessage(msg);
 			} else {
@@ -207,7 +207,18 @@ public class PlayerProxy extends Thread {
 		case Message.LOST:
 			server.sendMessageToOpponent(msg);
 			break;
+		case Message.CHALLENGE:
+			
+			if(msg.getMessage().equals(Challenge_Accept)) {
+				parseChallengeMessage(msg.getName());
+				
+			}
 		}
+	}
+
+	private void parseChallengeMessage(String name) {
+		String[] names = name.split(" ");
+		server.setUpBattle(names[0],names[1]);
 	}
 
 	/**
@@ -226,7 +237,10 @@ public class PlayerProxy extends Thread {
 		} else if (msg.getMessage().equalsIgnoreCase("Multiplayer")) {
 			playing = false;
 			mode = GameMode.MultiPlayer;
-			server.sendPlayers(name);
+			if(server.getPlayerCount() > 1) {
+				server.checkForOpponentTo(name);
+			}
+			// server.sendPlayers(name);
 			// see if there is players to start a match
 			if (!server.lookForPlayerMulti()) {
 				playing = false; // wait

@@ -5,7 +5,7 @@
  * */
 package battleship.game;
 
-import static battleship.game.Constants.GRID_SIZE;
+import static battleship.game.Constants.*;
 
 import java.awt.Cursor;
 import java.awt.Image;
@@ -17,6 +17,7 @@ import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.Vector;
 
+import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import javax.swing.Timer;
 
@@ -37,7 +38,7 @@ import battleship.ships.ShipBuilder;
  * @Class Player
  * @brief Class represent a player human or non-human,
  * */
-public class Player implements BattlePlayer{
+public class Player implements BattlePlayer {
 	private String name;
 	private Avatar avatar;
 	private Screen screen;
@@ -54,6 +55,7 @@ public class Player implements BattlePlayer{
 	private boolean opponentDeployed = false;
 	private boolean deployed = false;
 	private boolean playerTurn = false;
+	private String opponent;
 
 	public Player(String name, Avatar avatar, ClientConnection con,
 			GameMode mode) {
@@ -71,10 +73,10 @@ public class Player implements BattlePlayer{
 		playerBoard.addMouseListener(new BoardListener());
 		enemyBoard.addMouseListener(new BoardListener());
 
-		//toolkit = Toolkit.getDefaultToolkit();
-		//cursorImg = toolkit.getImage("src/res/sprite/crosshair.png");
-		//cursor = toolkit.createCustomCursor(cursorImg, new Point(0, 0), "");
-		//enemyBoard.setCursor(cursor);
+		// toolkit = Toolkit.getDefaultToolkit();
+		// cursorImg = toolkit.getImage("src/res/sprite/crosshair.png");
+		// cursor = toolkit.createCustomCursor(cursorImg, new Point(0, 0), "");
+		// enemyBoard.setCursor(cursor);
 		screen = new Screen(this, playerBoard, enemyBoard);
 		playerShips = ShipBuilder.buildShips();
 		remainingShips = 9;
@@ -82,7 +84,7 @@ public class Player implements BattlePlayer{
 		AudioLoader.getAudio("ocean1").setLoop(true).playAudio();
 		listen();
 	}
-	
+
 	@Override
 	public void listen() {
 		new Thread(con).start();
@@ -107,13 +109,21 @@ public class Player implements BattlePlayer{
 	public String getGameMode() {
 		return mode.getMode();
 	}
-	
+
 	public ArrayList<String> getConnectedPlayers() {
 		return con.getConnectedPlayers();
 	}
 
 	public boolean checkHit(int row, int col) {
 		return playerBoard.checkHit(row, col);
+	}
+	
+	public void setOpponent(String opponent) {
+		this.opponent = opponent;
+	}
+	
+	public String getOpponent() {
+		return opponent;
 	}
 
 	/**
@@ -236,23 +246,23 @@ public class Player implements BattlePlayer{
 		playerBoard.displayDefeat();
 		playerTurn = false;
 	}
-	
+
 	class GameTimer {
 		private Timer t;
 		private int seconds;
 		private final int delay;
-		
+
 		public GameTimer(int seconds, int delay) {
 			this.seconds = seconds;
 			this.delay = delay;
 		}
-		
+
 		public void run() {
 			t = new Timer(delay, new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					--seconds;
-					screen.setMessage("AI incoming projectile in "+ seconds);
+					screen.setMessage("AI incoming projectile in " + seconds);
 					checkTime();
 				}
 			});
@@ -260,7 +270,7 @@ public class Player implements BattlePlayer{
 		}
 
 		private void checkTime() {
-			if (seconds <= 0) {			
+			if (seconds <= 0) {
 				t.stop();
 				t = null;
 			}
@@ -282,7 +292,7 @@ public class Player implements BattlePlayer{
 					else
 						alignment = Alignment.HORIZONTAL;
 				} else { // place ship
-					
+
 					placePlayerShip(row, col);
 				}
 			} else if (e.getComponent() == enemyBoard) {
@@ -291,8 +301,10 @@ public class Player implements BattlePlayer{
 		}
 
 		private void placePlayerShip(int row, int col) {
-			if(shipPlacementIndex == 0) { screen.disableRandom(); }
-			
+			if (shipPlacementIndex == 0) {
+				screen.disableRandom();
+			}
+
 			if (shipPlacementIndex < playerShips.size()) {
 				Ship ship = playerShips.elementAt(shipPlacementIndex);
 				ship.setAlignment(alignment);
@@ -321,4 +333,38 @@ public class Player implements BattlePlayer{
 			}
 		}
 	}
+
+	@Override
+	public void handleChallenge(String sender, String message) {
+		String title = "", msgText = "";
+		int reply = -1;
+		if (message.equalsIgnoreCase(Challenge_Request)) {
+			msgText = sender
+					+ " want's to battle with you\n\nDo you accept the challenge?";
+			title = "CHALLENGE REQUEST";
+			reply = JOptionPane.showConfirmDialog(null, msgText, title,
+					JOptionPane.YES_NO_OPTION);
+			if (reply == JOptionPane.YES_OPTION) {
+				opponent = sender;
+				sendMessage(new Message(Message.CHALLENGE, name + " " + opponent,
+						Challenge_Accept));
+			} else {
+				sendMessage(new Message(Message.CHALLENGE, name + " " + opponent, Challenge_Deny));
+			}
+
+		} else if (message.equalsIgnoreCase(Challenge_Accept)) {
+			msgText = sender + " has accepted your request.";
+			title = "CHALLENGE ACCEPT";
+			JOptionPane.showMessageDialog(null, msgText, title,
+					JOptionPane.INFORMATION_MESSAGE);
+			opponent = sender;
+		} else if (message.equalsIgnoreCase(Challenge_Deny)) {
+			msgText = sender + " has denied your request.";
+			title = "CHALLENGE ACCEPT";
+			JOptionPane.showMessageDialog(null, msgText, title,
+					JOptionPane.INFORMATION_MESSAGE);
+		}
+
+	}
+
 }

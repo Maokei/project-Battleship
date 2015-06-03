@@ -1,5 +1,6 @@
 package battleship.network;
 
+import static battleship.game.Constants.*;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -124,6 +125,10 @@ public class ClientConnection implements Runnable, NetworkOperations {
 		case Message.LOST:
 			if (msg.getName().equalsIgnoreCase("AI"))
 				((Player) player).battleWon();
+			break;
+		case Message.CHALLENGE:
+			player.handleChallenge(msg.getName(), msg.getMessage());
+			break;
 		}
 	}
 
@@ -139,6 +144,11 @@ public class ClientConnection implements Runnable, NetworkOperations {
 			System.out.print("\n");
 		}
 	}
+	
+	
+		
+		
+	
 	
 	public ArrayList<String> getConnectedPlayers() {
 		return players;
