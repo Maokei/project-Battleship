@@ -84,22 +84,24 @@ public class PlayerProxy extends Thread {
 
 	/**
 	 * getMode
+	 * 
 	 * @name getMode
 	 * @return return the player mode for playerProxy
 	 * */
 	public GameMode getMode() {
 		return mode;
 	}
-	
+
 	/**
-	 * getPlayering 
+	 * getPlayering
+	 * 
 	 * @name getPlaying
 	 * @return boolean
 	 * */
 	public boolean getPlaying() {
 		return playing;
 	}
-	
+
 	/**
 	 * initGrid
 	 * 
@@ -166,10 +168,8 @@ public class PlayerProxy extends Thread {
 		case Message.MESSAGE:
 			server.sendMessageToOpponent(msg);
 			/*
-			if (checkMessage()) {
-				server.sendMessageToOpponent(msg);
-			}
-			*/
+			 * if (checkMessage()) { server.sendMessageToOpponent(msg); }
+			 */
 			break;
 		case Message.CHAT:
 			server.sendMessageToAll(msg);
@@ -189,33 +189,26 @@ public class PlayerProxy extends Thread {
 
 	/**
 	 * handleLogin
+	 * 
 	 * @name handleLogin
 	 * @brief handles the client login procedure, depending on selected GameMode
 	 * */
 	private void handleLogin() {
-		if (server.getNumberOfCurrentPlayers() > server.getNumberOfPlayers()) {
-			name = msg.getName();
-			server.sendMessageToSender(new Message(Message.MESSAGE, msg
-					.getName(), "Server full"));
-			this.closeConnection();
-			server.removePlayerProxy(this);
-		} else {
-			name = msg.getName();
-			if (msg.getMessage().equalsIgnoreCase("Singleplayer")) {
-				mode = GameMode.SinglePlayer;
-				aiPlayer = new AIPlayer();
-				aiMatch = true;
-				playing = true;
-			} else if (msg.getMessage().equalsIgnoreCase("Multiplayer")) {
-				playing = false;
-				mode = GameMode.MultiPlayer;
-				server.sendPlayers(name);
-				//see if there is players to start a match
-				if(!server.lookForPlayerMulti()) {
-					playing = false; //wait
-				}else{
-					//get opponent and start match
-				}
+		name = msg.getName();
+		if (msg.getMessage().equalsIgnoreCase("Singleplayer")) {
+			mode = GameMode.SinglePlayer;
+			aiPlayer = new AIPlayer();
+			aiMatch = true;
+			playing = true;
+		} else if (msg.getMessage().equalsIgnoreCase("Multiplayer")) {
+			playing = false;
+			mode = GameMode.MultiPlayer;
+			server.sendPlayers(name);
+			// see if there is players to start a match
+			if (!server.lookForPlayerMulti()) {
+				playing = false; // wait
+			} else {
+				// get opponent and start match
 			}
 		}
 	}
@@ -466,8 +459,9 @@ public class PlayerProxy extends Thread {
 			in.close();
 			out.close();
 			socket.close();
-			System.out.println("Client " + name + " with address " + address + " and port "
-					+ port + "\nhas closed the connection with the server.\n ");
+			System.out.println("Client " + name + " with address " + address
+					+ " and port " + port
+					+ "\nhas closed the connection with the server.\n ");
 		} catch (IOException e) {
 			// System.err.println(e.getMessage());
 		}

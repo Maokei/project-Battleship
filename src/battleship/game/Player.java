@@ -79,6 +79,7 @@ public class Player implements BattlePlayer{
 		playerShips = ShipBuilder.buildShips();
 		remainingShips = 9;
 		screen.showGUI();
+		AudioLoader.getAudio("ocean1").setLoop(true).playAudio();
 		listen();
 	}
 	

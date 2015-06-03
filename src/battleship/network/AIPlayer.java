@@ -104,7 +104,7 @@ public class AIPlayer implements BattlePlayer, NetworkOperations {
 		if (checkProbableTargets()) {
 			calculateNextTarget();
 		} else {
-			System.out.println("Valid target size: " + validTargets.size());
+			
 			Grid grid = validTargets.get((validTargets.size() > 0) ? r.nextInt(validTargets.size()) : 0);
 			int row = grid.getRow();
 			int col = grid.getCol();
@@ -114,6 +114,7 @@ public class AIPlayer implements BattlePlayer, NetworkOperations {
 						+ Integer.toString(row) + " " + Integer.toString(col)));
 				System.out.println("Removing grid [ " + row + "," + col + "]");
 				validTargets.remove(grid);
+				System.out.println("Valid target size: " + validTargets.size());
 			}
 		}
 	}
@@ -134,9 +135,9 @@ public class AIPlayer implements BattlePlayer, NetworkOperations {
 		int randomProbable = r.nextInt(probableTargets.size());
 		Grid grid = (Grid) probableTargets.toArray()[randomProbable];
 		probableTargets.remove(grid);
+		validTargets.remove(grid);
 		System.out.println("Caluclate Valid target size: "
 				+ validTargets.size());
-		validTargets.remove(grid);
 		int row = grid.getRow();
 		int col = grid.getCol();
 		System.out.println("FIRE " + row + ", " + col);
@@ -449,7 +450,8 @@ public class AIPlayer implements BattlePlayer, NetworkOperations {
 								probableTargets.remove(new Grid(rowCounter,
 										colCounter));
 								validTargets.remove(new Grid(rowCounter,
-										colCounter++));
+										colCounter));
+								colCounter++;
 							}
 							rowCounter++;
 						}
@@ -476,10 +478,9 @@ public class AIPlayer implements BattlePlayer, NetworkOperations {
 						for (int i = 0; i < width; i++) {
 							rowCounter = row;
 							for (int j = 0; j < height; j++) {
-								probableTargets.remove(new Grid(rowCounter,
-										colCounter));
-								validTargets.remove(new Grid(rowCounter++,
-										colCounter));
+								probableTargets.remove(new Grid(rowCounter,colCounter));
+								validTargets.remove(new Grid(rowCounter,colCounter));
+								rowCounter++;
 							}
 							colCounter++;
 						}
@@ -489,39 +490,6 @@ public class AIPlayer implements BattlePlayer, NetworkOperations {
 			shipsDown.clear();
 			enemyShipDown = false;
 			prevHit = currHit = new Grid(-1, -1);
-		}
-	}
-
-	private void removeHorizontalAdjacent(Grid grid) {
-		int row = grid.getRow();
-		int col = grid.getCol();
-		if (checkBounds(row, col)) {
-			if (row > 0 && (enemyGrid[row - 1][col] == empty)) {
-				if (probableTargets.remove(new Grid(row - 1, col)))
-					System.out.println("Removing " + (row - 1) + "," + col);
-			}
-			if (row < (SIZE - 1) && (enemyGrid[row + 1][col] == empty)) {
-				if (probableTargets.remove(new Grid(row + 1, col))) {
-					System.out.println("Removing " + (row + 1) + "," + col);
-				}
-			}
-		}
-	}
-
-	private void removeVerticalAdjacent(Grid grid) {
-		int row = grid.getRow();
-		int col = grid.getCol();
-		if (checkBounds(row, col)) {
-			if (col > 0 && (enemyGrid[row][col - 1] == empty)) {
-				if (probableTargets.remove(new Grid(row, col - 1))) {
-					System.out.println("Removing " + row + "," + (col - 1));
-				}
-			}
-			if (col < (SIZE - 1) && (enemyGrid[row][col + 1] == empty)) {
-				if (probableTargets.remove(new Grid(row, col + 1))) {
-					System.out.println("Removing " + row + "," + (col + 1));
-				}
-			}
 		}
 	}
 

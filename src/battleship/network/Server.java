@@ -35,7 +35,6 @@ public class Server extends JFrame {
 	private static final long serialVersionUID = 6118484193736984812L;
 	private static int id;
 	private int portNumber;
-	private final int numberOfPlayers = 2;
 	private ServerSocket server;
 	private ArrayList<PlayerProxy> players;
 	private ArrayList<Battle> battles;
@@ -285,7 +284,6 @@ public class Server extends JFrame {
 		this.setSize(400, 400);
 		this.setVisible(true);
 	}
-	public int getNumberOfPlayers() {return numberOfPlayers;}
 	public int getNumberOfCurrentPlayers() {return players.size();}
 	
 	private void resetServer() {
