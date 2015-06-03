@@ -18,6 +18,7 @@ public class Game {
 	
 	public Game() {
 		AudioLoader.initSounds();
+		
 		login = new LoginDialog(player);
 	}
 	

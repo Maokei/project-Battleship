@@ -54,6 +54,7 @@ public class Player implements BattlePlayer{
 	private boolean opponentDeployed = false;
 	private boolean deployed = false;
 	private boolean playerTurn = false;
+	private String reciever, server;
 
 	public Player(String name, Avatar avatar, ClientConnection con,
 			GameMode mode) {
@@ -70,7 +71,7 @@ public class Player implements BattlePlayer{
 		enemyBoard = new Gameboard();
 		playerBoard.addMouseListener(new BoardListener());
 		enemyBoard.addMouseListener(new BoardListener());
-
+		reciever = server = "Server";
 		//toolkit = Toolkit.getDefaultToolkit();
 		//cursorImg = toolkit.getImage("src/res/sprite/crosshair.png");
 		//cursor = toolkit.createCustomCursor(cursorImg, new Point(0, 0), "");
@@ -98,6 +99,10 @@ public class Player implements BattlePlayer{
 
 	public String getName() {
 		return name;
+	}
+	
+	public String getReciever() {
+		return reciever;
 	}
 
 	public Avatar getAvatar() {
@@ -145,7 +150,7 @@ public class Player implements BattlePlayer{
 			sinkShip(ship);
 			screen.setShips(--remainingShips);
 		}
-		sendMessage(new Message(Message.MESSAGE, name, "HIT "
+		sendMessage(new Message(Message.MESSAGE, name, reciever, "HIT "
 				+ Integer.toString(row) + " " + Integer.toString(col)));
 		if (remainingShips == 0)
 			battleLost();
@@ -156,7 +161,7 @@ public class Player implements BattlePlayer{
 		int row = ship.getStartPosition().getRow();
 		int col = ship.getStartPosition().getCol();
 
-		sendMessage(new Message(Message.MESSAGE, name, "SHIP_DOWN "
+		sendMessage(new Message(Message.MESSAGE, name, reciever, "SHIP_DOWN "
 				+ ship.getType() + " " + ship.getAlignment() + " "
 				+ Integer.toString(row) + " " + Integer.toString(col)));
 
@@ -168,7 +173,7 @@ public class Player implements BattlePlayer{
 
 	public void registerPlayerMiss(int row, int col) {
 		AudioLoader.getAudio("splash1").playAudio();
-		sendMessage(new Message(Message.TURN, name, ""));
+		sendMessage(new Message(Message.TURN, reciever, name, ""));
 		screen.setMessage("Wait for your turn");
 		enemyBoard.addMiss(row, col);
 		screen.setMisses(++misses);
@@ -177,7 +182,7 @@ public class Player implements BattlePlayer{
 
 	public void registerEnemyMiss(int row, int col) {
 		AudioLoader.getAudio("splash1").playAudio();
-		sendMessage(new Message(Message.MESSAGE, name, "MISS "
+		sendMessage(new Message(Message.MESSAGE, name, reciever, "MISS "
 				+ Integer.toString(row) + " " + Integer.toString(col)));
 		playerBoard.addMiss(row, col);
 	}
@@ -231,7 +236,7 @@ public class Player implements BattlePlayer{
 
 	public void battleLost() {
 		AudioLoader.getAudio("march").setLoop(true).playAudio();
-		sendMessage(new Message(Message.LOST, name, ""));
+		sendMessage(new Message(Message.LOST, reciever, name, ""));
 		screen.setMessage("You sir, are a DISGRACE!!");
 		playerBoard.displayDefeat();
 		playerTurn = false;
@@ -297,7 +302,7 @@ public class Player implements BattlePlayer{
 				Ship ship = playerShips.elementAt(shipPlacementIndex);
 				ship.setAlignment(alignment);
 
-				sendMessage(new Message(Message.MESSAGE, name, "PLACING "
+				sendMessage(new Message(Message.MESSAGE, name, reciever, "PLACING "
 						+ ship.getType() + " " + ship.getAlignment() + " "
 						+ Integer.toString(row) + " " + Integer.toString(col)));
 
@@ -316,7 +321,7 @@ public class Player implements BattlePlayer{
 		private void fire(int row, int col) {
 			if (deployed && opponentDeployed && playerTurn) {
 				System.out.println("Firing");
-				sendMessage(new Message(Message.MESSAGE, name, "FIRE "
+				sendMessage(new Message(Message.MESSAGE, name, reciever, "FIRE "
 						+ Integer.toString(row) + " " + Integer.toString(col)));
 			}
 		}

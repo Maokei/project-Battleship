@@ -18,14 +18,16 @@ public class Message implements Serializable {
 	private static final long serialVersionUID = -1162931686882215029L;
 	private int type;
 	private String msg;
-	private String name;
+	private String sender;
+	private String reciever;
 	public static final int LOGIN = 0, MESSAGE = 1,
 			CHAT = 2, LOGOUT = 3, DEPLOYED = 4, TURN = 5,
 			AIMATCH = 6, CHALLENGE = 7, LOST = 8, RETRIEVE = 9;
 
-	public Message(int type, String name, String msg) {
+	public Message(int type, String sender, String reciever,  String msg) {
 		this.type = type;
-		this.name = name;
+		this.sender = sender;
+		this.setReciever(reciever);
 		this.msg = msg;
 	}
 	
@@ -55,6 +57,14 @@ public class Message implements Serializable {
 	 * @return return the name as a string player name that sent the message or server
 	 * */
 	public String getName() {
-		return name;
+		return sender;
+	}
+
+	public String getReciever() {
+		return reciever;
+	}
+
+	public void setReciever(String reciever) {
+		this.reciever = reciever;
 	}
 }

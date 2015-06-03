@@ -40,6 +40,7 @@ public class PlayerProxy extends Thread {
 	protected ObjectInputStream in;
 	protected ObjectOutputStream out;
 	protected boolean running = true;
+	private String receiver, toServer;
 
 	/**
 	 * PlayerProxy Constructor
@@ -203,7 +204,7 @@ public class PlayerProxy extends Thread {
 		} else if (msg.getMessage().equalsIgnoreCase("Multiplayer")) {
 			playing = false;
 			mode = GameMode.MultiPlayer;
-			server.sendPlayers(name);
+			// server.sendPlayers(name);
 			// see if there is players to start a match
 			if (!server.lookForPlayerMulti()) {
 				playing = false; // wait
@@ -215,7 +216,7 @@ public class PlayerProxy extends Thread {
 
 	private void handleLogout() {
 		server.removePlayerProxy(this.playerId);
-		server.sendMessageToOpponent(new Message(Message.CHAT, msg.getName(),
+		server.sendMessageToOpponent(new Message(Message.CHAT, msg.getName(), toServer,
 				msg.getMessage()));
 	}
 

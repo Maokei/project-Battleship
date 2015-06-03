@@ -183,14 +183,15 @@ public class Server extends JFrame {
 			int value = r.nextInt(100);
 			if (value < 50) {
 				players.get(0).sendMessage(
-						new Message(Message.TURN, players.get(1).name, ""));
+						new Message(Message.TURN, players.get(0).name, players.get(1).name, ""));
 			} else {
 				players.get(1).sendMessage(
-						new Message(Message.TURN, players.get(0).name, ""));
+						new Message(Message.TURN, players.get(1).name, players.get(0).name, ""));
 			}
 		}
 	}
 	
+	/*
 	public synchronized void sendPlayers(String name) {
 		StringBuilder builder = new StringBuilder();
 		for(PlayerProxy player : players) {
@@ -201,6 +202,7 @@ public class Server extends JFrame {
 		}
 		sendMessageToAll(new Message(Message.LOGIN, "Server", builder.toString().trim()));
 	}
+	*/
 	
 	/**
 	 * lookForPlayerMulti
@@ -229,7 +231,7 @@ public class Server extends JFrame {
 	
 	public synchronized void sendAllDeployed() {
 		for (PlayerProxy player : players) {
-			player.sendMessage(new Message(Message.DEPLOYED, player.name, ""));
+			player.sendMessage(new Message(Message.DEPLOYED, player.name, "Server", ""));
 		}
 	}
 	
@@ -269,7 +271,7 @@ public class Server extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				sendMessageToAll(new Message(1, "server", input.getText()));
+				sendMessageToAll(new Message(1, "server", "Server", input.getText()));
 				input.setText("");
 			}
 		});
