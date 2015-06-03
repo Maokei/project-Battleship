@@ -105,6 +105,21 @@ public class Server extends JFrame {
 			}
 		}
 	}
+	
+	public void setUpBattle(String challenger1, String challenger2) {
+		PlayerProxy player1 = null, player2 = null;
+		for (PlayerProxy player : players) {
+			if (player.name.equalsIgnoreCase(challenger1)) {
+				player1 = player;
+			}
+		}
+		for (PlayerProxy player : players) {
+			if (player.name.equalsIgnoreCase(challenger2)) {
+				player2 = player;
+			}
+		}
+		battles.add(new Battle(this, player1, player2));
+	}
 
 	/**
 	 * removePlayerProxy
@@ -317,10 +332,7 @@ public class Server extends JFrame {
 		server.listen();
 	}
 
-	public void setUpBattle(String string, String string2) {
-		// TODO Auto-generated method stub
-		
-	}
+	
 
 	
 
