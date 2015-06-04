@@ -86,7 +86,6 @@ public class Player {
 		enemyBoard = new Gameboard();
 		playerBoard.addMouseListener(new BoardListener());
 		enemyBoard.addMouseListener(new BoardListener());
-
 		// toolkit = Toolkit.getDefaultToolkit();
 		// cursorImg = toolkit.getImage("src/res/sprite/crosshair.png");
 		// cursor = toolkit.createCustomCursor(cursorImg, new Point(0, 0), "");
@@ -177,7 +176,7 @@ public class Player {
 	}
 
 	/**
-	 * setOpponent
+	 * setOpponentName
 	 * @name setOpponent
 	 * @param Takes an opponent as a string name
 	 * */
@@ -186,8 +185,8 @@ public class Player {
 	}
 
 	/**
-	 * getOpponent
-	 * @name getOpponent
+	 * getOpponentName
+	 * @name getOpponentName
 	 * @return returns opponent name as a string.
 	 * */
 	public String getOpponentName() {
@@ -475,11 +474,6 @@ public class Player {
 			}
 		}
 
-		/**
-		 * placePlayerShip
-		 * @name placePlayerShip
-		 * @param Integer row and integer column, where to place player ship.
-		 * */
 		private void placePlayerShip(int row, int col) {
 			if (shipPlacementIndex == 0) {
 				screen.disableRandom();
@@ -504,12 +498,7 @@ public class Player {
 				}
 			}
 		}
-		
-		/**
-		 * fire
-		 * @name fire
-		 * @param Integer row and integer column, sends out fire message.
-		 * */
+
 		private void fire(int row, int col) {
 			if (deployed && opponentDeployed && playerTurn) {
 				if (enemyBoard.checkFire(row, col)) {
@@ -522,13 +511,7 @@ public class Player {
 		}
 	}
 
-	/**
-	 * handleChallange
-	 * @name handleChallange
-	 * @param handle a challange message given String sender name and String message.
-	 * */
-	@Override
-	public void handleChallenge(String sender, String message) {
+	public void handleChallenge(Message msg) {
 		String title = "", msgText = "";
 		int reply = -1;
 		if (msg.getMessage().equalsIgnoreCase(Challenge_Request)) {
@@ -559,12 +542,6 @@ public class Player {
 
 	}
 
-	/**
-	 * handleAIMatch
-	 * @name handleAIMatch
-	 * @brief JOptionPane query player about playing against server instead of waiting for a player.
-	 * */
-	@Override
 	public void handleAIMatch() {
 		String msgText = "There are no available players at this time\n\nDo you want to play singleplayer?";
 		String title = "No Available Players";
@@ -577,5 +554,4 @@ public class Player {
 					Challenge_Deny));
 		}
 	}
-
 }
