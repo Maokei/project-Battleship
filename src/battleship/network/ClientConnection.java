@@ -105,29 +105,29 @@ public class ClientConnection implements Runnable, NetworkOperations {
 			parseLogin(msg);
 			break;
 		case Message.LOGOUT:
-			players.remove(msg.getName());
+			players.remove(msg.getSender());
 			break;
 		case Message.MESSAGE:
 			parseMessage(msg);
 			break;
 		case Message.CHAT:
-			if (!msg.getName().equalsIgnoreCase("AI"))
-				output.append(msg.getName() + ">> " + msg.getMessage() + "\n");
+			if (!msg.getSender().equalsIgnoreCase("AI"))
+				output.append(msg.getSender() + ">> " + msg.getMessage() + "\n");
 			break;
 		case Message.DEPLOYED:
 			player.setOpponentDeployed();
 			break;
 		case Message.TURN:
-			if (!msg.getName().equals(player.getName())) {
+			if (!msg.getSender().equals(player.getName())) {
 				player.setPlayerTurn(true);
 			}
 			break;
 		case Message.LOST:
-			if (msg.getName().equalsIgnoreCase("AI"))
+			if (msg.getSender().equalsIgnoreCase("AI"))
 				((Player) player).battleWon();
 			break;
 		case Message.CHALLENGE:
-			player.handleChallenge(msg.getName(), msg.getMessage());
+			player.handleChallenge(msg.getSender(), msg.getMessage());
 			break;
 		case Message.AIMATCH:
 			player.handleAIMatch();
@@ -138,7 +138,7 @@ public class ClientConnection implements Runnable, NetworkOperations {
 	private void parseLogin(Message msg) {
 		System.out.print("parseLogin " + player.getName() + ": ");
 		
-		if(msg.getName().equalsIgnoreCase("Server")) {
+		if(msg.getSender().equalsIgnoreCase("Server")) {
 			String[] tokens = msg.getMessage().split(" ");
 			for(String name : tokens) {
 				System.out.print(name);

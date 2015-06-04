@@ -328,10 +328,11 @@ public class Player implements BattlePlayer {
 
 		private void fire(int row, int col) {
 			if (deployed && opponentDeployed && playerTurn) {
-				if(enemyBoard.checkFire(row, col)) {
-				sendMessage(new Message(Message.MESSAGE, name, "FIRE "
-						+ Integer.toString(row) + " " + Integer.toString(col)));
-				playerTurn = false;
+				if (enemyBoard.checkFire(row, col)) {
+					sendMessage(new Message(Message.MESSAGE, name, "FIRE "
+							+ Integer.toString(row) + " "
+							+ Integer.toString(col)));
+					playerTurn = false;
 				}
 			}
 		}

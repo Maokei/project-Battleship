@@ -110,8 +110,12 @@ public class PlayerProxy extends Thread {
 	 * @name getPlaying
 	 * @return boolean
 	 * */
-	public boolean getPlaying() {
+	public boolean isPlaying() {
 		return playing;
+	}
+	
+	public void setPlaying(boolean playing) {
+		this.playing = playing;
 	}
 
 	/**
@@ -201,7 +205,9 @@ public class PlayerProxy extends Thread {
 			break;
 		case Message.TURN:
 			if (mode == GameMode.SinglePlayer) {
-				aiPlayer.setPlayerTurn(true);
+				if (!msg.getSender().equalsIgnoreCase("AI")) {
+					aiPlayer.setPlayerTurn(true);
+				}
 			} else {
 				server.sendMessageToOpponent(msg);
 			}
@@ -213,25 +219,25 @@ public class PlayerProxy extends Thread {
 			parseChallengeMessage(msg);
 			break;
 		case Message.MODE:
-			parseModeMessage(msg); 
+			parseModeMessage(msg);
 			break;
 		}
 	}
 
 	private void parseModeMessage(Message msg2) {
-		if(msg.getName().equalsIgnoreCase(name)) {
-			if(msg.getMessage().equalsIgnoreCase("SinglePlayer")) {
+		if (msg.getSender().equalsIgnoreCase(name)) {
+			if (msg.getMessage().equalsIgnoreCase("SinglePlayer")) {
 				mode = GameMode.SinglePlayer;
 				aiPlayer = new AIPlayer();
 				aiMatch = true;
 				playing = true;
 			}
-			
+
 		}
 	}
 
 	private void parseChallengeMessage(Message msg) {
-		String[] names = msg.getName().split(" ");
+		String[] names = msg.getSender().split(" ");
 		if (names[0].equalsIgnoreCase(name)) {
 			if (msg.getMessage().equals(Challenge_Accept)) {
 				server.sendMessageToPlayer(names[1], new Message(
@@ -242,7 +248,7 @@ public class PlayerProxy extends Thread {
 			} else if (msg.getMessage().equals(Challenge_Deny)) {
 				server.sendMessageToPlayer(names[1], new Message(
 						Message.CHALLENGE, names[0], Challenge_Deny));
-			} 
+			}
 		}
 	}
 
@@ -253,7 +259,7 @@ public class PlayerProxy extends Thread {
 	 * @brief handles the client login procedure, depending on selected GameMode
 	 * */
 	private void handleLogin() {
-		name = msg.getName();
+		name = msg.getSender();
 		if (msg.getMessage().equalsIgnoreCase("Singleplayer")) {
 			mode = GameMode.SinglePlayer;
 			aiPlayer = new AIPlayer();
@@ -291,7 +297,7 @@ public class PlayerProxy extends Thread {
 
 	private void handleLogout() {
 		server.removePlayerProxy(this.playerId);
-		server.sendMessageToOpponent(new Message(Message.CHAT, msg.getName(),
+		server.sendMessageToOpponent(new Message(Message.CHAT, msg.getSender(),
 				msg.getMessage()));
 	}
 

@@ -99,8 +99,9 @@ public class Server extends JFrame {
 	public void checkForOpponentTo(String name) {
 		for (PlayerProxy player : players) {
 			if (player.name != name) {
-				if(!player.getPlaying()) {
+				if(!player.isPlaying()) {
 					player.sendMessage(new Message(Message.CHALLENGE, name, Challenge_Request));
+					break;
 				}
 			}
 		}
@@ -178,9 +179,9 @@ public class Server extends JFrame {
 	 * @return void
 	 * */
 	public synchronized void sendMessageToAll(Message msg) {
-		messages.append(msg.getName() + " all:" + msg.getMessage() + "\n");
+		messages.append(msg.getSender() + " all:" + msg.getMessage() + "\n");
 		for (PlayerProxy player : players) {
-			if (player.name != msg.getName()) {
+			if (player.name != msg.getSender()) {
 				player.sendMessage(msg);
 			}
 		}
@@ -196,9 +197,9 @@ public class Server extends JFrame {
 	 * @return void
 	 * */
 	public synchronized void sendMessageToOpponent(Message msg) {
-		messages.append(msg.getName() + " MsgOP:" + msg.getMessage() + "\n");
+		messages.append(msg.getSender() + " MsgOP:" + msg.getMessage() + "\n");
 		for (PlayerProxy player : players) {
-			if (!player.getPlayerName().equalsIgnoreCase(msg.getName())) {
+			if (!player.getPlayerName().equalsIgnoreCase(msg.getSender())) {
 				player.sendMessage(msg);
 			}
 		}
@@ -206,7 +207,7 @@ public class Server extends JFrame {
 
 	public synchronized void sendMessageToSender(Message msg) {
 		for (PlayerProxy player : players) {
-			if (player.getPlayerName().equalsIgnoreCase(msg.getName())) {
+			if (player.getPlayerName().equalsIgnoreCase(msg.getSender())) {
 				player.sendMessage(msg);
 			}
 		}
@@ -247,7 +248,7 @@ public class Server extends JFrame {
 	public boolean lookForPlayerMulti() {
 		for(PlayerProxy p : players) {
 			if(p.getMode() == GameMode.MultiPlayer){
-				if(p.getPlaying() == false)
+				if(p.isPlaying() == false)
 					return true;
 			}
 		}
