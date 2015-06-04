@@ -270,6 +270,11 @@ public class Server extends JFrame {
 		}
 	}
 	
+	/**
+	 * getPlayerCount
+	 * @name getPlayerCount
+	 * @return integer return number of connected players.
+	 * */
 	public int getPlayerCount() {
 		return players.size();
 	}
@@ -325,8 +330,22 @@ public class Server extends JFrame {
 		this.setSize(400, 400);
 		this.setVisible(true);
 	}
-	public int getNumberOfCurrentPlayers() {return players.size();}
 	
+	/**
+	 * getNumberOfPlayers
+	 * @name getNumberOfPlayers
+	 * @return integer return number of connected players.
+	 * */
+	public int getNumberOfCurrentPlayers() {
+		return players.size();
+		
+	}
+	
+	/**
+	 * resetServer
+	 * @name resetServer
+	 * @brief Closes all connections and removes players and resets id counter.
+	 * */
 	private void resetServer() {
 		// add reset message to event log
 		// messages.
@@ -336,18 +355,4 @@ public class Server extends JFrame {
 		id = 0;
 		this.messages.append("Server reset\n");
 	}
-
-	public static void main(String[] args) {
-		Server server = new Server(DEFAULT_PORT);
-		server.listen();
-	}
-
-	
-
-	
-
-	
-
-	
-
 }
