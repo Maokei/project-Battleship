@@ -1,9 +1,18 @@
+/**
+ * @file BattlePlayer.java
+ * @author rickard, lars
+ * @date 2015-05-25
+ * */
 package battleship.game;
 
 import java.util.ArrayList;
 
 import battleship.ships.Ship;
 
+/**
+ * @interface BattlePlayer 
+ * @extends PlayerOperations
+ * */
 public interface BattlePlayer extends PlayerOperations {
 	public void setOpponentDeployed();
 	public void setPlayerTurn(boolean playerTurn);

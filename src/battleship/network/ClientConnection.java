@@ -1,3 +1,8 @@
+/**
+ * @file ClientConnection.java
+ * @authors rickard, lars
+ * @date 2015-05-25
+ * */
 package battleship.network;
 
 import static battleship.game.Constants.*;
@@ -19,6 +24,12 @@ import battleship.ships.BattleShipFactory;
 import battleship.ships.Ship;
 import battleship.ships.ShipType;
 
+/**
+ * ClientConnection 
+ * @class ClientConnection
+ * @implements Runnable, NetworkOperation
+ * @brief Class describes the connection. Client uses this connection class to talk to server and handle messages.
+ * */
 public class ClientConnection implements Runnable, NetworkOperations {
 	private String address;
 	private int portNumber;
@@ -37,6 +48,11 @@ public class ClientConnection implements Runnable, NetworkOperations {
 		this.players = new ArrayList<String>();
 	}
 
+	/**
+	 * openConnection
+	 * @name openConnection
+	 * @brief Try to open a connection given that ip and port are set already.
+	 * */
 	public boolean openConnection() {
 		try {
 			socket = new Socket(address, portNumber);
@@ -53,15 +69,29 @@ public class ClientConnection implements Runnable, NetworkOperations {
 		return true;
 	}
 
+	/**
+	 * setPlayer
+	 * @name setPlayer
+	 * @param Takes and sets a Player pointer.
+	 * */
 	public void setPlayer(Player player) {
 		this.player = player;
 	}
 
-	// just to demonstrate Chat
+	/**
+	 * setOutput
+	 * @name setOutput
+	 * @brief Chat test function.
+	 * */
 	public void setOutput(JTextArea output) {
 		this.output = output;
 	}
 
+	/**
+	 * run
+	 * @name run
+	 * @brief Start the thread and listen for messages.
+	 * */
 	public void run() {
 		try {
 			while (running) {
@@ -81,6 +111,11 @@ public class ClientConnection implements Runnable, NetworkOperations {
 		}
 	}
 
+	/**
+	 * closeConnection
+	 * @name closeConnection
+	 * @brief Attempt to safely close the connection.
+	 * */
 	public void closeConnection() {
 		if (socket != null) {
 			int port = socket.getPort();
@@ -98,6 +133,11 @@ public class ClientConnection implements Runnable, NetworkOperations {
 		System.exit(0);
 	}
 
+	/**
+	 * handleMessage
+	 * @name handleMessage
+	 * @param Takes a message and handles in appropriately.
+	 * */
 	private void handleMessage(Message msg) {
 		int type = msg.getType();
 		switch (type) {
@@ -138,6 +178,11 @@ public class ClientConnection implements Runnable, NetworkOperations {
 		}
 	}
 
+	/**
+	 * parseLogin
+	 * @name parseLogin
+	 * @param Takes a login message object to parse.
+	 * */
 	private void parseLogin(Message msg) {
 		System.out.print("parseLogin " + player.getName() + ": ");
 
@@ -151,10 +196,22 @@ public class ClientConnection implements Runnable, NetworkOperations {
 		}
 	}
 
+	/**
+	 * getConnectedPlayers
+	 * @name getConnectedPlayers
+	 * @brief Function meant to be used my lobby to populate players JList.
+	 * @returns A list of player names. 
+	 * */
 	public ArrayList<String> getConnectedPlayers() {
 		return players;
 	}
 
+	/**
+	 * parseMessage
+	 * @name parseMessage
+	 * @brief Parses a battle message.
+	 * @param Takes a message to parse.
+	 * */
 	private void parseMessage(Message msg) {
 		if (msg.getMessage().startsWith("Server full")) {
 			JOptionPane.showMessageDialog(null,
@@ -179,12 +236,22 @@ public class ClientConnection implements Runnable, NetworkOperations {
 		}
 	}
 
+	/**
+	 * parseMissMessage
+	 * @name parseMissMessage
+	 * @param Takes an Array of string tokens
+	 * */
 	private void parseMissMessage(String[] tokens) {
 		int row = Integer.parseInt(tokens[1]);
 		int col = Integer.parseInt(tokens[2]);
 		player.registerPlayerMiss(row, col);
 	}
 
+	/**
+	 * parseShipDownMessage
+	 * @name parseShipDownMessage
+	 * @param Array of String tokens.
+	 * */
 	private void parseShipDownMessage(String[] tokens) {
 		Ship ship = null;
 		ShipType type;
@@ -212,18 +279,32 @@ public class ClientConnection implements Runnable, NetworkOperations {
 		player.placeEnemyShip(ship, row, col);
 	}
 
+	/**
+	 * parseFireMessage
+	 * @name parseFireMessage
+	 * @param String array to be parsed, register FireMessage.
+	 * */
 	private void parseFireMessage(String[] tokens) {
 		int row = Integer.parseInt(tokens[1]);
 		int col = Integer.parseInt(tokens[2]);
 		player.registerFire(row, col);
 	}
 
+	/**
+	 * parseHitMessage
+	 * @name parseHitMessage
+	 * */
 	private void parseHitMessage(String[] tokens) {
 		int row = Integer.parseInt(tokens[1]);
 		int col = Integer.parseInt(tokens[2]);
 		player.registerPlayerHit(row, col);
 	}
 
+	/**
+	 * sendMessage
+	 * @name sendMessage
+	 * @param Takes a Message object to be written out sent sent through stream.
+	 * */
 	public void sendMessage(Message message) {
 		try {
 			out.writeObject(message);
@@ -233,6 +314,12 @@ public class ClientConnection implements Runnable, NetworkOperations {
 		}
 	}
 
+	/**
+	 * setRunning
+	 * @name setRunning
+	 * @brief Sets running state.
+	 * @param boolean running state to be set.
+	 * */
 	public void setRunning(boolean running) {
 		this.running = running;
 	}

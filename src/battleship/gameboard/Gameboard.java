@@ -1,3 +1,8 @@
+/**
+ * @file Gameboard.java
+ * @authors rickard, lars
+ * @date 2015-05-25
+ * */
 package battleship.gameboard;
 
 import static battleship.game.Constants.GRID_SIZE;
@@ -20,6 +25,12 @@ import battleship.resources.SpriteLoader;
 import battleship.ships.Alignment;
 import battleship.ships.Ship;
 
+/**
+ * Gameboard
+ * @class Gameboard
+ * @extends JPanel
+ * @brief Class describes a battleship gameboard.
+ * */
 public class Gameboard extends JPanel {
 	private static final long serialVersionUID = 1L;
 	private Grid[][] gridboard;
@@ -28,19 +39,28 @@ public class Gameboard extends JPanel {
 	private boolean defeat = false;
 	private boolean victory = false;
 
+	/**
+	 * Gameboard
+	 * @constructor Gameboard
+	 * */
 	public Gameboard() {
 		super();
 		setLayout(new GridLayout(SIZE, SIZE));
 		setSize(new Dimension((SIZE * GRID_SIZE), (SIZE * GRID_SIZE)));
 		gridboard = new Grid[SIZE][SIZE];
-
+		//load in sprites
 		sprites = SpriteLoader.getInstance(32, 32, 8, 8, 13);
 		sprites.loadSprites("src/res/sprite/spritesheet_battleship.png");
 		background = sprites.getSprite("water");
+		//initiate grid
 		initGrid();
-
 	}
 
+	/**
+	 * initGrid
+	 * @name initGrid
+	 * @brief Function initiates a player grid.
+	 * */
 	private void initGrid() {
 		for (int row = 0; row < SIZE; row++) {
 			for (int col = 0; col < SIZE; col++) {
@@ -50,24 +70,51 @@ public class Gameboard extends JPanel {
 		}
 	}
 
+	/**
+	 * addHit
+	 * @name addHit
+	 * @param intger row and integer column to add a hit on grid.
+	 * @brief Add a hit on a player grid.
+	 * */
 	public void addHit(int row, int col) {
 		gridboard[row][col].setIcon(new ImageIcon(sprites.getSprite("hit")));
 		gridboard[row][col].setHit();
 	}
 
+	/**
+	 * addMiss
+	 * @name addMiss
+	 * @param intger row and integer column to add a miss on grid.
+	 * @brief Add a miss on a player grid.
+	 * */
 	public void addMiss(int row, int col) {
 		gridboard[row][col].setIcon(new ImageIcon(sprites.getSprite("miss")));
 		gridboard[row][col].setMiss();
 	}
 
+	/**
+	 * fadeGridOut
+	 * @name fadeGridOut
+	 * @param intger row and integer column to add a fadeout on grid.
+	 * */
 	public void fadeGridOut(int row, int col) {
 		gridboard[row][col].fadeOut();
 	}
 
+	/**
+	 * fadeGridIn
+	 * @name fadeGridIn
+	 * @param intger row and integer column to add a fadein effect on grid.
+	 * */
 	public void fadeGridIn(int row, int col) {
 		gridboard[row][col].fadeIn();
 	}
 
+	/**
+	 * paintComponent
+	 * @name paintComponent
+	 * @param Graphics g to draw
+	 * */
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		if (!(defeat || victory)) {
@@ -99,6 +146,14 @@ public class Gameboard extends JPanel {
 		}
 	}
 
+	
+	/**
+	 * checkShipPlacement
+	 * @name checkShipPlacement
+	 * @brief Check if ship placement is possible, given position and alignment in ship object.
+	 * @param Takes a Ship object, integer row in grid and integer column in grid.
+	 * @return boolean value if ship placement is possible otherwise false will be returned.
+	 * */
 	public boolean checkShipPlacement(Ship ship, int row, int col) {
 		if (ship.getAlignment() == Alignment.HORIZONTAL) {
 			int width = ship.getLength() + 2;
@@ -183,7 +238,13 @@ public class Gameboard extends JPanel {
 		return true;
 	}
 
-	
+	/**
+	 * placeShip
+	 * @name placeShip
+	 * @brief Place ship on the playing grid, and fill points on grid belonging to ship length and alignment.
+	 * @param Takes a ship object, integer row in grid and integer column in grid.
+	 * @return Void function.
+	 * */
 	public void placeShip(Ship ship, int row, int col) {
 		int counter;
 		if (ship.getAlignment() == Alignment.HORIZONTAL) {
@@ -205,6 +266,13 @@ public class Gameboard extends JPanel {
 		}
 	}
 
+	/**
+	 * addShipSprite
+	 * @name addShipSprite
+	 * @brief Add appropriate sprite to draw.
+	 * @param Ship object and integer row and integer column, counter for length of ship.
+	 * @return Void function.
+	 * */
 	private void addShipSprite(Ship ship, int row, int col, int counter) {
 		String pre, post;
 		if (ship.getAlignment() == Alignment.HORIZONTAL)
@@ -228,6 +296,13 @@ public class Gameboard extends JPanel {
 				.setIcon(new ImageIcon(sprites.getSprite(pre + post)));
 	}
 
+	/**
+	 * checkHit
+	 * @name checkHit
+	 * @brief Help function to look for a hit on given position.
+	 * @param Integer row and integer column on player grid.
+	 * @return If target has been false is returned, false for miss or empty.
+	 * */
 	public boolean checkHit(int row, int col) {
 		if (!(gridboard[row][col].isEmpty() || gridboard[row][col].isHit() || gridboard[row][col].isMiss())) {
 				return true;
@@ -235,16 +310,31 @@ public class Gameboard extends JPanel {
 		return false;
 	}
 
+	/**
+	 * displayDefeat
+	 * @name displayDefeat
+	 * @brief Set defeat state and repaint.
+	 * */
 	public void displayDefeat() {
 		defeat = true;
 		repaint();
 	}
 
+	/**
+	 * displayVictory
+	 * @name displayVictory
+	 * @brief Set victory state and repaint. 
+	 * */
 	public void displayVictory() {
 		victory = true;
 		repaint();
 	}
 
+	/**
+	 * setGridsNotVisible
+	 * @name setGridNotVisible
+	 * @brief Make set each grid cell not visible.
+	 * */
 	private void setGridsNotVisisble() {
 		for (int row = 0; row < SIZE; row++) {
 			for (int col = 0; col < SIZE; col++) {
@@ -253,6 +343,11 @@ public class Gameboard extends JPanel {
 		}
 	}
 
+	/**
+	 * clear
+	 * @name clear
+	 * @brief Loop and fast fade out each grid cell.
+	 * */
 	public void clear() {
 		for (int row = 0; row < SIZE; row++) {
 			for (int col = 0; col < SIZE; col++) {
@@ -263,6 +358,11 @@ public class Gameboard extends JPanel {
 		}
 	}
 
+	/**
+	 * randmizeShipPlacement
+	 * @name randomizeShipPlacement 
+	 * @param Takes a vector of ships to randomized onto grid.
+	 * */
 	public void randomizeShipPlacement(Vector<Ship> ships) {
 		for (Ship ship : ships) {
 			String type = ship.getType();

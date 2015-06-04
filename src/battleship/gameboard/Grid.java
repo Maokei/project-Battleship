@@ -32,6 +32,9 @@ public class Grid extends JLabel {
 	private boolean hit = false;
 	private boolean miss = false;
 
+	/**
+	 * @param integer row and integer column
+	 * */
 	public Grid(int row, int col) {
 		super();
 		setPreferredSize(new Dimension(32, 32));
@@ -39,18 +42,32 @@ public class Grid extends JLabel {
 		this.col = col;
 	}
 
+	/**
+	 * setOccupied
+	 * @name setOccupied
+	 * @brief Set occupied state.
+	 * */
 	public void setOccupied() {
 		empty = false;
 	}
 
+	/**
+	 * isEmpty
+	 * @name isEmpty
+	 * @return return empty state.
+	 * */
 	public boolean isEmpty() {
 		return empty;
 	}
 
+	/**
+	 * setHit
+	 * @name setHit
+	 * */
 	public void setHit() {
 		hit = true;
 	}
-
+	
 	public boolean isHit() {
 		return hit;
 	}
