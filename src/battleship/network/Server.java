@@ -169,44 +169,14 @@ public class Server extends JFrame {
 			players.remove(pp);
 		}
 	}
-
-	/*
-	 * private void removeByName(Message msg) { for (PlayerProxy player :
-	 * players) { if (player.name == msg.getName()) {
-	 * messages.append("Removed player: " + player.name);
-	 * players.remove(player); player.running = false; } } }
-	 */
+	
 	/**
-	 * sendMessageToAll
+	 * sendMessage
 	 * 
-	 * @brief Function to handle massage that will be sent to all clients
-	 * @param Message
-	 *            to be send to everyone
+	 * @brief Send message to reciver.
+	 * @param Message to be sent.
 	 * @return void
 	 * */
-	/*
-	 * public synchronized void sendMessageToAll(Message msg) {
-	 * messages.append(msg.getSender() + " all:" + msg.getMessage() + "\n"); for
-	 * (PlayerProxy player : players) { if (player.name != msg.getSender()) {
-	 * player.sendMessage(msg); } } }
-	 */
-	/**
-	 * sendMessageToOpponent
-	 * 
-	 * @brief Function to handle sending message to opponent in a battleship
-	 *        match
-	 * @param Message
-	 *            to be sent.
-	 * @return void
-	 * */
-	/*
-	 * public synchronized void sendMessageToOpponent(Message msg) {
-	 * messages.append("Sender " + msg.getSender() + "Receiver " +
-	 * msg.getReceiver() + " MsgOP: " + msg.getMessage() + "\n"); for
-	 * (PlayerProxy player : players) { if
-	 * (!player.getPlayerName().equalsIgnoreCase(msg.getSender())) {
-	 * player.sendMessage(msg); } } }
-	 */
 	public synchronized void sendMessage(Message msg) {
 		messages.append("Sender " + msg.getSender() + "Receiver "
 				+ msg.getReceiver() + " MsgOP: " + msg.getMessage() + "\n");
@@ -218,6 +188,12 @@ public class Server extends JFrame {
 		}
 	}
 
+	/**
+	 * sendMessageToAllPlayers
+	 * @name sendsMessageToallPlayers
+	 * @param Message object
+	 * @brief sends a message to all connected players.
+	 * */
 	public synchronized void sendMessageToAllPlayers(Message msg) {
 		messages.append("Sender " + msg.getSender() + "Receiver ALL"
 				+ " MsgOP: " + msg.getMessage() + "\n");
@@ -226,6 +202,11 @@ public class Server extends JFrame {
 		}
 	}
 
+	/**
+	 * checkDeployment
+	 * @name checkDeployment
+	 * @param Takes a Message sends it to receiver of sender.
+	 * */
 	public boolean checkDeployment(Message msg) {
 		for (PlayerProxy player : players) {
 			if (player.getPlayerName().equalsIgnoreCase(msg.getSender())) {
@@ -241,6 +222,11 @@ public class Server extends JFrame {
 		return true;
 	}
 
+	/**
+	 * randomizePlayerTurn
+	 * @name randomizePlayerTurn
+	 * @brief Randomizes player turns. 
+	 * */
 	public void randomizePlayerTurn(Message msg) {
 		if (players.size() > 1 && checkDeployment(msg)) {
 			sendAllDeployed(msg);
@@ -256,6 +242,11 @@ public class Server extends JFrame {
 		}
 	}
 	
+	/**
+	 * sendAllDeployed
+	 * @name sendAllDeployed
+	 * @brief Send out deployment message.
+	 * */
 	public synchronized void sendAllDeployed(Message msg) {
 		sendMessage(new Message(Message.DEPLOYED, msg.getSender(),
 				msg.getReceiver(), ""));
