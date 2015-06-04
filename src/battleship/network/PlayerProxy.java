@@ -668,7 +668,7 @@ public class PlayerProxy extends Thread {
 			initEnemyGrid();
 			displayPlayerGrid();
 			displayPlayerShips();
-
+			playerTurn = false;
 		}
 
 		private void initEnemyGrid() {
@@ -941,6 +941,7 @@ public class PlayerProxy extends Thread {
 				enemyGrid[row][col] = miss;
 				probableTargets.remove(new Grid(row, col));
 				sendMessage(new Message(Message.TURN, "AI", name, ""));
+				playerTurn = false;
 			}
 		}
 
@@ -962,6 +963,7 @@ public class PlayerProxy extends Thread {
 
 		public void battleLost() {
 			sendMessage(new Message(Message.LOST, "AI", name, ""));
+			playerTurn = false;
 		}
 
 		public String getName() {
@@ -973,6 +975,7 @@ public class PlayerProxy extends Thread {
 		}
 
 		public void setPlayerTurn(boolean playerTurn) {
+			this.playerTurn = playerTurn;
 			new GameTimer(2, 1000).run();
 		}
 

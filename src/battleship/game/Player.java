@@ -201,6 +201,8 @@ public class Player {
 	public boolean getHasOpponent() {
 		return hasOpponent;
 	}
+	
+	
 
 	/**
 	 * registerFire
@@ -242,13 +244,21 @@ public class Player {
 	public void registerEnemyHit(Ship ship, int row, int col) {
 		AudioLoader.getAudio("explosion1").playAudio();
 		playerBoard.addHit(row, col);
-		sendMessage(new Message(Message.MESSAGE, getName(), getOpponentName(), "HIT "
-				+ Integer.toString(row) + " " + Integer.toString(col)));
+		if(mode == GameMode.MultiPlayer) {
+			sendMessage(new Message(Message.MESSAGE, getName(), getOpponentName(), "HIT "
+					+ Integer.toString(row) + " " + Integer.toString(col)));
+		}
 		ship.hit();
 		if (!ship.isAlive()) {
 			sinkShip(ship);
 			screen.setShips(--remainingShips);
 		}
+		
+		if(mode == GameMode.SinglePlayer) {
+			sendMessage(new Message(Message.MESSAGE, getName(), getOpponentName(), "HIT "
+					+ Integer.toString(row) + " " + Integer.toString(col)));
+		}
+		
 		if (remainingShips == 0)
 			battleLost();
 	}
@@ -271,6 +281,8 @@ public class Player {
 		for (Grid pos : ship.getPosition()) {
 			playerBoard.fadeGridOut(pos.getRow(), pos.getCol());
 		}
+		
+		
 	}
 
 	/**
@@ -554,4 +566,5 @@ public class Player {
 					Challenge_Deny));
 		}
 	}
+
 }
