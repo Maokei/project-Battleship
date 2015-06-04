@@ -243,13 +243,13 @@ public class Player {
 	public void registerEnemyHit(Ship ship, int row, int col) {
 		AudioLoader.getAudio("explosion1").playAudio();
 		playerBoard.addHit(row, col);
+		sendMessage(new Message(Message.MESSAGE, getName(), getOpponentName(), "HIT "
+				+ Integer.toString(row) + " " + Integer.toString(col)));
 		ship.hit();
 		if (!ship.isAlive()) {
 			sinkShip(ship);
 			screen.setShips(--remainingShips);
 		}
-		sendMessage(new Message(Message.MESSAGE, getName(), getOpponentName(), "HIT "
-				+ Integer.toString(row) + " " + Integer.toString(col)));
 		if (remainingShips == 0)
 			battleLost();
 	}
