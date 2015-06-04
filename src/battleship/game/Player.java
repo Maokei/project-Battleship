@@ -462,6 +462,11 @@ public class Player implements BattlePlayer {
 			}
 		}
 
+		/**
+		 * placePlayerShip
+		 * @name placePlayerShip
+		 * @param Integer row and integer column, where to place player ship.
+		 * */
 		private void placePlayerShip(int row, int col) {
 			if (shipPlacementIndex == 0) {
 				screen.disableRandom();
@@ -486,7 +491,12 @@ public class Player implements BattlePlayer {
 				}
 			}
 		}
-
+		
+		/**
+		 * fire
+		 * @name fire
+		 * @param Integer row and integer column, sends out fire message.
+		 * */
 		private void fire(int row, int col) {
 			if (deployed && opponentDeployed && playerTurn) {
 				System.out.println("Firing");
@@ -496,6 +506,11 @@ public class Player implements BattlePlayer {
 		}
 	}
 
+	/**
+	 * handleChallange
+	 * @name handleChallange
+	 * @param handle a challange message given String sender name and String message.
+	 * */
 	@Override
 	public void handleChallenge(String sender, String message) {
 		String title = "", msgText = "";
@@ -529,6 +544,11 @@ public class Player implements BattlePlayer {
 
 	}
 
+	/**
+	 * handleAIMatch
+	 * @name handleAIMatch
+	 * @brief JOptionPane query player about playing against server instead of waiting for a player.
+	 * */
 	@Override
 	public void handleAIMatch() {
 		String msgText = "There are no available players at this time\n\nDo you want to play singleplayer?";

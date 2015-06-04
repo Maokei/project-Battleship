@@ -96,6 +96,11 @@ public class Server extends JFrame {
 		}
 	}
 	
+	/**
+	 * checkForOpponentTo
+	 * @name checkForOpponentTo
+	 * @param String name opponent to send a challange.
+	 * */
 	public void checkForOpponentTo(String name) {
 		for (PlayerProxy player : players) {
 			if (player.name != name) {
@@ -106,6 +111,11 @@ public class Server extends JFrame {
 		}
 	}
 	
+	/**
+	 * sendMessageToPlayer
+	 * @name sendMessageToPlayer
+	 * @param String name to which player you want to send Message object to.
+	 * */
 	public void sendMessageToPlayer(String name, Message msg) {
 		for (PlayerProxy player : players) {
 			if (player.name == name) {
@@ -114,6 +124,11 @@ public class Server extends JFrame {
 		}
 	}
 	
+	/**
+	 * setUpBattle
+	 * @name setUpBattle
+	 * @param 
+	 * */
 	public void setUpBattle(String challenger1, String challenger2) {
 		System.out.println("Trying to find " + challenger1 + " and " + challenger2 + " in playersList");
 		PlayerProxy player1 = null, player2 = null;
@@ -204,6 +219,11 @@ public class Server extends JFrame {
 		}
 	}
 
+	/**
+	 * sendMessageToSender
+	 * @name sendMessageToSender
+	 * @param Message msg send message to sender.
+	 * */
 	public synchronized void sendMessageToSender(Message msg) {
 		for (PlayerProxy player : players) {
 			if (player.getPlayerName().equalsIgnoreCase(msg.getName())) {
@@ -212,6 +232,11 @@ public class Server extends JFrame {
 		}
 	}
 
+	/**
+	 * randomizePlayerTurn
+	 * @name randomizePlayerTurn
+	 * @brief Randomizes player turns. 
+	 * */
 	public void randomizePlayerTurn() {
 		if (players.size() > 1 && checkDeployment()) {
 			sendAllDeployed();
@@ -228,6 +253,11 @@ public class Server extends JFrame {
 		}
 	}
 	
+	/**
+	 * sendPlayer
+	 * @name sendPlayer
+	 * @param String name to send list of player too.
+	 * */
 	public synchronized void sendPlayers(String name) {
 		StringBuilder builder = new StringBuilder();
 		for(PlayerProxy player : players) {
@@ -254,6 +284,11 @@ public class Server extends JFrame {
 		return false;
 	}
 
+	/**
+	 * checkDeployment
+	 * @name checkDeployment
+	 * @return boolean check if player has deployed ships.
+	 * */
 	public boolean checkDeployment() {
 		for (PlayerProxy player : players) {
 			if (!player.getDeployed() == true) {
@@ -264,6 +299,11 @@ public class Server extends JFrame {
 		return true;
 	}
 	
+	/**
+	 * sendAllDeployed
+	 * @name sendAllDeployed
+	 * @brief Sends out deployed message.
+	 * */
 	public synchronized void sendAllDeployed() {
 		for (PlayerProxy player : players) {
 			player.sendMessage(new Message(Message.DEPLOYED, player.name, ""));

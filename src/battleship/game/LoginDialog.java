@@ -1,4 +1,8 @@
-
+/**
+ * @file LoginDialog.java
+ * @authors rickard, lars
+ * @date 2015-05-25
+ * */
 package battleship.game;
 
 import java.awt.BorderLayout;
@@ -25,6 +29,11 @@ import battleship.network.ClientConnection;
 import battleship.screen.AvatarPanel;
 import battleship.screen.InputPanel;
 
+/**
+ * @class LoginDialog
+ * @extends JDialog
+ * @brief Class describes a JDialog that handles server login process on client side. 
+ * */
 public class LoginDialog extends JDialog {
 	private static final long serialVersionUID = 1L;
 	private Player player;
@@ -45,6 +54,10 @@ public class LoginDialog extends JDialog {
 	public static final int DEFAULT_PORT = 10001;
 	public static final String DEFAULT_ADDRESS = "localhost";
 
+	/**
+	 * LoginDialog constructor, setup's gui.
+	 * @param Takes a Player to adapt login dialog too.
+	 * */
 	public LoginDialog(Player player) {
 		super();
 		this.player = player;
@@ -120,16 +133,31 @@ public class LoginDialog extends JDialog {
 		port = 10001;
 	}
 	
+	/**
+	 * clear
+	 * @name clear
+	 * @brief Clear login dialog input fields.
+	 * */
 	private void clear() {
 		nameInput.setInput("");
 		avatarChooser.reset();
 	}
 	
+	/**
+	 * close
+	 * @name close
+	 * @brief Close dialog.
+	 * */
 	private void close() {
 		setVisible(false);
 		dispose();
 	}
 	
+	/**
+	 * getIpAndPort
+	 * @name getIpAndPort
+	 * @brief Function query user about ip and port from user.
+	 * */
 	private void getIpAndPort() {
 		ip = (String)JOptionPane.showInputDialog(
                 this,
@@ -151,6 +179,11 @@ public class LoginDialog extends JDialog {
 		port = Integer.parseInt(temp);
 	}
 	
+	/**
+	 * waitingDialog
+	 * @name waitingDialog
+	 * @brief displays a waiting dialog, waiting for another player.
+	 * */
 	private void waitingDialog() {
 		JOptionPane optionPane = new JOptionPane("Waiting for players!"); 
 		JDialog wait = optionPane.createDialog(this, "Waiting");
@@ -158,6 +191,11 @@ public class LoginDialog extends JDialog {
 		wait.setVisible(true);
 	}
 	
+	/**
+	 * login
+	 * @name login
+	 * @brief Initiate login to server singel or multiplayer based on GameMode.
+	 * */
 	private void login() {
 		if (!nameInput.equals("")) {
 			if(mode == GameMode.SinglePlayer) {
@@ -184,6 +222,11 @@ public class LoginDialog extends JDialog {
 		}
 	}
 	
+	/**
+	 * @class PlayerModeListener
+	 * @implements ActionListener
+	 * @brief Inner class describes a GameMode selection listener.
+	 * */
 	class PlayerModeListener implements ActionListener {
 
 		@Override
