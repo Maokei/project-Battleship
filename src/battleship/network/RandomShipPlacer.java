@@ -1,3 +1,8 @@
+/**
+ * @file RandomShipPlacer.java
+ * @authors rickard, lars
+ * @date 2015-05-25
+ * */
 package battleship.network;
 
 import static battleship.game.Constants.*;
@@ -10,6 +15,10 @@ import battleship.ships.Alignment;
 import battleship.ships.Ship;
 import battleship.ships.ShipBuilder;
 
+/**
+ * @class RandomShipPlacer
+ * @brief Class describes a way to randomly place ships with 1 space in between each ship.
+ * */
 public class RandomShipPlacer {
 	private char[][] gridboard;
 	private Vector<Ship> ships;
@@ -18,14 +27,30 @@ public class RandomShipPlacer {
 	public RandomShipPlacer() {
 		randomizeShipGrid();
 	}
+	
+	/**
+	 * getRandomShipGrid
+	 * @name getRandomShipGrid
+	 * @return return a char[][] grid 10 * 10
+	 * */
 	public char[][] getRandomShipGrid() {
 		return gridboard;
 	}
 
+	/**
+	 * getRandomShips
+	 * @name getRandomShips
+	 * @returns Ship vector.
+	 * */
 	public Vector<Ship> getRandomShips() {
 		return ships;
 	}
 
+	/**
+	 * randomizeShipGrid
+	 * @name randomizeShipsGrid
+	 * @brief randomize ships on grid.
+	 * */
 	private void randomizeShipGrid() {
 		gridboard = new char[SIZE][SIZE];
 		ships = ShipBuilder.buildShips();
@@ -37,6 +62,11 @@ public class RandomShipPlacer {
 		placeAllShips();
 	}
 
+	/**
+	 * placeAllShips
+	 * @name placeAllShips
+	 * @brief Meta function to start placing ships on char grid.
+	 * */
 	public void placeAllShips() {
 		for (Ship ship : ships) {
 			randomizeAlignment(ship);
@@ -48,6 +78,12 @@ public class RandomShipPlacer {
 		}
 	}
 
+	/**
+	 * placeShip
+	 * @name placeShip
+	 * @brief Place a ship on the grid.
+	 * @param Ship object to be placed and a grid to place the ship on.
+	 * */
 	private void placeShip(Ship ship, Grid grid) {
 		int counter;
 		if (ship.getAlignment() == Alignment.HORIZONTAL) {
@@ -70,6 +106,12 @@ public class RandomShipPlacer {
 		}
 	}
 
+	/**
+	 * getValidGrid
+	 * @name getValidgrid
+	 * @param Ship object
+	 * @return returns new grid object
+	 * */
 	private Grid getValidGrid(Ship ship) {
 		int row, col;
 		do {
@@ -80,6 +122,12 @@ public class RandomShipPlacer {
 		return new Grid(row, col);
 	}
 
+	/**
+	 * checkGrid
+	 * @name checkGrid
+	 * @param Ship object, Grid object
+	 * @return validates grid, true valid.
+	 * */
 	private boolean checkGrid(Ship ship, Grid grid) {
 		int row = grid.getRow();
 		int col = grid.getCol();
@@ -151,15 +199,32 @@ public class RandomShipPlacer {
 		return true;
 	}
 
+	/**
+	 * randomizeAlignment
+	 * @name randomizeAlignment
+	 * @param Ship pointer to randomize ship alignment.
+	 * */
 	private void randomizeAlignment(Ship ship) {
 		ship.setAlignment((r.nextInt(100) < 50) ? Alignment.HORIZONTAL
 				: Alignment.VERTICAL);
 	}
 
+	/**
+	 * getRandomnInt
+	 * @name getRandomInt
+	 * @param Integer to set random upper bound.
+	 * @return Integer returns a random integer.
+	 * */
 	private int getRandomInt(int number) {
 		return r.nextInt(number);
 	}
 
+	/**
+	 * checkEmptyGrid
+	 * @name checkEmptyGrid
+	 * @param Integer row and integer column.
+	 * @return boolean depending on if grid cell is empty or not.
+	 * */
 	private boolean checkEmptyGrid(int row, int col) {
 		return (gridboard[row][col] == empty);
 	}
