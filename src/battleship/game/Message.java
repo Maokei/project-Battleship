@@ -61,6 +61,11 @@ public class Message implements Serializable {
 		return sender;
 	}
 	
+	/**
+	 * getReceiver 
+	 * @name getReceiver
+	 * @return String name of the receiver.
+	 * */
 	public String getReceiver() {
 		return receiver;
 	}
