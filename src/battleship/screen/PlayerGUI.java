@@ -1,3 +1,8 @@
+/**
+ * @file PlayerGUI.java
+ * @authors rickard, lars
+ * @date 2015-05-25
+ * */
 package battleship.screen;
 
 import java.awt.AlphaComposite;
@@ -26,6 +31,11 @@ import javax.swing.Timer;
 import battleship.game.Message;
 import battleship.game.Player;
 
+/**
+ * @class PlayerGUI
+ * @extends JPanel
+ * @package battleship.screen
+ * */
 public class PlayerGUI extends JPanel {
 	private static final long serialVersionUID = 3152977875044360557L;
 	private Player player;
@@ -41,6 +51,10 @@ public class PlayerGUI extends JPanel {
 	private GridBagConstraints gc;
 	private boolean deployed = false;
 
+	/**
+	 * PlayerGUI Constructor
+	 * @param Takes a player pointer to adapt GUI for.
+	 * */
 	public PlayerGUI(Player player) {
 		super(new GridBagLayout());
 		this.player = player;
@@ -108,11 +122,21 @@ public class PlayerGUI extends JPanel {
 		add(stats, gc);
 	}
 
+	/**
+	 * randomizeShipPlacement
+	 * @name randomizeShipPlacement
+	 * @brief Initiate randomization of player ships.
+	 * */
 	private void randomizeShipPlacement() {
 		player.randomizeShipPlacement();
 		random.setEnabled(false);
 	}
 
+	/**
+	 * shipsPlaced
+	 * @name shipsPlaced
+	 * @brief Set ship deployed state and sendout deployed message.
+	 * */
 	private void shipsPlaced() {
 		if (!deployed) {
 			player.sendMessage(new Message(Message.DEPLOYED, player.getName(), player.getOpponentName(),
@@ -123,20 +147,40 @@ public class PlayerGUI extends JPanel {
 		}
 	}
 
+	/**
+	 * setShipsDeployed
+	 * @name setShipsDeployed
+	 * @brief set deployed state.
+	 * */
 	public void setShipsDeployed() {
 		random.setEnabled(false);
 		ready.setEnabled(true);
 		ready.blink();
 	}
 	
+	/**
+	 * disableRandom
+	 * @name disableRandom
+	 * @brief set enabled state.
+	 * */
 	public void disableRandom() {
 		random.setEnabled(false);
 	}
 
+	/**
+	 * getStats
+	 * @name getStats
+	 * @return Returns player stats.
+	 * */
 	public PlayerStats getStats() {
 		return stats;
 	}
 
+	/**
+	 * @class ReadyButton
+	 * @extends JButton
+	 * @brief Class describes a ready button.
+	 * */
 	class ReadyButton extends JButton {
 		private static final long serialVersionUID = 1L;
 		private Blinker blink;
@@ -161,18 +205,33 @@ public class PlayerGUI extends JPanel {
 			setContentAreaFilled(false);
 			setBackground(new Color(15, 15, 15));
 		}
-
+		
+		/**
+		 * blink
+		 * @name blink
+		 * @brief Engage button blinking.
+		 * */
 		public void blink() {
 			blink = new Blinker();
 			blink.fadeInAndOut();
 		}
 
+		/**
+		 * stop
+		 * @name stop
+		 * @brief Stops the button from blinking.
+		 * */
 		public void stop() {
 			blink.stop();
 			alpha = 1.0f;
 			repaint();
 		}
 
+		/**
+		 * pain
+		 * @name paint
+		 * @param Graphics context
+		 * */
 		@Override
 		public void paint(Graphics g) {
 			if (img == null || img.getWidth() != getWidth()
@@ -190,6 +249,10 @@ public class PlayerGUI extends JPanel {
 			g2d.dispose();
 		}
 
+		/**
+		 * @class Blinker
+		 * @brief Class blinks.
+		 * */
 		class Blinker {
 			private Timer t;
 
@@ -208,6 +271,11 @@ public class PlayerGUI extends JPanel {
 				t.start();
 			}
 
+			/**
+			 * checkBounds
+			 * @name checkBounds 
+			 * @return check alpha bound true if bounds are valid.
+			 * */
 			private boolean checkBounds() {
 				if (alpha < 0.0f) {
 					alpha = 0.0f;
@@ -218,11 +286,20 @@ public class PlayerGUI extends JPanel {
 				}
 				return true;
 			}
-
+			
+			/**
+			 * changeDirection
+			 * @name changeDirection
+			 * */
 			private void changeDirection() {
 				level = -level;
 			}
-
+			
+			/**
+			 * stop
+			 * @name stop 
+			 * @brief Stops blinking.
+			 * */
 			public void stop() {
 				t.stop();
 				t = null;
