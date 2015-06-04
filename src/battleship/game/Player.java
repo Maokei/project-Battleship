@@ -17,6 +17,8 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.Vector;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.BlockingQueue;
 
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
@@ -37,7 +39,8 @@ import battleship.ships.ShipBuilder;
 /**
  * @package battleship.entity
  * @Class Player
- * @brief Class represent a player human battleship player, class also contains many of the core gameplay mechanics.
+ * @brief Class represent a player human battleship player, class also contains
+ *        many of the core gameplay mechanics.
  * @implements BattlePlayer interface
  * */
 public class Player {
@@ -45,6 +48,7 @@ public class Player {
 	private Avatar avatar;
 	private Screen screen;
 	private ClientConnection con;
+	private BlockingQueue<String> validMove;
 	private GameMode mode;
 	private Gameboard playerBoard, enemyBoard;
 	private Vector<Ship> playerShips;
@@ -62,8 +66,11 @@ public class Player {
 
 	/**
 	 * Player
+	 * 
 	 * @brief Player constructor
-	 * @param String player name, Avatar object player picture, ClientConnection for talk to server.
+	 * @param String
+	 *            player name, Avatar object player picture, ClientConnection
+	 *            for talk to server.
 	 * */
 	public Player(String name, Avatar avatar, ClientConnection con,
 			GameMode mode) {
@@ -71,12 +78,14 @@ public class Player {
 		this.avatar = avatar;
 		this.con = con;
 		this.mode = mode;
-		con.setPlayer(this);
+		validMove = new ArrayBlockingQueue<String>(1);
+		con.setPlayer(this, validMove);
 	}
 
 	/**
 	 * init
-	 * @name init 
+	 * 
+	 * @name init
 	 * @brief Player class initiation function.
 	 * @return void function
 	 * */
@@ -86,7 +95,6 @@ public class Player {
 		enemyBoard = new Gameboard();
 		playerBoard.addMouseListener(new BoardListener());
 		enemyBoard.addMouseListener(new BoardListener());
-
 		// toolkit = Toolkit.getDefaultToolkit();
 		// cursorImg = toolkit.getImage("src/res/sprite/crosshair.png");
 		// cursor = toolkit.createCustomCursor(cursorImg, new Point(0, 0), "");
@@ -102,8 +110,10 @@ public class Player {
 
 	/**
 	 * listen
+	 * 
 	 * @name listen
-	 * @brief Start a new thread to listen for incoming events with ClientConnection.
+	 * @brief Start a new thread to listen for incoming events with
+	 *        ClientConnection.
 	 * */
 
 	public void listen() {
@@ -112,8 +122,10 @@ public class Player {
 
 	/**
 	 * sendMessage
+	 * 
 	 * @name sendMessage
-	 * @param Message object to be sent to server.
+	 * @param Message
+	 *            object to be sent to server.
 	 * @return void function.
 	 * */
 	public void sendMessage(Message message) {
@@ -122,6 +134,7 @@ public class Player {
 
 	/**
 	 * getConnection
+	 * 
 	 * @name getConnection
 	 * @return ClientConnection pointer.
 	 * */
@@ -131,6 +144,7 @@ public class Player {
 
 	/**
 	 * getName
+	 * 
 	 * @name getName
 	 * @return String object player name.
 	 **/
@@ -139,7 +153,8 @@ public class Player {
 	}
 
 	/**
-	 * getAvatar 
+	 * getAvatar
+	 * 
 	 * @name getAvatar
 	 * @return avatar pointer used by player.
 	 * */
@@ -149,6 +164,7 @@ public class Player {
 
 	/**
 	 * getGameMode
+	 * 
 	 * @name getGameMode
 	 * @return GameMode enum.
 	 * */
@@ -158,8 +174,10 @@ public class Player {
 
 	/**
 	 * getConnectedPlayers
+	 * 
 	 * @name getConnectedPlayers
-	 * @param ArrayList<String> of connected players.
+	 * @param ArrayList
+	 *            <String> of connected players.
 	 * */
 	public ArrayList<String> getConnectedPlayers() {
 		return con.getConnectedPlayers();
@@ -167,9 +185,11 @@ public class Player {
 
 	/**
 	 * checkHit
+	 * 
 	 * @name checkHit
 	 * @brief Check for a hit in given position.
-	 * @param Integer row and integer column in grid.
+	 * @param Integer
+	 *            row and integer column in grid.
 	 * @true True for hit false for no hit.
 	 * */
 	public boolean checkHit(int row, int col) {
@@ -177,39 +197,41 @@ public class Player {
 	}
 
 	/**
-	 * setOpponent
+	 * setOpponentName
+	 * 
 	 * @name setOpponent
-	 * @param Takes an opponent as a string name
+	 * @param Takes
+	 *            an opponent as a string name
 	 * */
 	public void setOpponentName(String opponent) {
 		this.opponentName = opponent;
 	}
 
 	/**
-	 * getOpponent
-	 * @name getOpponent
+	 * getOpponentName
+	 * 
+	 * @name getOpponentName
 	 * @return returns opponent name as a string.
 	 * */
 	public String getOpponentName() {
 		return opponentName;
 	}
-	
-	
+
 	public void setHasOpponent(boolean hasOpponent) {
 		this.hasOpponent = hasOpponent;
 	}
-	
+
 	public boolean getHasOpponent() {
 		return hasOpponent;
 	}
-	
-	
 
 	/**
 	 * registerFire
+	 * 
 	 * @name registerFire
 	 * @brief register a shot on the grid.
-	 * @param intger row and integer column in a grid.
+	 * @param intger
+	 *            row and integer column in a grid.
 	 * */
 	public void registerFire(int row, int col) {
 		if (checkHit(row, col)) {
@@ -225,8 +247,10 @@ public class Player {
 
 	/**
 	 * registerPlayerHit
+	 * 
 	 * @name registerPlayerHit
-	 * @param integer row and integer column in grid.
+	 * @param integer
+	 *            row and integer column in grid.
 	 * */
 	public void registerPlayerHit(int row, int col) {
 		AudioLoader.getAudio("explosion1").playAudio();
@@ -237,60 +261,67 @@ public class Player {
 
 	/**
 	 * registerEnemyHit
+	 * 
 	 * @name registerEnemyHit
 	 * @brief Function register and enemy hit on a grid.
-	 * @param Ship object, integer row and integer column.
+	 * @param Ship
+	 *            object, integer row and integer column.
 	 * @return void function.
 	 * */
 	public void registerEnemyHit(Ship ship, int row, int col) {
 		AudioLoader.getAudio("explosion1").playAudio();
 		playerBoard.addHit(row, col);
-		if(mode == GameMode.MultiPlayer) {
-			sendMessage(new Message(Message.MESSAGE, getName(), getOpponentName(), "HIT "
-					+ Integer.toString(row) + " " + Integer.toString(col)));
+		if (mode == GameMode.MultiPlayer) {
+			sendMessage(new Message(Message.MESSAGE, getName(),
+					getOpponentName(), "HIT " + Integer.toString(row) + " "
+							+ Integer.toString(col)));
 		}
 		ship.hit();
 		if (!ship.isAlive()) {
 			sinkShip(ship);
 			screen.setShips(--remainingShips);
 		}
-		
-		if(mode == GameMode.SinglePlayer) {
-			sendMessage(new Message(Message.MESSAGE, getName(), getOpponentName(), "HIT "
-					+ Integer.toString(row) + " " + Integer.toString(col)));
+
+		if (mode == GameMode.SinglePlayer) {
+			sendMessage(new Message(Message.MESSAGE, getName(),
+					getOpponentName(), "HIT " + Integer.toString(row) + " "
+							+ Integer.toString(col)));
 		}
-		
+
 		if (remainingShips == 0)
 			battleLost();
 	}
 
 	/**
 	 * sinkShip
+	 * 
 	 * @name sinkShip
-	 * @param Takes a ship pointer for a ship to be sunk.
+	 * @param Takes
+	 *            a ship pointer for a ship to be sunk.
 	 * */
 	public void sinkShip(Ship ship) {
 		AudioLoader.getAudio("tilt").playAudio();
 		int row = ship.getStartPosition().getRow();
 		int col = ship.getStartPosition().getCol();
 
-		sendMessage(new Message(Message.MESSAGE,  getName(), getOpponentName(), "SHIP_DOWN "
-				+ ship.getType() + " " + ship.getAlignment() + " "
-				+ Integer.toString(row) + " " + Integer.toString(col)));
+		sendMessage(new Message(Message.MESSAGE, getName(), getOpponentName(),
+				"SHIP_DOWN " + ship.getType() + " " + ship.getAlignment() + " "
+						+ Integer.toString(row) + " " + Integer.toString(col)));
 
 		playerBoard.placeShip(ship, row, col);
 		for (Grid pos : ship.getPosition()) {
 			playerBoard.fadeGridOut(pos.getRow(), pos.getCol());
 		}
-		
-		
+
 	}
 
 	/**
 	 * registerPlayerMiss
+	 * 
 	 * @name registerPlayerMiss
 	 * @brief register a miss by player.
-	 * @param interger row and integer column.
+	 * @param interger
+	 *            row and integer column.
 	 * */
 	public void registerPlayerMiss(int row, int col) {
 		AudioLoader.getAudio("splash1").playAudio();
@@ -303,22 +334,27 @@ public class Player {
 
 	/**
 	 * registerEnemyMiss
+	 * 
 	 * @name registerEnemyMiss
 	 * @brief registers a miss by the enemy.
-	 * @param integer row and integer column on grid.
+	 * @param integer
+	 *            row and integer column on grid.
 	 * */
 	public void registerEnemyMiss(int row, int col) {
 		AudioLoader.getAudio("splash1").playAudio();
-		sendMessage(new Message(Message.MESSAGE,  getName(), getOpponentName(), "MISS "
-				+ Integer.toString(row) + " " + Integer.toString(col)));
+		sendMessage(new Message(Message.MESSAGE, getName(), getOpponentName(),
+				"MISS " + Integer.toString(row) + " " + Integer.toString(col)));
 		playerBoard.addMiss(row, col);
+
 	}
 
 	/**
 	 * placeEnemyShip
+	 * 
 	 * @name placeEnemyShip
 	 * @brief register an enemy ship on enemy grid to be drawn.
-	 * @param Ship object, integer row and integer column.
+	 * @param Ship
+	 *            object, integer row and integer column.
 	 * */
 	public void placeEnemyShip(Ship ship, int row, int col) {
 		AudioLoader.getAudio("ship_down").playAudio();
@@ -333,8 +369,9 @@ public class Player {
 
 	/**
 	 * randomizeShipPlacement
+	 * 
 	 * @name randomizeShipPlacement
-	 * @brief  meta function to start randomization of ships
+	 * @brief meta function to start randomization of ships
 	 * @return void function
 	 **/
 	public void randomizeShipPlacement() {
@@ -347,8 +384,10 @@ public class Player {
 
 	/**
 	 * setRunning
+	 * 
 	 * @name setRunning
-	 * @param set running state clientConnection takes boolean value.
+	 * @param set
+	 *            running state clientConnection takes boolean value.
 	 * */
 	public void setRunning(boolean running) {
 		con.setRunning(running);
@@ -356,6 +395,7 @@ public class Player {
 
 	/**
 	 * setOpponentDeployed
+	 * 
 	 * @name setOpponentDeployed
 	 * @brief set opponent deployed state true.
 	 * */
@@ -365,6 +405,7 @@ public class Player {
 
 	/**
 	 * setDeployed
+	 * 
 	 * @name setDeployed
 	 * @brief setDeployed state true and appropriate screen message for player.
 	 * */
@@ -379,7 +420,8 @@ public class Player {
 
 	/**
 	 * setPlayerTurn
-	 * @name setPlayerTurn 
+	 * 
+	 * @name setPlayerTurn
 	 * @brief set turn state and appropriate screen message.
 	 * @param boolean value to set player turn state.
 	 * */
@@ -390,6 +432,7 @@ public class Player {
 
 	/**
 	 * battleWon
+	 * 
 	 * @name battleWon
 	 * @brief stop turns and display victory message.
 	 * */
@@ -401,12 +444,13 @@ public class Player {
 
 	/**
 	 * battleLost
+	 * 
 	 * @name battleLost
 	 * @brief player lost sound and stop turn, display battle lost message.
 	 * */
 	public void battleLost() {
 		AudioLoader.getAudio("march").setLoop(true).playAudio();
-		sendMessage(new Message(Message.LOST,  getName(), getOpponentName(), ""));
+		sendMessage(new Message(Message.LOST, getName(), getOpponentName(), ""));
 		screen.setMessage("You sir, are a DISGRACE!!");
 		playerBoard.displayDefeat();
 		playerTurn = false;
@@ -414,9 +458,11 @@ public class Player {
 
 	/**
 	 * GameTimer
+	 * 
 	 * @class GameTimer
 	 * @brief And inner help class to help with timing of events.
-	 * @param integer seconds and integer amount of delay.
+	 * @param integer
+	 *            seconds and integer amount of delay.
 	 * */
 	class GameTimer {
 		private Timer t;
@@ -430,6 +476,7 @@ public class Player {
 
 		/**
 		 * run
+		 * 
 		 * @name run
 		 * @brief start's thread
 		 * */
@@ -447,6 +494,7 @@ public class Player {
 
 		/**
 		 * checkTime
+		 * 
 		 * @name checkTime
 		 * @brief if no time left stop.
 		 * */
@@ -460,6 +508,7 @@ public class Player {
 
 	/**
 	 * BoardListener
+	 * 
 	 * @class BoardListener
 	 * @extends MouseAdapter
 	 * @brief Event listener class for a player board.
@@ -487,11 +536,6 @@ public class Player {
 			}
 		}
 
-		/**
-		 * placePlayerShip
-		 * @name placePlayerShip
-		 * @param Integer row and integer column, where to place player ship.
-		 * */
 		private void placePlayerShip(int row, int col) {
 			if (shipPlacementIndex == 0) {
 				screen.disableRandom();
@@ -500,47 +544,58 @@ public class Player {
 			if (shipPlacementIndex < playerShips.size()) {
 				Ship ship = playerShips.elementAt(shipPlacementIndex);
 				ship.setAlignment(alignment);
+				sendMessage(new Message(Message.VALID, getName(),
+						getOpponentName(), "PLACING " + ship.getType() + " "
+								+ ship.getAlignment() + " "
+								+ Integer.toString(row) + " "
+								+ Integer.toString(col)));
 
-				sendMessage(new Message(Message.MESSAGE,  getName(), getOpponentName(), "PLACING "
-						+ ship.getType() + " " + ship.getAlignment() + " "
-						+ Integer.toString(row) + " " + Integer.toString(col)));
+				try {
+					if (validMove.take().equalsIgnoreCase(Valid_Move)) {
+						screen.setMessage("Deploy your ships");
+						sendMessage(new Message(Message.MESSAGE, getName(),
+								getOpponentName(), "PLACING " + ship.getType()
+										+ " " + ship.getAlignment() + " "
+										+ Integer.toString(row) + " "
+										+ Integer.toString(col)));
 
-				if (playerBoard.checkShipPlacement(ship, row, col)) {
-					playerBoard.placeShip(ship, row, col);
-					shipPlacementIndex++;
+						if (playerBoard.checkShipPlacement(ship, row, col)) {
+							playerBoard.placeShip(ship, row, col);
+							shipPlacementIndex++;
 
-					if (shipPlacementIndex == playerShips.size()) {
-						screen.setShipsDeployed();
-						screen.setMessage("Press Ready Button");
+							if (shipPlacementIndex == playerShips.size()) {
+								screen.setShipsDeployed();
+								screen.setMessage("Press Ready Button");
+							}
+						}
+					} else {
+						screen.setMessage("Hey, give some space will ya!");
 					}
+				} catch (InterruptedException e) {
+					e.printStackTrace();
 				}
 			}
 		}
-		
-		/**
-		 * fire
-		 * @name fire
-		 * @param Integer row and integer column, sends out fire message.
-		 * */
+
 		private void fire(int row, int col) {
-			if (deployed && opponentDeployed && playerTurn) {
-				if (enemyBoard.checkFire(row, col)) {
-					sendMessage(new Message(Message.MESSAGE,  getName(), getOpponentName(), "FIRE "
-							+ Integer.toString(row) + " "
-							+ Integer.toString(col)));
-					playerTurn = false;
-				}
+			if (checkDeployed() && playerTurn) {
+				sendMessage(new Message(Message.MESSAGE, getName(),
+						getOpponentName(), "FIRE " + Integer.toString(row)
+								+ " " + Integer.toString(col)));
+				playerTurn = false;
+			}
+		}
+
+		private boolean checkDeployed() {
+			if (mode == GameMode.MultiPlayer) {
+				return (deployed && opponentDeployed);
+			} else {
+				return deployed;
 			}
 		}
 	}
 
-	/**
-	 * handleChallange
-	 * @name handleChallange
-	 * @param handle a challange message given String sender name and String message.
-	 * */
-	@Override
-	public void handleChallenge(String sender, String message) {
+	public void handleChallenge(Message msg) {
 		String title = "", msgText = "";
 		int reply = -1;
 		if (msg.getMessage().equalsIgnoreCase(Challenge_Request)) {
@@ -552,18 +607,22 @@ public class Player {
 			if (reply == JOptionPane.YES_OPTION) {
 				opponentName = msg.getSender();
 				hasOpponent = true;
-				sendMessage(new Message(Message.CHALLENGE, getName(), getOpponentName(), Challenge_Accept));
+				sendMessage(new Message(Message.CHALLENGE, getName(),
+						getOpponentName(), Challenge_Accept));
 			} else {
-				sendMessage(new Message(Message.CHALLENGE, getName(), msg.getSender(), Challenge_Deny));
+				sendMessage(new Message(Message.CHALLENGE, getName(),
+						msg.getSender(), Challenge_Deny));
 			}
 		} else if (msg.getMessage().equalsIgnoreCase(Challenge_Accept)) {
-			msgText = msg.getSender() + " has accepted your your invitation\n\nGood Luck!.";
+			msgText = msg.getSender()
+					+ " has accepted your your invitation\n\nGood Luck!.";
 			title = "CHALLENGE ACCEPT";
 			JOptionPane.showMessageDialog(null, msgText, title,
 					JOptionPane.INFORMATION_MESSAGE);
 			opponentName = msg.getSender();
 		} else if (msg.getMessage().equalsIgnoreCase(Challenge_Deny)) {
-			msgText = msg.getSender() + " has denied your request.\n\nMaybe he is busy.";
+			msgText = msg.getSender()
+					+ " has denied your request.\n\nMaybe he is busy.";
 			title = "CHALLENGE DENIED";
 			JOptionPane.showMessageDialog(null, msgText, title,
 					JOptionPane.INFORMATION_MESSAGE);
@@ -571,23 +630,17 @@ public class Player {
 
 	}
 
-	/**
-	 * handleAIMatch
-	 * @name handleAIMatch
-	 * @brief JOptionPane query player about playing against server instead of waiting for a player.
-	 * */
-	@Override
 	public void handleAIMatch() {
 		String msgText = "There are no available players at this time\n\nDo you want to play singleplayer?";
 		String title = "No Available Players";
 		int reply = JOptionPane.showConfirmDialog(null, msgText, title,
 				JOptionPane.YES_NO_OPTION);
 		if (reply == JOptionPane.YES_OPTION) {
-			sendMessage(new Message(Message.MODE, getName(), getOpponentName(), "SinglePlayer"));
+			sendMessage(new Message(Message.MODE, getName(), getOpponentName(),
+					"SinglePlayer"));
 		} else {
-			sendMessage(new Message(Message.CHALLENGE, getName(), getOpponentName(),
-					Challenge_Deny));
+			sendMessage(new Message(Message.CHALLENGE, getName(),
+					getOpponentName(), Challenge_Deny));
 		}
 	}
-
 }

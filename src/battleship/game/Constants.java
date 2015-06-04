@@ -35,4 +35,7 @@ public class Constants {
 	public static final String Challenge_Request = "Request";
 	public static final String Challenge_Accept = "Accept";
 	public static final String Challenge_Deny = "Deny";
+	
+	public static final String Valid_Move = "Valid";
+	public static final String NonValid_Move = "NonValid";
 }

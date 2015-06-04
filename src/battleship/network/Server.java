@@ -41,7 +41,7 @@ public class Server extends JFrame {
 	private ServerSocket server;
 	private ArrayList<PlayerProxy> players;
 	private ArrayList<Battle> battles;
-	
+
 	// gui components
 	private JButton resetBtn;
 	private JTextArea messages;
@@ -78,7 +78,8 @@ public class Server extends JFrame {
 				players.add(player);
 				player.start();
 				messages.append("\nNew connection accepted.\n"
-						+ "Connected players: " + players.size() + " id: " + id + " Name: " + player.getName()  + "\n");
+						+ "Connected players: " + players.size() + " id: " + id
+						+ " Name: " + player.getName() + "\n");
 			}
 		} catch (IOException e) {
 			System.err.println(e.getMessage());
@@ -96,27 +97,19 @@ public class Server extends JFrame {
 			}
 		}
 	}
-	
-	/**
-	 * checkForOpponentTo
-	 * @name checkForOpponentTo
-	 * @param String name opponent to send a challange.
-	 * */
+	/*
 	public void checkForOpponentTo(String name) {
 		for (PlayerProxy player : players) {
 			if (player.name != name) {
-				if(!player.getPlaying()) {
-					player.sendMessage(new Message(Message.CHALLENGE, name, Challenge_Request));
+				if (!player.isPlaying()) {
+					player.sendMessage(new Message(Message.CHALLENGE, name,
+							Challenge_Request));
+					break;
 				}
 			}
 		}
 	}
-	
-	/**
-	 * sendMessageToPlayer
-	 * @name sendMessageToPlayer
-	 * @param String name to which player you want to send Message object to.
-	 * */
+
 	public void sendMessageToPlayer(String name, Message msg) {
 		for (PlayerProxy player : players) {
 			if (player.name == name) {
@@ -124,14 +117,10 @@ public class Server extends JFrame {
 			}
 		}
 	}
-	
-	/**
-	 * setUpBattle
-	 * @name setUpBattle
-	 * @param 
-	 * */
+
 	public void setUpBattle(String challenger1, String challenger2) {
-		System.out.println("Trying to find " + challenger1 + " and " + challenger2 + " in playersList");
+		System.out.println("Trying to find " + challenger1 + " and "
+				+ challenger2 + " in playersList");
 		PlayerProxy player1 = null, player2 = null;
 		for (PlayerProxy player : players) {
 			if (player.name.equalsIgnoreCase(challenger1)) {
@@ -146,7 +135,7 @@ public class Server extends JFrame {
 		System.out.println(challenger1 + " is now battling " + challenger2);
 		// TODO -> battles.add(new Battle(this, player1, player2));
 	}
-
+	*/
 	/**
 	 * removePlayerProxy
 	 * 
@@ -171,11 +160,12 @@ public class Server extends JFrame {
 	 * 
 	 * @name removePlayerProxy
 	 * @brief Function to remove a client proxy
-	 * @param Takes a player proxy object, and removes it if it exists
+	 * @param Takes
+	 *            a player proxy object, and removes it if it exists
 	 * @return void
 	 * */
 	public void removePlayerProxy(battleship.network.PlayerProxy pp) {
-		if(players.equals(pp)) {
+		if (players.equals(pp)) {
 			players.remove(pp);
 		}
 	}
@@ -194,15 +184,12 @@ public class Server extends JFrame {
 	 *            to be send to everyone
 	 * @return void
 	 * */
-	public synchronized void sendMessageToAll(Message msg) {
-		messages.append(msg.getName() + " all:" + msg.getMessage() + "\n");
-		for (PlayerProxy player : players) {
-			if (player.name != msg.getName()) {
-				player.sendMessage(msg);
-			}
-		}
-	}
-
+	/*
+	 * public synchronized void sendMessageToAll(Message msg) {
+	 * messages.append(msg.getSender() + " all:" + msg.getMessage() + "\n"); for
+	 * (PlayerProxy player : players) { if (player.name != msg.getSender()) {
+	 * player.sendMessage(msg); } } }
+	 */
 	/**
 	 * sendMessageToOpponent
 	 * 
@@ -212,100 +199,95 @@ public class Server extends JFrame {
 	 *            to be sent.
 	 * @return void
 	 * */
-	public synchronized void sendMessageToOpponent(Message msg) {
-		messages.append(msg.getName() + " MsgOP:" + msg.getMessage() + "\n");
+	/*
+	 * public synchronized void sendMessageToOpponent(Message msg) {
+	 * messages.append("Sender " + msg.getSender() + "Receiver " +
+	 * msg.getReceiver() + " MsgOP: " + msg.getMessage() + "\n"); for
+	 * (PlayerProxy player : players) { if
+	 * (!player.getPlayerName().equalsIgnoreCase(msg.getSender())) {
+	 * player.sendMessage(msg); } } }
+	 */
+	public synchronized void sendMessage(Message msg) {
+		messages.append("Sender " + msg.getSender() + "Receiver "
+				+ msg.getReceiver() + " MsgOP: " + msg.getMessage() + "\n");
+		
 		for (PlayerProxy player : players) {
-			if (!player.getPlayerName().equalsIgnoreCase(msg.getName())) {
+			if (player.getPlayerName().equalsIgnoreCase(msg.getReceiver())) {
 				player.sendMessage(msg);
 			}
 		}
 	}
 
-	/**
-	 * sendMessageToSender
-	 * @name sendMessageToSender
-	 * @param Message msg send message to sender.
-	 * */
-	public synchronized void sendMessageToSender(Message msg) {
+	public synchronized void sendMessageToAllPlayers(Message msg) {
+		messages.append("Sender " + msg.getSender() + "Receiver ALL"
+				+ " MsgOP: " + msg.getMessage() + "\n");
 		for (PlayerProxy player : players) {
-			if (player.getPlayerName().equalsIgnoreCase(msg.getName())) {
-				player.sendMessage(msg);
-			}
+			player.sendMessage(msg);
 		}
 	}
 
-	/**
-	 * randomizePlayerTurn
-	 * @name randomizePlayerTurn
-	 * @brief Randomizes player turns. 
-	 * */
-	public void randomizePlayerTurn() {
-		if (players.size() > 1 && checkDeployment()) {
-			sendAllDeployed();
+	public boolean checkDeployment(Message msg) {
+		for (PlayerProxy player : players) {
+			if (player.getPlayerName().equalsIgnoreCase(msg.getSender())) {
+				if(!player.deployed) {
+					return false;
+				}
+			} else if(player.getPlayerName().equalsIgnoreCase(msg.getReceiver())) {
+				if(!player.deployed) {
+					return false;
+				}
+			}
+		}
+		return true;
+	}
 
+	public void randomizePlayerTurn(Message msg) {
+		if (players.size() > 1 && checkDeployment(msg)) {
+			sendAllDeployed(msg);
 			Random r = new Random();
 			int value = r.nextInt(100);
 			if (value < 50) {
-				players.get(0).sendMessage(
-						new Message(Message.TURN, players.get(1).name, ""));
+				sendMessage(new Message(Message.TURN, msg.getSender(),
+						msg.getReceiver(), ""));
 			} else {
-				players.get(1).sendMessage(
-						new Message(Message.TURN, players.get(0).name, ""));
+				sendMessage(new Message(Message.TURN, msg.getReceiver(),
+						msg.getSender(), ""));
 			}
 		}
 	}
 	
-	/**
-	 * sendPlayer
-	 * @name sendPlayer
-	 * @param String name to send list of player too.
-	 * */
-	public synchronized void sendPlayers(String name) {
-		StringBuilder builder = new StringBuilder();
-		for(PlayerProxy player : players) {
-			if (!player.getPlayerName().equalsIgnoreCase(name)) {
-				builder.append(player.getName());
-				builder.append(' ');
-			}
-		}
-		sendMessageToAll(new Message(Message.LOGIN, "Server", builder.toString().trim()));
+	public synchronized void sendAllDeployed(Message msg) {
+		sendMessage(new Message(Message.DEPLOYED, msg.getSender(),
+				msg.getReceiver(), ""));
+		sendMessage(new Message(Message.DEPLOYED, msg.getReceiver(),
+				msg.getSender(), ""));
 	}
-	
+
+	/*
+	 * public synchronized void sendPlayers(String name) { StringBuilder builder
+	 * = new StringBuilder(); for(PlayerProxy player : players) { if
+	 * (!player.getPlayerName().equalsIgnoreCase(name)) {
+	 * builder.append(player.getName()); builder.append(' '); } }
+	 * sendMessageToAll(new Message(Message.LOGIN, "Server",
+	 * builder.toString().trim())); }
+	 */
 	/**
 	 * lookForPlayerMulti
+	 * 
 	 * @name lookForPlayerMulti
-	 * @return boolean if a player is found that is in multiplayer mode and not player.
+	 * @return boolean if a player is found that is in multiplayer mode and not
+	 *         player.
 	 * */
 	public boolean lookForPlayerMulti() {
-		for(PlayerProxy p : players) {
-			if(p.getMode() == GameMode.MultiPlayer){
-				if(p.getPlaying() == false)
+		for (PlayerProxy p : players) {
+			if (p.getMode() == GameMode.MultiPlayer) {
+				if (p.isPlaying() == false)
 					return true;
 			}
 		}
 		return false;
 	}
 
-	/**
-	 * checkDeployment
-	 * @name checkDeployment
-	 * @return boolean check if player has deployed ships.
-	 * */
-	public boolean checkDeployment() {
-		for (PlayerProxy player : players) {
-			if (!player.getDeployed() == true) {
-				System.out.println(player.getName() + " is not deployed");
-				return false;
-			}
-		}
-		return true;
-	}
-	
-	public synchronized void sendAllDeployed() {
-		for (PlayerProxy player : players) {
-			player.sendMessage(new Message(Message.DEPLOYED, player.name, ""));
-		}
-	}
 	
 	/**
 	 * getPlayerCount
@@ -315,7 +297,6 @@ public class Server extends JFrame {
 	public int getPlayerCount() {
 		return players.size();
 	}
-	
 
 	/**
 	 * setupGui
@@ -348,12 +329,13 @@ public class Server extends JFrame {
 		// Input field for server messages
 		this.add(input = new JTextField(), BorderLayout.SOUTH);
 		this.input.addActionListener(new AbstractAction() {
-			
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				sendMessageToAll(new Message(1, "server", input.getText()));
-				input.setText("");
+				for (PlayerProxy p : players) {
+					sendMessage(new Message(Message.MESSAGE, "Server", p
+							.getPlayerName(), input.getText()));
+				}
 			}
 		});
 		// reset server button
@@ -367,6 +349,7 @@ public class Server extends JFrame {
 		this.setSize(400, 400);
 		this.setVisible(true);
 	}
+
 	
 	/**
 	 * getNumberOfPlayers
@@ -375,7 +358,6 @@ public class Server extends JFrame {
 	 * */
 	public int getNumberOfCurrentPlayers() {
 		return players.size();
-		
 	}
 	
 	/**
@@ -388,7 +370,7 @@ public class Server extends JFrame {
 		// messages.
 		// closing all connections
 		players = new ArrayList<PlayerProxy>();
-		//reset id counter
+		// reset id counter
 		id = 0;
 		this.messages.append("Server reset\n");
 	}

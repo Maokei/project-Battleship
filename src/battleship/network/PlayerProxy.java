@@ -193,12 +193,8 @@ public class PlayerProxy extends Thread {
 			break;
 		case Message.MESSAGE:
 			if (mode == GameMode.SinglePlayer) {
-				if (!checkMessage(msg)) {
-					// TODO -> sendMessage(new Message(Message.MESSAGE, "ERROR",
-					// ""));
-				}
 				parseMessage(msg);
-			} else {
+			} else if (mode == GameMode.MultiPlayer){
 				server.sendMessage(msg);
 			}
 			break;
@@ -217,11 +213,6 @@ public class PlayerProxy extends Thread {
 		case Message.TURN:
 			if (mode == GameMode.SinglePlayer) {
 				aiPlayer.setPlayerTurn(true);
-				/*
-				 * if (!msg.getSender().equalsIgnoreCase("AI")) {
-				 * 
-				 * }
-				 */
 			} else {
 				server.sendMessage(msg);
 			}
@@ -238,6 +229,13 @@ public class PlayerProxy extends Thread {
 			break;
 		case Message.MODE:
 			parseModeMessage(msg);
+			break;
+		case Message.VALID:
+			if(checkMessage(msg)) {
+				sendMessage(new Message(Message.VALID, name, "", Valid_Move));
+			} else {
+				sendMessage(new Message(Message.VALID, name, "", NonValid_Move));
+			}
 			break;
 		}
 	}
@@ -304,8 +302,7 @@ public class PlayerProxy extends Thread {
 			Random r = new Random();
 			int value = r.nextInt(100);
 			if (value < 50) {
-				sendMessage(new Message(Message.TURN, "AI", msg.getReceiver(),
-						""));
+				sendMessage(new Message(Message.TURN, "AI", name,""));
 			} else {
 				aiPlayer.setPlayerTurn(true);
 			}
@@ -650,7 +647,7 @@ public class PlayerProxy extends Thread {
 		public AIPlayer() {
 			init();
 			// sendMessage(new Message(Message.LOGIN, name, "MultiPlayer"));
-			sendMessage(new Message(Message.DEPLOYED, "AI", name, ""));
+			// sendMessage(new Message(Message.DEPLOYED, "AI", name, ""));
 		}
 
 		public void init() {
@@ -941,7 +938,6 @@ public class PlayerProxy extends Thread {
 				enemyGrid[row][col] = miss;
 				probableTargets.remove(new Grid(row, col));
 				sendMessage(new Message(Message.TURN, "AI", name, ""));
-				playerTurn = false;
 			}
 		}
 

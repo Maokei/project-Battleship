@@ -22,7 +22,8 @@ public class Message implements Serializable {
 	private String receiver;
 	public static final int LOGIN = 0, MESSAGE = 1,
 			CHAT = 2, LOGOUT = 3, DEPLOYED = 4, TURN = 5,
-			AIMATCH = 6, CHALLENGE = 7, LOST = 8, MODE = 9;
+			AIMATCH = 6, CHALLENGE = 7, LOST = 8, MODE = 9,
+			VALID = 10;
 	
 
 	public Message(int type, String sender, String receiver, String msg) {

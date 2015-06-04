@@ -6,12 +6,14 @@
 package battleship.network;
 
 import static battleship.game.Constants.*;
+
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.util.concurrent.BlockingQueue;
 
 import javax.swing.JOptionPane;
 import javax.swing.JTextArea;
@@ -41,6 +43,7 @@ public class ClientConnection implements Runnable, NetworkOperations {
 	private ArrayList<String> players;
 	private JTextArea output; // just for Chat
 	private boolean running = true;
+	private BlockingQueue<String> validMove;
 
 	public ClientConnection(String address, int portNumber) {
 		this.address = address;
@@ -71,11 +74,13 @@ public class ClientConnection implements Runnable, NetworkOperations {
 
 	/**
 	 * setPlayer
+	 * @param validMove 
 	 * @name setPlayer
 	 * @param Takes and sets a Player pointer.
 	 * */
-	public void setPlayer(Player player) {
+	public void setPlayer(Player player, BlockingQueue<String> validMove) {
 		this.player = player;
+		this.validMove = validMove;
 	}
 
 	/**
@@ -158,7 +163,7 @@ public class ClientConnection implements Runnable, NetworkOperations {
 			player.setOpponentDeployed();
 			break;
 		case Message.TURN:
-			if (!msg.getSender().equals(player.getName())) {
+			if (msg.getReceiver().equalsIgnoreCase(player.getName()) ) {
 				player.setPlayerTurn(true);
 			}
 			break;
@@ -173,6 +178,12 @@ public class ClientConnection implements Runnable, NetworkOperations {
 			break;
 		case Message.AIMATCH:
 			player.handleAIMatch();
+			break;
+		case Message.VALID: 
+			System.out.println("Adding to validMove : " + msg.getMessage());
+			if(!validMove.offer(msg.getMessage())) {
+				System.out.println("Can't put it in :)");
+			}
 			break;
 		}
 	}
