@@ -210,7 +210,8 @@ public class PlayerProxy extends Thread {
 			if (mode == GameMode.SinglePlayer) {
 				randomizePlayerTurn();
 			} else if (mode == GameMode.MultiPlayer) {
-				server.randomizePlayerTurn(msg);
+				if(hasOpponent)
+					server.randomizePlayerTurn(msg);
 			}
 			break;
 		case Message.TURN:

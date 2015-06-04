@@ -163,8 +163,7 @@ public class ClientConnection implements Runnable, NetworkOperations {
 			}
 			break;
 		case Message.LOST:
-			if (msg.getSender().equalsIgnoreCase("AI"))
-				((Player) player).battleWon();
+				player.battleWon();
 			break;
 		case Message.CHALLENGE:
 			if (!msg.getSender().equalsIgnoreCase(player.getName())
