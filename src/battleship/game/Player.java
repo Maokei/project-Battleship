@@ -117,11 +117,11 @@ public class Player implements BattlePlayer {
 	public boolean checkHit(int row, int col) {
 		return playerBoard.checkHit(row, col);
 	}
-	
+
 	public void setOpponent(String opponent) {
 		this.opponent = opponent;
 	}
-	
+
 	public String getOpponent() {
 		return opponent;
 	}
@@ -145,6 +145,7 @@ public class Player implements BattlePlayer {
 		AudioLoader.getAudio("explosion1").playAudio();
 		enemyBoard.addHit(row, col);
 		screen.setHits(++hits);
+		playerTurn = true;
 	}
 
 	public void registerEnemyHit(Ship ship, int row, int col) {
@@ -327,9 +328,11 @@ public class Player implements BattlePlayer {
 
 		private void fire(int row, int col) {
 			if (deployed && opponentDeployed && playerTurn) {
-				System.out.println("Firing");
+				if(enemyBoard.checkFire(row, col)) {
 				sendMessage(new Message(Message.MESSAGE, name, "FIRE "
 						+ Integer.toString(row) + " " + Integer.toString(col)));
+				playerTurn = false;
+				}
 			}
 		}
 	}
@@ -346,10 +349,11 @@ public class Player implements BattlePlayer {
 					JOptionPane.YES_NO_OPTION);
 			if (reply == JOptionPane.YES_OPTION) {
 				opponent = sender;
-				sendMessage(new Message(Message.CHALLENGE, name + " " + opponent,
-						Challenge_Accept));
+				sendMessage(new Message(Message.CHALLENGE, name + " "
+						+ opponent, Challenge_Accept));
 			} else {
-				sendMessage(new Message(Message.CHALLENGE, name + " " + opponent, Challenge_Deny));
+				sendMessage(new Message(Message.CHALLENGE, name + " "
+						+ opponent, Challenge_Deny));
 			}
 
 		} else if (message.equalsIgnoreCase(Challenge_Accept)) {
@@ -374,10 +378,10 @@ public class Player implements BattlePlayer {
 		int reply = JOptionPane.showConfirmDialog(null, msgText, title,
 				JOptionPane.YES_NO_OPTION);
 		if (reply == JOptionPane.YES_OPTION) {
-			sendMessage(new Message(Message.MODE, name,
-					"SinglePlayer"));
+			sendMessage(new Message(Message.MODE, name, "SinglePlayer"));
 		} else {
-			sendMessage(new Message(Message.CHALLENGE, name + " " + opponent, Challenge_Deny));
+			sendMessage(new Message(Message.CHALLENGE, name + " " + opponent,
+					Challenge_Deny));
 		}
 	}
 

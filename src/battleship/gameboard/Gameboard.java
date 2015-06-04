@@ -52,10 +52,12 @@ public class Gameboard extends JPanel {
 
 	public void addHit(int row, int col) {
 		gridboard[row][col].setIcon(new ImageIcon(sprites.getSprite("hit")));
+		gridboard[row][col].setHit();
 	}
 
 	public void addMiss(int row, int col) {
 		gridboard[row][col].setIcon(new ImageIcon(sprites.getSprite("miss")));
+		gridboard[row][col].setMiss();
 	}
 
 	public void fadeGridOut(int row, int col) {
@@ -227,8 +229,7 @@ public class Gameboard extends JPanel {
 	}
 
 	public boolean checkHit(int row, int col) {
-		if (!gridboard[row][col].isEmpty()) {
-			if (!gridboard[row][col].isHit())
+		if (!(gridboard[row][col].isEmpty() || gridboard[row][col].isHit() || gridboard[row][col].isMiss())) {
 				return true;
 		}
 		return false;
@@ -275,5 +276,12 @@ public class Gameboard extends JPanel {
 			}
 			System.out.print(" ]\n");
 		}
+	}
+
+	public boolean checkFire(int row, int col) {
+		if (!(gridboard[row][col].isHit() || gridboard[row][col].isMiss())) {
+				return true;
+		}
+		return false;
 	}
 }

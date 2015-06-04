@@ -226,6 +226,7 @@ public class PlayerProxy extends Thread {
 				aiMatch = true;
 				playing = true;
 			}
+			
 		}
 	}
 

@@ -30,6 +30,7 @@ public class Grid extends JLabel {
 	private float dir = -0.02f, alpha = 1.0f;
 	private boolean empty = true;
 	private boolean hit = false;
+	private boolean miss = false;
 
 	public Grid(int row, int col) {
 		super();
@@ -46,12 +47,20 @@ public class Grid extends JLabel {
 		return empty;
 	}
 
-	public void setHit(boolean hit) {
-		this.hit = hit;
+	public void setHit() {
+		hit = true;
 	}
 
 	public boolean isHit() {
 		return hit;
+	}
+	
+	public void setMiss() {
+		miss = true;
+	}
+	
+	public boolean isMiss() {
+		return miss;
 	}
 
 	public int getRow() {
@@ -64,7 +73,6 @@ public class Grid extends JLabel {
 
 	public void fadeOut() {
 		new Fader().fadeOut();
-		;
 	}
 
 	public void fadeIn() {
