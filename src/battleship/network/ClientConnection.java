@@ -127,8 +127,9 @@ public class ClientConnection implements Runnable, NetworkOperations {
 				((Player) player).battleWon();
 			break;
 		case Message.CHALLENGE:
-			if(!msg.getSender().equalsIgnoreCase(player.getName()) && !player.getHasOpponent()) {
-			player.handleChallenge(msg);
+			if (!msg.getSender().equalsIgnoreCase(player.getName())
+					&& !player.getHasOpponent()) {
+				player.handleChallenge(msg);
 			}
 			break;
 		case Message.AIMATCH:
@@ -139,22 +140,17 @@ public class ClientConnection implements Runnable, NetworkOperations {
 
 	private void parseLogin(Message msg) {
 		System.out.print("parseLogin " + player.getName() + ": ");
-		
-		if(msg.getSender().equalsIgnoreCase("Server")) {
+
+		if (msg.getSender().equalsIgnoreCase("Server")) {
 			String[] tokens = msg.getMessage().split(" ");
-			for(String name : tokens) {
+			for (String name : tokens) {
 				System.out.print(name);
 				players.add(name);
 			}
 			System.out.print("\n");
 		}
 	}
-	
-	
-		
-		
-	
-	
+
 	public ArrayList<String> getConnectedPlayers() {
 		return players;
 	}

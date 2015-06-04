@@ -40,11 +40,11 @@ public class PlayerProxy extends Thread {
 	private String address;
 	private Message msg;
 	protected String name;
-	protected String opponent;
 	protected int playerId;
 	protected GameMode mode;
 	protected boolean playing;
 	protected boolean hasOpponent;
+	protected String opponent = "";
 	private char[][] playerGrid;
 	private AIPlayer aiPlayer;
 	private boolean aiMatch;
@@ -115,15 +115,15 @@ public class PlayerProxy extends Thread {
 	public boolean isPlaying() {
 		return playing;
 	}
-	
+
 	public void setPlaying(boolean playing) {
 		this.playing = playing;
 	}
-	
+
 	public void setHasOpponent(boolean hasOpponent) {
 		this.hasOpponent = hasOpponent;
 	}
-	
+
 	public boolean getHasOpponent() {
 		return hasOpponent;
 	}
@@ -203,7 +203,7 @@ public class PlayerProxy extends Thread {
 			}
 			break;
 		case Message.CHAT:
-			server.sendMessageToAllPlayers(msg);
+			server.sendMessage(msg);
 			break;
 		case Message.DEPLOYED:
 			deployed = true;
@@ -215,15 +215,22 @@ public class PlayerProxy extends Thread {
 			break;
 		case Message.TURN:
 			if (mode == GameMode.SinglePlayer) {
-				if (!msg.getSender().equalsIgnoreCase("AI")) {
-					aiPlayer.setPlayerTurn(true);
-				}
+				aiPlayer.setPlayerTurn(true);
+				/*
+				 * if (!msg.getSender().equalsIgnoreCase("AI")) {
+				 * 
+				 * }
+				 */
 			} else {
 				server.sendMessage(msg);
 			}
 			break;
 		case Message.LOST:
-			server.sendMessage(msg);
+			if (mode == GameMode.SinglePlayer) {
+				aiPlayer.setPlayerTurn(false);
+			} else {
+				server.sendMessage(msg);
+			}
 			break;
 		case Message.CHALLENGE:
 			parseChallengeMessage(msg);
@@ -242,22 +249,19 @@ public class PlayerProxy extends Thread {
 				aiMatch = true;
 				playing = true;
 			}
-
 		}
 	}
 
 	private void parseChallengeMessage(Message msg) {
-		if (msg.getReceiver().equalsIgnoreCase(name)) {
-			if (msg.getMessage().equals(Challenge_Accept)) {
-				server.sendMessage(new Message(
-						Message.CHALLENGE, name, msg.getReceiver(), Challenge_Accept));
-				//server.setUpBattle(msg.getSender(), msg.getReceiver());
-				playing = true;
+		if(msg.getMessage().equalsIgnoreCase(Challenge_Request)) {
+			server.sendMessageToAllPlayers(msg);
+		} else {
+			if(msg.getMessage().equalsIgnoreCase(Challenge_Accept)) {
 				opponent = msg.getReceiver();
-			} else if (msg.getMessage().equals(Challenge_Deny)) {
-				server.sendMessage(new Message(
-						Message.CHALLENGE, msg.getSender(), msg.getReceiver(), Challenge_Deny));
+				hasOpponent = true;
+				playing = true;
 			}
+			server.sendMessage(msg);
 		}
 	}
 
@@ -277,9 +281,9 @@ public class PlayerProxy extends Thread {
 		} else if (msg.getMessage().equalsIgnoreCase("Multiplayer")) {
 			playing = false;
 			mode = GameMode.MultiPlayer;
-			
 			if (server.getPlayerCount() > 1) {
-				server.sendMessage(new Message(Message.CHALLENGE, name, "", Challenge_Request));
+				server.sendMessageToAllPlayers(new Message(Message.CHALLENGE, name, "",
+						Challenge_Request));
 				// server.checkForOpponentTo(name);
 			} else {
 				sendMessage(new Message(Message.AIMATCH, name, "", ""));
@@ -299,7 +303,8 @@ public class PlayerProxy extends Thread {
 			Random r = new Random();
 			int value = r.nextInt(100);
 			if (value < 50) {
-				sendMessage(new Message(Message.TURN, "AI", msg.getReceiver(), ""));
+				sendMessage(new Message(Message.TURN, "AI", msg.getReceiver(),
+						""));
 			} else {
 				aiPlayer.setPlayerTurn(true);
 			}
@@ -308,7 +313,7 @@ public class PlayerProxy extends Thread {
 
 	private void handleLogout() {
 		server.removePlayerProxy(this.playerId);
-		server.sendMessageToOpponent(new Message(Message.CHAT, msg.getSender(), msg.getReceiver(),
+		server.sendMessage(new Message(Message.CHAT, msg.getSender(), opponent,
 				msg.getMessage()));
 	}
 
@@ -715,9 +720,9 @@ public class PlayerProxy extends Thread {
 				int col = grid.getCol();
 				if (checkBounds(row, col)) {
 					System.out.println("FIRE " + row + ", " + col);
-					sendMessage(new Message(Message.MESSAGE, "AI", name, "FIRE "
-							+ Integer.toString(row) + " "
-							+ Integer.toString(col)));
+					sendMessage(new Message(Message.MESSAGE, "AI", name,
+							"FIRE " + Integer.toString(row) + " "
+									+ Integer.toString(col)));
 					System.out.println("Removing grid [ " + row + "," + col
 							+ "]");
 					validTargets.remove(grid);
@@ -920,9 +925,11 @@ public class PlayerProxy extends Thread {
 			int col = ship.getStartPosition().getCol();
 			if (checkBounds(row, col)) {
 				System.out.println("Player SHIP DOWN " + ship.getType());
-				sendMessage(new Message(Message.MESSAGE, "AI", name, "SHIP_DOWN "
-						+ ship.getType() + " " + ship.getAlignment() + " "
-						+ Integer.toString(row) + " " + Integer.toString(col)));
+				sendMessage(new Message(Message.MESSAGE, "AI", name,
+						"SHIP_DOWN " + ship.getType() + " "
+								+ ship.getAlignment() + " "
+								+ Integer.toString(row) + " "
+								+ Integer.toString(col)));
 			}
 
 		}

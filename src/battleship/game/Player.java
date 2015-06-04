@@ -56,7 +56,7 @@ public class Player {
 	private boolean deployed = false;
 	private boolean playerTurn = false;
 	private boolean hasOpponent = false;
-	private String opponentName;
+	private String opponentName = "";
 
 	public Player(String name, Avatar avatar, ClientConnection con,
 			GameMode mode) {
@@ -83,6 +83,7 @@ public class Player {
 		screen.showGUI();
 		AudioLoader.getAudio("ocean1").setLoop(true).playAudio();
 		listen();
+		sendMessage(new Message(Message.LOGIN, name, "", getGameMode()));
 	}
 
 	public void listen() {
@@ -359,9 +360,8 @@ public class Player {
 				hasOpponent = true;
 				sendMessage(new Message(Message.CHALLENGE, getName(), getOpponentName(), Challenge_Accept));
 			} else {
-				sendMessage(new Message(Message.CHALLENGE, getName(), getOpponentName(), Challenge_Deny));
+				sendMessage(new Message(Message.CHALLENGE, getName(), msg.getSender(), Challenge_Deny));
 			}
-
 		} else if (msg.getMessage().equalsIgnoreCase(Challenge_Accept)) {
 			msgText = msg.getSender() + " has accepted your your invitation\n\nGood Luck!.";
 			title = "CHALLENGE ACCEPT";
@@ -383,7 +383,7 @@ public class Player {
 		int reply = JOptionPane.showConfirmDialog(null, msgText, title,
 				JOptionPane.YES_NO_OPTION);
 		if (reply == JOptionPane.YES_OPTION) {
-			sendMessage(new Message(Message.MODE,  getName(), getOpponentName(), "SinglePlayer"));
+			sendMessage(new Message(Message.MODE, getName(), getOpponentName(), "SinglePlayer"));
 		} else {
 			sendMessage(new Message(Message.CHALLENGE, getName(), getOpponentName(),
 					Challenge_Deny));

@@ -113,7 +113,7 @@ public class Lobby extends JFrame {
 				if(sel.equals(player.getName()))
 					return;
 				JOptionPane.showMessageDialog(new JFrame(), "Sending battle challange to opponent, " + sel);
-				player.sendMessage(new Message(Message.CHALLENGE, player.getName(), sel));
+				player.sendMessage(new Message(Message.CHALLENGE, player.getName(), "", sel));
 				players.clearSelection();
 			}
 		}
@@ -125,7 +125,7 @@ public class Lobby extends JFrame {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			player.sendMessage(new Message(Message.AIMATCH, player.getName(), ""));
+			player.sendMessage(new Message(Message.AIMATCH, player.getName(),"", ""));
 		}
 	}
 	

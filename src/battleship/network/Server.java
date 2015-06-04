@@ -228,11 +228,14 @@ public class Server extends JFrame {
 
 	public boolean checkDeployment(Message msg) {
 		for (PlayerProxy player : players) {
-			if (player.getPlayerName().equalsIgnoreCase(msg.getSender())
-					|| player.getPlayerName().equalsIgnoreCase(
-							msg.getReceiver())) {
-				if (!player.getDeployed())
+			if (player.getPlayerName().equalsIgnoreCase(msg.getSender())) {
+				if(!player.deployed) {
 					return false;
+				}
+			} else if(player.getPlayerName().equalsIgnoreCase(msg.getReceiver())) {
+				if(!player.deployed) {
+					return false;
+				}
 			}
 		}
 		return true;
@@ -244,12 +247,20 @@ public class Server extends JFrame {
 			Random r = new Random();
 			int value = r.nextInt(100);
 			if (value < 50) {
-				sendMessage(msg);
+				sendMessage(new Message(Message.TURN, msg.getSender(),
+						msg.getReceiver(), ""));
 			} else {
 				sendMessage(new Message(Message.TURN, msg.getReceiver(),
 						msg.getSender(), ""));
 			}
 		}
+	}
+	
+	public synchronized void sendAllDeployed(Message msg) {
+		sendMessage(new Message(Message.DEPLOYED, msg.getSender(),
+				msg.getReceiver(), ""));
+		sendMessage(new Message(Message.DEPLOYED, msg.getReceiver(),
+				msg.getSender(), ""));
 	}
 
 	/*
@@ -277,12 +288,7 @@ public class Server extends JFrame {
 		return false;
 	}
 
-	public synchronized void sendAllDeployed(Message msg) {
-		sendMessage(new Message(Message.DEPLOYED, msg.getSender(),
-				msg.getReceiver(), ""));
-		sendMessage(new Message(Message.DEPLOYED, msg.getReceiver(),
-				msg.getSender(), ""));
-	}
+	
 
 	public int getPlayerCount() {
 		return players.size();
