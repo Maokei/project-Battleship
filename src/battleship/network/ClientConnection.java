@@ -25,7 +25,7 @@ public class ClientConnection implements Runnable, NetworkOperations {
 	private Socket socket;
 	private ObjectOutputStream out;
 	private ObjectInputStream in;
-	private BattlePlayer player;
+	private Player player;
 	private Message msg;
 	private ArrayList<String> players;
 	private JTextArea output; // just for Chat
@@ -53,7 +53,7 @@ public class ClientConnection implements Runnable, NetworkOperations {
 		return true;
 	}
 
-	public void setBattlePlayer(BattlePlayer player) {
+	public void setPlayer(Player player) {
 		this.player = player;
 	}
 
@@ -127,7 +127,9 @@ public class ClientConnection implements Runnable, NetworkOperations {
 				((Player) player).battleWon();
 			break;
 		case Message.CHALLENGE:
-			player.handleChallenge(msg.getSender(), msg.getMessage());
+			if(!msg.getSender().equalsIgnoreCase(player.getName()) && !player.getHasOpponent()) {
+			player.handleChallenge(msg);
+			}
 			break;
 		case Message.AIMATCH:
 			player.handleAIMatch();

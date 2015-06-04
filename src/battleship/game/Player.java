@@ -38,7 +38,7 @@ import battleship.ships.ShipBuilder;
  * @Class Player
  * @brief Class represent a player human or non-human,
  * */
-public class Player implements BattlePlayer {
+public class Player {
 	private String name;
 	private Avatar avatar;
 	private Screen screen;
@@ -55,7 +55,8 @@ public class Player implements BattlePlayer {
 	private boolean opponentDeployed = false;
 	private boolean deployed = false;
 	private boolean playerTurn = false;
-	private String opponent;
+	private boolean hasOpponent = false;
+	private String opponentName;
 
 	public Player(String name, Avatar avatar, ClientConnection con,
 			GameMode mode) {
@@ -63,7 +64,7 @@ public class Player implements BattlePlayer {
 		this.avatar = avatar;
 		this.con = con;
 		this.mode = mode;
-		con.setBattlePlayer(this);
+		con.setPlayer(this);
 	}
 
 	public void init() {
@@ -72,7 +73,6 @@ public class Player implements BattlePlayer {
 		enemyBoard = new Gameboard();
 		playerBoard.addMouseListener(new BoardListener());
 		enemyBoard.addMouseListener(new BoardListener());
-
 		// toolkit = Toolkit.getDefaultToolkit();
 		// cursorImg = toolkit.getImage("src/res/sprite/crosshair.png");
 		// cursor = toolkit.createCustomCursor(cursorImg, new Point(0, 0), "");
@@ -85,7 +85,6 @@ public class Player implements BattlePlayer {
 		listen();
 	}
 
-	@Override
 	public void listen() {
 		new Thread(con).start();
 	}
@@ -118,12 +117,20 @@ public class Player implements BattlePlayer {
 		return playerBoard.checkHit(row, col);
 	}
 
-	public void setOpponent(String opponent) {
-		this.opponent = opponent;
+	public void setOpponentName(String opponent) {
+		this.opponentName = opponent;
 	}
 
-	public String getOpponent() {
-		return opponent;
+	public String getOpponentName() {
+		return opponentName;
+	}
+	
+	public void setHasOpponent(boolean hasOpponent) {
+		this.hasOpponent = hasOpponent;
+	}
+	
+	public boolean getHasOpponent() {
+		return hasOpponent;
 	}
 
 	/**
@@ -156,7 +163,7 @@ public class Player implements BattlePlayer {
 			sinkShip(ship);
 			screen.setShips(--remainingShips);
 		}
-		sendMessage(new Message(Message.MESSAGE, name, "HIT "
+		sendMessage(new Message(Message.MESSAGE, getName(), getOpponentName(), "HIT "
 				+ Integer.toString(row) + " " + Integer.toString(col)));
 		if (remainingShips == 0)
 			battleLost();
@@ -167,7 +174,7 @@ public class Player implements BattlePlayer {
 		int row = ship.getStartPosition().getRow();
 		int col = ship.getStartPosition().getCol();
 
-		sendMessage(new Message(Message.MESSAGE, name, "SHIP_DOWN "
+		sendMessage(new Message(Message.MESSAGE,  getName(), getOpponentName(), "SHIP_DOWN "
 				+ ship.getType() + " " + ship.getAlignment() + " "
 				+ Integer.toString(row) + " " + Integer.toString(col)));
 
@@ -179,7 +186,7 @@ public class Player implements BattlePlayer {
 
 	public void registerPlayerMiss(int row, int col) {
 		AudioLoader.getAudio("splash1").playAudio();
-		sendMessage(new Message(Message.TURN, name, ""));
+		sendMessage(new Message(Message.TURN, getName(), getOpponentName(), ""));
 		screen.setMessage("Wait for your turn");
 		enemyBoard.addMiss(row, col);
 		screen.setMisses(++misses);
@@ -188,7 +195,7 @@ public class Player implements BattlePlayer {
 
 	public void registerEnemyMiss(int row, int col) {
 		AudioLoader.getAudio("splash1").playAudio();
-		sendMessage(new Message(Message.MESSAGE, name, "MISS "
+		sendMessage(new Message(Message.MESSAGE,  getName(), getOpponentName(), "MISS "
 				+ Integer.toString(row) + " " + Integer.toString(col)));
 		playerBoard.addMiss(row, col);
 	}
@@ -242,7 +249,7 @@ public class Player implements BattlePlayer {
 
 	public void battleLost() {
 		AudioLoader.getAudio("march").setLoop(true).playAudio();
-		sendMessage(new Message(Message.LOST, name, ""));
+		sendMessage(new Message(Message.LOST,  getName(), getOpponentName(), ""));
 		screen.setMessage("You sir, are a DISGRACE!!");
 		playerBoard.displayDefeat();
 		playerTurn = false;
@@ -310,7 +317,7 @@ public class Player implements BattlePlayer {
 				Ship ship = playerShips.elementAt(shipPlacementIndex);
 				ship.setAlignment(alignment);
 
-				sendMessage(new Message(Message.MESSAGE, name, "PLACING "
+				sendMessage(new Message(Message.MESSAGE,  getName(), getOpponentName(), "PLACING "
 						+ ship.getType() + " " + ship.getAlignment() + " "
 						+ Integer.toString(row) + " " + Integer.toString(col)));
 
@@ -329,7 +336,7 @@ public class Player implements BattlePlayer {
 		private void fire(int row, int col) {
 			if (deployed && opponentDeployed && playerTurn) {
 				if (enemyBoard.checkFire(row, col)) {
-					sendMessage(new Message(Message.MESSAGE, name, "FIRE "
+					sendMessage(new Message(Message.MESSAGE,  getName(), getOpponentName(), "FIRE "
 							+ Integer.toString(row) + " "
 							+ Integer.toString(col)));
 					playerTurn = false;
@@ -338,50 +345,47 @@ public class Player implements BattlePlayer {
 		}
 	}
 
-	@Override
-	public void handleChallenge(String sender, String message) {
+	public void handleChallenge(Message msg) {
 		String title = "", msgText = "";
 		int reply = -1;
-		if (message.equalsIgnoreCase(Challenge_Request)) {
-			msgText = sender
-					+ " want's to battle with you\n\nDo you accept the challenge?";
+		if (msg.getMessage().equalsIgnoreCase(Challenge_Request)) {
+			msgText = msg.getSender()
+					+ " has sent a game invitation to you\n\nDo you accept the challenge?";
 			title = "CHALLENGE REQUEST";
 			reply = JOptionPane.showConfirmDialog(null, msgText, title,
 					JOptionPane.YES_NO_OPTION);
 			if (reply == JOptionPane.YES_OPTION) {
-				opponent = sender;
-				sendMessage(new Message(Message.CHALLENGE, name + " "
-						+ opponent, Challenge_Accept));
+				opponentName = msg.getSender();
+				hasOpponent = true;
+				sendMessage(new Message(Message.CHALLENGE, getName(), getOpponentName(), Challenge_Accept));
 			} else {
-				sendMessage(new Message(Message.CHALLENGE, name + " "
-						+ opponent, Challenge_Deny));
+				sendMessage(new Message(Message.CHALLENGE, getName(), getOpponentName(), Challenge_Deny));
 			}
 
-		} else if (message.equalsIgnoreCase(Challenge_Accept)) {
-			msgText = sender + " has accepted your request.";
+		} else if (msg.getMessage().equalsIgnoreCase(Challenge_Accept)) {
+			msgText = msg.getSender() + " has accepted your your invitation\n\nGood Luck!.";
 			title = "CHALLENGE ACCEPT";
 			JOptionPane.showMessageDialog(null, msgText, title,
 					JOptionPane.INFORMATION_MESSAGE);
-			opponent = sender;
-		} else if (message.equalsIgnoreCase(Challenge_Deny)) {
-			msgText = sender + " has denied your request.";
-			title = "CHALLENGE ACCEPT";
+			opponentName = msg.getSender();
+		} else if (msg.getMessage().equalsIgnoreCase(Challenge_Deny)) {
+			msgText = msg.getSender() + " has denied your request.\n\nMaybe he is busy.";
+			title = "CHALLENGE DENIED";
 			JOptionPane.showMessageDialog(null, msgText, title,
 					JOptionPane.INFORMATION_MESSAGE);
 		}
 
 	}
 
-	@Override
 	public void handleAIMatch() {
 		String msgText = "There are no available players at this time\n\nDo you want to play singleplayer?";
 		String title = "No Available Players";
 		int reply = JOptionPane.showConfirmDialog(null, msgText, title,
 				JOptionPane.YES_NO_OPTION);
 		if (reply == JOptionPane.YES_OPTION) {
-			sendMessage(new Message(Message.MODE, name, "SinglePlayer"));
+			sendMessage(new Message(Message.MODE,  getName(), getOpponentName(), "SinglePlayer"));
 		} else {
-			sendMessage(new Message(Message.CHALLENGE, name + " " + opponent,
+			sendMessage(new Message(Message.CHALLENGE, getName(), getOpponentName(),
 					Challenge_Deny));
 		}
 	}
