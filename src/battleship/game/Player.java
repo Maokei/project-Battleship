@@ -474,6 +474,11 @@ public class Player {
 			}
 		}
 
+		/**
+		 * placePlayerShip
+		 * @name placePlayerShip
+		 * @param Integer row and integer column, where to place player ship.
+		 * */
 		private void placePlayerShip(int row, int col) {
 			if (shipPlacementIndex == 0) {
 				screen.disableRandom();
@@ -499,6 +504,11 @@ public class Player {
 			}
 		}
 
+		/**
+		 * fire
+		 * @name fire
+		 * @param Integer row and integer column, sends out fire message.
+		 * */
 		private void fire(int row, int col) {
 			if (deployed && opponentDeployed && playerTurn) {
 				if (enemyBoard.checkFire(row, col)) {
@@ -511,6 +521,11 @@ public class Player {
 		}
 	}
 
+	/**
+	 * handleChallange
+	 * @name handleChallange
+	 * @param handle a challange message given String sender name and String message.
+	 * */
 	public void handleChallenge(Message msg) {
 		String title = "", msgText = "";
 		int reply = -1;
@@ -542,6 +557,11 @@ public class Player {
 
 	}
 
+	/**
+	 * handleAIMatch
+	 * @name handleAIMatch
+	 * @brief JOptionPane query player about playing against server instead of waiting for a player.
+	 * */
 	public void handleAIMatch() {
 		String msgText = "There are no available players at this time\n\nDo you want to play singleplayer?";
 		String title = "No Available Players";
