@@ -687,4 +687,8 @@ public class Player {
 			break;
 		}
 	}
+
+	public void updateLobby() {
+		screen.updateLobby();
+	}
 }

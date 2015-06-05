@@ -25,6 +25,7 @@ public class Screen {
 	private MainPanel mainPanel;
 	private PlayerGUI playergui;
 	private MessagePanel msgPanel;
+	private ChallengePanel challenge;
 	
 	public Screen(Player player, Gameboard playerBoard, Gameboard enemyBoard) {
 		this.playerBoard = playerBoard;
@@ -33,10 +34,11 @@ public class Screen {
 		mainPanel = new MainPanel();
 		playergui = new PlayerGUI(player);
 		msgPanel = new MessagePanel();
+		challenge = new ChallengePanel(player);
 		mainPanel.add(playergui);
 		mainPanel.add(playerBoard);
 		mainPanel.add(enemyBoard);
-		
+		mainPanel.add(challenge);
 		mainPanel.add(msgPanel);
 		frame.add(mainPanel, BorderLayout.CENTER);
 		frame.addWindowListener(new WindowAdapter() {
@@ -68,6 +70,10 @@ public class Screen {
 	
 	public void setMessage(String message) {
 		msgPanel.setMessage(message);
+	}
+	
+	public void updateLobby() {
+		challenge.updateNames();
 	}
 	
 	public void showGUI() {

@@ -274,14 +274,13 @@ public class Server extends JFrame {
 				msg.getSender(), ""));
 	}
 
-	/*
-	 * public synchronized void sendPlayers(String name) { StringBuilder builder
-	 * = new StringBuilder(); for(PlayerProxy player : players) { if
-	 * (!player.getPlayerName().equalsIgnoreCase(name)) {
-	 * builder.append(player.getName()); builder.append(' '); } }
-	 * sendMessageToAll(new Message(Message.LOGIN, "Server",
-	 * builder.toString().trim())); }
-	 */
+	public synchronized void sendAllPlayers() {
+		for (PlayerProxy player : players) {
+			for(PlayerProxy p : players) {
+				sendMessage(new Message(Message.LOGIN, p.name, player.name, ""));
+			}
+		}
+	}
 	/**
 	 * lookForPlayerMulti
 	 * 

@@ -31,10 +31,12 @@ import battleship.ships.Ship;
 import battleship.ships.ShipType;
 
 /**
- * ClientConnection 
+ * ClientConnection
+ * 
  * @class ClientConnection
  * @implements Runnable, NetworkOperation
- * @brief Class describes the connection. Client uses this connection class to talk to server and handle messages.
+ * @brief Class describes the connection. Client uses this connection class to
+ *        talk to server and handle messages.
  * */
 public class ClientConnection implements Runnable, NetworkOperations {
 	private String address;
@@ -56,6 +58,7 @@ public class ClientConnection implements Runnable, NetworkOperations {
 
 	/**
 	 * openConnection
+	 * 
 	 * @name openConnection
 	 * @brief Try to open a connection given that ip and port are set already.
 	 * */
@@ -77,9 +80,11 @@ public class ClientConnection implements Runnable, NetworkOperations {
 
 	/**
 	 * setPlayer
-	 * @param validMove 
+	 * 
+	 * @param validMove
 	 * @name setPlayer
-	 * @param Takes and sets a Player pointer.
+	 * @param Takes
+	 *            and sets a Player pointer.
 	 * */
 	public void setPlayer(Player player) {
 		this.player = player;
@@ -87,6 +92,7 @@ public class ClientConnection implements Runnable, NetworkOperations {
 
 	/**
 	 * setOutput
+	 * 
 	 * @name setOutput
 	 * @brief Chat test function.
 	 * */
@@ -96,6 +102,7 @@ public class ClientConnection implements Runnable, NetworkOperations {
 
 	/**
 	 * run
+	 * 
 	 * @name run
 	 * @brief Start the thread and listen for messages.
 	 * */
@@ -120,6 +127,7 @@ public class ClientConnection implements Runnable, NetworkOperations {
 
 	/**
 	 * closeConnection
+	 * 
 	 * @name closeConnection
 	 * @brief Attempt to safely close the connection.
 	 * */
@@ -142,8 +150,10 @@ public class ClientConnection implements Runnable, NetworkOperations {
 
 	/**
 	 * handleMessage
+	 * 
 	 * @name handleMessage
-	 * @param Takes a message and handles in appropriately.
+	 * @param Takes
+	 *            a message and handles in appropriately.
 	 * */
 	private void handleMessage(Message msg) {
 		int type = msg.getType();
@@ -165,12 +175,12 @@ public class ClientConnection implements Runnable, NetworkOperations {
 			player.setOpponentDeployed();
 			break;
 		case Message.TURN:
-			if (msg.getReceiver().equalsIgnoreCase(player.getName()) ) {
+			if (msg.getReceiver().equalsIgnoreCase(player.getName())) {
 				player.setPlayerTurn(true);
 			}
 			break;
 		case Message.LOST:
-				player.battleWon();
+			player.battleWon();
 			break;
 		case Message.CHALLENGE:
 			if (!msg.getSender().equalsIgnoreCase(player.getName())
@@ -181,9 +191,9 @@ public class ClientConnection implements Runnable, NetworkOperations {
 		case Message.AIMATCH:
 			player.handleAIMatch();
 			break;
-		case Message.VALID: 
+		case Message.VALID:
 			String Sender = msg.getSender();
-			if(msg.getSender().equalsIgnoreCase(Valid_Move)) {
+			if (msg.getSender().equalsIgnoreCase(Valid_Move)) {
 				parseValidMessage(msg);
 			} else {
 				player.handleNonValidMove(msg);
@@ -206,7 +216,7 @@ public class ClientConnection implements Runnable, NetworkOperations {
 			col = Integer.parseInt(tokens[2]);
 			player.registerEnemyMiss(row, col);
 			break;
-		case "PLACING": 
+		case "PLACING":
 			parseMessage(msg);
 			break;
 		}
@@ -214,27 +224,27 @@ public class ClientConnection implements Runnable, NetworkOperations {
 
 	/**
 	 * parseLogin
+	 * 
 	 * @name parseLogin
-	 * @param Takes a login message object to parse.
+	 * @param Takes
+	 *            a login message object to parse.
 	 * */
 	private void parseLogin(Message msg) {
-		System.out.print("parseLogin " + player.getName() + ": ");
-
-		if (msg.getSender().equalsIgnoreCase("Server")) {
-			String[] tokens = msg.getMessage().split(" ");
-			for (String name : tokens) {
-				System.out.print(name);
-				players.add(name);
+		if (!(msg.getSender().equalsIgnoreCase(player.getName()))) {
+			if (!players.contains(msg.getSender())) {
+				System.out.println(msg.getSender() + " is added to the list");
+				players.add(msg.getSender());
+				player.updateLobby();
 			}
-			System.out.print("\n");
 		}
 	}
 
 	/**
 	 * getConnectedPlayers
+	 * 
 	 * @name getConnectedPlayers
 	 * @brief Function meant to be used my lobby to populate players JList.
-	 * @returns A list of player names. 
+	 * @returns A list of player names.
 	 * */
 	public ArrayList<String> getConnectedPlayers() {
 		return players;
@@ -242,14 +252,16 @@ public class ClientConnection implements Runnable, NetworkOperations {
 
 	/**
 	 * parseMessage
+	 * 
 	 * @name parseMessage
 	 * @brief Parses a battle message.
-	 * @param Takes a message to parse.
+	 * @param Takes
+	 *            a message to parse.
 	 * */
 	private void parseMessage(Message msg) {
 		String[] tokens = msg.getMessage().split(" ");
 		switch (tokens[0].toUpperCase()) {
-		case "PLACING": 
+		case "PLACING":
 			parsePlaceMessage(tokens);
 			break;
 		case "SHIP_DOWN":
@@ -275,8 +287,10 @@ public class ClientConnection implements Runnable, NetworkOperations {
 
 	/**
 	 * parseMissMessage
+	 * 
 	 * @name parseMissMessage
-	 * @param Takes an Array of string tokens
+	 * @param Takes
+	 *            an Array of string tokens
 	 * */
 	private void parseMissMessage(String[] tokens) {
 		int row = Integer.parseInt(tokens[1]);
@@ -286,8 +300,10 @@ public class ClientConnection implements Runnable, NetworkOperations {
 
 	/**
 	 * parseShipDownMessage
+	 * 
 	 * @name parseShipDownMessage
-	 * @param Array of String tokens.
+	 * @param Array
+	 *            of String tokens.
 	 * */
 	private void parseShipDownMessage(String[] tokens) {
 		Ship ship = null;
@@ -318,8 +334,10 @@ public class ClientConnection implements Runnable, NetworkOperations {
 
 	/**
 	 * parseFireMessage
+	 * 
 	 * @name parseFireMessage
-	 * @param String array to be parsed, register FireMessage.
+	 * @param String
+	 *            array to be parsed, register FireMessage.
 	 * */
 	private void parseFireMessage(String[] tokens) {
 		int row = Integer.parseInt(tokens[1]);
@@ -329,6 +347,7 @@ public class ClientConnection implements Runnable, NetworkOperations {
 
 	/**
 	 * parseHitMessage
+	 * 
 	 * @name parseHitMessage
 	 * */
 	private void parseHitMessage(String[] tokens) {
@@ -339,8 +358,10 @@ public class ClientConnection implements Runnable, NetworkOperations {
 
 	/**
 	 * sendMessage
+	 * 
 	 * @name sendMessage
-	 * @param Takes a Message object to be written out sent sent through stream.
+	 * @param Takes
+	 *            a Message object to be written out sent sent through stream.
 	 * */
 	public void sendMessage(Message message) {
 		try {
@@ -353,6 +374,7 @@ public class ClientConnection implements Runnable, NetworkOperations {
 
 	/**
 	 * setRunning
+	 * 
 	 * @name setRunning
 	 * @brief Sets running state.
 	 * @param boolean running state to be set.
