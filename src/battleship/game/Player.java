@@ -115,7 +115,6 @@ public class Player {
 	 * @brief Start a new thread to listen for incoming events with
 	 *        ClientConnection.
 	 * */
-
 	public void listen() {
 		new Thread(con).start();
 	}
@@ -577,6 +576,11 @@ public class Player {
 			}
 		}
 
+		/**
+		 * fire
+		 * @name fire
+		 * @param Integer row and integer column, sends out fire message.
+		 * */
 		private void fire(int row, int col) {
 			if (checkDeployed() && playerTurn) {
 				sendMessage(new Message(Message.MESSAGE, getName(),
@@ -595,6 +599,11 @@ public class Player {
 		}
 	}
 
+	/**
+	 * handleChallange
+	 * @name handleChallange
+	 * @param handle a challange message given String sender name and String message.
+	 * */
 	public void handleChallenge(Message msg) {
 		String title = "", msgText = "";
 		int reply = -1;
@@ -630,6 +639,11 @@ public class Player {
 
 	}
 
+	/**
+	 * handleAIMatch
+	 * @name handleAIMatch
+	 * @brief JOptionPane query player about playing against server instead of waiting for a player.
+	 * */
 	public void handleAIMatch() {
 		String msgText = "There are no available players at this time\n\nDo you want to play singleplayer?";
 		String title = "No Available Players";

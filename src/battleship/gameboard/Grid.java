@@ -100,6 +100,10 @@ public class Grid extends JLabel {
 		new Fader().fastFade();
 	}
 
+	/**
+	 * @class Fader
+	 * @brief Describes a fading effect.
+	 * */
 	class Fader {
 		private Timer t;
 
@@ -110,6 +114,10 @@ public class Grid extends JLabel {
 			}
 		}
 
+		/**
+		 * @name fadeOut
+		 * @brief fadeout effect.
+		 * */
 		public void fadeOut() {
 			dir = -0.02f;
 			alpha = 1.0f;
@@ -129,6 +137,10 @@ public class Grid extends JLabel {
 			t.start();
 		}
 
+		/**
+		 * fadeIn
+		 * @name fadeIn
+		 * */
 		public void fadeIn() {
 			dir = 0.02f;
 			alpha = 0.0f;
@@ -147,6 +159,11 @@ public class Grid extends JLabel {
 			t.start();
 		}
 
+		/**
+		 * fastFade
+		 * @name fastFade
+		 * @brief Fast fade out effect.
+		 * */
 		public void fastFade() {
 			dir = -0.20f;
 			alpha = 1.0f;
@@ -170,7 +187,11 @@ public class Grid extends JLabel {
 			t.stop();
 			t = null;
 		}
-
+		
+		/**
+		 * @name checkLowerBounds
+		 * @return If alpha is within lower bounds return true. 
+		 * */
 		private boolean checkLowerBounds() {
 			if (alpha <= 0.0f) {
 				alpha = 0.0f;
@@ -179,6 +200,10 @@ public class Grid extends JLabel {
 			return true;
 		}
 
+		/**
+		 * @name checkUpperBounds
+		 * @return If alpha is within upper bounds return true. 
+		 * */
 		private boolean checkUpperBounds() {
 			if (alpha >= 1.0f) {
 				alpha = 1.0f;
@@ -188,6 +213,11 @@ public class Grid extends JLabel {
 		}
 	}
 
+	/**
+	 * paint
+	 * @name paint
+	 * @brief Paints 
+	 * */
 	@Override
 	public void paint(Graphics g) {
 		Graphics2D g2d = (Graphics2D) g.create();
@@ -222,6 +252,11 @@ public class Grid extends JLabel {
 		return false;
 	}
 
+	/**
+	 * hashcode
+	 * @name hashcode
+	 * @return produce and return hashcode as Integer.
+	 * */
 	@Override
 	public int hashCode() {
 		int hash = 13;

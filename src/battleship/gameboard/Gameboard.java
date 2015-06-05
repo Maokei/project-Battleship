@@ -378,6 +378,12 @@ public class Gameboard extends JPanel {
 		}
 	}
 
+	/**
+	 * checkFire
+	 * @name checkFire
+	 * @param integer row and integer column where fire will be checked.
+	 * @return boolean true if is hit or is, empty false
+	 * */
 	public boolean checkFire(int row, int col) {
 		if (!(gridboard[row][col].isHit() || gridboard[row][col].isMiss())) {
 				return true;
