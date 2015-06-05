@@ -231,12 +231,20 @@ public class PlayerProxy extends Thread {
 			parseModeMessage(msg);
 			break;
 		case Message.VALID:
-			if(checkMessage(msg)) {
-				sendMessage(new Message(Message.VALID, name, "", Valid_Move));
-			} else {
-				sendMessage(new Message(Message.VALID, name, "", NonValid_Move));
-			}
+			parseValidMessage(msg);
 			break;
+		}
+	}
+
+	private void parseValidMessage(Message msg) {
+		String[] tokens = msg.getMessage().split(" ");
+		if(checkMessage(msg)) {
+			sendMessage(new Message(Message.VALID, Valid_Move, tokens[0], msg.getMessage()));
+			System.out.println("Message " + msg.getMessage() + " TRUE");
+		} else {
+			String message = msg.getMessage();
+			sendMessage(new Message(Message.VALID, NonValid_Move, tokens[0], msg.getMessage()));
+			System.out.println("Message " + msg.getMessage() + " FALSE");
 		}
 	}
 

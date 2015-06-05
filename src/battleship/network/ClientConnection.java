@@ -13,7 +13,11 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.TimeUnit;
 
 import javax.swing.JOptionPane;
 import javax.swing.JTextArea;
@@ -43,7 +47,6 @@ public class ClientConnection implements Runnable, NetworkOperations {
 	private ArrayList<String> players;
 	private JTextArea output; // just for Chat
 	private boolean running = true;
-	private BlockingQueue<String> validMove;
 
 	public ClientConnection(String address, int portNumber) {
 		this.address = address;
@@ -78,9 +81,8 @@ public class ClientConnection implements Runnable, NetworkOperations {
 	 * @name setPlayer
 	 * @param Takes and sets a Player pointer.
 	 * */
-	public void setPlayer(Player player, BlockingQueue<String> validMove) {
+	public void setPlayer(Player player) {
 		this.player = player;
-		this.validMove = validMove;
 	}
 
 	/**
@@ -180,10 +182,32 @@ public class ClientConnection implements Runnable, NetworkOperations {
 			player.handleAIMatch();
 			break;
 		case Message.VALID: 
-			System.out.println("Adding to validMove : " + msg.getMessage());
-			if(!validMove.offer(msg.getMessage())) {
-				System.out.println("Can't put it in :)");
+			String Sender = msg.getSender();
+			if(msg.getSender().equalsIgnoreCase(Valid_Move)) {
+				parseValidMessage(msg);
+			} else {
+				player.handleNonValidMove(msg);
 			}
+			break;
+		}
+	}
+
+	private void parseValidMessage(Message msg) {
+		String[] tokens = msg.getMessage().split(" ");
+		int row, col;
+		switch (tokens[0].toUpperCase()) {
+		case "HIT":
+			row = Integer.parseInt(tokens[1]);
+			col = Integer.parseInt(tokens[2]);
+			player.registerEnemyHit(row, col);
+			break;
+		case "MISS":
+			row = Integer.parseInt(tokens[1]);
+			col = Integer.parseInt(tokens[2]);
+			player.registerEnemyMiss(row, col);
+			break;
+		case "PLACING": 
+			parseMessage(msg);
 			break;
 		}
 	}
@@ -223,14 +247,11 @@ public class ClientConnection implements Runnable, NetworkOperations {
 	 * @param Takes a message to parse.
 	 * */
 	private void parseMessage(Message msg) {
-		if (msg.getMessage().startsWith("Server full")) {
-			JOptionPane.showMessageDialog(null,
-					"The server is full\nTry connecting at a later time.");
-			running = false;
-			return;
-		}
 		String[] tokens = msg.getMessage().split(" ");
 		switch (tokens[0].toUpperCase()) {
+		case "PLACING": 
+			parsePlaceMessage(tokens);
+			break;
 		case "SHIP_DOWN":
 			parseShipDownMessage(tokens);
 			break;
@@ -244,6 +265,12 @@ public class ClientConnection implements Runnable, NetworkOperations {
 			parseMissMessage(tokens);
 			break;
 		}
+	}
+
+	private void parsePlaceMessage(String[] tokens) {
+		int row = Integer.parseInt(tokens[3]);
+		int col = Integer.parseInt(tokens[4]);
+		player.placePlayerShip(row, col);
 	}
 
 	/**
@@ -297,7 +324,7 @@ public class ClientConnection implements Runnable, NetworkOperations {
 	private void parseFireMessage(String[] tokens) {
 		int row = Integer.parseInt(tokens[1]);
 		int col = Integer.parseInt(tokens[2]);
-		player.registerFire(row, col);
+		player.checkFire(row, col);
 	}
 
 	/**

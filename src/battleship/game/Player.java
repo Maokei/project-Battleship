@@ -48,10 +48,10 @@ public class Player {
 	private Avatar avatar;
 	private Screen screen;
 	private ClientConnection con;
-	private BlockingQueue<String> validMove;
 	private GameMode mode;
 	private Gameboard playerBoard, enemyBoard;
 	private Vector<Ship> playerShips;
+	private Alignment alignment = Alignment.HORIZONTAL;
 	private Toolkit toolkit;
 	private Image cursorImg;
 	private Cursor cursor;
@@ -78,8 +78,7 @@ public class Player {
 		this.avatar = avatar;
 		this.con = con;
 		this.mode = mode;
-		validMove = new ArrayBlockingQueue<String>(1);
-		con.setPlayer(this, validMove);
+		con.setPlayer(this);
 	}
 
 	/**
@@ -115,6 +114,7 @@ public class Player {
 	 * @brief Start a new thread to listen for incoming events with
 	 *        ClientConnection.
 	 * */
+
 	public void listen() {
 		new Thread(con).start();
 	}
@@ -224,6 +224,16 @@ public class Player {
 		return hasOpponent;
 	}
 
+	public void checkFire(int row, int col) {
+		if (checkHit(row, col)) {
+			sendMessage(new Message(Message.VALID, name, "", "HIT "
+					+ Integer.toString(row) + " " + Integer.toString(col)));
+		} else {
+			sendMessage(new Message(Message.VALID, name, "", "MISS "
+					+ Integer.toString(row) + " " + Integer.toString(col)));
+		}
+	}
+
 	/**
 	 * registerFire
 	 * 
@@ -232,6 +242,7 @@ public class Player {
 	 * @param intger
 	 *            row and integer column in a grid.
 	 * */
+	/*
 	public void registerFire(int row, int col) {
 		if (checkHit(row, col)) {
 			for (Ship ship : playerShips) {
@@ -243,7 +254,7 @@ public class Player {
 			registerEnemyMiss(row, col);
 		}
 	}
-
+	*/
 	/**
 	 * registerPlayerHit
 	 * 
@@ -267,28 +278,32 @@ public class Player {
 	 *            object, integer row and integer column.
 	 * @return void function.
 	 * */
-	public void registerEnemyHit(Ship ship, int row, int col) {
-		AudioLoader.getAudio("explosion1").playAudio();
-		playerBoard.addHit(row, col);
-		if (mode == GameMode.MultiPlayer) {
-			sendMessage(new Message(Message.MESSAGE, getName(),
-					getOpponentName(), "HIT " + Integer.toString(row) + " "
-							+ Integer.toString(col)));
-		}
-		ship.hit();
-		if (!ship.isAlive()) {
-			sinkShip(ship);
-			screen.setShips(--remainingShips);
-		}
+	public void registerEnemyHit(int row, int col) {
+		for (Ship ship : playerShips) {
+			if (ship.isAlive() && ship.checkHit(row, col)) {
+				AudioLoader.getAudio("explosion1").playAudio();
+				playerBoard.addHit(row, col);
+				if (mode == GameMode.MultiPlayer) {
+					sendMessage(new Message(Message.MESSAGE, getName(),
+							getOpponentName(), "HIT " + Integer.toString(row) + " "
+									+ Integer.toString(col)));
+				}
+				ship.hit();
+				if (!ship.isAlive()) {
+					sinkShip(ship);
+					screen.setShips(--remainingShips);
+				}
 
-		if (mode == GameMode.SinglePlayer) {
-			sendMessage(new Message(Message.MESSAGE, getName(),
-					getOpponentName(), "HIT " + Integer.toString(row) + " "
-							+ Integer.toString(col)));
-		}
+				if (mode == GameMode.SinglePlayer) {
+					sendMessage(new Message(Message.MESSAGE, getName(),
+							getOpponentName(), "HIT " + Integer.toString(row) + " "
+									+ Integer.toString(col)));
+				}
 
-		if (remainingShips == 0)
-			battleLost();
+				if (remainingShips == 0)
+					battleLost();
+			}
+		}
 	}
 
 	/**
@@ -505,6 +520,25 @@ public class Player {
 		}
 	}
 
+	public void placePlayerShip(int row, int col) {
+		if (shipPlacementIndex == 0) {
+			screen.disableRandom();
+		}
+		Ship ship = playerShips.elementAt(shipPlacementIndex);
+		ship.setAlignment(alignment);
+
+		if (playerBoard.checkShipPlacement(ship, row, col)) {
+			playerBoard.placeShip(ship, row, col);
+			shipPlacementIndex++;
+
+			if (shipPlacementIndex == playerShips.size()) {
+				screen.setShipsDeployed();
+				screen.setMessage("Press Ready Button");
+			}
+		}
+
+	}
+
 	/**
 	 * BoardListener
 	 * 
@@ -513,7 +547,6 @@ public class Player {
 	 * @brief Event listener class for a player board.
 	 * */
 	class BoardListener extends MouseAdapter {
-		Alignment alignment = Alignment.HORIZONTAL;
 
 		@Override
 		public void mousePressed(MouseEvent e) {
@@ -526,60 +559,31 @@ public class Player {
 						alignment = Alignment.VERTICAL;
 					else
 						alignment = Alignment.HORIZONTAL;
-				} else { // place ship
+				} else {
+					if (shipPlacementIndex < playerShips.size()) {
+						Ship ship = playerShips.elementAt(shipPlacementIndex);
+						ship.setAlignment(alignment);
 
-					placePlayerShip(row, col);
-				}
-			} else if (e.getComponent() == enemyBoard) {
-				fire(row, col);
-			}
-		}
-
-		private void placePlayerShip(int row, int col) {
-			if (shipPlacementIndex == 0) {
-				screen.disableRandom();
-			}
-
-			if (shipPlacementIndex < playerShips.size()) {
-				Ship ship = playerShips.elementAt(shipPlacementIndex);
-				ship.setAlignment(alignment);
-				sendMessage(new Message(Message.VALID, getName(),
-						getOpponentName(), "PLACING " + ship.getType() + " "
-								+ ship.getAlignment() + " "
-								+ Integer.toString(row) + " "
-								+ Integer.toString(col)));
-
-				try {
-					if (validMove.take().equalsIgnoreCase(Valid_Move)) {
-						screen.setMessage("Deploy your ships");
-						sendMessage(new Message(Message.MESSAGE, getName(),
+						sendMessage(new Message(Message.VALID, name,
 								getOpponentName(), "PLACING " + ship.getType()
 										+ " " + ship.getAlignment() + " "
 										+ Integer.toString(row) + " "
 										+ Integer.toString(col)));
-
-						if (playerBoard.checkShipPlacement(ship, row, col)) {
-							playerBoard.placeShip(ship, row, col);
-							shipPlacementIndex++;
-
-							if (shipPlacementIndex == playerShips.size()) {
-								screen.setShipsDeployed();
-								screen.setMessage("Press Ready Button");
-							}
-						}
-					} else {
-						screen.setMessage("Hey, give some space will ya!");
 					}
-				} catch (InterruptedException e) {
-					e.printStackTrace();
+					// placePlayerShip(row, col);
 				}
+			} else if (e.getComponent() == enemyBoard) {
+				if(enemyBoard.checkFire(row, col))
+					fire(row, col);
 			}
 		}
 
 		/**
 		 * fire
+		 * 
 		 * @name fire
-		 * @param Integer row and integer column, sends out fire message.
+		 * @param Integer
+		 *            row and integer column, sends out fire message.
 		 * */
 		private void fire(int row, int col) {
 			if (checkDeployed() && playerTurn) {
@@ -601,8 +605,11 @@ public class Player {
 
 	/**
 	 * handleChallange
+	 * 
 	 * @name handleChallange
-	 * @param handle a challange message given String sender name and String message.
+	 * @param handle
+	 *            a challange message given String sender name and String
+	 *            message.
 	 * */
 	public void handleChallenge(Message msg) {
 		String title = "", msgText = "";
@@ -641,8 +648,10 @@ public class Player {
 
 	/**
 	 * handleAIMatch
+	 * 
 	 * @name handleAIMatch
-	 * @brief JOptionPane query player about playing against server instead of waiting for a player.
+	 * @brief JOptionPane query player about playing against server instead of
+	 *        waiting for a player.
 	 * */
 	public void handleAIMatch() {
 		String msgText = "There are no available players at this time\n\nDo you want to play singleplayer?";
@@ -655,6 +664,27 @@ public class Player {
 		} else {
 			sendMessage(new Message(Message.CHALLENGE, getName(),
 					getOpponentName(), Challenge_Deny));
+		}
+	}
+
+	public void handleNonValidMove(Message msg) {
+		System.out.println("Handling NonValidMove");
+		String[] tokens = msg.getMessage().split(" ");
+		int row, col;
+		switch (tokens[0].toUpperCase()) {
+		case "HIT":
+			row = Integer.parseInt(tokens[1]);
+			col = Integer.parseInt(tokens[2]);
+			screen.setMessage("Enemy Missed an illegal shot at " + row + "," + col);
+			break;
+		case "MISS":
+			row = Integer.parseInt(tokens[1]);
+			col = Integer.parseInt(tokens[2]);
+			screen.setMessage("Enemy Missed an illegal shot at " + row + "," + col);
+			break;
+		case "PLACING": 
+			screen.setMessage("It's a little crowded, don't ya think!!");
+			break;
 		}
 	}
 }
