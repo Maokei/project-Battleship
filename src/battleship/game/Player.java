@@ -288,10 +288,13 @@ public class Player {
 							getOpponentName(), "HIT " + Integer.toString(row) + " "
 									+ Integer.toString(col)));
 				}
+				
 				ship.hit();
 				if (!ship.isAlive()) {
 					sinkShip(ship);
 					screen.setShips(--remainingShips);
+					if (remainingShips == 0)
+						battleLost();
 				}
 
 				if (mode == GameMode.SinglePlayer) {
@@ -299,9 +302,6 @@ public class Player {
 							getOpponentName(), "HIT " + Integer.toString(row) + " "
 									+ Integer.toString(col)));
 				}
-
-				if (remainingShips == 0)
-					battleLost();
 			}
 		}
 	}
@@ -326,7 +326,6 @@ public class Player {
 		for (Grid pos : ship.getPosition()) {
 			playerBoard.fadeGridOut(pos.getRow(), pos.getCol());
 		}
-
 	}
 
 	/**
@@ -521,6 +520,7 @@ public class Player {
 	}
 
 	public void placePlayerShip(int row, int col) {
+		screen.setMessage("Deploy your ships");
 		if (shipPlacementIndex == 0) {
 			screen.disableRandom();
 		}
