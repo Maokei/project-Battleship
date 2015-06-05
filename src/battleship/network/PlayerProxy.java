@@ -995,7 +995,7 @@ public class PlayerProxy extends Thread {
 
 		public void setPlayerTurn(boolean playerTurn) {
 			this.playerTurn = playerTurn;
-			new GameTimer(2, 1000).run();
+			new GameTimer(2, 1300).run();
 		}
 
 		public void placeEnemyShip(Ship ship, int row, int col) {
