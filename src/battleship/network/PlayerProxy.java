@@ -236,6 +236,11 @@ public class PlayerProxy extends Thread {
 		}
 	}
 
+	/**
+	 * parseValidMessage
+	 * @name parseValidMessage
+	 * @param Takes a Message to be parsed.
+	 * */
 	private void parseValidMessage(Message msg) {
 		String[] tokens = msg.getMessage().split(" ");
 		if(checkMessage(msg)) {
@@ -248,6 +253,11 @@ public class PlayerProxy extends Thread {
 		}
 	}
 
+	/**
+	 * parseModeMessage
+	 * @name parseModeMessage
+	 * @param Takes a GameMode message to parse. 
+	 * */
 	private void parseModeMessage(Message msg) {
 		if (msg.getSender().equalsIgnoreCase(name)) {
 			if (msg.getMessage().equalsIgnoreCase("SinglePlayer")) {
@@ -259,6 +269,11 @@ public class PlayerProxy extends Thread {
 		}
 	}
 
+	/**
+	 * parseChallangeMessage
+	 * @name parseChallangeMessage
+	 * @param Takes a Challange message to parse. 
+	 * */
 	private void parseChallengeMessage(Message msg) {
 		if(msg.getMessage().equalsIgnoreCase(Challenge_Request)) {
 			server.sendMessageToAllPlayers(msg);
