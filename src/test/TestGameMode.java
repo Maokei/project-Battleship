@@ -53,7 +53,7 @@ public class TestGameMode {
 	}
 	
 	/**
-	 * @name testGetType
+	 * @name testGetMode
 	 * @brief test if getMode returns correct String representation
 	 * */
 	@Test
