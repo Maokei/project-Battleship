@@ -1,3 +1,8 @@
+/**
+ * @file ChallangePanel.java
+ * @authors rickard, lars
+ * @date 2015-05-25
+ * */
 package battleship.screen;
 
 import static battleship.game.Constants.*;
@@ -28,6 +33,11 @@ import battleship.game.LoginDialog;
 import battleship.game.Message;
 import battleship.game.Player;
 
+/**
+ * @class ChallangePanel
+ * @extends JPanel
+ * @brief Class describes a challange panel.
+ * */
 public class ChallengePanel extends JPanel {
 	private static final long serialVersionUID = 2283968572833866258L;
 	private Player player;
@@ -39,6 +49,10 @@ public class ChallengePanel extends JPanel {
 	private String opponent;
 	private final String noPlayers = "No available players.";
 
+	/**
+	 *  @constructor ChallangePanel
+	 *  @param Takes a Player pointer.
+	 * */
 	public ChallengePanel(Player player) {
 		this.player = player;
 		setLayout(new BorderLayout());
@@ -69,6 +83,11 @@ public class ChallengePanel extends JPanel {
 		setVisible(true);
 	}
 	
+	/**
+	 * setInviteEnabled
+	 * @name setInviteEnabled
+	 * @param Boolean to set enabled state.
+	 * */
 	public void setInviteEnabled(boolean enabled) {
 		invite.setEnabled(enabled);
 	}
@@ -114,16 +133,11 @@ public class ChallengePanel extends JPanel {
 		pane = new JScrollPane(players);
 	}
 	
-	/*
-	class NameListener extends MouseAdapter {
-		public void mousePressed(MouseEvent e) {
-			JLabel choosen = ((JLabel) e.getSource());
-			choosen.setForeground(new Color(0, 255, 0));
-			opponent = choosen.getText();
-			invite.setEnabled(true);
-		}
-	}
-	*/
+	/**
+	 * @class ChallangeListener
+	 * @implements ActionListener
+	 * @brief Class describes a button listener for the Challenge panel.
+	 * */
 	private class ChallengeListener implements ActionListener {
 
 		@Override

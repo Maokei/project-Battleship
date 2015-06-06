@@ -1,3 +1,8 @@
+/**
+ * @File Avatar.java
+ * @authors rickard, lars
+ * @date 2015-05-25
+ * */
 package battleship.screen;
 
 import java.awt.Color;
@@ -17,6 +22,10 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
+/**
+ * @class Avatar
+ * @extends JPanel
+ * */
 public class Avatar extends JPanel {
 	private static final long serialVersionUID = 1L;
 	private BufferedImage img;
@@ -31,6 +40,9 @@ public class Avatar extends JPanel {
 			new Color(20, 20, 20), new Color(30, 30, 30), new Color(40, 40, 40) };
 	
 
+	/**
+	 * @constructor Avatar
+	 * */
 	public Avatar() {
 		super(new GridLayout(2, 1, 0, 0));
 		setSize(new Dimension(100, 80));
@@ -50,13 +62,21 @@ public class Avatar extends JPanel {
 		add(nameLabel);
 	}
 	
+	/**
+	 * setupPaint
+	 * @name setupPaint
+	 * @brief Sets up drawing of avatar.
+	 * */
 	private void setupPaint() {
 		center = new Point2D.Double(getWidth() / 2, getHeight() / 2);
 		radius = (float) (getWidth() / 2.0);
 		rgp = new RadialGradientPaint(center, radius, gradientStops, colors);
 	}
 	
-	
+	/**
+	 * @constructor Avatar
+	 * @param BufferedImage avatar, String avatar name.
+	 * */
 	public Avatar(BufferedImage img, String name) {
 		super(new GridLayout(2, 1, 10, 10));
 		this.img = img;
@@ -68,6 +88,11 @@ public class Avatar extends JPanel {
 		add(nameLabel);
 	}
 
+	/**
+	 * setAvatar
+	 * @name setAvatar
+	 * @param Sets an avtar with a BufferedImage and a String name.
+	 * */
 	public void setAvatar(BufferedImage img, String name) {
 		this.img = img;
 		this.name = name;
@@ -75,14 +100,30 @@ public class Avatar extends JPanel {
 		nameLabel.setText(name);
 	}
 
+	/**
+	 * getImage
+	 * @name getImage
+	 * @return Returns the current BufferedImage used as avatar.
+	 * */
 	public BufferedImage getImage() {
 		return img;
 	}
 
+	/**
+	 * getName
+	 * @name getName
+	 * @return Returns avatar name as a String.
+	 * */
 	public String getName() {
 		return name;
 	}
 	
+	/**
+	 * paintComponent
+	 * @name paintComponent
+	 * @param Graphics context.
+	 * @brief Paints background.
+	 * */
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
 

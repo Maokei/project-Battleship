@@ -1,3 +1,8 @@
+/**
+ * @file AvatarPanel.java
+ * @authors rickard, lars
+ * @date 2015-05-25
+ * */
 package battleship.screen;
 
 import java.awt.BorderLayout;
@@ -24,6 +29,11 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
+/**
+ * @class AvatarPanel
+ * @extends JPanel
+ * @brief Class describes an avatar display panel.
+ * */
 public class AvatarPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 	private Map<String, BufferedImage> avatars;
@@ -41,6 +51,9 @@ public class AvatarPanel extends JPanel {
 	private Color[] colors = { new Color(0, 0, 0), new Color(10, 10, 10),
 			new Color(20, 20, 20), new Color(30, 30, 30), new Color(40, 40, 40) };
 
+	/**
+	 * @constructor AvatarPanel
+	 * */
 	public AvatarPanel() {
 		super(new BorderLayout());
 		setSize(new Dimension(150, 150));
@@ -87,6 +100,11 @@ public class AvatarPanel extends JPanel {
 		init();
 	}
 
+	/**
+	 * init
+	 * @name init
+	 * @brief Initialize avatar panel.
+	 * */
 	private void init() {
 		readAvatarsFromFile();
 		names.add("Pirate Pac");
@@ -95,6 +113,11 @@ public class AvatarPanel extends JPanel {
 		description.setText(names.get(index));
 	}
 	
+	/**
+	 * setupPaint
+	 * @name setupPaint
+	 * @brief Setup drawing.
+	 * */
 	private void setupPaint() {
 		center = new Point2D.Double(getWidth() / 2, getHeight() / 2);
 		radius = (float) (getWidth() / 2.0);
@@ -102,6 +125,11 @@ public class AvatarPanel extends JPanel {
 	}
 
 
+	/**
+	 * reset
+	 * @name reset
+	 * @brief Reset's panel.
+	 * */
 	public void reset() {
 		index = 0;
 		avatar.setIcon(new ImageIcon(avatars.get(names.get(index))));
@@ -110,10 +138,19 @@ public class AvatarPanel extends JPanel {
 		rightArrow.setEnabled(true);
 	}
 
+	/**
+	 * getAvatar
+	 * @name getAvatar
+	 * @returns Avatar object pointer.
+	 * */
 	public Avatar getAvatar() {
 		return new Avatar(avatars.get(names.get(index)), names.get(index));
 	}
 
+	/**
+	 * readAvatarFromFile
+	 * @name readAvatarFromFile
+	 * */
 	private void readAvatarsFromFile() {
 		try {
 			avatars.put("Pirate Pac",
@@ -126,6 +163,11 @@ public class AvatarPanel extends JPanel {
 		}
 	}
 
+	/**
+	 * @class AvatarCycler
+	 * @implements ActionListener
+	 * @brief Class describes an Listener that cycles between available avtars.
+	 * */
 	class AvatarCycler implements ActionListener {
 
 		@Override
@@ -168,6 +210,11 @@ public class AvatarPanel extends JPanel {
 		}
 	}
 	
+	/**
+	 * paintComponent
+	 * @name paintComponent
+	 * @param Graphics context.
+	 * */
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
 

@@ -1,3 +1,8 @@
+/**
+ * @file PlayerStats.java
+ * @authors rickard, lars
+ * @date 2015-05-25
+ * */
 package battleship.screen;
 
 import java.awt.Color;
@@ -9,6 +14,11 @@ import java.awt.GridBagLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+/**
+ * @class PlayerStats
+ * @extends JPanel
+ * @brief Class describes a player statistics panel.
+ * */
 public class PlayerStats extends JPanel {
 	private static final long serialVersionUID = 5629108795041289152L;
 	private JLabel hitsLabel;
@@ -23,6 +33,10 @@ public class PlayerStats extends JPanel {
 	private Font font = new Font("Monospaced", Font.PLAIN, 14);
 	private GridBagConstraints gc;
 	
+	/**
+	 * PlayerStats constructor.
+	 * @constructor PlayerStats
+	 * */
 	public PlayerStats() {
 		super(new GridBagLayout());
 		setPreferredSize(new Dimension(200, 300));
@@ -73,14 +87,30 @@ public class PlayerStats extends JPanel {
 		add(shipsValue, gc);
 	}
 	
+	/**
+	 * setHits
+	 * @name setHits
+	 * @param Integer hits set number of hits on panel.
+	 * */
 	public void setHits(int hits) {
 		hitsValue.setText(Integer.toString(hits));
 	}
 	
+	
+	/**
+	 * setMisses
+	 * @name setMisses
+	 * @param Integer misses set number of misses on statistics panel.
+	 * */
 	public void setMisses(int misses) {
 		missValue.setText(Integer.toString(misses));
 	}
 	
+	/**
+	 * setShips
+	 * @name setShips
+	 * @param Integer ships set number of ships on panel.
+	 * */
 	public void setShips(int ships) {
 		shipsValue.setText(Integer.toString(ships));
 	}
