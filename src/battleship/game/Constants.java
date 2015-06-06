@@ -16,6 +16,9 @@ public class Constants {
 		//this is a restricted area!
 	}
 	
+	public static final String DEFAULT_ADDRESS = "localhost";
+	public static final int DEFAULT_PORT = 10001;
+	
 	/**
 	 * Number of ships for each player constants
 	 * */

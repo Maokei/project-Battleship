@@ -5,16 +5,20 @@
  * */
 package battleship.game;
 
+import static battleship.game.Constants.*;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 import battleship.network.Server;
 import battleship.resources.AudioLoader;
 
+/**
+ * @class Game
+ * @brief Main Game class
+ * */
 public class Game {
 	private Player player;
 	private LoginDialog login;
-	public static final int DEFAULT_PORT = 10001;
 	
 	public Game() {
 		AudioLoader.initSounds();

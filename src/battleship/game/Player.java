@@ -6,20 +6,18 @@
 package battleship.game;
 
 //include constants
-import static battleship.game.Constants.*;
+import static battleship.game.Constants.Challenge_Accept;
+import static battleship.game.Constants.Challenge_Deny;
+import static battleship.game.Constants.Challenge_Name;
+import static battleship.game.Constants.Challenge_Request;
+import static battleship.game.Constants.GRID_SIZE;
 
-import java.awt.Cursor;
-import java.awt.Image;
-import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.ArrayList;
 import java.util.Map;
 import java.util.Vector;
-import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.BlockingQueue;
 
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
@@ -31,18 +29,16 @@ import battleship.network.ClientConnection;
 import battleship.network.RandomShipPlacer;
 import battleship.resources.AudioLoader;
 import battleship.screen.Avatar;
-import battleship.screen.Lobby;
 import battleship.screen.Screen;
 import battleship.ships.Alignment;
 import battleship.ships.Ship;
 import battleship.ships.ShipBuilder;
 
 /**
- * @package battleship.entity
+ * @package battleship.game
  * @Class Player
  * @brief Class represent a player human battleship player, class also contains
  *        many of the core gameplay mechanics.
- * @implements BattlePlayer interface
  * */
 public class Player {
 	private String name;
@@ -53,9 +49,6 @@ public class Player {
 	private Gameboard playerBoard, enemyBoard;
 	private Vector<Ship> playerShips;
 	private Alignment alignment = Alignment.HORIZONTAL;
-	private Toolkit toolkit;
-	private Image cursorImg;
-	private Cursor cursor;
 	private int shipPlacementIndex;
 	private int remainingShips;
 	private int hits, misses;
@@ -70,8 +63,14 @@ public class Player {
 	 * 
 	 * @brief Player constructor
 	 * @param String
-	 *            player name, Avatar object player picture, ClientConnection
+	 *            player name,
+	 * @param Avatar
+	 *            object player picture
+	 * @param ClientConnection
 	 *            for talk to server.
+	 * @param mode
+	 *            instance of type GameMode, represents player choice of game
+	 *            mode
 	 * */
 	public Player(String name, Avatar avatar, ClientConnection con,
 			GameMode mode) {
@@ -95,10 +94,6 @@ public class Player {
 		enemyBoard = new Gameboard();
 		playerBoard.addMouseListener(new BoardListener());
 		enemyBoard.addMouseListener(new BoardListener());
-		// toolkit = Toolkit.getDefaultToolkit();
-		// cursorImg = toolkit.getImage("src/res/sprite/crosshair.png");
-		// cursor = toolkit.createCustomCursor(cursorImg, new Point(0, 0), "");
-		// enemyBoard.setCursor(cursor);
 		screen = new Screen(this, playerBoard, enemyBoard);
 		playerShips = ShipBuilder.buildShips();
 		remainingShips = 9;
@@ -115,7 +110,6 @@ public class Player {
 	 * @brief Start a new thread to listen for incoming events with
 	 *        ClientConnection.
 	 * */
-
 	public void listen() {
 		new Thread(con).start();
 	}
@@ -176,8 +170,7 @@ public class Player {
 	 * getConnectedPlayers
 	 * 
 	 * @name getConnectedPlayers
-	 * @param Map
-	 *            <String> of connected players.
+	 * @return Map <String, String> of connected players.
 	 * */
 	public Map<String, String> getConnectedPlayers() {
 		return con.getConnectedPlayers();
@@ -188,9 +181,9 @@ public class Player {
 	 * 
 	 * @name checkHit
 	 * @brief Check for a hit in given position.
-	 * @param Integer
-	 *            row and integer column in grid.
-	 * @true True for hit false for no hit.
+	 * @param int row and int column in grid.
+	 * @return boolean value representing hit or no hit
+	 * @true true for hit false for no hit.
 	 * */
 	public boolean checkHit(int row, int col) {
 		return playerBoard.checkHit(row, col);
@@ -199,7 +192,7 @@ public class Player {
 	/**
 	 * setOpponentName
 	 * 
-	 * @name setOpponent
+	 * @name setOpponentName
 	 * @param Takes
 	 *            an opponent as a string name
 	 * */
@@ -211,20 +204,48 @@ public class Player {
 	 * getOpponentName
 	 * 
 	 * @name getOpponentName
+	 * @brief sets opponent name
 	 * @return returns opponent name as a string.
 	 * */
 	public String getOpponentName() {
 		return opponentName;
 	}
 
+	/**
+	 * setHasOpponent
+	 * 
+	 * @name setHasOpponent
+	 * @brief set value of Players hasOpponent to this value
+	 * @param hasOpponent
+	 *            sets Player hasOpponent to this value
+	 * */
 	public void setHasOpponent(boolean hasOpponent) {
 		this.hasOpponent = hasOpponent;
 	}
 
+	/**
+	 * getHasOpponent
+	 * 
+	 * @name getHasOpponent
+	 * @brief gets value of Player hasOpponent
+	 * @return returns the value of Player hasOpponent
+	 * @true if player has an opponent
+	 * */
 	public boolean getHasOpponent() {
 		return hasOpponent;
 	}
 
+	/**
+	 * checkFire
+	 * 
+	 * @name checkFire
+	 * @brief sends a message to server to validate an opponents fire
+	 *        coordinates
+	 * @param row
+	 *            the playerBoard row coordinate
+	 * @param col
+	 *            the playerBoard col coordinate
+	 * */
 	public void checkFire(int row, int col) {
 		if (checkHit(row, col)) {
 			sendMessage(new Message(Message.VALID, name, "", "HIT "
@@ -240,8 +261,10 @@ public class Player {
 	 * 
 	 * @name registerFire
 	 * @brief register a shot on the grid.
-	 * @param intger
-	 *            row and integer column in a grid.
+	 * @param row
+	 *            the playerBoard row coordinate
+	 * @param col
+	 *            the playerBoard col coordinate
 	 * */
 	/*
 	 * public void registerFire(int row, int col) { if (checkHit(row, col)) {
@@ -253,8 +276,11 @@ public class Player {
 	 * registerPlayerHit
 	 * 
 	 * @name registerPlayerHit
-	 * @param integer
-	 *            row and integer column in grid.
+	 * @brief registers a hit on the playerBoard, sets players turn to true
+	 * @param row
+	 *            the playerBoard row coordinate
+	 * @param col
+	 *            the playerBoard col coordinate
 	 * */
 	public void registerPlayerHit(int row, int col) {
 		AudioLoader.getAudio("explosion1").playAudio();
@@ -267,10 +293,12 @@ public class Player {
 	 * registerEnemyHit
 	 * 
 	 * @name registerEnemyHit
-	 * @brief Function register and enemy hit on a grid.
-	 * @param Ship
-	 *            object, integer row and integer column.
-	 * @return void function.
+	 * @brief Function register an enemy hit on a grid, sends message to
+	 *        opponent
+	 * @param row
+	 *            the playerBoard row coordinate
+	 * @param col
+	 *            the playerBoard col coordinate
 	 * */
 	public void registerEnemyHit(int row, int col) {
 		for (Ship ship : playerShips) {
@@ -304,6 +332,8 @@ public class Player {
 	 * sinkShip
 	 * 
 	 * @name sinkShip
+	 * @brief displays that a ship is sunk on playerBoard, sends message to
+	 *        opponent
 	 * @param Takes
 	 *            a ship pointer for a ship to be sunk.
 	 * */
@@ -326,9 +356,12 @@ public class Player {
 	 * registerPlayerMiss
 	 * 
 	 * @name registerPlayerMiss
-	 * @brief register a miss by player.
-	 * @param interger
-	 *            row and integer column.
+	 * @brief register a miss on enemyBoard, sends a TURN message to opponent,
+	 *        and sets players turn to false.
+	 * @param row
+	 *            the enemyBoard row coordinate
+	 * @param col
+	 *            the enemyBoard col coordinate
 	 * */
 	public void registerPlayerMiss(int row, int col) {
 		AudioLoader.getAudio("splash1").playAudio();
@@ -343,31 +376,33 @@ public class Player {
 	 * registerEnemyMiss
 	 * 
 	 * @name registerEnemyMiss
-	 * @brief registers a miss by the enemy.
-	 * @param integer
-	 *            row and integer column on grid.
+	 * @brief registers a miss on playerBoard and sends message to opponent
+	 * @param row
+	 *            the playerBoard row coordinate
+	 * @param col
+	 *            the playerBoard col coordinate
 	 * */
 	public void registerEnemyMiss(int row, int col) {
 		AudioLoader.getAudio("splash1").playAudio();
 		sendMessage(new Message(Message.MESSAGE, getName(), getOpponentName(),
 				"MISS " + Integer.toString(row) + " " + Integer.toString(col)));
 		playerBoard.addMiss(row, col);
-
 	}
 
 	/**
 	 * placeEnemyShip
 	 * 
 	 * @name placeEnemyShip
-	 * @brief register an enemy ship on enemy grid to be drawn.
-	 * @param Ship
-	 *            object, integer row and integer column.
+	 * @brief register an enemy ship on enemy grid to be drawn, and faded in.
+	 * @param ship
+	 *            the ship to be displayed
+	 * @param row
+	 *            the enemyBoard row coordinate
+	 * @param col
+	 *            the enemyBoard col coordinate
 	 * */
 	public void placeEnemyShip(Ship ship, int row, int col) {
 		AudioLoader.getAudio("ship_down").playAudio();
-		System.out.println("Placing enemy ship:\n");
-		System.out.println(ship.getType() + " " + ship.getAlignment()
-				+ " Grid[" + row + ", " + col + "]");
 		enemyBoard.placeShip(ship, row, col);
 		for (Grid pos : ship.getPosition()) {
 			enemyBoard.fadeGridIn(pos.getRow(), pos.getCol());
@@ -379,7 +414,6 @@ public class Player {
 	 * 
 	 * @name randomizeShipPlacement
 	 * @brief meta function to start randomization of ships
-	 * @return void function
 	 **/
 	public void randomizeShipPlacement() {
 		shipPlacementIndex = playerShips.size();
@@ -393,8 +427,9 @@ public class Player {
 	 * setRunning
 	 * 
 	 * @name setRunning
-	 * @param set
-	 *            running state clientConnection takes boolean value.
+	 * @brief sets the state of ClientConnection listening loop
+	 * @param running
+	 *            sets the ClientConnection listening loop to this value.
 	 * */
 	public void setRunning(boolean running) {
 		con.setRunning(running);
@@ -414,7 +449,8 @@ public class Player {
 	 * setDeployed
 	 * 
 	 * @name setDeployed
-	 * @brief setDeployed state true and appropriate screen message for player.
+	 * @brief setDeployed state true for Player and appropriate screen message
+	 *        for player.
 	 * */
 	public void setDeployed() {
 		deployed = true;
@@ -476,6 +512,16 @@ public class Player {
 		private int seconds;
 		private final int delay;
 
+		/**
+		 * GameTimer
+		 * 
+		 * @name GameTimer
+		 * @brief Two argument constructor to set the time and delay of timer
+		 * @param seconds
+		 *            the number of seconds the timer runs
+		 * @param delay
+		 *            number of times the timer fires per second
+		 * */
 		public GameTimer(int seconds, int delay) {
 			this.seconds = seconds;
 			this.delay = delay;
@@ -485,7 +531,7 @@ public class Player {
 		 * run
 		 * 
 		 * @name run
-		 * @brief start's thread
+		 * @brief starts timer thread,
 		 * */
 		public void run() {
 			t = new Timer(delay, new ActionListener() {
@@ -513,6 +559,17 @@ public class Player {
 		}
 	}
 
+	/**
+	 * placePlayerShip
+	 * 
+	 * @name placePlayerShip
+	 * @brief places the ship specified by shipPlacementIndex at the start of
+	 *        the specified row and col
+	 * @param row
+	 *            the playerBoard row coordinate
+	 * @param col
+	 *            the playerBoard col coordinate
+	 * */
 	public void placePlayerShip(int row, int col) {
 		screen.setMessage("Deploy your ships");
 		if (shipPlacementIndex == 0) {
@@ -538,10 +595,16 @@ public class Player {
 	 * 
 	 * @class BoardListener
 	 * @extends MouseAdapter
-	 * @brief Event listener class for a player board.
+	 * @brief Event listener class for playerBoard and enemyBoard
 	 * */
 	class BoardListener extends MouseAdapter {
-
+		/**
+		 * mousePressed
+		 * 
+		 * @name mousePressed
+		 * @brief sends a ship placement message to server for validation, or
+		 *        calls method fire based on which Board is pressed.
+		 * */
 		@Override
 		public void mousePressed(MouseEvent e) {
 			int row = e.getY() / GRID_SIZE;
@@ -564,7 +627,6 @@ public class Player {
 										+ Integer.toString(row) + " "
 										+ Integer.toString(col)));
 					}
-					// placePlayerShip(row, col);
 				}
 			} else if (e.getComponent() == enemyBoard) {
 				if (enemyBoard.checkFire(row, col))
@@ -576,11 +638,13 @@ public class Player {
 		 * fire
 		 * 
 		 * @name fire
-		 * @param Integer
-		 *            row and integer column, sends out fire message.
+		 * @brief sends a message to opponent if both are deployed and its the players turn
+		 * @param row
+		 *       	the enemyBoard row coordinate
+		 * @param col
+		 *          the enemyBoard col coordinate
 		 * */
 		private void fire(int row, int col) {
-			System.out.println("I'm in fire");
 			if (checkDeployed() && playerTurn) {
 				sendMessage(new Message(Message.MESSAGE, getName(),
 						getOpponentName(), "FIRE " + Integer.toString(row)
@@ -592,7 +656,14 @@ public class Player {
 						+ "\nPlayerTurn: " + playerTurn);
 			}
 		}
-
+		/**
+		 * checkDeployed
+		 * 
+		 * @name checkDeployed
+		 * @brief checks if deployed based on GameMode
+		 * @return returns a flag based on GameMode
+		 * @true if player (and opponent if multiPlayer) is deployed.
+		 * */
 		private boolean checkDeployed() {
 			if (mode == GameMode.MultiPlayer) {
 				return (deployed && opponentDeployed);
@@ -606,9 +677,8 @@ public class Player {
 	 * handleChallange
 	 * 
 	 * @name handleChallange
-	 * @param handle
-	 *            a challange message given String sender name and String
-	 *            message.
+	 * @brief handles a Challenge message, and displays appropriate message to player
+	 * @param msg the Challenge message to handle
 	 * */
 	public void handleChallenge(Message msg) {
 		String title = "", msgText = "";
@@ -642,7 +712,8 @@ public class Player {
 			getConnectedPlayers().put(opponentName, "playing");
 			updateLobby();
 			screen.setInviteEnabled(false);
-			sendMessage(new Message(Message.CHALLENGE, name, opponentName, Challenge_Name));
+			sendMessage(new Message(Message.CHALLENGE, name, opponentName,
+					Challenge_Name));
 		} else if (msg.getMessage().equalsIgnoreCase(Challenge_Deny)) {
 			msgText = msg.getSender()
 					+ " has denied your request.\n\nMaybe he's afraid!.";
@@ -672,9 +743,15 @@ public class Player {
 					getOpponentName(), Challenge_Deny));
 		}
 	}
-
+	
+	/**
+	 * handleNonValidMove
+	 * 
+	 * @name handleNonValidMove
+	 * @brief displays a message about an invalid move by player or enemy
+	 * @param msg The message containing the invalid move.
+	 * */
 	public void handleNonValidMove(Message msg) {
-		System.out.println("Handling NonValidMove");
 		String[] tokens = msg.getMessage().split(" ");
 		int row, col;
 		switch (tokens[0].toUpperCase()) {
@@ -696,6 +773,12 @@ public class Player {
 		}
 	}
 
+	/**
+	 * updateLobby
+	 * 
+	 * @name updateLobby
+	 * @brief updates the names in lobby to display current changes
+	 * */
 	public void updateLobby() {
 		screen.updateLobby();
 	}
