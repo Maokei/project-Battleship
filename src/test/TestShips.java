@@ -53,4 +53,18 @@ public class TestShips {
 		carrier.hit();
 		assertTrue(carrier.isAlive());
 	}
+	
+	@Test 
+	public void testShipBuilder() {
+		Vector<Ship> ships = ShipBuilder.buildShips();
+		assertTrue(ships.get(0).getType() == "Carrier");
+		assertTrue(ships.get(1).getType() == "Destroyer");
+		assertTrue(ships.get(2).getType() == "Destroyer");
+		assertTrue(ships.get(3).getType() == "Destroyer");
+		assertTrue(ships.get(4).getType() == "Submarine");
+		assertTrue(ships.get(5).getType() == "Submarine");
+		assertTrue(ships.get(6).getType() == "Submarine");
+		assertTrue(ships.get(7).getType() == "Submarine");
+		assertTrue(ships.get(8).getType() == "Submarine");
+	}
 }
