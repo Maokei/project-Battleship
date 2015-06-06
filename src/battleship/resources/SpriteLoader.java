@@ -1,6 +1,7 @@
 /**
- * @authors rijo1001, lama1203
  * @file SpriteLoader.java
+ * @authors rijo1001, lama1203
+ * @date 2015-05-20
  * */
 package battleship.resources;
 
@@ -16,6 +17,10 @@ import java.util.Map;
 
 import javax.imageio.ImageIO;
 
+/**
+ * @class SpriteLoader
+ * @brief Describes a class that reads images form file to create BufferedImages. 
+ * */
 public class SpriteLoader {
 	private int width, height;
 	private int rows, cols;
@@ -24,6 +29,9 @@ public class SpriteLoader {
 	private List<String> names;
 	private static SpriteLoader instance = null;
 
+	/**
+	 * @constructor SpriteLoader
+	 * */
 	private SpriteLoader(int width, int height, int rows, int cols, int numOfSprites) {
 		this.width = width;
 		this.height = height;
@@ -35,6 +43,11 @@ public class SpriteLoader {
 		initNames();
 	}
 
+	/**
+	 * initNames
+	 * @name initNames
+	 * @brief Initializes sprite's with pre-defined names.
+	 * */
 	private void initNames() {
 		names.add("hor_front"); names.add("hor_mid"); names.add("hor_back");
 		names.add("ver_front"); names.add("ver_mid"); names.add("ver_back");
@@ -43,6 +56,12 @@ public class SpriteLoader {
 		names.add("miss");
 	}
 
+	/**
+	 * loadSprites
+	 *  @name loadSprites 
+	 *  @param String filename of sprite to load.
+	 *  @return Was successful or not.
+	 * */
 	public boolean loadSprites(String filename) {
 		try {
 			BufferedImage spritesheet = getTransparentImage(ImageIO.read(new File(filename)));
@@ -69,6 +88,12 @@ public class SpriteLoader {
 		return false;
 	}
 	
+	/**
+	 * getTransparentImage
+	 * @name getTransparentImage
+	 * @param Image img, creates a transparent image with image.
+	 * @return BufferedImage with transparency.
+	 * */
 	public static BufferedImage getTransparentImage(Image img) {
 		/*
 		if (img instanceof BufferedImage) {
@@ -88,14 +113,29 @@ public class SpriteLoader {
 		return bimage;
 	}
 
+	/**
+	 * addName
+	 * @name addName
+	 * */
 	public void addName(String name) {
 		names.add(name);
 	}
 
+	/**
+	 * getSprite
+	 * @name getSprite
+	 * @param Request sprite by String name.
+	 * @return BufferedImage requested.
+	 * */
 	public BufferedImage getSprite(String name) {
 		return sprites.get(name);
 	}
 	
+	/**
+	 * getInstance
+	 * @name getInstance
+	 * @return SpriteLoader instance.
+	 * */
 	public static SpriteLoader getInstance(int width, int height, int rows, int cols, int numOfSprites) {
 		if(instance == null)
 			instance = new SpriteLoader(width, height, rows, cols, numOfSprites);
