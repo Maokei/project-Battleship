@@ -25,7 +25,16 @@ public class Message implements Serializable {
 			AIMATCH = 6, CHALLENGE = 7, LOST = 8, MODE = 9,
 			VALID = 10;
 	
-
+	/**
+	 * Message
+	 * 
+	 * @name Message
+	 * @brief Four arguments constructor
+	 * @param type the type of Message
+	 * @param sender the sender of this Message
+	 * @param receiver the receiver of this Message
+	 * @param msg String representation of the Message
+	 * */
 	public Message(int type, String sender, String receiver, String msg) {
 		this.type = type;
 		this.sender = sender;
@@ -36,7 +45,6 @@ public class Message implements Serializable {
 	/**
 	 * getType
 	 * @name getType
-	 * @param None
 	 * @return returns constant integer to denote the type of message for parsing
 	 * */
 	public int getType() {
@@ -46,7 +54,6 @@ public class Message implements Serializable {
 	/**
 	 * getMessage
 	 * @name getMessage
-	 * @param none
 	 * @return String containing the actual message
 	 * */
 	public String getMessage() {
