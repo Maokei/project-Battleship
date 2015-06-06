@@ -1,5 +1,12 @@
-
+/**
+ * @file LoginDialog.java
+ * @author Rickard(rijo1001), Lars(lama1203)
+ * @date 2015-05-05
+ * */
 package battleship.game;
+
+import static battleship.game.Constants.DEFAULT_ADDRESS;
+import static battleship.game.Constants.DEFAULT_PORT;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -25,6 +32,11 @@ import battleship.network.ClientConnection;
 import battleship.screen.AvatarPanel;
 import battleship.screen.InputPanel;
 
+/**
+ * @class LoginDialog
+ * @package battleship.game
+ * @brief A dialog to choose a name, avatar, and GameMode
+ * */
 public class LoginDialog extends JDialog {
 	private static final long serialVersionUID = 1L;
 	private Player player;
@@ -38,17 +50,23 @@ public class LoginDialog extends JDialog {
 	private JButton cancel, clear, login;
 	private ClientConnection connection;
 	private Font font;
-	private NetworkDialog networkDialog;
 	private GameMode mode;
 	private String ip;
 	private int port;
-	public static final int DEFAULT_PORT = 10001;
-	public static final String DEFAULT_ADDRESS = "localhost";
 
+	/**
+	 * LoginDialog
+	 * 
+	 * @name LoginDialog
+	 * @brief One argument constructor sets up interface of dialog
+	 * @param player the player to instantiate based on user choice
+	 * */
 	public LoginDialog(Player player) {
 		super();
 		this.player = player;
 		mode = GameMode.SinglePlayer;
+		ip = DEFAULT_ADDRESS;
+		port = DEFAULT_PORT;
 		setLayout(new BorderLayout());
 		font = new Font("Monospaced", Font.PLAIN, 12);
 		nameInput = new InputPanel("Enter name: ", true);
@@ -69,9 +87,7 @@ public class LoginDialog extends JDialog {
 		try {
 			single.setIcon(new ImageIcon(ImageIO.read(new File("src/res/sprite/singleplayer.png"))));
 			multi.setIcon(new ImageIcon(ImageIO.read(new File("src/res/sprite/multiplayer.png"))));
-
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		group = new ButtonGroup();
@@ -115,21 +131,37 @@ public class LoginDialog extends JDialog {
 		setLocationRelativeTo(null);
 		setVisible(true);
 		pack();
-		//ip & port
-		ip = DEFAULT_ADDRESS;
-		port = 10001;
+		
 	}
 	
+	/**
+	 * clear
+	 * 
+	 * @name clear
+	 * @brief clears name input field and resets avatar
+	 * */
 	private void clear() {
 		nameInput.setInput("");
 		avatarChooser.reset();
 	}
 	
+	/**
+	 * close
+	 * 
+	 * @name close
+	 * @brief set visibility false and disposes the dialog
+	 * */
 	private void close() {
 		setVisible(false);
 		dispose();
 	}
 	
+	/**
+	 * getIpAndPort
+	 * 
+	 * @name getIpAndPort
+	 * @brief prompts user for input on ip-address and port
+	 * */
 	private void getIpAndPort() {
 		ip = (String)JOptionPane.showInputDialog(
                 this,
@@ -139,7 +171,6 @@ public class LoginDialog extends JDialog {
                 null,
                null,
                 DEFAULT_ADDRESS);
-		//port
 		String temp = (String)JOptionPane.showInputDialog(
                 this,
                 "Enter port",
@@ -151,13 +182,12 @@ public class LoginDialog extends JDialog {
 		port = Integer.parseInt(temp);
 	}
 	
-	private void waitingDialog() {
-		JOptionPane optionPane = new JOptionPane("Waiting for players!"); 
-		JDialog wait = optionPane.createDialog(this, "Waiting");
-		wait.setModal(false);
-		wait.setVisible(true);
-	}
-	
+	/**
+	 * login
+	 * 
+	 * @name login
+	 * @brief instantiate the player based on options of the user
+	 * */
 	private void login() {
 		if (!nameInput.equals("")) {
 			if(mode == GameMode.SinglePlayer) {
@@ -170,9 +200,7 @@ public class LoginDialog extends JDialog {
 				}
 				System.out.println("You choose the single player mode");
 			} else if (mode == GameMode.MultiPlayer) {
-				//networkDialog = new NetworkDialog(player, nameInput.getInput(), avatarChooser.getAvatar(), connection, mode);
 				getIpAndPort();
-				//make connection
 				connection = new ClientConnection(ip, port);
 				if (connection.openConnection()) {
 					player = new Player(nameInput.getInput(), avatarChooser.getAvatar(), connection, mode);
@@ -184,6 +212,14 @@ public class LoginDialog extends JDialog {
 		}
 	}
 	
+	/**
+	 * PlayerModeListener
+	 * 
+	 * @class PlayerModeListener
+	 * @name PlayerModeListener
+	 * @implements ActionListener
+	 * @brief inner class that sets the GameMode and changes color to reflect the choice
+	 * */
 	class PlayerModeListener implements ActionListener {
 
 		@Override
@@ -198,6 +234,5 @@ public class LoginDialog extends JDialog {
 				mode = GameMode.MultiPlayer;
 			}
 		}
-		
 	}
 }

@@ -6,7 +6,7 @@
 package battleship.game;
 
 /**
- * @package battleship.entity
+ * @package battleship.game
  * @class Constants
  * @brief This class only meant to hold constant values and cannot be instantiated.
  * */

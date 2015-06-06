@@ -6,6 +6,7 @@ package battleship.game;
 
 /**
  * @class GameMode
+ * @package battleship.game
  * @brief Enumerated type differentiates between single- and multiplayer mode.
  * */
 public enum GameMode {
