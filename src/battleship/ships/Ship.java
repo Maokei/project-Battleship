@@ -11,7 +11,7 @@ import battleship.gameboard.Grid;
 
 /**
  * @package battleship.ships
- * @class Ship 
+ * @class Ship class represents a Ship
  * @brief Abstract class describes a Ship.
  * */
 public abstract class Ship {
@@ -19,150 +19,197 @@ public abstract class Ship {
 	protected String shipName;
 	protected int length;
 	protected int health;
-	protected int posX;
-	protected int posY;
-	protected int posX1;
-	protected int posY1;
 	protected Vector<Grid> position;
 	protected Alignment alignment;
 	protected boolean alive = true;
-	
+
 	/**
-	 * Ship Constructor
+	 * @constructor Ship
 	 * @name Ship
-	 * @brief Generates a ship name and initiates the ship grid.
+	 * @brief Ship constructor generates a ship name and initiates the ship
+	 *        grid.
 	 * */
 	public Ship() {
 		shipName = SimpleShipName.getInstance().generateName();
 		position = new Vector<Grid>();
 	}
-	
+
 	/**
 	 * toString
+	 * 
 	 * @name toString
+	 * @brief returns Ship attributes as a String
+	 * @return String representation of a Ship
 	 * */
 	public String toString() {
-		return String.format("%s, %d, %d, %d, %d, %s", type, length, health, posX, posY, alignment);
+		return String.format("%s, %d, %d, %s", type, length, health, alignment);
 	}
-	
+
 	/**
-	 * Getters
+	 * getType
+	 * 
+	 * @name getType
+	 * @brief returns a Ship type
+	 * @return type a Ship type
 	 * */
-	public String getType() { return type; }
-	public int getLength() { return length; }
-	public int getHealth() { return health; }
-	public Alignment getAlignment() { return alignment; }
-	public boolean isAlive() { return alive; }
-	public int getX() {return posX;}
-	public int getY() {return posY;}
-	public int getX1() {return posX1;}
-	public int getY1() {return posY1;}
-	public String getShipName() {return shipName;}
-	public Vector<Grid> getPosition() { return position; }
+	public String getType() {
+		return type;
+	}
+
+	/**
+	 * getLength
+	 * 
+	 * @name getLength
+	 * @brief returns a Ship length
+	 * @return type a Ship length
+	 * */
+	public int getLength() {
+		return length;
+	}
+
+	/**
+	 * getHealth
+	 * 
+	 * @name getHealth
+	 * @brief returns a Ship health
+	 * @return type a Ship health
+	 * */
+	public int getHealth() {
+		return health;
+	}
+
+	/**
+	 * getAlignment
+	 * 
+	 * @name getAlignment
+	 * @brief returns a Ship alignment
+	 * @return type a Ship alignment
+	 * */
+	public Alignment getAlignment() {
+		return alignment;
+
+	}
+
+	/**
+	 * isAlive
+	 * 
+	 * @name isAlive
+	 * @brief returns flag representing if Ship is alive
+	 * @return alive true if Ship is alive, false otherwise
+	 * */
+	public boolean isAlive() {
+		return alive;
+	}
+
+	/**
+	 * getShipName
+	 * 
+	 * @name getShipName
+	 * @brief returns a Ship SimpleShipName
+	 * @return type a String of Ship SimpleShipName
+	 * */
+	public String getShipName() {
+		return shipName;
+	}
+
+	/**
+	 * getPosition
+	 * 
+	 * @name getPosition
+	 * @brief returns a Vector of Grid representing Ship positions 
+	 * @return position Vector of Grid
+	 * */
+	public Vector<Grid> getPosition() {
+		return position;
+	}
+
+	/**
+	 * getStartPosition
+	 * 
+	 * @name getStartPosition
+	 * @brief returns a Grid representing a Ship start position
+	 * @return position first Grid of position Vector
+	 * */
 	public Grid getStartPosition() {
 		return position.elementAt(0);
 	}
-	
+
 	/**
 	 * setAlignment
+	 * 
 	 * @name setAlignment
-	 * @param Takes Alignment enumerated and sets ship alignment.
+	 * @brief sets Ship Alignment
+	 * @param Takes
+	 *            Alignment enumerated and sets ship alignment.
 	 * */
 	public void setAlignment(Alignment alignment) {
 		this.alignment = alignment;
 	}
-	
+
 	/**
 	 * addPositionGrid
+	 * 
 	 * @name addPositionGrid
-	 * @param Integer row and integer column to add to ship grid.
+	 * @brief adds a new Grid to ship position
+	 * @param row
+	 *            to add to ship grid.
+	 * @param col
+	 *            to add to ship grid.
 	 * */
 	public void addPositionGrid(int row, int col) {
 		position.add(new Grid(row, col));
 	}
-	
+
 	/**
 	 * isInPosition
+	 * 
 	 * @name isInPosition
-	 * @param Integer row and integer column on grid.
-	 * @return True if position matches.
+	 * @brief checks if ship is in position
+	 * @param row
+	 *            to check
+	 * @param col
+	 *            to check
+	 * @return True if position matches, false otherwise.
 	 * */
 	public boolean isInPosition(int row, int col) {
-		for(Grid grid : position) {
-			if((grid.getRow() == row) && (grid.getCol() == col)) {
+		for (Grid grid : position) {
+			if ((grid.getRow() == row) && (grid.getCol() == col)) {
 				return true;
 			}
 		}
 		return false;
 	}
-	
+
 	/**
 	 * checkHit
+	 * 
 	 * @name checkHit
-	 * @param Integer row and integer column on grid.
+	 * @brief check if ship is hit
+	 * @param row
+	 *            to check
+	 * @param col
+	 *            to check
 	 * @return Boolean true if was hit on given coordinates.
 	 * */
 	public boolean checkHit(int row, int col) {
-		for(Grid grid : position) {
-			if(alive && ((grid.getRow() == row) && (grid.getCol() == col))) {
+		for (Grid grid : position) {
+			if (alive && ((grid.getRow() == row) && (grid.getCol() == col))) {
 				return true;
 			}
 		}
 		return false;
 	}
-	
-	/**
-	 * setPosition
-	 * @name setPosition
-	 * @param Integer row and integer column on grid.
-	 * @brief Set Ship position on grid.
-	 * */
-	public void setPosition(int x, int y) {
-		posX = x;
-		posY = y;
-		if(alignment == Alignment.HORIZONTAL)
-			posX1 += length;
-		else
-			posY1 += length;
-	}	
-	
-	/**
-	 * wasHit
-	 * @name wasHit
-	 * @param Integer x and integer y, register hit on ship.
-	 * */
-	public boolean wasHit(int x, int y) {
-		if(alignment == Alignment.HORIZONTAL) {
-			if(y == posY && (x >= posX && x <= posX1)) {
-				hit();
-				return true;
-			}
-		}else{ //vertical
-			if(x == posX && (y >= posY && y <= posY1)) {
-				hit();
-				return true;
-			}
-		}
-		return false;
-	}
-	
+
 	/**
 	 * hit
+	 * 
 	 * @name hit
-	 * @brief Registers a hit on ship.
+	 * @brief decrements one from health, if health is zero, sets alive to false
 	 * */
 	public void hit() {
 		--health;
-		if(health == 0) 
+		if (health == 0)
 			alive = false;
 	}
-	
-	
-	public abstract void draw();
+
 }
-
-
-
-
-
-

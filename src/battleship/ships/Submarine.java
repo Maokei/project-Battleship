@@ -6,11 +6,13 @@
 package battleship.ships;
 
 
+
 /**
- * @package battleship.ships
- * @class Submarine
+ * @package battleship.ship
+ * @class Submarine class Submarine represents a ship of length 1
  * @extends Ship
- * */
+ * @brief Class defines a Submarine ship 
+ **/
 public class Submarine extends Ship {
 
 	public Submarine() {
@@ -19,10 +21,4 @@ public class Submarine extends Ship {
 		//default 
 		alignment = Alignment.HORIZONTAL;
 	}
-	
-	@Override
-	public void draw() {
-		System.out.println("I'm drawing a Submarine");
-	}
-	
 }

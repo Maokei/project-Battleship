@@ -7,10 +7,20 @@ package battleship.ships;
 
 
 /**
- * @package battleship.entity
- * @class BattleShipFactory
+ * @package battleship.ships
+ * @class BattleShipFactory class return a Ship object based on name
+ * @brief returns a Ship based on name
  * */
 public class BattleShipFactory {
+	
+	/**
+	 * getShip
+	 * 
+	 * @name getShip
+	 * @param type the type of Ship
+	 * @brief static method that returns a Ship based on name
+	 * @return ship a Ship 
+	 * */
 	public static Ship getShip(ShipType type) {
 		Ship ship = null;
 		switch(type) {

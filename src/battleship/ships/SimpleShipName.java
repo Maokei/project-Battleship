@@ -8,7 +8,7 @@ import java.util.Random;
 
 /**
  * @package battleship.ships
- * @class SimpleShipName
+ * @class SimpleShipName class randomizes a name for a ship
  * @brief Class generates names for ships.
  * */
 public class SimpleShipName {
@@ -23,7 +23,9 @@ public class SimpleShipName {
 	
 	/**
 	 * generateName
+	 * 
 	 * @name generateName
+	 * @brief randomizes a name 
 	 * @return returns a randomized ship name.
 	 * */
 	public String generateName() {
@@ -38,7 +40,9 @@ public class SimpleShipName {
 	
 	/**
 	 * getInstance
+	 * 
 	 * @name getInstance
+	 * @brief static method that returns a singleton instance
 	 * @returns singleton instance.
 	 * */
 	public static SimpleShipName getInstance() {

@@ -12,7 +12,7 @@ import java.util.Vector;
 
 /**
  * @package battleship.ships
- * @class ShipBuilder
+ * @class ShipBuilder class populates a Vector of Ship objects
  * @brief Class builds ships for the players.
  * */
 public class ShipBuilder {
@@ -20,7 +20,8 @@ public class ShipBuilder {
 	/**
 	 * buildShips
 	 * @name buildShips
-	 * @return Returns a ship vector containing all of the ships a player needs for a battle.
+	 * @brief static method that returns all ships
+	 * @return Returns Vector of Ship containing all of the ships a player needs for a battle.
 	 * */
 	public static Vector<Ship> buildShips() {
 		Vector<Ship> ships = new Vector<Ship>(9);

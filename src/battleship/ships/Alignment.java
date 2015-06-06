@@ -6,6 +6,8 @@
 package battleship.ships;
 
 /**
+ * @package battleship.ships
+ *
  * Alignment
  * @Enumerated Alignment
  * @brief Describes the alignment of a ship on a battleship grid.

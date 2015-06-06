@@ -7,9 +7,10 @@ package battleship.ships;
 
 
 /**
- *@package battleship.entity
- *@class Carrier
- *@brief Class defines a carrier ship 
+ * @package battleship.ships
+ * @class Carrier class Carrier represents a ship of length 5
+ * @extends Ship
+ * @brief Class defines a carrier ship 
  **/
 public class Carrier extends Ship {
 	
@@ -17,10 +18,5 @@ public class Carrier extends Ship {
 		type = "Carrier";
 		length = health = 5;
 		alignment = Alignment.HORIZONTAL;
-	}
-	
-	@Override
-	public void draw() {
-		System.out.println("I'm drawing a Carrier");
 	}
 }
