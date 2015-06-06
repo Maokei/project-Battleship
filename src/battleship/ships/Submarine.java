@@ -11,7 +11,7 @@ package battleship.ships;
  * @class Submarine
  * @extends Ship
  * */
-class Submarine extends Ship {
+public class Submarine extends Ship {
 
 	public Submarine() {
 		type = "Submarine";

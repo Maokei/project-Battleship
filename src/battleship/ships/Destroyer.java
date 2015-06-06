@@ -10,7 +10,7 @@ package battleship.ships;
  * @class Destroyer
  * @extends Ship
  * */
-class Destroyer extends Ship {
+public class Destroyer extends Ship {
 
 	public Destroyer() {
 		type = "Destroyer";
