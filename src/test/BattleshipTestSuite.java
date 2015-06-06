@@ -18,7 +18,7 @@ import org.junit.runners.Suite;
 @RunWith(Suite.class)
 @Suite.SuiteClasses
 ({ 
-	TestShips.class
+	TestShips.class, TestGameMode.class
 })
 
 public class BattleshipTestSuite {}
