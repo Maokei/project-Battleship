@@ -20,7 +20,6 @@ import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 
-import battleship.network.RandomShipPlacer;
 import battleship.resources.SpriteLoader;
 import battleship.ships.Alignment;
 import battleship.ships.Ship;
@@ -41,18 +40,19 @@ public class Gameboard extends JPanel {
 
 	/**
 	 * Gameboard
+	 * 
+	 * @name GameBoard
 	 * @constructor Gameboard
+	 * @brief instantiates and initiates the Gameboard grids
 	 * */
 	public Gameboard() {
 		super();
 		setLayout(new GridLayout(SIZE, SIZE));
 		setSize(new Dimension((SIZE * GRID_SIZE), (SIZE * GRID_SIZE)));
 		gridboard = new Grid[SIZE][SIZE];
-		//load in sprites
 		sprites = SpriteLoader.getInstance(32, 32, 8, 8, 13);
 		sprites.loadSprites("src/res/sprite/spritesheet_battleship.png");
 		background = sprites.getSprite("water");
-		//initiate grid
 		initGrid();
 	}
 
@@ -73,8 +73,9 @@ public class Gameboard extends JPanel {
 	/**
 	 * addHit
 	 * @name addHit
-	 * @param intger row and integer column to add a hit on grid.
 	 * @brief Add a hit on a player grid.
+	 * @param row the gridboard row coordinate
+	 * @param row the gridboard col coordinate
 	 * */
 	public void addHit(int row, int col) {
 		gridboard[row][col].setIcon(new ImageIcon(sprites.getSprite("hit")));
@@ -84,8 +85,9 @@ public class Gameboard extends JPanel {
 	/**
 	 * addMiss
 	 * @name addMiss
-	 * @param intger row and integer column to add a miss on grid.
 	 * @brief Add a miss on a player grid.
+	 * @param row the gridboard row coordinate
+	 * @param row the gridboard col coordinate
 	 * */
 	public void addMiss(int row, int col) {
 		gridboard[row][col].setIcon(new ImageIcon(sprites.getSprite("miss")));
@@ -95,7 +97,9 @@ public class Gameboard extends JPanel {
 	/**
 	 * fadeGridOut
 	 * @name fadeGridOut
-	 * @param intger row and integer column to add a fadeout on grid.
+	 * @brief fade out effect on grid.
+	 * @param row the gridboard row coordinate
+	 * @param row the gridboard col coordinate
 	 * */
 	public void fadeGridOut(int row, int col) {
 		gridboard[row][col].fadeOut();
@@ -104,7 +108,9 @@ public class Gameboard extends JPanel {
 	/**
 	 * fadeGridIn
 	 * @name fadeGridIn
-	 * @param intger row and integer column to add a fadein effect on grid.
+	 * @brief fade in effect on grid.
+	 * @param row the gridboard row coordinate
+	 * @param row the gridboard col coordinate
 	 * */
 	public void fadeGridIn(int row, int col) {
 		gridboard[row][col].fadeIn();
@@ -129,7 +135,6 @@ public class Gameboard extends JPanel {
 			}
 		} else {
 			setGridsNotVisisble();
-			// g.clearRect(0, 0, getWidth(), getHeight());
 			try {
 				if (defeat) {
 					background = ImageIO.read(new File(
@@ -149,9 +154,12 @@ public class Gameboard extends JPanel {
 	
 	/**
 	 * checkShipPlacement
+	 * 
 	 * @name checkShipPlacement
 	 * @brief Check if ship placement is possible, given position and alignment in ship object.
-	 * @param Takes a Ship object, integer row in grid and integer column in grid.
+	 * @param ship the ship used for alignment check and length
+	 * @param row the gridboard row coordinate
+	 * @param row the gridboard col coordinate
 	 * @return boolean value if ship placement is possible otherwise false will be returned.
 	 * */
 	public boolean checkShipPlacement(Ship ship, int row, int col) {
@@ -179,17 +187,13 @@ public class Gameboard extends JPanel {
 				
 				int rowCounter = row;
 				int colCounter = col;
-				System.out.println("\nChecking grids:");
 				for(int i = 0; i < height; i++) {
 					colCounter = col;
-					System.out.print("[ ");
 					for(int j = 0; j < width; j++) {
-						System.out.print(rowCounter + "," + colCounter + " ");
 						if(!gridboard[rowCounter][colCounter++].isEmpty()) {
 							return false;
 						}
 					}
-					System.out.print("]\n");
 					rowCounter++;
 				}
 			} else {
@@ -216,21 +220,18 @@ public class Gameboard extends JPanel {
 				} else {
 					--width;
 				}
+				
 				int rowCounter = row;
 				int colCounter = col;
-				System.out.println("\nChecking grids:");
 				for(int i = 0; i < width; i++) {
 					rowCounter = row;
-					System.out.print("[ ");
 					for(int j = 0; j < height; j++) {
-						System.out.print(rowCounter + "," + colCounter + " ");
 						if(!gridboard[rowCounter++][colCounter].isEmpty()) {
 							return false;
 						}
 					}
 					colCounter++;
 				}
-				System.out.print("]\n");
 			} else {
 				return false;
 			}
@@ -242,8 +243,9 @@ public class Gameboard extends JPanel {
 	 * placeShip
 	 * @name placeShip
 	 * @brief Place ship on the playing grid, and fill points on grid belonging to ship length and alignment.
-	 * @param Takes a ship object, integer row in grid and integer column in grid.
-	 * @return Void function.
+	 * @param ship the ship used for alignment check and length
+	 * @param row the gridboard row coordinate
+	 * @param row the gridboard col coordinate
 	 * */
 	public void placeShip(Ship ship, int row, int col) {
 		int counter;
@@ -268,10 +270,13 @@ public class Gameboard extends JPanel {
 
 	/**
 	 * addShipSprite
+	 * 
 	 * @name addShipSprite
 	 * @brief Add appropriate sprite to draw.
-	 * @param Ship object and integer row and integer column, counter for length of ship.
-	 * @return Void function.
+	 * @param ship the ship used for alignment check and length
+	 * @param row the gridboard row coordinate
+	 * @param row the gridboard col coordinate
+	 * @param counter the counter used to get the correct sprite
 	 * */
 	private void addShipSprite(Ship ship, int row, int col, int counter) {
 		String pre, post;
@@ -300,7 +305,8 @@ public class Gameboard extends JPanel {
 	 * checkHit
 	 * @name checkHit
 	 * @brief Help function to look for a hit on given position.
-	 * @param Integer row and integer column on player grid.
+	 * @param row the gridboard row coordinate
+	 * @param row the gridboard col coordinate
 	 * @return If target has been false is returned, false for miss or empty.
 	 * */
 	public boolean checkHit(int row, int col) {
@@ -360,8 +366,10 @@ public class Gameboard extends JPanel {
 
 	/**
 	 * randmizeShipPlacement
+	 * 
 	 * @name randomizeShipPlacement 
-	 * @param Takes a vector of ships to randomized onto grid.
+	 * @brief Takes a vector of ships to randomized onto grid.
+	 * @param ships Vector of Ship to be placed 
 	 * */
 	public void randomizeShipPlacement(Vector<Ship> ships) {
 		for (Ship ship : ships) {
@@ -380,7 +388,9 @@ public class Gameboard extends JPanel {
 
 	/**
 	 * checkFire
+	 * 
 	 * @name checkFire
+	 * @brief checks whether specified grid is not hit or missed
 	 * @param integer row and integer column where fire will be checked.
 	 * @return boolean true if is hit or is, empty false
 	 * */
