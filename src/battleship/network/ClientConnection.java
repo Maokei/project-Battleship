@@ -27,7 +27,7 @@ import battleship.ships.ShipType;
 /**
  * ClientConnection
  * 
- * @class ClientConnection
+ * @class ClientConnection The class handles messages sent to this Player
  * @implements Runnable, NetworkOperation
  * @brief Class describes the connection. Client uses this connection class to
  *        talk to server and handle messages.
@@ -41,9 +41,16 @@ public class ClientConnection implements Runnable, NetworkOperations {
 	private Player player;
 	private Message msg;
 	private Map<String, String> players;
-	private JTextArea output; // just for Chat
+	private JTextArea output;
 	private boolean running = true;
 
+	/**
+	 * ClientConnection
+	 * @constructor ClientConnection
+	 * @brief Two-arguments constructor that receives ip-address and port number
+	 * @param address the ip-address of the Player
+	 * @param portNumber the port to be used to connect to the server
+	 * */
 	public ClientConnection(String address, int portNumber) {
 		this.address = address;
 		this.portNumber = portNumber;
@@ -88,7 +95,8 @@ public class ClientConnection implements Runnable, NetworkOperations {
 	 * setOutput
 	 * 
 	 * @name setOutput
-	 * @brief Chat test function.
+	 * @brief receives a JTextArea to update chat output
+	 * @param output instance of JTextField used to display chat messages
 	 * */
 	public void setOutput(JTextArea output) {
 		this.output = output;
@@ -186,7 +194,6 @@ public class ClientConnection implements Runnable, NetworkOperations {
 			player.handleAIMatch();
 			break;
 		case Message.VALID:
-			String Sender = msg.getSender();
 			if (msg.getSender().equalsIgnoreCase(Valid_Move)) {
 				parseValidMessage(msg);
 			} else {
@@ -196,6 +203,13 @@ public class ClientConnection implements Runnable, NetworkOperations {
 		}
 	}
 
+	/**
+	 * parseValidMessage
+	 * 
+	 * @name parseValidMessage
+	 * @brief parses a Message of type VALID and handles it accordingly
+	 * @param msg the message to be parsed and handled
+	 * */
 	private void parseValidMessage(Message msg) {
 		String[] tokens = msg.getMessage().split(" ");
 		int row, col;
@@ -220,8 +234,8 @@ public class ClientConnection implements Runnable, NetworkOperations {
 	 * parseLogin
 	 * 
 	 * @name parseLogin
-	 * @param Takes
-	 *            a login message object to parse.
+	 * @brief adds a new Player name to container for use in lobby, and updates lobby if needed
+	 * @param msg the message to be parsed 
 	 * */
 	private void parseLogin(Message msg) {
 		if (!(msg.getSender().equalsIgnoreCase(player.getName()))) {
@@ -241,8 +255,8 @@ public class ClientConnection implements Runnable, NetworkOperations {
 	 * getConnectedPlayers
 	 * 
 	 * @name getConnectedPlayers
-	 * @brief Function meant to be used my lobby to populate players JList.
-	 * @returns A list of player names.
+	 * @brief Function meant to be used by lobby to populate players JList.
+	 * @returns A Map of player names.
 	 * */
 	public Map<String, String> getConnectedPlayers() {
 		return players;
@@ -252,9 +266,8 @@ public class ClientConnection implements Runnable, NetworkOperations {
 	 * parseMessage
 	 * 
 	 * @name parseMessage
-	 * @brief Parses a battle message.
-	 * @param Takes
-	 *            a message to parse.
+	 * @brief Parses a Message.
+	 * @param msg the Message to be parsed
 	 * */
 	private void parseMessage(Message msg) {
 		String[] tokens = msg.getMessage().split(" ");
@@ -277,6 +290,13 @@ public class ClientConnection implements Runnable, NetworkOperations {
 		}
 	}
 
+	/**
+	 * parsePlaceMessage
+	 * 
+	 * @name parsePlaceMessage
+	 * @brief calls player placePlayerShip to place ship at the given grid coordinates
+	 * @param tokens String array with coordinates
+	 * */
 	private void parsePlaceMessage(String[] tokens) {
 		int row = Integer.parseInt(tokens[3]);
 		int col = Integer.parseInt(tokens[4]);
@@ -287,8 +307,8 @@ public class ClientConnection implements Runnable, NetworkOperations {
 	 * parseMissMessage
 	 * 
 	 * @name parseMissMessage
-	 * @param Takes
-	 *            an Array of string tokens
+	 * @brief calls player registerPlayerMiss to register miss at the given grid coordinates
+	 * @param tokens String array with coordinates
 	 * */
 	private void parseMissMessage(String[] tokens) {
 		int row = Integer.parseInt(tokens[1]);
@@ -300,8 +320,8 @@ public class ClientConnection implements Runnable, NetworkOperations {
 	 * parseShipDownMessage
 	 * 
 	 * @name parseShipDownMessage
-	 * @param Array
-	 *            of String tokens.
+	 * @brief calls player placeEnemyShip to place ship miss at the given grid coordinates
+	 * @param tokens String array with coordinates and ship attributes
 	 * */
 	private void parseShipDownMessage(String[] tokens) {
 		Ship ship = null;
@@ -334,8 +354,8 @@ public class ClientConnection implements Runnable, NetworkOperations {
 	 * parseFireMessage
 	 * 
 	 * @name parseFireMessage
-	 * @param String
-	 *            array to be parsed, register FireMessage.
+	 * @brief calls player checkFire to check whether enemy fire is hit or miss
+	 * @param tokens String array with coordinates
 	 * */
 	private void parseFireMessage(String[] tokens) {
 		int row = Integer.parseInt(tokens[1]);
@@ -344,9 +364,11 @@ public class ClientConnection implements Runnable, NetworkOperations {
 	}
 
 	/**
-	 * parseHitMessage
+	 * parseFireMessage
 	 * 
-	 * @name parseHitMessage
+	 * @name parseFireMessage
+	 * @brief calls player registerPlayerHit to add hit to playerBoard
+	 * @param tokens String array with coordinates
 	 * */
 	private void parseHitMessage(String[] tokens) {
 		int row = Integer.parseInt(tokens[1]);
@@ -358,8 +380,7 @@ public class ClientConnection implements Runnable, NetworkOperations {
 	 * sendMessage
 	 * 
 	 * @name sendMessage
-	 * @param Takes
-	 *            a Message object to be written out sent sent through stream.
+	 * @param msg the Message object to be written out sent sent through stream.
 	 * */
 	public void sendMessage(Message message) {
 		try {

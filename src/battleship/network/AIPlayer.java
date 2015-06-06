@@ -1,3 +1,8 @@
+/**
+ * @file AIPlayer.java
+ * @authors rickard, lars
+ * @date 2015-05-18
+ * */
 package battleship.network;
 
 import static battleship.game.Constants.SIZE;
@@ -22,6 +27,13 @@ import battleship.gameboard.Grid;
 import battleship.ships.Alignment;
 import battleship.ships.Ship;
 
+/**
+ * AIPlayer
+ * 
+ * @class AIPlayer
+ * @package battleship.network
+ * @brief Class represents a server AI player
+ * */
 public class AIPlayer {
 		private PlayerProxy player;
 		private RandomShipPlacer shipPlacer;
@@ -38,11 +50,25 @@ public class AIPlayer {
 		private Grid prevHit, currHit;
 		private Alignment enemyShipAlignment;
 
+		/**
+		 * AIPlayer
+		 * 
+		 * @name AIPlayer
+		 * @constructor One argument constructor
+		 * @brief sets the PlayerProxy instance
+		 * @param player instance of PlayerProxy used to send messages to player
+		 * */
 		public AIPlayer(PlayerProxy player) {
 			this.player = player;
 			init();
 		}
 
+		/**
+		 * init
+		 * 
+		 * @name init
+		 * @brief initiates the AI player Grid and ships at random
+		 * */
 		public void init() {
 			r = new Random();
 			shipPlacer = new RandomShipPlacer();
@@ -56,11 +82,15 @@ public class AIPlayer {
 			prevHit = new Grid(-1, -1);
 			currHit = new Grid(-1, -1);
 			initEnemyGrid();
-			displayPlayerGrid();
-			displayPlayerShips();
 			playerTurn = false;
 		}
 
+		/**
+		 * initEnemyGrid
+		 * 
+		 * @name initEnemyGrid
+		 * @brief initiates the enemyGrid and adds valid targets
+		 * */
 		private void initEnemyGrid() {
 			for (int row = 0; row < SIZE; row++) {
 				for (int col = 0; col < SIZE; col++) {
@@ -69,37 +99,13 @@ public class AIPlayer {
 				}
 			}
 		}
-
-		public void displayPlayerGrid() {
-			for (int row = 0; row < SIZE; row++) {
-				System.out.print("[");
-				for (int col = 0; col < SIZE; col++) {
-					System.out.print(aiPlayerGrid[row][col]);
-				}
-				System.out.print("]\n");
-			}
-		}
-
-		public void displayPlayerShips() {
-			for (Ship ship : playerShips) {
-				System.out.print(ship.getType() + "[ ");
-				for (Grid grid : ship.getPosition()) {
-					System.out.print(grid.getRow() + "," + grid.getCol() + " ");
-				}
-				System.out.print(ship.getType() + "]\n");
-			}
-		}
-
-		public void displayEnemyGrid() {
-			for (int row = 0; row < SIZE; row++) {
-				System.out.print("[");
-				for (int col = 0; col < SIZE; col++) {
-					System.out.print(enemyGrid[row][col]);
-				}
-				System.out.print("]\n");
-			}
-		}
-
+		
+		/**
+		 * fire
+		 * 
+		 * @name fire
+		 * @brief fires on enemyGrid at random or based on probable targets
+		 * */
 		public void fire() {
 			if (checkProbableTargets()) {
 				calculateNextTarget();
@@ -110,19 +116,21 @@ public class AIPlayer {
 				int row = grid.getRow();
 				int col = grid.getCol();
 				if (checkBounds(row, col)) {
-					System.out.println("FIRE " + row + ", " + col);
 					player.sendMessage(new Message(Message.MESSAGE, "AI", player.name,
 							"FIRE " + Integer.toString(row) + " "
 									+ Integer.toString(col)));
-					System.out.println("Removing grid [ " + row + "," + col
-							+ "]");
 					validTargets.remove(grid);
-					System.out.println("Valid target size: "
-							+ validTargets.size());
 				}
 			}
 		}
 
+		/**
+		 * checkProbableTargets
+		 * 
+		 * @name checkProbableTargets
+		 * @brief checks whether there are probable targets
+		 * @returns true if probableTargets is not empty
+		 * */
 		private boolean checkProbableTargets() {
 			if (probableTargets.size() > 0) {
 				return true;
@@ -130,25 +138,32 @@ public class AIPlayer {
 			return false;
 		}
 
+		/**
+		 * calculateNextTarget
+		 * 
+		 * @name calculateNextTarget
+		 * @brief calculates and fires based on random probable target, sends message to player
+		 * */
 		private void calculateNextTarget() {
-			System.out.print("ProbableTargets [ ");
-			for (Grid grid : probableTargets) {
-				System.out.print(grid.getRow() + "," + grid.getCol() + " ");
-			}
-			System.out.print("]\n");
 			int randomProbable = r.nextInt(probableTargets.size());
 			Grid grid = (Grid) probableTargets.toArray()[randomProbable];
 			probableTargets.remove(grid);
 			validTargets.remove(grid);
-			System.out.println("Caluclate Valid target size: "
-					+ validTargets.size());
 			int row = grid.getRow();
 			int col = grid.getCol();
-			System.out.println("FIRE " + row + ", " + col);
 			player.sendMessage(new Message(Message.MESSAGE, "AI", player.name, "FIRE "
 					+ Integer.toString(row) + " " + Integer.toString(col)));
 		}
 
+		/**
+		 * checkHit
+		 * 
+		 * @name checkHit
+		 * @brief checks whether aiPlayerGrid is occupied
+		 * @param row the aiPlayerGrid row coordinate
+		 * @param row the aiPlayerGrid col coordinate
+		 * @return true if occupied, false otherwise
+		 * */
 		public boolean checkHit(int row, int col) {
 			if (aiPlayerGrid[row][col] == occupied) {
 				return true;
@@ -156,6 +171,14 @@ public class AIPlayer {
 			return false;
 		}
 
+		/**
+		 * registerFire
+		 * 
+		 * @name registerFire
+		 * @brief checks if AI enemyGrid is hit or missed, calls appropriate function based on check
+		 * @param row the aiPlayerGrid row coordinate
+		 * @param row the aiPlayerGrid col coordinate
+		 * */
 		public void registerFire(int row, int col) {
 			if (checkBounds(row, col)) {
 				if (checkHit(row, col)) {
@@ -170,10 +193,17 @@ public class AIPlayer {
 			}
 		}
 
+		/**
+		 * registerPlayerHit
+		 * 
+		 * @name registerPlayerHit
+		 * @brief register a hit on enemyGrid, starts a gameTimer to fire again
+		 * @param row the aiPlayerGrid row coordinate
+		 * @param row the aiPlayerGrid col coordinate
+		 * */
 		public void registerPlayerHit(int row, int col) {
 			if (checkBounds(row, col)) {
 				enemyGrid[row][col] = hit;
-				System.out.println("HIT " + row + "," + col);
 				comparePrevHits(new Grid(row, col));
 				addNextPossibleTargets(new Grid(row, col));
 				if (enemyShipDown) {
@@ -183,6 +213,13 @@ public class AIPlayer {
 			}
 		}
 
+		/**
+		 * comparePrevHits
+		 * 
+		 * @name comparePrevHits
+		 * @brief compares a previous hit with param grid to determine enemy ship alignment
+		 * @param current Grid hit
+		 * */
 		private void comparePrevHits(Grid grid) {
 			if (prevHit.getRow() == -1 && prevHit.getCol() == -1) {
 				prevHit = grid;
@@ -204,6 +241,12 @@ public class AIPlayer {
 			}
 		}
 
+		/**
+		 * updateProbableTargets
+		 * 
+		 * @name updateProbableTargets
+		 * @brief removes probableTargets based on determined ship alignment
+		 * */
 		private void updateProbableTargets() {
 			if (enemyShipAlignment == Alignment.HORIZONTAL) {
 				for (Iterator<Grid> i = probableTargets.iterator(); i.hasNext();) {
@@ -222,6 +265,13 @@ public class AIPlayer {
 			}
 		}
 
+		/**
+		 * addNextPossibleTargets
+		 * 
+		 * @name addNextPossibleTargets
+		 * @brief adds Grids to probableTargets surrounding a hit 
+		 * @param grid the grid that was hit
+		 * */
 		private void addNextPossibleTargets(Grid grid) {
 			if (prevHit.getRow() == -1 || currHit.getRow() == -1) {
 				if (checkLeftGrid(grid))
@@ -255,6 +305,14 @@ public class AIPlayer {
 			}
 		}
 
+		/**
+		 * checkLeftGrid
+		 * 
+		 * @name checkLeftGrid
+		 * @brief checks whether a grid to the left is not missed or hit 
+		 * @param grid the grid that was hit
+		 * @return true if the grid is not missed or hit, false otherwise
+		 * */
 		private boolean checkLeftGrid(Grid grid) {
 			int row = grid.getRow();
 			int col = grid.getCol();
@@ -265,6 +323,14 @@ public class AIPlayer {
 			return false;
 		}
 
+		/**
+		 * checkTopGrid
+		 * 
+		 * @name checkTopGrid
+		 * @brief checks whether a grid above is not missed or hit 
+		 * @param grid the grid that was hit
+		 * @return true if the grid is not missed or hit, false otherwise
+		 * */
 		private boolean checkTopGrid(Grid grid) {
 			int row = grid.getRow();
 			int col = grid.getCol();
@@ -275,6 +341,14 @@ public class AIPlayer {
 			return false;
 		}
 
+		/**
+		 * checkRightGrid
+		 * 
+		 * @name checkRightGrid
+		 * @brief checks whether a grid to the right is not missed or hit 
+		 * @param grid the grid that was hit
+		 * @return true if the grid is not missed or hit, false otherwise
+		 * */
 		private boolean checkRightGrid(Grid grid) {
 			int row = grid.getRow();
 			int col = grid.getCol();
@@ -285,6 +359,14 @@ public class AIPlayer {
 			return false;
 		}
 
+		/**
+		 * checkBottomGrid
+		 * 
+		 * @name checkBottomGrid
+		 * @brief checks whether a grid below is not missed or hit 
+		 * @param grid the grid that was hit
+		 * @return true if the grid is not missed or hit, false otherwise
+		 * */
 		private boolean checkBottomGrid(Grid grid) {
 			int row = grid.getRow();
 			int col = grid.getCol();
@@ -295,6 +377,18 @@ public class AIPlayer {
 			return false;
 		}
 
+		/**
+		 * registerEnemyHit
+		 * 
+		 * @name registerEnemyHit
+		 * @brief registers a hit on aiPlayerGrid and checks whether a ship is sunk, send message to player
+		 * @param ship
+		 *            the ship that was hit
+		 * @param row
+		 *            the aiPlayerGrid row coordinate
+		 * @param col
+		 *            the aiPlayerGrid col coordinate
+		 * */
 		public void registerEnemyHit(Ship ship, int row, int col) {
 			if (checkBounds(row, col)) {
 				player.sendMessage(new Message(Message.MESSAGE, "AI", player.name, "HIT "
@@ -311,11 +405,18 @@ public class AIPlayer {
 			}
 		}
 
+		/**
+		 * sinkShip
+		 * 
+		 * @name sinkShip
+		 * @brief sends message about the ship sunk
+		 * @param ship
+		 *            the ship that was sunk
+		 * */
 		public void sinkShip(Ship ship) {
 			int row = ship.getStartPosition().getRow();
 			int col = ship.getStartPosition().getCol();
 			if (checkBounds(row, col)) {
-				System.out.println("Player SHIP DOWN " + ship.getType());
 				player.sendMessage(new Message(Message.MESSAGE, "AI", player.name,
 						"SHIP_DOWN " + ship.getType() + " "
 								+ ship.getAlignment() + " "
@@ -325,6 +426,16 @@ public class AIPlayer {
 
 		}
 
+		/**
+		 * registerPlayerMiss
+		 * 
+		 * @name registerPlayerMiss
+		 * @brief register player miss and sends message to player
+		 * @param row
+		 *            the enemyGrid row coordinate
+		 * @param col
+		 *            the enemyGrid col coordinate
+		 * */
 		public void registerPlayerMiss(int row, int col) {
 			if (checkBounds(row, col)) {
 				playerTurn = false;
@@ -334,6 +445,16 @@ public class AIPlayer {
 			}
 		}
 
+		/**
+		 * checkBounds
+		 * 
+		 * @name checkBounds
+		 * @brief checks whether the row and col arguments are within grid size bounds
+		 * @param row
+		 *            the enemyGrid row coordinate
+		 * @param col
+		 *            the enemyGrid col coordinate
+		 * */
 		private boolean checkBounds(int row, int col) {
 			if ((row >= 0 && row < SIZE) && (col >= 0 && col < SIZE)) {
 				return true;
@@ -343,6 +464,16 @@ public class AIPlayer {
 			}
 		}
 
+		/**
+		 * registerEnemyMiss
+		 * 
+		 * @name registerEnemyMiss
+		 * @brief register Player miss and sends message to player
+		 * @param row
+		 *            the enemyGrid row coordinate
+		 * @param col
+		 *            the enemyGrid col coordinate
+		 * */
 		public void registerEnemyMiss(int row, int col) {
 			aiPlayerGrid[row][col] = miss;
 			System.out.println("Enemy MISS " + row + ", " + col);
@@ -350,35 +481,70 @@ public class AIPlayer {
 					+ Integer.toString(row) + " " + Integer.toString(col)));
 		}
 
+		/**
+		 * battleLost
+		 * 
+		 * @name battleLost
+		 * @brief sends message to player that AI lost the game, sets AI turn to false
+		 * */
 		public void battleLost() {
 			player.sendMessage(new Message(Message.LOST, "AI", player.name, ""));
 			this.playerTurn = false;
 		}
 
+		/**
+		 * getName
+		 * 
+		 * @name getName
+		 * @brief returns the name of the player as a String
+		 * @return player name
+		 * */
 		public String getName() {
 			return player.name;
 		}
 
+		/**
+		 * setPlayerTurn
+		 * 
+		 * @name setPlayerTurn
+		 * @brief sets player turn to true and starts game timer
+		 * @param playerTurn sets the playerTurn to this value
+		 * */
 		public void setPlayerTurn(boolean playerTurn) {
 			this.playerTurn = playerTurn;
 			new GameTimer(2, 1300).run();
 		}
 
+		/**
+		 * placeEnemyShip
+		 * 
+		 * @name placeEnemyShip
+		 * @brief sets enemyShipDown flag to true, adds ship to shipsDown Vector
+		 * @param ship
+		 *            the ship that was sunk
+		 * @param row
+		 *            the aiPlayerGrid row coordinate
+		 * @param col
+		 *            the aiPlayerGrid col coordinate
+		 * */
 		public void placeEnemyShip(Ship ship, int row, int col) {
-			if (ship == null) {
-				System.out.println("Ship is NULL!!!!");
-			} else {
-				enemyShipDown = true;
-				setShipPositions(ship, row, col);
-				System.out.print("Adding ship " + ship.getType() + " [");
-				for (Grid grid : ship.getPosition()) {
-					System.out.print(grid.getRow() + "," + grid.getCol() + " ");
-				}
-				System.out.print("]\n");
-				shipsDown.add(ship);
-			}
+			enemyShipDown = true;
+			setShipPositions(ship, row, col);
+			shipsDown.add(ship);
 		}
 
+		/**
+		 * setShipPositions
+		 * 
+		 * @name setShipPositions
+		 * @brief adds positions of ship sunk
+		 * @param ship
+		 *            the ship that was sunk
+		 * @param row
+		 *            the aiPlayerGrid row coordinate
+		 * @param col
+		 *            the aiPlayerGrid col coordinate
+		 * */
 		public void setShipPositions(Ship ship, int row, int col) {
 			int counter;
 			if (ship.getAlignment() == Alignment.HORIZONTAL) {
@@ -396,6 +562,12 @@ public class AIPlayer {
 			}
 		}
 
+		/**
+		 * checkEnemyDownProbableTargets
+		 * 
+		 * @name checkEnemyDownProbableTargets
+		 * @brief removes grids and surrounding grids from valid, and probable targets, from ship that was sunk
+		 * */
 		public void checkEnemyDownProbableTargets() {
 			if (!probableTargets.isEmpty()) {
 				for (Ship ship : shipsDown) {
@@ -472,16 +644,37 @@ public class AIPlayer {
 			}
 		}
 
+		/**
+		 * GameTimer
+		 * 
+		 * @class GameTimer
+		 * @name GameTimer
+		 * @brief Inner class that starts a Timer based on given time and delay 
+		 * */
 		class GameTimer {
 			private Timer t;
 			private int seconds;
 			private final int delay;
 
+			/**
+			 * GameTimer
+			 * 
+			 * @constructor GameTimer A two-arguments constructor
+			 * @name GameTimer
+			 * @param seconds the number of seconds to fire the events
+			 * @param delay the frequency to fire events
+			 * */
 			public GameTimer(int seconds, int delay) {
 				this.seconds = seconds;
 				this.delay = delay;
 			}
 
+			/**
+			 * run
+			 * 
+			 * @name run
+			 * @brief starts timer based on delay frequency, events decrements seconds
+			 * */
 			public void run() {
 				t = new Timer(delay, new ActionListener() {
 					@Override
@@ -493,6 +686,12 @@ public class AIPlayer {
 				t.start();
 			}
 
+			/**
+			 * checkTime
+			 * 
+			 * @name checkTime
+			 * @brief checks whether seconds have reached target value
+			 * */
 			private void checkTime() {
 				if (seconds <= 0) {
 					fire();
