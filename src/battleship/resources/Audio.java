@@ -1,3 +1,8 @@
+/**
+ * @file Audio.java
+ * @authors rickard, lars
+ * @date 2015-05-25
+ * */
 package battleship.resources;
 
 import java.io.File;
@@ -9,7 +14,10 @@ import javax.sound.sampled.Clip;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 
-
+/**
+ * @class Audio
+ * @brief Class describes the playing of an audio event.
+ * */
 public class Audio {
 	private Clip clip;
 	
@@ -31,22 +39,42 @@ public class Audio {
 		}
 	}
 	
+	/**
+	 * stop
+	 * @name stop
+	 * @brief Stop's playing.
+	 * */
 	public void stop() {
 		if(clip.isRunning()) {
 			clip.stop();
 		}
 	}
 	
+	/**
+	 * reset
+	 * @name reset
+	 * @brief Reset playing.
+	 * */
 	public void reset() {
 		stop();
 		clip.setFramePosition(0);
 	}
 	
+	/**
+	 * playAudio
+	 * @name playAudio
+	 * @brief Play audio clip from the start.
+	 * */
 	public void playAudio() {
 		reset();
 		clip.start();
 	}
 	
+	/**
+	 * setLoop
+	 * @name setLoop 
+	 * @param Set loop state for audio clip.
+	 * */
 	public Audio setLoop(boolean loop) {
 		if(loop) {
 			clip.setLoopPoints(0, -1);
