@@ -5,26 +5,18 @@
  * */
 package battleship.network;
 
-import static battleship.game.Constants.*;
+import static battleship.game.Constants.Valid_Move;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
-import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.TimeUnit;
 
-import javax.swing.JOptionPane;
 import javax.swing.JTextArea;
 
-import battleship.game.BattlePlayer;
 import battleship.game.Message;
 import battleship.game.Player;
 import battleship.ships.Alignment;

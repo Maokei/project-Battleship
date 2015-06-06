@@ -1,27 +1,24 @@
 package battleship.network;
 
-import static battleship.game.Constants.*;
+import static battleship.game.Constants.Challenge_Accept;
+import static battleship.game.Constants.Challenge_Name;
+import static battleship.game.Constants.Challenge_Request;
+import static battleship.game.Constants.NonValid_Move;
+import static battleship.game.Constants.SIZE;
+import static battleship.game.Constants.Valid_Move;
+import static battleship.game.Constants.empty;
+import static battleship.game.Constants.hit;
+import static battleship.game.Constants.miss;
+import static battleship.game.Constants.occupied;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Random;
-import java.util.Set;
-import java.util.Vector;
 
-import javax.swing.JOptionPane;
-import javax.swing.Timer;
-
-import battleship.game.BattlePlayer;
 import battleship.game.GameMode;
 import battleship.game.Message;
-import battleship.gameboard.Grid;
 import battleship.ships.Alignment;
 import battleship.ships.BattleShipFactory;
 import battleship.ships.Ship;
