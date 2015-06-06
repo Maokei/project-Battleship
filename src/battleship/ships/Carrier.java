@@ -11,7 +11,7 @@ package battleship.ships;
  *@class Carrier
  *@brief Class defines a carrier ship 
  **/
-class Carrier extends Ship {
+public class Carrier extends Ship {
 	
 	public Carrier() {
 		type = "Carrier";

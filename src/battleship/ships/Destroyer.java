@@ -1,7 +1,16 @@
+/**
+ * @file Destroyer.java
+ * @authors rickard, lars
+ * @date 2015-05-25
+ * */
 package battleship.ships;
 
 
-class Destroyer extends Ship {
+/**
+ * @class Destroyer
+ * @extends Ship
+ * */
+public class Destroyer extends Ship {
 
 	public Destroyer() {
 		type = "Destroyer";
