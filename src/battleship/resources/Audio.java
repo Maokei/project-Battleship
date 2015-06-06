@@ -15,12 +15,21 @@ import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 
 /**
- * @class Audio
- * @brief Class describes the playing of an audio event.
+ * @package battleship.resources
+ * @class Audio class loads audio files from disk and plays them 
+ * @brief handles the retrieving and playing of in-game sound
  * */
 public class Audio {
 	private Clip clip;
 	
+	/**
+	 * loadAudio
+	 * 
+	 * @name loadAudio
+	 * @brief load audio file from disk
+	 * @param path the system path used to load file
+	 * @param filename the name of the file
+	 * */
 	public void loadAudio(String path, String filename) {
 		try {
 			AudioInputStream in = AudioSystem.getAudioInputStream(new File(path + filename));
@@ -41,8 +50,9 @@ public class Audio {
 	
 	/**
 	 * stop
+	 * 
 	 * @name stop
-	 * @brief Stop's playing.
+	 * @brief Stop playing audio.
 	 * */
 	public void stop() {
 		if(clip.isRunning()) {
@@ -62,6 +72,7 @@ public class Audio {
 	
 	/**
 	 * playAudio
+	 * 
 	 * @name playAudio
 	 * @brief Play audio clip from the start.
 	 * */
