@@ -16,7 +16,7 @@ import battleship.ships.*;
 
 public class TestShips {
 	
-	public void TestShips() {}
+	public TestShips() {}
 
 	@Test
 	public void testSubmarine() {
@@ -52,6 +52,8 @@ public class TestShips {
 		carrier.hit();
 		carrier.hit();
 		assertTrue(carrier.isAlive());
+		carrier.hit();
+		assertFalse(carrier.isAlive());
 	}
 	
 	@Test 

@@ -12,18 +12,15 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
-import java.util.Vector;
-
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
 import battleship.gameboard.Gameboard;
 import battleship.gameboard.Grid;
-import battleship.ships.BattleShipFactory;
 import battleship.ships.Carrier;
 import battleship.ships.Ship;
-import battleship.ships.ShipType;
+
 /**
  * @package test
  * @class TestGameBoard tests the <code>Gameboard</code> class.
@@ -31,11 +28,7 @@ import battleship.ships.ShipType;
  * */
 public class TestGameboard {
 	private Gameboard gameboard;
-	private static Ship ship;
 	
-	static {
-		ship = BattleShipFactory.getShip(ShipType.CARRIER);
-	}
 	public TestGameboard() {}
 	
 	/**
@@ -47,8 +40,6 @@ public class TestGameboard {
 	public void setUp() {
 		gameboard = new Gameboard();
 		assertNotNull(gameboard);
-		assertNotNull(ship);
-		assertEquals(ship.getType(), "Carrier");
 	}
 	
 	/**
@@ -80,9 +71,10 @@ public class TestGameboard {
 	 * */
 	@Test
 	public void testCheckHit() {
-		assertTrue(gameboard.checkHit(3, 3));
-		gameboard.addHit(3, 3);
-		assertFalse(gameboard.checkHit(3, 3));
+		Ship ship = new Carrier();
+		assertEquals(gameboard.checkHit(3, 3), false);
+		gameboard.placeShip(ship, 3, 3);
+		assertEquals(gameboard.checkHit(3, 3), true);
 	}
 	
 	
@@ -92,9 +84,9 @@ public class TestGameboard {
 	 * */
 	@Test
 	public void testCheckFire() {
-		assertTrue(gameboard.checkFire(4, 4));
+		assertEquals(gameboard.checkFire(4, 4), true);
 		gameboard.addHit(4, 4);
-		assertFalse(gameboard.checkFire(4, 4));
+		assertEquals(gameboard.checkFire(4, 4), false);
 	}
 	
 	/**
@@ -103,19 +95,26 @@ public class TestGameboard {
 	 * */
 	@Test
 	public void testPlaceShip() {
+		Ship ship = new Carrier();
 		gameboard.placeShip(ship, 2, 2);
 		int row = 2;
 		int counter = 2;
-		assertTrue(ship.getStartPosition() == new Grid(2, 2));
+		assertEquals(ship.getStartPosition(), new Grid(2, 2));
 		for(Grid grid : ship.getPosition()) {
-			assertTrue(grid.getRow() == row);
+			assertTrue(grid.getRow() == 2);
 			assertFalse(grid.getRow() != row);
+			assertFalse(grid.getCol() != counter);
 			assertTrue(grid.getCol() == counter++);
 		}
 	}
 	
+	/**
+	 * @name TestCheckShipPlacement
+	 * @brief test if a checkShipPlacement returns correct flag
+	 * */
 	@Test
-	public void TestcheckShipPlacement() {
+	public void TestCheckShipPlacement() {
+		Ship ship = new Carrier();
 		assertTrue(gameboard.checkShipPlacement(ship, 7, 4));
 		gameboard.placeShip(ship, 7, 2);
 		assertFalse(gameboard.checkShipPlacement(ship, 7, 4));
@@ -123,7 +122,7 @@ public class TestGameboard {
 	
 	/**
 	 * @name tearDown
-	 * @brief tearDown method sets msg to null
+	 * @brief tearDown method sets gameboard to null
 	 * */
 	@After
 	@Test

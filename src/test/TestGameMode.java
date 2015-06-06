@@ -59,9 +59,9 @@ public class TestGameMode {
 	@Test
 	public void testGetMode() {
 		mode = GameMode.SinglePlayer;
-		assertEquals(mode.getMode(), "SinglePlayer");
+		assertEquals(mode.getMode(), "Singleplayer");
 		mode = GameMode.MultiPlayer;
-		assertEquals(mode.getMode(), "MultiPlayer");
+		assertEquals(mode.getMode(), "Multiplayer");
 	}
 	
 	/**
