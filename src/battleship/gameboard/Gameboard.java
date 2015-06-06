@@ -350,21 +350,6 @@ public class Gameboard extends JPanel {
 	}
 
 	/**
-	 * clear
-	 * @name clear
-	 * @brief Loop and fast fade out each grid cell.
-	 * */
-	public void clear() {
-		for (int row = 0; row < SIZE; row++) {
-			for (int col = 0; col < SIZE; col++) {
-				if (!gridboard[row][col].isEmpty()) {
-					gridboard[row][col].fastFade();
-				}
-			}
-		}
-	}
-
-	/**
 	 * randmizeShipPlacement
 	 * 
 	 * @name randomizeShipPlacement 
@@ -373,16 +358,12 @@ public class Gameboard extends JPanel {
 	 * */
 	public void randomizeShipPlacement(Vector<Ship> ships) {
 		for (Ship ship : ships) {
-			String type = ship.getType();
-			System.out.print(type + "[ ");
 			for (int i = 0; i < ship.getLength(); i++) {
 				int row = ship.getPosition().elementAt(i).getRow();
 				int col = ship.getPosition().elementAt(i).getCol();
-				System.out.print(row + "," + col + " ");
 				gridboard[row][col].setOccupied();
 				addShipSprite(ship, row, col, i);
 			}
-			System.out.print(" ]\n");
 		}
 	}
 
