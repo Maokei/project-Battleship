@@ -5,8 +5,6 @@
  * */
 package battleship.network;
 
-import static battleship.game.Constants.*;
-
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
@@ -40,14 +38,11 @@ public class Server extends JFrame {
 	private int portNumber;
 	private ServerSocket server;
 	private ArrayList<PlayerProxy> players;
-	private ArrayList<Battle> battles;
 
 	// gui components
 	private JButton resetBtn;
 	private JTextArea messages;
 	private JTextField input;
-
-	public static final int DEFAULT_PORT = 10001;
 
 	public Server(int portNumber) {
 		super("*** Battleship server ***");
@@ -96,45 +91,7 @@ public class Server extends JFrame {
 			}
 		}
 	}
-	/*
-	public void checkForOpponentTo(String name) {
-		for (PlayerProxy player : players) {
-			if (player.name != name) {
-				if (!player.isPlaying()) {
-					player.sendMessage(new Message(Message.CHALLENGE, name,
-							Challenge_Request));
-					break;
-				}
-			}
-		}
-	}
 
-	public void sendMessageToPlayer(String name, Message msg) {
-		for (PlayerProxy player : players) {
-			if (player.name == name) {
-				player.sendMessage(msg);
-			}
-		}
-	}
-
-	public void setUpBattle(String challenger1, String challenger2) {
-		System.out.println("Trying to find " + challenger1 + " and "
-				+ challenger2 + " in playersList");
-		PlayerProxy player1 = null, player2 = null;
-		for (PlayerProxy player : players) {
-			if (player.name.equalsIgnoreCase(challenger1)) {
-				player1 = player;
-			}
-		}
-		for (PlayerProxy player : players) {
-			if (player.name.equalsIgnoreCase(challenger2)) {
-				player2 = player;
-			}
-		}
-		System.out.println(challenger1 + " is now battling " + challenger2);
-		// TODO -> battles.add(new Battle(this, player1, player2));
-	}
-	*/
 	/**
 	 * removePlayerProxy
 	 * 
@@ -225,22 +182,6 @@ public class Server extends JFrame {
 		return true;
 	}
 	
-/*
-	public boolean checkDeployment(Message msg) {
-		for (PlayerProxy player : players) {
-			if (player.getPlayerName().equalsIgnoreCase(msg.getSender())) {
-				if(!player.deployed) {
-					return false;
-				}
-			} else if(player.getPlayerName().equalsIgnoreCase(msg.getReceiver())) {
-				if(!player.deployed) {
-					return false;
-				}
-			}
-		}
-		return true;
-	}
-*/
 	/**
 	 * randomizePlayerTurn
 	 * @name randomizePlayerTurn
@@ -284,24 +225,6 @@ public class Server extends JFrame {
 			}
 		}
 	}
-	/**
-	 * lookForPlayerMulti
-	 * 
-	 * @name lookForPlayerMulti
-	 * @return boolean if a player is found that is in multiplayer mode and not
-	 *         player.
-	 * */
-	public boolean lookForPlayerMulti() {
-		for (PlayerProxy p : players) {
-			if (p.getMode() == GameMode.MultiPlayer) {
-				if (p.isPlaying() == false)
-					return true;
-			}
-		}
-		return false;
-	}
-
-	
 	/**
 	 * getPlayerCount
 	 * @name getPlayerCount

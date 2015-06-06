@@ -307,21 +307,8 @@ public class PlayerProxy extends Thread {
 			if (server.getPlayerCount() > 1) {
 				System.out.println("Sending all players in Proxy");
 				server.sendAllPlayers();
-				/*
-				server.sendMessageToAllPlayers(new Message(Message.CHALLENGE, name, "",
-						Challenge_Request));
-				// server.checkForOpponentTo(name);
-				
-				 */
 			} else {
 				sendMessage(new Message(Message.AIMATCH, name, "", ""));
-			}
-			// server.sendPlayers(name);
-			// see if there is players to start a match
-			if (!server.lookForPlayerMulti()) {
-				playing = false; // wait
-			} else {
-				// get opponent and start match
 			}
 		}
 	}
