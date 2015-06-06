@@ -19,7 +19,7 @@ import javax.swing.Timer;
 /**
  * @class Grid
  * @package battleship.player
- * @brief Class describes a battleship 10 * 10 grid
+ * @brief Class describes a battleship Grid
  * @extends JLabel
  * */
 public class Grid extends JLabel {
@@ -33,7 +33,10 @@ public class Grid extends JLabel {
 	private boolean miss = false;
 
 	/**
-	 * @param integer row and integer column
+	 * Grid 
+	 * @constructor Two arguments constructor
+	 * @param row the Grid row coordinate
+	 * @param row the Grid col coordinate
 	 * */
 	public Grid(int row, int col) {
 		super();
@@ -44,6 +47,7 @@ public class Grid extends JLabel {
 
 	/**
 	 * setOccupied
+	 * 
 	 * @name setOccupied
 	 * @brief Set occupied state.
 	 * */
@@ -53,6 +57,7 @@ public class Grid extends JLabel {
 
 	/**
 	 * isEmpty
+	 * 
 	 * @name isEmpty
 	 * @return return empty state.
 	 * */
@@ -62,47 +67,100 @@ public class Grid extends JLabel {
 
 	/**
 	 * setHit
+	 * 
 	 * @name setHit
+	 * @brief sets the Grid value hit to true
 	 * */
 	public void setHit() {
 		hit = true;
 	}
 	
+	/**
+	 * isHit
+	 * 
+	 * @name isHit
+	 * @brief checks whether grid is hit
+	 * @return true if hit false otherwise
+	 * */
 	public boolean isHit() {
 		return hit;
 	}
 	
+	/**
+	 * setHit
+	 * @name setMiss
+	 * @brief sets the Grid value miss to true
+	 * */
 	public void setMiss() {
 		miss = true;
 	}
 	
+	/**
+	 * isMiss
+	 * 
+	 * @name isMiss
+	 * @brief checks whether grid is miss
+	 * @return true if miss false otherwise
+	 * */
 	public boolean isMiss() {
 		return miss;
 	}
 
+	/**
+	 * getRow
+	 * 
+	 * @name getRow
+	 * @brief returns the Grid row
+	 * @return row
+	 * */
 	public int getRow() {
 		return row;
 	}
 
+	/**
+	 * getCol
+	 * 
+	 * @name getCol
+	 * @brief returns the Grid col
+	 * @return col
+	 * */
 	public int getCol() {
 		return col;
 	}
 
+	/**
+	 * fadeOut
+	 * 
+	 * @name fadeOut
+	 * @brief calls inner class Fader to perform fade out effect on Grid
+	 * */
 	public void fadeOut() {
 		new Fader().fadeOut();
 	}
 
+	/**
+	 * fadeIn
+	 * 
+	 * @name fadeIn
+	 * @brief calls inner class Fader to perform fade in effect on Grid
+	 * */
 	public void fadeIn() {
 		new Fader().fadeIn();
 	}
 
+	/**
+	 * fastFade
+	 * 
+	 * @name fastFade
+	 * @brief calls inner class Fader to perform fast fade out in effect on Grid
+	 * */
 	public void fastFade() {
 		new Fader().fastFade();
 	}
 
 	/**
 	 * @class Fader
-	 * @brief Describes a fading effect.
+	 * @brief Timer that changes alpha value to display an fading effect.
 	 * */
 	class Fader {
 		private Timer t;
@@ -116,7 +174,7 @@ public class Grid extends JLabel {
 
 		/**
 		 * @name fadeOut
-		 * @brief fadeout effect.
+		 * @brief fade out effect.
 		 * */
 		public void fadeOut() {
 			dir = -0.02f;
@@ -140,6 +198,7 @@ public class Grid extends JLabel {
 		/**
 		 * fadeIn
 		 * @name fadeIn
+		 * @brief fade in effect
 		 * */
 		public void fadeIn() {
 			dir = 0.02f;
@@ -161,6 +220,7 @@ public class Grid extends JLabel {
 
 		/**
 		 * fastFade
+		 * 
 		 * @name fastFade
 		 * @brief Fast fade out effect.
 		 * */
@@ -189,7 +249,10 @@ public class Grid extends JLabel {
 		}
 		
 		/**
+		 * checkLowerBounds
+		 * 
 		 * @name checkLowerBounds
+		 * @brief checks whether alpha value is within range
 		 * @return If alpha is within lower bounds return true. 
 		 * */
 		private boolean checkLowerBounds() {
@@ -201,7 +264,10 @@ public class Grid extends JLabel {
 		}
 
 		/**
+		 * checkUpperBounds
+		 * 
 		 * @name checkUpperBounds
+		 * @brief checks whether alpha value is within range
 		 * @return If alpha is within upper bounds return true. 
 		 * */
 		private boolean checkUpperBounds() {
@@ -237,6 +303,13 @@ public class Grid extends JLabel {
 		}
 	}
 
+	/**
+	 * equals
+	 * 
+	 * @name equals
+	 * @brief checks whether to instances is equal
+	 * @return return true if equal false otherwise
+	 * */
 	@Override
 	public boolean equals(Object otherGrid) {
 		if (otherGrid == null)
@@ -253,9 +326,11 @@ public class Grid extends JLabel {
 	}
 
 	/**
-	 * hashcode
-	 * @name hashcode
-	 * @return produce and return hashcode as Integer.
+	 * hashCode
+	 * 
+	 * @name hashCode
+	 * @brief calculates a hash for this grid instance
+	 * @return return a number used as hash
 	 * */
 	@Override
 	public int hashCode() {
