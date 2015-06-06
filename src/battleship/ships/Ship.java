@@ -149,7 +149,7 @@ public abstract class Ship {
 	/**
 	 * hit
 	 * @name hit
-	 * @brief Registers a hit on ship.
+	 * @brief Decrement life on ship.
 	 * */
 	public void hit() {
 		--health;
