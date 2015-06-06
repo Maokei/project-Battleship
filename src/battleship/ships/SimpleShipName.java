@@ -20,6 +20,11 @@ public class SimpleShipName {
 		r = new Random();
 	}
 	
+	/**
+	 * generateName
+	 * @name generateName
+	 * @return returns a randomized ship name.
+	 * */
 	public String generateName() {
 		
 		StringBuilder sb = new StringBuilder();
@@ -30,6 +35,11 @@ public class SimpleShipName {
 		return sb.toString();
 	}
 	
+	/**
+	 * getInstance
+	 * @name getInstance
+	 * @returns singleton instance.
+	 * */
 	public static SimpleShipName getInstance() {
 	      if(instance == null) {
 	         instance = new SimpleShipName();

@@ -1,3 +1,8 @@
+/**
+ * @file ShipBuilder.java
+ * @author rickard, lars
+ * @date 2015-05-25
+ * */
 package battleship.ships;
 
 import static battleship.game.Constants.NUM_OF_DESTROYERS;
@@ -5,7 +10,17 @@ import static battleship.game.Constants.NUM_OF_SUBMARINES;
 
 import java.util.Vector;
 
+/**
+ * @class ShipBuilder
+ * @brief Class builds ships for the players.
+ * */
 public class ShipBuilder {
+	
+	/**
+	 * buildShips
+	 * @name buildShips
+	 * @return Returns a ship vector containing all of the ships a player needs for a battle.
+	 * */
 	public static Vector<Ship> buildShips() {
 		Vector<Ship> ships = new Vector<Ship>(9);
 		ships.add(BattleShipFactory.getShip(ShipType.CARRIER));
