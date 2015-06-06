@@ -5,8 +5,6 @@
  * */
 package battleship.network;
 
-import java.util.ArrayList;
-
 import battleship.game.Message;
 
 /**

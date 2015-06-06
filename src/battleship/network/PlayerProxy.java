@@ -52,9 +52,14 @@ public class PlayerProxy extends Thread {
 	protected boolean running = true;
 
 	/**
-	 * PlayerProxy Constructor
+	 * PlayerProxy 
 	 * 
+	 * @constructor PlayerProxy
 	 * @name PlayerProxy
+	 * @brief receives instances of Socket, Server and an int id to handle communication with Player
+	 * @param socket The socket that received the Player connection
+	 * @param server the Server instance used to handle communication with all players
+	 * @param id the unique player number
 	 * */
 	public PlayerProxy(Socket socket, Server server, int id) {
 		this.socket = socket;
@@ -76,7 +81,6 @@ public class PlayerProxy extends Thread {
 	 * 
 	 * @name getPlayerName
 	 * @brief Return player names.
-	 * @param None
 	 * @return returns player name as string
 	 * */
 	public String getPlayerName() {
@@ -87,7 +91,8 @@ public class PlayerProxy extends Thread {
 	 * getDeployed
 	 * 
 	 * @name getDeployed
-	 * @return boolean, has player deployed his ships
+	 * @brief returns boolean flag that is true if the player has deployed his ships, false otherwise
+	 * @return deployed falg is true if player ships is deployed
 	 * */
 	public boolean getDeployed() {
 		return deployed;
@@ -97,30 +102,53 @@ public class PlayerProxy extends Thread {
 	 * getMode
 	 * 
 	 * @name getMode
-	 * @return return the player mode for playerProxy
+	 * @brief returns an instance of class GameMode, representing single. or multiplayer
+	 * @return mode instance of GameMode
 	 * */
 	public GameMode getMode() {
 		return mode;
 	}
 
 	/**
-	 * getPlayering
+	 * getPlaying
 	 * 
 	 * @name getPlaying
-	 * @return boolean
+	 * @brief returns if player currently is engaged in single-or multiplayer game
+	 * @return boolean playing
 	 * */
 	public boolean isPlaying() {
 		return playing;
 	}
 
+	/**
+	 * setPlaying
+	 * 
+	 * @name setPlaying
+	 * @brief sets the flag representing if player is playing or not
+	 * @param playing sets the playing flag to true or false
+	 * */
 	public void setPlaying(boolean playing) {
 		this.playing = playing;
 	}
 
+	/**
+	 * setHasOpponent
+	 * 
+	 * @name setHasOpponent
+	 * @brief sets the flag representing if player has an opponent or not
+	 * @param hasOpponent sets the hasOpponent flag to true or false
+	 * */
 	public void setHasOpponent(boolean hasOpponent) {
 		this.hasOpponent = hasOpponent;
 	}
 
+	/**
+	 * getHasOpponent
+	 * 
+	 * @name getHasOpponent
+	 * @brief returns flag representing if player has an opponent
+	 * @return hasOpponent is true if player has an opponent, false otherwise
+	 * */
 	public boolean getHasOpponent() {
 		return hasOpponent;
 	}
@@ -130,6 +158,7 @@ public class PlayerProxy extends Thread {
 	 * 
 	 * @name initGrid
 	 * @brief Function initiates a playerGrid with empty cells aka water
+	 * @param grid multi-dimensional char array representing a player grid
 	 * */
 	private void initGrid(char[][] grid) {
 		for (int row = 0; row < SIZE; row++) {
@@ -143,9 +172,7 @@ public class PlayerProxy extends Thread {
 	 * run
 	 * 
 	 * @name run
-	 * @brief proxy run loop
-	 * @param None
-	 * @return void
+	 * @brief proxy run loop to handle messages from player
 	 * */
 	public void run() {
 		try {
@@ -176,9 +203,7 @@ public class PlayerProxy extends Thread {
 	 * 
 	 * @name handleMessage
 	 * @brief Function is responsible for handling messages accordingly.
-	 * @param Takes
-	 *            a Message.
-	 * @return void
+	 * @param msg the message to be handled
 	 * */
 	private void handleMessage(Message msg) {
 		switch (msg.getType()) {
@@ -235,24 +260,24 @@ public class PlayerProxy extends Thread {
 
 	/**
 	 * parseValidMessage
+	 * 
 	 * @name parseValidMessage
-	 * @param Takes a Message to be parsed.
+	 * @brief checks whether a move by the player is valid, sends message to player of result
+	 * @param msg the message to be parsed
 	 * */
 	private void parseValidMessage(Message msg) {
 		String[] tokens = msg.getMessage().split(" ");
 		if(checkMessage(msg)) {
 			sendMessage(new Message(Message.VALID, Valid_Move, tokens[0], msg.getMessage()));
-			System.out.println("Message " + msg.getMessage() + " TRUE");
 		} else {
-			String message = msg.getMessage();
 			sendMessage(new Message(Message.VALID, NonValid_Move, tokens[0], msg.getMessage()));
-			System.out.println("Message " + msg.getMessage() + " FALSE");
 		}
 	}
 
 	/**
 	 * parseModeMessage
 	 * @name parseModeMessage
+	 * @brief changes GameMode to MultiPlayer 
 	 * @param Takes a GameMode message to parse. 
 	 * */
 	private void parseModeMessage(Message msg) {
@@ -267,9 +292,11 @@ public class PlayerProxy extends Thread {
 	}
 
 	/**
-	 * parseChallangeMessage
-	 * @name parseChallangeMessage
-	 * @param Takes a Challange message to parse. 
+	 * parseChallengeMessage
+	 * 
+	 * @name parseChallengeMessage
+	 * @brief parses and handles a Message of type CHALLENGE
+	 * @param msg a Message of type CHALLENGE to be parsed
 	 * */
 	private void parseChallengeMessage(Message msg) {
 		if(msg.getMessage().equalsIgnoreCase(Challenge_Request)) {
@@ -313,6 +340,12 @@ public class PlayerProxy extends Thread {
 		}
 	}
 
+	/**
+	 * randomizePlayerTurn
+	 * 
+	 * @name randomizePlayerTurn
+	 * @brief randomizes the player turn for a singlePlayer match and notifies a player 
+	 * */
 	private void randomizePlayerTurn() {
 		if (deployed) {
 			Random r = new Random();
@@ -325,12 +358,26 @@ public class PlayerProxy extends Thread {
 		}
 	}
 
+	/**
+	 * handleLogout
+	 * 
+	 * @name handleLogout
+	 * @brief removes player from the servers list of players and sends message to opponent 
+	 * */
 	private void handleLogout() {
 		server.removePlayerProxy(this.playerId);
 		server.sendMessage(new Message(Message.CHAT, msg.getSender(), opponent,
 				msg.getMessage()));
 	}
 
+	/**
+	 * checkMessage
+	 * 
+	 * @name checkMessage
+	 * @brief checks whether a Message sent by the player is a valid move
+	 * @param msg the Message to be checked
+	 * @return a boolean flag representing if player move is valid 
+	 * */
 	private boolean checkMessage(Message msg) {
 		boolean checked = false;
 		String[] tokens = msg.getMessage().split(" ");
@@ -354,6 +401,14 @@ public class PlayerProxy extends Thread {
 		return checked;
 	}
 
+	/**
+	 * checkPlaceMessage
+	 * 
+	 * @name checkPlaceMessage
+	 * @brief checks whether a player can place a ship at given coordinates
+	 * @param tokens an array containing the ship attributes and coordinates
+	 * @return a boolean flag representing if player move is valid 
+	 * */
 	private boolean checkPlaceMessage(String[] tokens) {
 		Ship ship = null;
 		ShipType type;
@@ -386,6 +441,14 @@ public class PlayerProxy extends Thread {
 		return false;
 	}
 
+	/**
+	 * checkShipDownMessage
+	 * 
+	 * @name checkShipDownMessage
+	 * @brief checks whether a player ship is sunk
+	 * @param tokens an array containing the ship attributes and coordinates
+	 * @return a boolean flag representing if player move is valid 
+	 * */
 	private boolean checkShipDownMessage(String[] tokens) {
 		Ship ship = null;
 		ShipType type;
@@ -412,10 +475,26 @@ public class PlayerProxy extends Thread {
 		return checkShipDown(row, col, ship.getLength(), alignment);
 	}
 
+	/**
+	 * checkFireMessage
+	 * 
+	 * @name checkFireMessage
+	 * @brief checks whether a player can fire at the coordinates
+	 * @param tokens an array containing the coordinates
+	 * @return a boolean flag representing if player move is valid 
+	 * */
 	private boolean checkFireMessage(String[] tokens) {
 		return true;
 	}
 
+	/**
+	 * checkHitMessage
+	 * 
+	 * @name checkHitMessage
+	 * @brief checks whether a player is hit at the given coordinates
+	 * @param tokens an array containing the coordinates
+	 * @return a boolean flag representing if player move is valid 
+	 * */
 	private boolean checkHitMessage(String[] tokens) {
 		int row = Integer.parseInt(tokens[1]);
 		int col = Integer.parseInt(tokens[2]);
@@ -426,6 +505,14 @@ public class PlayerProxy extends Thread {
 		return false;
 	}
 
+	/**
+	 * checkMissMessage
+	 * 
+	 * @name checkMissMessage
+	 * @brief checks whether a player is missed at the given coordinates
+	 * @param tokens an array containing the coordinates
+	 * @return a boolean flag representing if player move is valid 
+	 * */
 	private boolean checkMissMessage(String[] tokens) {
 		int row = Integer.parseInt(tokens[1]);
 		int col = Integer.parseInt(tokens[2]);
@@ -436,34 +523,105 @@ public class PlayerProxy extends Thread {
 		return false;
 	}
 
+	/**
+	 * isEmpty
+	 * 
+	 * @name isEmpty
+	 * @brief checks whether the grid is empty at the given coordinates
+	 * @param row the grid row coordinate
+	 * @param col the grid col coordinate
+	 * @return a boolean flag representing if grid is empty
+	 * */
 	private boolean isEmpty(int row, int col) {
 		return playerGrid[row][col] == empty;
 	}
 
+	/**
+	 * isHit
+	 * 
+	 * @name isHit
+	 * @brief checks whether the grid is hit at the given coordinates
+	 * @param row the grid row coordinate
+	 * @param col the grid col coordinate
+	 * @return a boolean flag representing if grid is hit
+	 * */
 	private boolean isHit(int row, int col) {
 		return playerGrid[row][col] == hit;
 	}
 
+
+	/**
+	 * isMissed
+	 * 
+	 * @name isMissed
+	 * @brief checks whether the grid is missed at the given coordinates
+	 * @param row the grid row coordinate
+	 * @param col the grid col coordinate
+	 * @return a boolean flag representing if grid is missed
+	 * */
 	private boolean isMissed(int row, int col) {
 		return playerGrid[row][col] == miss;
 	}
 
+	/**
+	 * isOccupied
+	 * 
+	 * @name isOccupied
+	 * @brief checks whether the grid is occupied at the given coordinates
+	 * @param row the grid row coordinate
+	 * @param col the grid col coordinate
+	 * @return a boolean flag representing if grid is occupied
+	 * */
 	private boolean isOccupied(int row, int col) {
 		return playerGrid[row][col] == occupied;
 	}
 
+	/**
+	 * setOccupied
+	 * 
+	 * @name setOccupied
+	 * @brief sets the grid to occupied at the given coordinates
+	 * @param row the grid row coordinate
+	 * @param col the grid col coordinate
+	 * */
 	private void setOccupied(int row, int col) {
 		playerGrid[row][col] = occupied;
 	}
 
+	/**
+	 * setHit
+	 * 
+	 * @name setHit
+	 * @brief sets the grid to hit at the given coordinates
+	 * @param row the grid row coordinate
+	 * @param col the grid col coordinate
+	 * */
 	private void setHit(int row, int col) {
 		playerGrid[row][col] = hit;
 	}
 
+	/**
+	 * setMiss
+	 * 
+	 * @name setMiss
+	 * @brief sets the grid to miss at the given coordinates
+	 * @param row the grid row coordinate
+	 * @param col the grid col coordinate
+	 * */
 	private void setMiss(int row, int col) {
 		playerGrid[row][col] = miss;
 	}
 
+	/**
+	 * checkShipPlacement
+	 * 
+	 * @name checkShipPlacement
+	 * @brief checks whether a ship can be placed at the given coordinates
+	 * @param ship the ship to be placed
+	 * @param row the grid row coordinate
+	 * @param col the grid col coordinate
+	 * @return a boolean flag representing if player move is valid 
+	 * */
 	private boolean checkShipPlacement(Ship ship, int row, int col) {
 		int length = ship.getLength();
 		int counter;
@@ -496,6 +654,17 @@ public class PlayerProxy extends Thread {
 		return true;
 	}
 
+	/**
+	 * checkShipDown
+	 * 
+	 * @name checkShipDown
+	 * @brief checks whether a ship is sunk at the given coordinates
+	 * @param row the grid row coordinate
+	 * @param col the grid col coordinate
+	 * @param length the length of the ship
+	 * @param alignment Alignment of the ship
+	 * @return a boolean flag representing if player move is valid 
+	 * */
 	private boolean checkShipDown(int row, int col, int length, Alignment alignment) {
 		int counter;
 		if (alignment == Alignment.HORIZONTAL) {
@@ -518,6 +687,15 @@ public class PlayerProxy extends Thread {
 		return true;
 	}
 
+	/**
+	 * placeShip
+	 * 
+	 * @name placeShip
+	 * @brief places a ship at the given coordinates
+	 * @param ship the ship to be placed
+	 * @param row the grid row coordinate
+	 * @param col the grid col coordinate
+	 * */
 	private void placeShip(Ship ship, int row, int col) {
 		int counter;
 		if (ship.getAlignment() == Alignment.HORIZONTAL) {
@@ -535,6 +713,13 @@ public class PlayerProxy extends Thread {
 		}
 	}
 
+	/**
+	 * parseMessage
+	 * 
+	 * @name parseMessage
+	 * @brief parses a Message from the player
+	 * @param msg the Message to be parsed
+	 * */
 	private void parseMessage(Message msg) {
 		String[] tokens = msg.getMessage().split(" ");
 		switch (tokens[0].toUpperCase()) {
@@ -553,6 +738,13 @@ public class PlayerProxy extends Thread {
 		}
 	}
 
+	/**
+	 * parseMissMessage
+	 * 
+	 * @name parseMissMessage
+	 * @brief parses a Miss Message from the player, sets the grid to miss, calls aiPlayer.registerPlayerMiss
+	 * @param tokens a String array containing the coordinates
+	 * */
 	private void parseMissMessage(String[] tokens) {
 		int row = Integer.parseInt(tokens[1]);
 		int col = Integer.parseInt(tokens[2]);
@@ -560,6 +752,13 @@ public class PlayerProxy extends Thread {
 		aiPlayer.registerPlayerMiss(row, col);
 	}
 
+	/**
+	 * parseShipDownMessage
+	 * 
+	 * @name parseShipDownMessage
+	 * @brief parses a shipDown Message from the player and calls aiPlayer.placeEnemyShip
+	 * @param tokens a String array containing the coordinates
+	 * */
 	private void parseShipDownMessage(String[] tokens) {
 		Ship ship = null;
 		ShipType type;
@@ -587,12 +786,26 @@ public class PlayerProxy extends Thread {
 		aiPlayer.placeEnemyShip(ship, row, col);
 	}
 
+	/**
+	 * parseFireMessage
+	 * 
+	 * @name parseFireMessage
+	 * @brief parses a Fire Message from the player and calls aiPlayer.registerFire
+	 * @param tokens a String array containing the coordinates
+	 * */
 	private void parseFireMessage(String[] tokens) {
 		int row = Integer.parseInt(tokens[1]);
 		int col = Integer.parseInt(tokens[2]);
 		aiPlayer.registerFire(row, col);
 	}
 
+	/**
+	 * parseHitMessage
+	 * 
+	 * @name parseHitMessage
+	 * @brief parses a Hit Message from the player, sets grid to hit, and calls aiPlayer.registerPlayerHit
+	 * @param tokens a String array containing the coordinates
+	 * */
 	private void parseHitMessage(String[] tokens) {
 		int row = Integer.parseInt(tokens[1]);
 		int col = Integer.parseInt(tokens[2]);
@@ -604,10 +817,8 @@ public class PlayerProxy extends Thread {
 	 * sendMessage
 	 * 
 	 * @name sendMessage
-	 * @brief Function sends messages
-	 * @param Takes
-	 *            a Message
-	 * @return void
+	 * @brief Function to send messages to player
+	 * @param msg the Message to be sent to player
 	 * */
 	public void sendMessage(Message msg) {
 		try {
@@ -622,8 +833,6 @@ public class PlayerProxy extends Thread {
 	 * 
 	 * @name closeConnection
 	 * @brief Responsible to closing the connection between server and player
-	 * @param None
-	 * @return void
 	 * */
 	protected void closeConnection() {
 		int port = socket.getPort();
@@ -634,8 +843,6 @@ public class PlayerProxy extends Thread {
 			System.out.println("Client " + name + " with address " + address
 					+ " and port " + port
 					+ "\nhas closed the connection with the server.\n ");
-		} catch (IOException e) {
-			// System.err.println(e.getMessage());
-		}
+		} catch (IOException e) {}
 	}
 }
