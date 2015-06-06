@@ -645,12 +645,11 @@ public class Player {
 			sendMessage(new Message(Message.CHALLENGE, name, opponentName, Challenge_Name));
 		} else if (msg.getMessage().equalsIgnoreCase(Challenge_Deny)) {
 			msgText = msg.getSender()
-					+ " has denied your request.\n\nMaybe he is busy.";
+					+ " has denied your request.\n\nMaybe he's afraid!.";
 			title = "CHALLENGE DENIED";
 			JOptionPane.showMessageDialog(null, msgText, title,
 					JOptionPane.INFORMATION_MESSAGE);
 		}
-
 	}
 
 	/**
