@@ -6,7 +6,7 @@ package battleship.game;
 
 /**
  * @class GameMode
- * @brief Enumerated type differentiates between single and multiplayer mode.
+ * @brief Enumerated type differentiates between single- and multiplayer mode.
  * */
 public enum GameMode {
 	SinglePlayer("Singleplayer"),
