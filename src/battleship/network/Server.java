@@ -28,8 +28,12 @@ import battleship.game.GameMode;
 import battleship.game.Message;
 
 /**
+ * Server
+ * 
  * @class Server
  * @package battleship.network
+ * @class Server class Server handles incoming connections, starts a new thread for each connection
+ * and handles communication between them
  * @brief Battleship server to handle message and relay game play events
  * */
 public class Server extends JFrame {
@@ -44,6 +48,13 @@ public class Server extends JFrame {
 	private JTextArea messages;
 	private JTextField input;
 
+	/**
+	 * Server
+	 * 
+	 * @constructor Server
+	 * @brief Server one-argument constructor, sets up GUI for server and instantiates the list of players
+	 * @param portNumber the port number used by players to establish connection
+	 * */
 	public Server(int portNumber) {
 		super("*** Battleship server ***");
 		setupGui();
@@ -57,8 +68,6 @@ public class Server extends JFrame {
 	 * @name listen
 	 * @brief Listen for clients that connect to server, adds proxie's to
 	 *        players a ArrayList
-	 * @param None
-	 * @return void
 	 * */
 	public void listen() {
 		Socket socket = new Socket();
@@ -98,7 +107,6 @@ public class Server extends JFrame {
 	 * @name removePlayerProxy
 	 * @brief Function to remove a client proxy
 	 * @param int id client proxy id, client to be removed
-	 * @return void
 	 * */
 	public void removePlayerProxy(int id) {
 		for (int i = players.size() - 1; i >= 0; i--) {
@@ -116,9 +124,7 @@ public class Server extends JFrame {
 	 * 
 	 * @name removePlayerProxy
 	 * @brief Function to remove a client proxy
-	 * @param Takes
-	 *            a player proxy object, and removes it if it exists
-	 * @return void
+	 * @param pp the instance of PlayerProxy to remove
 	 * */
 	public void removePlayerProxy(battleship.network.PlayerProxy pp) {
 		if (players.equals(pp)) {
@@ -129,9 +135,8 @@ public class Server extends JFrame {
 	/**
 	 * sendMessage
 	 * 
-	 * @brief Send message to reciver.
-	 * @param Message to be sent.
-	 * @return void
+	 * @brief Send message to receiver.
+	 * @param msg Message to be sent.
 	 * */
 	public synchronized void sendMessage(Message msg) {
 		messages.append("Sender " + msg.getSender() + "Receiver "
@@ -146,9 +151,10 @@ public class Server extends JFrame {
 
 	/**
 	 * sendMessageToAllPlayers
+	 * 
 	 * @name sendsMessageToallPlayers
-	 * @param Message object
 	 * @brief sends a message to all connected players.
+	 * @param msg Message to send
 	 * */
 	public synchronized void sendMessageToAllPlayers(Message msg) {
 		messages.append("Sender " + msg.getSender() + "Receiver ALL"
@@ -163,8 +169,11 @@ public class Server extends JFrame {
 
 	/**
 	 * checkDeployment
+	 * 
 	 * @name checkDeployment
-	 * @param Takes a Message sends it to receiver of sender.
+	 * @brief checks whether both sender and receiver is deployed
+	 * @param msg Message sent to receiver and sender.
+	 * @return returns true if both are deployed, false otherwise
 	 * */
 	public boolean checkDeployment(Message msg) {
 		for (PlayerProxy player : players) {
@@ -185,7 +194,8 @@ public class Server extends JFrame {
 	/**
 	 * randomizePlayerTurn
 	 * @name randomizePlayerTurn
-	 * @brief Randomizes player turns. 
+	 * @brief Randomizes player turn if both players are deployed, and sends messages to both players 
+	 * @param msg the Message of type DEPLOYED to be sent to if all players are deployed
 	 * */
 	public void randomizePlayerTurn(Message msg) {
 		if (players.size() > 1 && checkDeployment(msg)) {
@@ -206,6 +216,7 @@ public class Server extends JFrame {
 	 * sendAllDeployed
 	 * @name sendAllDeployed
 	 * @brief Send out deployment message.
+	 * @param msg the Message of type DEPLOYED to be sent to both players
 	 * */
 	public synchronized void sendAllDeployed(Message msg) {
 		sendMessage(new Message(Message.DEPLOYED, msg.getSender(),
@@ -214,6 +225,12 @@ public class Server extends JFrame {
 				msg.getSender(), ""));
 	}
 
+	/**
+	 * sendAllPlayers
+	 * 
+	 * @name sendAllPlayers
+	 * @brief sends a Message of type LOGIN to all players so that they can update their lobby
+	 * */
 	public synchronized void sendAllPlayers() {
 		for (PlayerProxy player : players) {
 			for(PlayerProxy p : players) {
@@ -239,8 +256,6 @@ public class Server extends JFrame {
 	 * 
 	 * @name setupGui
 	 * @brief Function set's up the server GUI, and button listeners.
-	 * @param none
-	 * @return void
 	 * */
 	private void setupGui() {
 		// Set system look and feel
