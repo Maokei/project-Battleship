@@ -10,12 +10,14 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * @class AudioLoader
+ * @package battleship.resources
+ * @class AudioLoader class retrieves and stores Audio object to be used in-game
  * @brief Describes a class responsible for loading audio clips from file and creating Audio objects. 
  **/
 public class AudioLoader {
 	private static String path = "src/res/audio/";
 	private static Map<String, Audio> mappedAudio = new HashMap<String, Audio>();
+	
 	private static String[] filenames = {"ambient_melodic_drums.wav", "ambient_ocean1.wav",
 			"ambient_ocean2.wav", "ambient_rocky.wav", "ambient_techno.wav",
 			 "intro_dreamy.wav",
@@ -27,6 +29,7 @@ public class AudioLoader {
 			"march", "explosion1", "tilt", "splash1", "splash2", "sinking", "ship_down" };
 	/**
 	 * initSounds
+	 * 
 	 * @name initSounds
 	 * @brief Initiate sounds to Audio objects.
 	 * */
@@ -40,6 +43,7 @@ public class AudioLoader {
 	
 	/**
 	 * getAudio
+	 * 
 	 * @name getAudio
 	 * @param Name of audio clip to be returned as Audio pointer.
 	 * */
