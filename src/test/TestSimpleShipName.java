@@ -58,7 +58,6 @@ public class TestSimpleShipName {
 	@Test
 	public void testGenerateName() {
 		String[] tokens = test.split(" ");
-		System.out.println(test);
 		for(String token : tokens) {
 			assertTrue(namesList.contains(token));
 		}
