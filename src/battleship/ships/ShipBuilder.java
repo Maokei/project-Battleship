@@ -11,6 +11,7 @@ import static battleship.game.Constants.NUM_OF_SUBMARINES;
 import java.util.Vector;
 
 /**
+ * @package battleship.ships
  * @class ShipBuilder
  * @brief Class builds ships for the players.
  * */

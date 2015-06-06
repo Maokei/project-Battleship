@@ -6,7 +6,7 @@
 package battleship.ships;
 
 /**
- * @package battleship.entity
+ * @package battleship.ships
  * @enumerated ShipTypes
  * */
 public enum ShipType {

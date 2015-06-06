@@ -10,8 +10,9 @@ import java.util.Vector;
 import battleship.gameboard.Grid;
 
 /**
+ * @package battleship.ships
  * @class Ship 
- * @brief Class describes a Ship.
+ * @brief Abstract class describes a Ship.
  * */
 public abstract class Ship {
 	protected String type;
@@ -123,8 +124,13 @@ public abstract class Ship {
 			posX1 += length;
 		else
 			posY1 += length;
-	}
+	}	
 	
+	/**
+	 * wasHit
+	 * @name wasHit
+	 * @param Integer x and integer y, register hit on ship.
+	 * */
 	public boolean wasHit(int x, int y) {
 		if(alignment == Alignment.HORIZONTAL) {
 			if(y == posY && (x >= posX && x <= posX1)) {
@@ -140,6 +146,11 @@ public abstract class Ship {
 		return false;
 	}
 	
+	/**
+	 * hit
+	 * @name hit
+	 * @brief Registers a hit on ship.
+	 * */
 	public void hit() {
 		--health;
 		if(health == 0) 

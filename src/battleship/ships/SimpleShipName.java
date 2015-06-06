@@ -7,6 +7,7 @@ package battleship.ships;
 import java.util.Random;
 
 /**
+ * @package battleship.ships
  * @class SimpleShipName
  * @brief Class generates names for ships.
  * */
