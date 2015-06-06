@@ -27,6 +27,7 @@ import battleship.ships.ShipType;
 /**
  * ClientConnection
  * 
+ * @package battleship.network
  * @class ClientConnection The class handles messages sent to this Player
  * @implements Runnable, NetworkOperation
  * @brief Class describes the connection. Client uses this connection class to

@@ -1,3 +1,8 @@
+/**
+ * @file PlayerProxy.java
+ * @date 2015-05-06
+ * @author rickard(rijo1001), lars(lama1205)
+ * */
 package battleship.network;
 
 import static battleship.game.Constants.Challenge_Accept;
@@ -27,6 +32,7 @@ import battleship.ships.ShipType;
 /**
  * PlayerProxy
  * 
+ * @package battleship.network
  * @class PlayerProxy
  * @extends Thread
  * @brief Client proxy class of the player.

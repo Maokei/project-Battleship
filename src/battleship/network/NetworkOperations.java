@@ -8,6 +8,7 @@ package battleship.network;
 import battleship.game.Message;
 
 /**
+ * @package battleship.network
  * @interface NetworkOperations
  * @brief Describes network actions.
  * */
