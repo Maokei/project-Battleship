@@ -14,7 +14,9 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.TimeUnit;
@@ -46,14 +48,14 @@ public class ClientConnection implements Runnable, NetworkOperations {
 	private ObjectInputStream in;
 	private Player player;
 	private Message msg;
-	private ArrayList<String> players;
+	private Map<String, String> players;
 	private JTextArea output; // just for Chat
 	private boolean running = true;
 
 	public ClientConnection(String address, int portNumber) {
 		this.address = address;
 		this.portNumber = portNumber;
-		this.players = new ArrayList<String>();
+		this.players = new HashMap<String, String>();
 	}
 
 	/**
@@ -231,9 +233,13 @@ public class ClientConnection implements Runnable, NetworkOperations {
 	 * */
 	private void parseLogin(Message msg) {
 		if (!(msg.getSender().equalsIgnoreCase(player.getName()))) {
-			if (!players.contains(msg.getSender())) {
+			if (!players.containsKey(msg.getSender())) {
+				if(msg.getMessage().equalsIgnoreCase("Playing")) {
+					players.put(msg.getSender(), "playing");
+				} else {
+					players.put(msg.getSender(), "free");
+				}
 				System.out.println(msg.getSender() + " is added to the list");
-				players.add(msg.getSender());
 				player.updateLobby();
 			}
 		}
@@ -246,7 +252,7 @@ public class ClientConnection implements Runnable, NetworkOperations {
 	 * @brief Function meant to be used my lobby to populate players JList.
 	 * @returns A list of player names.
 	 * */
-	public ArrayList<String> getConnectedPlayers() {
+	public Map<String, String> getConnectedPlayers() {
 		return players;
 	}
 

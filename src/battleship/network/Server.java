@@ -70,7 +70,6 @@ public class Server extends JFrame {
 		try {
 			server = new ServerSocket(portNumber);
 			System.out.println("Server Listening on port " + portNumber);
-
 			while (true) {
 				socket = server.accept();
 				id++;
@@ -277,7 +276,11 @@ public class Server extends JFrame {
 	public synchronized void sendAllPlayers() {
 		for (PlayerProxy player : players) {
 			for(PlayerProxy p : players) {
-				sendMessage(new Message(Message.LOGIN, p.name, player.name, ""));
+				if(p.playing) {
+					sendMessage(new Message(Message.LOGIN, p.name, player.name, "Playing"));
+				} else {
+					sendMessage(new Message(Message.LOGIN, p.name, player.name, "Free"));
+				}
 			}
 		}
 	}

@@ -189,6 +189,6 @@ public class Lobby extends JFrame {
 	}
 
 	private void addPlayerNames() {
-		names.addAll(player.getConnectedPlayers());
+		// names.addAll(player.getConnectedPlayers());
 	}
 }

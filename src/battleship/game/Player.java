@@ -16,6 +16,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
+import java.util.Map;
 import java.util.Vector;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
@@ -175,10 +176,10 @@ public class Player {
 	 * getConnectedPlayers
 	 * 
 	 * @name getConnectedPlayers
-	 * @param ArrayList
+	 * @param Map
 	 *            <String> of connected players.
 	 * */
-	public ArrayList<String> getConnectedPlayers() {
+	public Map<String, String> getConnectedPlayers() {
 		return con.getConnectedPlayers();
 	}
 
@@ -243,18 +244,11 @@ public class Player {
 	 *            row and integer column in a grid.
 	 * */
 	/*
-	public void registerFire(int row, int col) {
-		if (checkHit(row, col)) {
-			for (Ship ship : playerShips) {
-				if (ship.isAlive() && ship.checkHit(row, col)) {
-					registerEnemyHit(ship, row, col);
-				}
-			}
-		} else {
-			registerEnemyMiss(row, col);
-		}
-	}
-	*/
+	 * public void registerFire(int row, int col) { if (checkHit(row, col)) {
+	 * for (Ship ship : playerShips) { if (ship.isAlive() && ship.checkHit(row,
+	 * col)) { registerEnemyHit(ship, row, col); } } } else {
+	 * registerEnemyMiss(row, col); } }
+	 */
 	/**
 	 * registerPlayerHit
 	 * 
@@ -285,10 +279,10 @@ public class Player {
 				playerBoard.addHit(row, col);
 				if (mode == GameMode.MultiPlayer) {
 					sendMessage(new Message(Message.MESSAGE, getName(),
-							getOpponentName(), "HIT " + Integer.toString(row) + " "
-									+ Integer.toString(col)));
+							getOpponentName(), "HIT " + Integer.toString(row)
+									+ " " + Integer.toString(col)));
 				}
-				
+
 				ship.hit();
 				if (!ship.isAlive()) {
 					sinkShip(ship);
@@ -299,8 +293,8 @@ public class Player {
 
 				if (mode == GameMode.SinglePlayer) {
 					sendMessage(new Message(Message.MESSAGE, getName(),
-							getOpponentName(), "HIT " + Integer.toString(row) + " "
-									+ Integer.toString(col)));
+							getOpponentName(), "HIT " + Integer.toString(row)
+									+ " " + Integer.toString(col)));
 				}
 			}
 		}
@@ -573,7 +567,7 @@ public class Player {
 					// placePlayerShip(row, col);
 				}
 			} else if (e.getComponent() == enemyBoard) {
-				if(enemyBoard.checkFire(row, col))
+				if (enemyBoard.checkFire(row, col))
 					fire(row, col);
 			}
 		}
@@ -586,11 +580,16 @@ public class Player {
 		 *            row and integer column, sends out fire message.
 		 * */
 		private void fire(int row, int col) {
+			System.out.println("I'm in fire");
 			if (checkDeployed() && playerTurn) {
 				sendMessage(new Message(Message.MESSAGE, getName(),
 						getOpponentName(), "FIRE " + Integer.toString(row)
 								+ " " + Integer.toString(col)));
 				playerTurn = false;
+			} else {
+				System.out.println("Deployed: " + deployed
+						+ "\nOpponentDeployed: " + opponentDeployed
+						+ "\nPlayerTurn: " + playerTurn);
 			}
 		}
 
@@ -623,6 +622,9 @@ public class Player {
 			if (reply == JOptionPane.YES_OPTION) {
 				opponentName = msg.getSender();
 				hasOpponent = true;
+				getConnectedPlayers().put(opponentName, "playing");
+				updateLobby();
+				screen.setInviteEnabled(false);
 				sendMessage(new Message(Message.CHALLENGE, getName(),
 						getOpponentName(), Challenge_Accept));
 			} else {
@@ -636,6 +638,11 @@ public class Player {
 			JOptionPane.showMessageDialog(null, msgText, title,
 					JOptionPane.INFORMATION_MESSAGE);
 			opponentName = msg.getSender();
+			hasOpponent = true;
+			getConnectedPlayers().put(opponentName, "playing");
+			updateLobby();
+			screen.setInviteEnabled(false);
+			sendMessage(new Message(Message.CHALLENGE, name, opponentName, Challenge_Name));
 		} else if (msg.getMessage().equalsIgnoreCase(Challenge_Deny)) {
 			msgText = msg.getSender()
 					+ " has denied your request.\n\nMaybe he is busy.";
@@ -675,14 +682,16 @@ public class Player {
 		case "HIT":
 			row = Integer.parseInt(tokens[1]);
 			col = Integer.parseInt(tokens[2]);
-			screen.setMessage("Enemy Missed an illegal shot at " + row + "," + col);
+			screen.setMessage("Enemy Missed an illegal shot at " + row + ","
+					+ col);
 			break;
 		case "MISS":
 			row = Integer.parseInt(tokens[1]);
 			col = Integer.parseInt(tokens[2]);
-			screen.setMessage("Enemy Missed an illegal shot at " + row + "," + col);
+			screen.setMessage("Enemy Missed an illegal shot at " + row + ","
+					+ col);
 			break;
-		case "PLACING": 
+		case "PLACING":
 			screen.setMessage("It's a little crowded, don't ya think!!");
 			break;
 		}

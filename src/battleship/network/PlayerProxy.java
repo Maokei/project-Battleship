@@ -277,7 +277,11 @@ public class PlayerProxy extends Thread {
 	private void parseChallengeMessage(Message msg) {
 		if(msg.getMessage().equalsIgnoreCase(Challenge_Request)) {
 			server.sendMessageToAllPlayers(msg);
-		} else {
+		} else if(msg.getMessage().equalsIgnoreCase(Challenge_Name)) {
+			opponent = msg.getReceiver();
+			hasOpponent = true;
+			playing = true;
+		}else {
 			if(msg.getMessage().equalsIgnoreCase(Challenge_Accept)) {
 				opponent = msg.getReceiver();
 				hasOpponent = true;
@@ -348,25 +352,25 @@ public class PlayerProxy extends Thread {
 		String[] tokens = msg.getMessage().split(" ");
 		switch (tokens[0].toUpperCase()) {
 		case "PLACING":
-			checked = checkPlaceMessage(tokens, playerGrid);
+			checked = checkPlaceMessage(tokens);
 			break;
 		case "SHIP_DOWN":
-			checked = checkShipDownMessage(tokens, playerGrid);
+			checked = checkShipDownMessage(tokens);
 			break;
 		case "FIRE":
-			checked = checkFireMessage(tokens, playerGrid);
+			checked = checkFireMessage(tokens);
 			break;
 		case "HIT":
-			checked = checkHitMessage(tokens, playerGrid);
+			checked = checkHitMessage(tokens);
 			break;
 		case "MISS":
-			checked = checkMissMessage(tokens, playerGrid);
+			checked = checkMissMessage(tokens);
 			break;
 		}
 		return checked;
 	}
 
-	private boolean checkPlaceMessage(String[] tokens, char[][] grid) {
+	private boolean checkPlaceMessage(String[] tokens) {
 		Ship ship = null;
 		ShipType type;
 		Alignment alignment = Alignment.HORIZONTAL;
@@ -391,14 +395,14 @@ public class PlayerProxy extends Thread {
 		int row = Integer.parseInt(tokens[3]);
 		int col = Integer.parseInt(tokens[4]);
 
-		if (checkShipPlacement(ship, row, col, grid)) {
-			placeShip(ship, row, col, grid);
+		if (checkShipPlacement(ship, row, col)) {
+			placeShip(ship, row, col);
 			return true;
 		}
 		return false;
 	}
 
-	private boolean checkShipDownMessage(String[] tokens, char[][] grid) {
+	private boolean checkShipDownMessage(String[] tokens) {
 		Ship ship = null;
 		ShipType type;
 		Alignment alignment = Alignment.HORIZONTAL;
@@ -421,72 +425,69 @@ public class PlayerProxy extends Thread {
 		ship = BattleShipFactory.getShip(type);
 		int row = Integer.parseInt(tokens[3]);
 		int col = Integer.parseInt(tokens[4]);
-		return checkShipDown(row, col, ship.getLength(), alignment, grid);
+		return checkShipDown(row, col, ship.getLength(), alignment);
 	}
 
-	private boolean checkFireMessage(String[] tokens, char[][] grid) {
+	private boolean checkFireMessage(String[] tokens) {
 		return true;
 	}
 
-	private boolean checkHitMessage(String[] tokens, char[][] grid) {
+	private boolean checkHitMessage(String[] tokens) {
 		int row = Integer.parseInt(tokens[1]);
 		int col = Integer.parseInt(tokens[2]);
 
-		if (isOccupied(row, col, grid) && !isHit(row, col, grid)) {
-			setHit(row, col, grid);
+		if (isOccupied(row, col) && !isHit(row, col)) {
 			return true;
 		}
 		return false;
 	}
 
-	private boolean checkMissMessage(String[] tokens, char[][] grid) {
+	private boolean checkMissMessage(String[] tokens) {
 		int row = Integer.parseInt(tokens[1]);
 		int col = Integer.parseInt(tokens[2]);
 
-		if (isEmpty(row, col, grid) && !isMissed(row, col, grid)) {
-			setMiss(row, col, grid);
+		if (isEmpty(row, col) && !isMissed(row, col)) {
 			return true;
 		}
 		return false;
 	}
 
-	private boolean isEmpty(int row, int col, char[][] grid) {
-		return grid[row][col] == empty;
+	private boolean isEmpty(int row, int col) {
+		return playerGrid[row][col] == empty;
 	}
 
-	private boolean isHit(int row, int col, char[][] grid) {
-		return grid[row][col] == hit;
+	private boolean isHit(int row, int col) {
+		return playerGrid[row][col] == hit;
 	}
 
-	private boolean isMissed(int row, int col, char[][] grid) {
-		return grid[row][col] == miss;
+	private boolean isMissed(int row, int col) {
+		return playerGrid[row][col] == miss;
 	}
 
-	private boolean isOccupied(int row, int col, char[][] grid) {
-		return grid[row][col] == occupied;
+	private boolean isOccupied(int row, int col) {
+		return playerGrid[row][col] == occupied;
 	}
 
-	private void setOccupied(int row, int col, char[][] grid) {
-		grid[row][col] = occupied;
+	private void setOccupied(int row, int col) {
+		playerGrid[row][col] = occupied;
 	}
 
-	private void setHit(int row, int col, char[][] grid) {
-		grid[row][col] = hit;
+	private void setHit(int row, int col) {
+		playerGrid[row][col] = hit;
 	}
 
-	private void setMiss(int row, int col, char[][] grid) {
-		grid[row][col] = miss;
+	private void setMiss(int row, int col) {
+		playerGrid[row][col] = miss;
 	}
 
-	private boolean checkShipPlacement(Ship ship, int row, int col,
-			char[][] grid) {
+	private boolean checkShipPlacement(Ship ship, int row, int col) {
 		int length = ship.getLength();
 		int counter;
 		if (ship.getAlignment() == Alignment.HORIZONTAL) {
 			if ((col + length - 1) < SIZE) {
 				counter = col;
 				for (int i = 0; i < length; i++) {
-					if (!isEmpty(row, counter, grid)) {
+					if (!isEmpty(row, counter)) {
 						return false;
 					}
 					counter++;
@@ -499,7 +500,7 @@ public class PlayerProxy extends Thread {
 			if ((row + length - 1) < SIZE) {
 				counter = row;
 				for (int i = 0; i < length; i++) {
-					if (!isEmpty(counter, col, grid)) {
+					if (!isEmpty(counter, col)) {
 						return false;
 					}
 					counter++;
@@ -511,13 +512,12 @@ public class PlayerProxy extends Thread {
 		return true;
 	}
 
-	private boolean checkShipDown(int row, int col, int length,
-			Alignment alignment, char[][] grid) {
+	private boolean checkShipDown(int row, int col, int length, Alignment alignment) {
 		int counter;
 		if (alignment == Alignment.HORIZONTAL) {
 			counter = col;
 			for (int i = 0; i < length; i++) {
-				if (!isHit(row, counter, grid)) {
+				if (!isHit(row, counter)) {
 					return false;
 				}
 				counter++;
@@ -525,28 +525,27 @@ public class PlayerProxy extends Thread {
 		} else if (alignment == Alignment.VERTICAL) {
 			counter = row;
 			for (int i = 0; i < length; i++) {
-				if (!isHit(counter, col, grid)) {
+				if (!isHit(counter, col)) {
 					return false;
 				}
 				counter++;
 			}
 		}
-
 		return true;
 	}
 
-	private void placeShip(Ship ship, int row, int col, char[][] grid) {
+	private void placeShip(Ship ship, int row, int col) {
 		int counter;
 		if (ship.getAlignment() == Alignment.HORIZONTAL) {
 			counter = col;
 			for (int i = 0; i < ship.getLength(); i++) {
-				setOccupied(row, counter, grid);
+				setOccupied(row, counter);
 				counter++;
 			}
 		} else if (ship.getAlignment() == Alignment.VERTICAL) {
 			counter = row;
 			for (int i = 0; i < ship.getLength(); i++) {
-				setOccupied(counter, col, grid);
+				setOccupied(counter, col);
 				counter++;
 			}
 		}
@@ -573,6 +572,7 @@ public class PlayerProxy extends Thread {
 	private void parseMissMessage(String[] tokens) {
 		int row = Integer.parseInt(tokens[1]);
 		int col = Integer.parseInt(tokens[2]);
+		setMiss(row, col);
 		aiPlayer.registerPlayerMiss(row, col);
 	}
 
@@ -612,6 +612,7 @@ public class PlayerProxy extends Thread {
 	private void parseHitMessage(String[] tokens) {
 		int row = Integer.parseInt(tokens[1]);
 		int col = Integer.parseInt(tokens[2]);
+		setHit(row, col);
 		aiPlayer.registerPlayerHit(row, col);
 	}
 

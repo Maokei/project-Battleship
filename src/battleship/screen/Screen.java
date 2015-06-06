@@ -76,6 +76,9 @@ public class Screen {
 		challenge.updateNames();
 	}
 	
+	public void setInviteEnabled(boolean enabled) {
+		challenge.setInviteEnabled(enabled);
+	}
 	public void showGUI() {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setSize(1200, 600);
