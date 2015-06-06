@@ -1,6 +1,7 @@
 /**
  * @file Screen.java
  * @author rickard, lars
+ * @date 2015-05-25
  * */
 package battleship.screen;
 
@@ -27,6 +28,10 @@ public class Screen {
 	private MessagePanel msgPanel;
 	private ChallengePanel challenge;
 	
+	/**
+	 * Screen constructor
+	 * @param Player object, GameBoard palyers gameboard, GameBoard of the enemy.
+	 * */
 	public Screen(Player player, Gameboard playerBoard, Gameboard enemyBoard) {
 		this.playerBoard = playerBoard;
 		this.enemyBoard = enemyBoard;
@@ -52,33 +57,74 @@ public class Screen {
 		});
 	}
 	
+	/**
+	 * disableRandom
+	 * @name disableRandom
+	 * @brief Disable's random ship placement button.
+	 * */
 	public void disableRandom() {
 		playergui.disableRandom();
 	}
 	
+	/**
+	 * setHits
+	 * @name setHits
+	 * @param Integer hits set number of hits on gui.
+	 * */
 	public void setHits(int hits) {
 		playergui.getStats().setHits(hits);
 	}
 	
+	/**
+	 * setMisses
+	 * @name setMisses
+	 * @param Integer misses, set number of misses on gui.
+	 * */
 	public void setMisses(int misses) {
 		playergui.getStats().setMisses(misses);
 	}
 	
+	/**
+	 * setShips
+	 * @name setShips
+	 * @param Integer ship, set number of ships on gui.
+	 * */
 	public void setShips(int ships) {
 		playergui.getStats().setShips(ships);
 	}
 	
+	/**
+	 * setMessage
+	 * @name setMessage
+	 * @param String message, to be added to message panel.
+	 * */
 	public void setMessage(String message) {
 		msgPanel.setMessage(message);
 	}
 	
+	/**
+	 * updateLobby
+	 * @name updateLobby
+	 * @brief Update the player names in the lobby.
+	 * */
 	public void updateLobby() {
 		challenge.updateNames();
 	}
 	
+	/**
+	 * setInviteEnabled
+	 * @name setInviteEnabled
+	 * @param setInvite state to boolean.
+	 * */
 	public void setInviteEnabled(boolean enabled) {
 		challenge.setInviteEnabled(enabled);
 	}
+	
+	/**
+	 * showGUI
+	 * @name showGUI
+	 * @brief Shows the screen GUI.
+	 * */
 	public void showGUI() {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setSize(1200, 600);
@@ -86,6 +132,11 @@ public class Screen {
 		frame.setVisible(true);
 	}
 
+	/**
+	 * setShipsDeployed
+	 * @name setShipsDeployed
+	 * @brief setShipsDeployed state, deployed.
+	 * */
 	public void setShipsDeployed() {
 		playergui.setShipsDeployed();
 	}

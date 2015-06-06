@@ -1,3 +1,8 @@
+/**
+ * @file MainPanel.java
+ * @authors rickard, lars
+ * @date 2015-05-25
+ * */
 package battleship.screen;
 
 import java.awt.Color;
@@ -8,6 +13,12 @@ import java.awt.geom.Point2D;
 
 import javax.swing.JPanel;
 
+
+/**
+ * @class MainPanel
+ * @extends JPanel
+ * @brief Class describes the main GUI panel.
+ * */
 public class MainPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 	private RadialGradientPaint rgp;
@@ -17,6 +28,9 @@ public class MainPanel extends JPanel {
 	private Color[] colors = { new Color(255, 0, 0), new Color(200, 0, 0),
 		new Color(150, 0, 0), new Color(100, 0, 0), new Color(50, 0, 0) };
 	
+	/**
+	 * @constructor MainPanel
+	 * */
 	public MainPanel() {
 		super();
 		setSize(800, 600);
@@ -25,6 +39,11 @@ public class MainPanel extends JPanel {
 		rgp = new RadialGradientPaint(center, radius, gradientStops, colors);
 	}
 	
+	/**
+	 * painComponent
+	 * @name painComponent
+	 * @brief Paints the JPanel.
+	 * */
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		
