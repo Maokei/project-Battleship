@@ -1,0 +1,497 @@
+\hypertarget{classbattleship_1_1game_1_1Player}{}\section{battleship.\+game.\+Player Class Reference}
+\label{classbattleship_1_1game_1_1Player}\index{battleship.\+game.\+Player@{battleship.\+game.\+Player}}
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class {\bfseries Board\+Listener}
+\begin{DoxyCompactList}\small\item\em Event listener class for player\+Board and enemy\+Board. \end{DoxyCompactList}\item 
+class {\bfseries Game\+Timer}
+\begin{DoxyCompactList}\small\item\em And inner help class to help with timing of events. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classbattleship_1_1game_1_1Player_a4461129b3ce0b1bf218b91d05c5c3aa0}{Player} (String name, \hyperlink{classbattleship_1_1screen_1_1Avatar}{Avatar} avatar, \hyperlink{classbattleship_1_1network_1_1ClientConnection}{Client\+Connection} con, \hyperlink{enumbattleship_1_1game_1_1GameMode}{Game\+Mode} mode)
+\begin{DoxyCompactList}\small\item\em \hyperlink{classbattleship_1_1game_1_1Player}{Player} constructor. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\begin{Indent}{\bf init}\par
+{\em \hyperlink{classbattleship_1_1game_1_1Player}{Player} class initiation function.
+
+init
+
+\begin{DoxyReturn}{Returns}
+void function 
+\end{DoxyReturn}
+}\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classbattleship_1_1game_1_1Player_aa0b2ae0c4d2a3de2b80fe44102962d24}{}void {\bfseries init} ()\label{classbattleship_1_1game_1_1Player_aa0b2ae0c4d2a3de2b80fe44102962d24}
+
+\end{DoxyCompactItemize}
+\end{Indent}
+\begin{Indent}{\bf listen}\par
+{\em Start a new thread to listen for incoming events with Client\+Connection.
+
+listen }\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classbattleship_1_1game_1_1Player_af63b3429d6150bb6b7a7005346701c7b}{}void {\bfseries listen} ()\label{classbattleship_1_1game_1_1Player_af63b3429d6150bb6b7a7005346701c7b}
+
+\end{DoxyCompactItemize}
+\end{Indent}
+\begin{Indent}{\bf send\+Message}\par
+{\em send\+Message
+
+
+\begin{DoxyParams}{Parameters}
+{\em \hyperlink{classbattleship_1_1game_1_1Message}{Message}} & object to be sent to server. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+void function. 
+\end{DoxyReturn}
+}\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classbattleship_1_1game_1_1Player_a10186b056f15848d299228d1a26b7791}{}void {\bfseries send\+Message} (\hyperlink{classbattleship_1_1game_1_1Message}{Message} message)\label{classbattleship_1_1game_1_1Player_a10186b056f15848d299228d1a26b7791}
+
+\end{DoxyCompactItemize}
+\end{Indent}
+\begin{Indent}{\bf get\+Connection}\par
+{\em get\+Connection
+
+\begin{DoxyReturn}{Returns}
+Client\+Connection pointer. 
+\end{DoxyReturn}
+}\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classbattleship_1_1game_1_1Player_aeca7262ad339a9af21a89556697123c9}{}\hyperlink{classbattleship_1_1network_1_1ClientConnection}{Client\+Connection} {\bfseries get\+Connection} ()\label{classbattleship_1_1game_1_1Player_aeca7262ad339a9af21a89556697123c9}
+
+\end{DoxyCompactItemize}
+\end{Indent}
+\begin{Indent}{\bf get\+Name}\par
+{\em get\+Name
+
+\begin{DoxyReturn}{Returns}
+String object player name. 
+\end{DoxyReturn}
+}\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classbattleship_1_1game_1_1Player_a51d55c2a810ffd57f4260c6df4277ff0}{}String {\bfseries get\+Name} ()\label{classbattleship_1_1game_1_1Player_a51d55c2a810ffd57f4260c6df4277ff0}
+
+\end{DoxyCompactItemize}
+\end{Indent}
+\begin{Indent}{\bf get\+Avatar}\par
+{\em get\+Avatar
+
+\begin{DoxyReturn}{Returns}
+avatar pointer used by player. 
+\end{DoxyReturn}
+}\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classbattleship_1_1game_1_1Player_a696bbbeb4372438db017740091f6d57f}{}\hyperlink{classbattleship_1_1screen_1_1Avatar}{Avatar} {\bfseries get\+Avatar} ()\label{classbattleship_1_1game_1_1Player_a696bbbeb4372438db017740091f6d57f}
+
+\end{DoxyCompactItemize}
+\end{Indent}
+\begin{Indent}{\bf get\+Game\+Mode}\par
+{\em get\+Game\+Mode
+
+\begin{DoxyReturn}{Returns}
+\hyperlink{enumbattleship_1_1game_1_1GameMode}{Game\+Mode} enum. 
+\end{DoxyReturn}
+}\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classbattleship_1_1game_1_1Player_abedd302ae67c147d94ff20328ba2358c}{}String {\bfseries get\+Game\+Mode} ()\label{classbattleship_1_1game_1_1Player_abedd302ae67c147d94ff20328ba2358c}
+
+\end{DoxyCompactItemize}
+\end{Indent}
+\begin{Indent}{\bf get\+Connected\+Players}\par
+{\em get\+Connected\+Players
+
+\begin{DoxyReturn}{Returns}
+Map $<$String, String$>$ of connected players. 
+\end{DoxyReturn}
+}\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classbattleship_1_1game_1_1Player_a34fc5f96d99b78553df54ef22aa44bbc}{}Map$<$ String, String $>$ {\bfseries get\+Connected\+Players} ()\label{classbattleship_1_1game_1_1Player_a34fc5f96d99b78553df54ef22aa44bbc}
+
+\end{DoxyCompactItemize}
+\end{Indent}
+\begin{Indent}{\bf check\+Hit}\par
+{\em Check for a hit in given position.
+
+check\+Hit
+
+
+\begin{DoxyParams}{Parameters}
+{\em int} & row and int column in grid. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+boolean value representing hit or no hit  true for hit false for no hit. 
+\end{DoxyReturn}
+}\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classbattleship_1_1game_1_1Player_a0198edb748b456b64960fcc625d737ff}{}boolean {\bfseries check\+Hit} (int row, int col)\label{classbattleship_1_1game_1_1Player_a0198edb748b456b64960fcc625d737ff}
+
+\end{DoxyCompactItemize}
+\end{Indent}
+\begin{Indent}{\bf set\+Opponent\+Name}\par
+{\em set\+Opponent\+Name
+
+
+\begin{DoxyParams}{Parameters}
+{\em Takes} & an opponent as a string name \\
+\hline
+\end{DoxyParams}
+}\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classbattleship_1_1game_1_1Player_a78458e544e5917402c23caf61e5191b7}{}void {\bfseries set\+Opponent\+Name} (String opponent)\label{classbattleship_1_1game_1_1Player_a78458e544e5917402c23caf61e5191b7}
+
+\end{DoxyCompactItemize}
+\end{Indent}
+\begin{Indent}{\bf get\+Opponent\+Name}\par
+{\em sets opponent name
+
+get\+Opponent\+Name
+
+\begin{DoxyReturn}{Returns}
+returns opponent name as a string. 
+\end{DoxyReturn}
+}\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classbattleship_1_1game_1_1Player_a7a5ef3859695a6aaea85915ce20547e8}{}String {\bfseries get\+Opponent\+Name} ()\label{classbattleship_1_1game_1_1Player_a7a5ef3859695a6aaea85915ce20547e8}
+
+\end{DoxyCompactItemize}
+\end{Indent}
+\begin{Indent}{\bf set\+Has\+Opponent}\par
+{\em set value of Players has\+Opponent to this value
+
+set\+Has\+Opponent
+
+
+\begin{DoxyParams}{Parameters}
+{\em has\+Opponent} & sets \hyperlink{classbattleship_1_1game_1_1Player}{Player} has\+Opponent to this value \\
+\hline
+\end{DoxyParams}
+}\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classbattleship_1_1game_1_1Player_a585fc5f47cdfcb0dd4cff902d9103c9c}{}void {\bfseries set\+Has\+Opponent} (boolean has\+Opponent)\label{classbattleship_1_1game_1_1Player_a585fc5f47cdfcb0dd4cff902d9103c9c}
+
+\end{DoxyCompactItemize}
+\end{Indent}
+\begin{Indent}{\bf get\+Has\+Opponent}\par
+{\em gets value of \hyperlink{classbattleship_1_1game_1_1Player}{Player} has\+Opponent
+
+get\+Has\+Opponent
+
+\begin{DoxyReturn}{Returns}
+returns the value of \hyperlink{classbattleship_1_1game_1_1Player}{Player} has\+Opponent  if player has an opponent 
+\end{DoxyReturn}
+}\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classbattleship_1_1game_1_1Player_a7978d165f7134f08604c54b0a7fda8c7}{}boolean {\bfseries get\+Has\+Opponent} ()\label{classbattleship_1_1game_1_1Player_a7978d165f7134f08604c54b0a7fda8c7}
+
+\end{DoxyCompactItemize}
+\end{Indent}
+\begin{Indent}{\bf check\+Fire}\par
+{\em sends a message to server to validate an opponents fire coordinates
+
+check\+Fire
+
+
+\begin{DoxyParams}{Parameters}
+{\em row} & the player\+Board row coordinate \\
+\hline
+{\em col} & the player\+Board col coordinate \\
+\hline
+\end{DoxyParams}
+}\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classbattleship_1_1game_1_1Player_a0841195e67fb60d3d94ada31f968016a}{}void {\bfseries check\+Fire} (int row, int col)\label{classbattleship_1_1game_1_1Player_a0841195e67fb60d3d94ada31f968016a}
+
+\end{DoxyCompactItemize}
+\end{Indent}
+\begin{Indent}{\bf register\+Player\+Hit}\par
+{\em registers a hit on the player\+Board, sets players turn to true
+
+register\+Player\+Hit
+
+
+\begin{DoxyParams}{Parameters}
+{\em row} & the player\+Board row coordinate \\
+\hline
+{\em col} & the player\+Board col coordinate \\
+\hline
+\end{DoxyParams}
+}\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classbattleship_1_1game_1_1Player_afcde7c4062ad70fca45991910c8db9a6}{}void {\bfseries register\+Player\+Hit} (int row, int col)\label{classbattleship_1_1game_1_1Player_afcde7c4062ad70fca45991910c8db9a6}
+
+\end{DoxyCompactItemize}
+\end{Indent}
+\begin{Indent}{\bf register\+Enemy\+Hit}\par
+{\em Function register an enemy hit on a grid, sends message to opponent
+
+register\+Enemy\+Hit
+
+
+\begin{DoxyParams}{Parameters}
+{\em row} & the player\+Board row coordinate \\
+\hline
+{\em col} & the player\+Board col coordinate \\
+\hline
+\end{DoxyParams}
+}\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classbattleship_1_1game_1_1Player_a4ca139ae94e784d0308ea2f3a5817d0d}{}void {\bfseries register\+Enemy\+Hit} (int row, int col)\label{classbattleship_1_1game_1_1Player_a4ca139ae94e784d0308ea2f3a5817d0d}
+
+\end{DoxyCompactItemize}
+\end{Indent}
+\begin{Indent}{\bf sink\+Ship}\par
+{\em displays that a ship is sunk on player\+Board, sends message to opponent
+
+sink\+Ship
+
+
+\begin{DoxyParams}{Parameters}
+{\em Takes} & a ship pointer for a ship to be sunk. \\
+\hline
+\end{DoxyParams}
+}\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classbattleship_1_1game_1_1Player_a3dbb2317283b26b1ea0c9197f6a87348}{}void {\bfseries sink\+Ship} (\hyperlink{classbattleship_1_1ships_1_1Ship}{Ship} ship)\label{classbattleship_1_1game_1_1Player_a3dbb2317283b26b1ea0c9197f6a87348}
+
+\end{DoxyCompactItemize}
+\end{Indent}
+\begin{Indent}{\bf register\+Player\+Miss}\par
+{\em register a miss on enemy\+Board, sends a T\+U\+R\+N message to opponent, and sets players turn to false.
+
+register\+Player\+Miss
+
+
+\begin{DoxyParams}{Parameters}
+{\em row} & the enemy\+Board row coordinate \\
+\hline
+{\em col} & the enemy\+Board col coordinate \\
+\hline
+\end{DoxyParams}
+}\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classbattleship_1_1game_1_1Player_a12c31814329a78b03697e46a842b8ee5}{}void {\bfseries register\+Player\+Miss} (int row, int col)\label{classbattleship_1_1game_1_1Player_a12c31814329a78b03697e46a842b8ee5}
+
+\end{DoxyCompactItemize}
+\end{Indent}
+\begin{Indent}{\bf register\+Enemy\+Miss}\par
+{\em registers a miss on player\+Board and sends message to opponent
+
+register\+Enemy\+Miss
+
+
+\begin{DoxyParams}{Parameters}
+{\em row} & the player\+Board row coordinate \\
+\hline
+{\em col} & the player\+Board col coordinate \\
+\hline
+\end{DoxyParams}
+}\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classbattleship_1_1game_1_1Player_a8b45bdafbb4ef6aecb7bb395faad4b3e}{}void {\bfseries register\+Enemy\+Miss} (int row, int col)\label{classbattleship_1_1game_1_1Player_a8b45bdafbb4ef6aecb7bb395faad4b3e}
+
+\end{DoxyCompactItemize}
+\end{Indent}
+\begin{Indent}{\bf place\+Enemy\+Ship}\par
+{\em register an enemy ship on enemy grid to be drawn, and faded in.
+
+place\+Enemy\+Ship
+
+
+\begin{DoxyParams}{Parameters}
+{\em ship} & the ship to be displayed \\
+\hline
+{\em row} & the enemy\+Board row coordinate \\
+\hline
+{\em col} & the enemy\+Board col coordinate \\
+\hline
+\end{DoxyParams}
+}\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classbattleship_1_1game_1_1Player_a071b5a6908713c58205855276f0d3d19}{}void {\bfseries place\+Enemy\+Ship} (\hyperlink{classbattleship_1_1ships_1_1Ship}{Ship} ship, int row, int col)\label{classbattleship_1_1game_1_1Player_a071b5a6908713c58205855276f0d3d19}
+
+\end{DoxyCompactItemize}
+\end{Indent}
+\begin{Indent}{\bf randomize\+Ship\+Placement}\par
+{\em meta function to start randomization of ships
+
+randomize\+Ship\+Placement }\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classbattleship_1_1game_1_1Player_a8190cf218476b7f7baa5160ecb6c0a0d}{}void {\bfseries randomize\+Ship\+Placement} ()\label{classbattleship_1_1game_1_1Player_a8190cf218476b7f7baa5160ecb6c0a0d}
+
+\end{DoxyCompactItemize}
+\end{Indent}
+\begin{Indent}{\bf set\+Running}\par
+{\em sets the state of Client\+Connection listening loop
+
+set\+Running
+
+
+\begin{DoxyParams}{Parameters}
+{\em running} & sets the Client\+Connection listening loop to this value. \\
+\hline
+\end{DoxyParams}
+}\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classbattleship_1_1game_1_1Player_a5118ababee51dda676cb8268dc1529ed}{}void {\bfseries set\+Running} (boolean running)\label{classbattleship_1_1game_1_1Player_a5118ababee51dda676cb8268dc1529ed}
+
+\end{DoxyCompactItemize}
+\end{Indent}
+\begin{Indent}{\bf set\+Opponent\+Deployed}\par
+{\em set opponent deployed state true.
+
+set\+Opponent\+Deployed }\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classbattleship_1_1game_1_1Player_a99bdf9c151fbc819915510085994ec6c}{}void {\bfseries set\+Opponent\+Deployed} ()\label{classbattleship_1_1game_1_1Player_a99bdf9c151fbc819915510085994ec6c}
+
+\end{DoxyCompactItemize}
+\end{Indent}
+\begin{Indent}{\bf set\+Deployed}\par
+{\em set\+Deployed state true for \hyperlink{classbattleship_1_1game_1_1Player}{Player} and appropriate screen message for player.
+
+set\+Deployed }\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classbattleship_1_1game_1_1Player_ac7a982264933bef991b8bbc19cf6d4b6}{}void {\bfseries set\+Deployed} ()\label{classbattleship_1_1game_1_1Player_ac7a982264933bef991b8bbc19cf6d4b6}
+
+\end{DoxyCompactItemize}
+\end{Indent}
+\begin{Indent}{\bf set\+Player\+Turn}\par
+{\em set turn state and appropriate screen message.
+
+set\+Player\+Turn
+
+
+\begin{DoxyParams}{Parameters}
+{\em boolean} & value to set player turn state. \\
+\hline
+\end{DoxyParams}
+}\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classbattleship_1_1game_1_1Player_a0e5eee9de5d9d69502cb7dbe1b3996a2}{}void {\bfseries set\+Player\+Turn} (boolean player\+Turn)\label{classbattleship_1_1game_1_1Player_a0e5eee9de5d9d69502cb7dbe1b3996a2}
+
+\end{DoxyCompactItemize}
+\end{Indent}
+\begin{Indent}{\bf battle\+Won}\par
+{\em stop turns and display victory message.
+
+battle\+Won }\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classbattleship_1_1game_1_1Player_a7f5fc5d13cd31da09e55fb461ec5e7b9}{}void {\bfseries battle\+Won} ()\label{classbattleship_1_1game_1_1Player_a7f5fc5d13cd31da09e55fb461ec5e7b9}
+
+\end{DoxyCompactItemize}
+\end{Indent}
+\begin{Indent}{\bf battle\+Lost}\par
+{\em player lost sound and stop turn, display battle lost message.
+
+battle\+Lost }\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classbattleship_1_1game_1_1Player_abb6e94a9bcbeb569e3d98af7466280a7}{}void {\bfseries battle\+Lost} ()\label{classbattleship_1_1game_1_1Player_abb6e94a9bcbeb569e3d98af7466280a7}
+
+\end{DoxyCompactItemize}
+\end{Indent}
+\begin{Indent}{\bf place\+Player\+Ship}\par
+{\em places the ship specified by ship\+Placement\+Index at the start of the specified row and col
+
+place\+Player\+Ship
+
+
+\begin{DoxyParams}{Parameters}
+{\em row} & the player\+Board row coordinate \\
+\hline
+{\em col} & the player\+Board col coordinate \\
+\hline
+\end{DoxyParams}
+}\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classbattleship_1_1game_1_1Player_ac0b492b971ccc934f29c413a259ee7c6}{}void {\bfseries place\+Player\+Ship} (int row, int col)\label{classbattleship_1_1game_1_1Player_ac0b492b971ccc934f29c413a259ee7c6}
+
+\end{DoxyCompactItemize}
+\end{Indent}
+\begin{Indent}{\bf handle\+Challange}\par
+{\em handles a Challenge message, and displays appropriate message to player
+
+handle\+Challange
+
+
+\begin{DoxyParams}{Parameters}
+{\em msg} & the Challenge message to handle \\
+\hline
+\end{DoxyParams}
+}\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classbattleship_1_1game_1_1Player_a06398a4cdbd6283502865830fbe60499}{}void {\bfseries handle\+Challenge} (\hyperlink{classbattleship_1_1game_1_1Message}{Message} msg)\label{classbattleship_1_1game_1_1Player_a06398a4cdbd6283502865830fbe60499}
+
+\end{DoxyCompactItemize}
+\end{Indent}
+\begin{Indent}{\bf handle\+A\+I\+Match}\par
+{\em J\+Option\+Pane query player about playing against server instead of waiting for a player.
+
+handle\+A\+I\+Match }\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classbattleship_1_1game_1_1Player_a497f3d3a9cbd930561726fdca93eb621}{}void {\bfseries handle\+A\+I\+Match} ()\label{classbattleship_1_1game_1_1Player_a497f3d3a9cbd930561726fdca93eb621}
+
+\end{DoxyCompactItemize}
+\end{Indent}
+\begin{Indent}{\bf handle\+Non\+Valid\+Move}\par
+{\em displays a message about an invalid move by player or enemy
+
+handle\+Non\+Valid\+Move
+
+
+\begin{DoxyParams}{Parameters}
+{\em msg} & The message containing the invalid move. \\
+\hline
+\end{DoxyParams}
+}\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classbattleship_1_1game_1_1Player_a20ff4072d02c459eeb6cbf45df6a4a27}{}void {\bfseries handle\+Non\+Valid\+Move} (\hyperlink{classbattleship_1_1game_1_1Message}{Message} msg)\label{classbattleship_1_1game_1_1Player_a20ff4072d02c459eeb6cbf45df6a4a27}
+
+\end{DoxyCompactItemize}
+\end{Indent}
+\begin{Indent}{\bf update\+Lobby}\par
+{\em updates the names in lobby to display current changes
+
+update\+Lobby }\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classbattleship_1_1game_1_1Player_a27136c32636e901372e4ee7834158a06}{}void {\bfseries update\+Lobby} ()\label{classbattleship_1_1game_1_1Player_a27136c32636e901372e4ee7834158a06}
+
+\end{DoxyCompactItemize}
+\end{Indent}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\hypertarget{classbattleship_1_1game_1_1Player_a4461129b3ce0b1bf218b91d05c5c3aa0}{}\index{battleship\+::game\+::\+Player@{battleship\+::game\+::\+Player}!Player@{Player}}
+\index{Player@{Player}!battleship\+::game\+::\+Player@{battleship\+::game\+::\+Player}}
+\subsubsection[{Player}]{\setlength{\rightskip}{0pt plus 5cm}battleship.\+game.\+Player.\+Player (
+\begin{DoxyParamCaption}
+\item[{String}]{name, }
+\item[{{\bf Avatar}}]{avatar, }
+\item[{{\bf Client\+Connection}}]{con, }
+\item[{{\bf Game\+Mode}}]{mode}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{classbattleship_1_1game_1_1Player_a4461129b3ce0b1bf218b91d05c5c3aa0}
+
+
+\hyperlink{classbattleship_1_1game_1_1Player}{Player} constructor. 
+
+\hyperlink{classbattleship_1_1game_1_1Player}{Player}
+
+
+\begin{DoxyParams}{Parameters}
+{\em String} & player name, \\
+\hline
+{\em Avatar} & object player picture \\
+\hline
+{\em Client\+Connection} & for talk to server. \\
+\hline
+{\em mode} & instance of type \hyperlink{enumbattleship_1_1game_1_1GameMode}{Game\+Mode}, represents player choice of game mode \\
+\hline
+\end{DoxyParams}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+src/battleship/game/\hyperlink{Player_8java}{Player.\+java}\end{DoxyCompactItemize}

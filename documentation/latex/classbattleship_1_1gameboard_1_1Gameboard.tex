@@ -1,0 +1,239 @@
+\hypertarget{classbattleship_1_1gameboard_1_1Gameboard}{}\section{battleship.\+gameboard.\+Gameboard Class Reference}
+\label{classbattleship_1_1gameboard_1_1Gameboard}\index{battleship.\+gameboard.\+Gameboard@{battleship.\+gameboard.\+Gameboard}}
+
+
+Class describes a battleship gameboard.  
+
+
+Inheritance diagram for battleship.\+gameboard.\+Gameboard\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{classbattleship_1_1gameboard_1_1Gameboard}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{Indent}{\bf Game\+Board}\par
+{\em instantiates and initiates the \hyperlink{classbattleship_1_1gameboard_1_1Gameboard}{Gameboard} grids
+
+\hyperlink{classbattleship_1_1gameboard_1_1Gameboard}{Gameboard}
+
+\hyperlink{classbattleship_1_1gameboard_1_1Gameboard}{Gameboard} }\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classbattleship_1_1gameboard_1_1Gameboard_a22e19f74df47266a779b786f7009c2a8}{}{\bfseries Gameboard} ()\label{classbattleship_1_1gameboard_1_1Gameboard_a22e19f74df47266a779b786f7009c2a8}
+
+\end{DoxyCompactItemize}
+\end{Indent}
+\begin{Indent}{\bf add\+Hit}\par
+{\em Add a hit on a player grid.
+
+add\+Hit
+
+
+\begin{DoxyParams}{Parameters}
+{\em row} & the gridboard row coordinate \\
+\hline
+{\em row} & the gridboard col coordinate \\
+\hline
+\end{DoxyParams}
+}\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classbattleship_1_1gameboard_1_1Gameboard_ad30e4d7fe41eea60bf568cfcbb55cfc7}{}void {\bfseries add\+Hit} (int row, int col)\label{classbattleship_1_1gameboard_1_1Gameboard_ad30e4d7fe41eea60bf568cfcbb55cfc7}
+
+\end{DoxyCompactItemize}
+\end{Indent}
+\begin{Indent}{\bf add\+Miss}\par
+{\em Add a miss on a player grid.
+
+add\+Miss
+
+
+\begin{DoxyParams}{Parameters}
+{\em row} & the gridboard row coordinate \\
+\hline
+{\em row} & the gridboard col coordinate \\
+\hline
+\end{DoxyParams}
+}\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classbattleship_1_1gameboard_1_1Gameboard_a6c218305cee523e002ff7a84372e7e7e}{}void {\bfseries add\+Miss} (int row, int col)\label{classbattleship_1_1gameboard_1_1Gameboard_a6c218305cee523e002ff7a84372e7e7e}
+
+\end{DoxyCompactItemize}
+\end{Indent}
+\begin{Indent}{\bf fade\+Grid\+Out}\par
+{\em fade out effect on grid.
+
+fade\+Grid\+Out
+
+
+\begin{DoxyParams}{Parameters}
+{\em row} & the gridboard row coordinate \\
+\hline
+{\em row} & the gridboard col coordinate \\
+\hline
+\end{DoxyParams}
+}\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classbattleship_1_1gameboard_1_1Gameboard_adf4f231cd7dc88512b15bcb53b229d9e}{}void {\bfseries fade\+Grid\+Out} (int row, int col)\label{classbattleship_1_1gameboard_1_1Gameboard_adf4f231cd7dc88512b15bcb53b229d9e}
+
+\end{DoxyCompactItemize}
+\end{Indent}
+\begin{Indent}{\bf fade\+Grid\+In}\par
+{\em fade in effect on grid.
+
+fade\+Grid\+In
+
+
+\begin{DoxyParams}{Parameters}
+{\em row} & the gridboard row coordinate \\
+\hline
+{\em row} & the gridboard col coordinate \\
+\hline
+\end{DoxyParams}
+}\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classbattleship_1_1gameboard_1_1Gameboard_a1fb2945fc8a0916b5db8294166e90524}{}void {\bfseries fade\+Grid\+In} (int row, int col)\label{classbattleship_1_1gameboard_1_1Gameboard_a1fb2945fc8a0916b5db8294166e90524}
+
+\end{DoxyCompactItemize}
+\end{Indent}
+\begin{Indent}{\bf check\+Ship\+Placement}\par
+{\em Check if ship placement is possible, given position and alignment in ship object.
+
+check\+Ship\+Placement
+
+
+\begin{DoxyParams}{Parameters}
+{\em ship} & the ship used for alignment check and length \\
+\hline
+{\em row} & the gridboard row coordinate \\
+\hline
+{\em row} & the gridboard col coordinate \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+boolean value if ship placement is possible otherwise false will be returned. 
+\end{DoxyReturn}
+}\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classbattleship_1_1gameboard_1_1Gameboard_a8f1e4a7b78564439aa0ff9c5bb182451}{}boolean {\bfseries check\+Ship\+Placement} (\hyperlink{classbattleship_1_1ships_1_1Ship}{Ship} ship, int row, int col)\label{classbattleship_1_1gameboard_1_1Gameboard_a8f1e4a7b78564439aa0ff9c5bb182451}
+
+\end{DoxyCompactItemize}
+\end{Indent}
+\begin{Indent}{\bf place\+Ship}\par
+{\em Place ship on the playing grid, and fill points on grid belonging to ship length and alignment.
+
+place\+Ship
+
+
+\begin{DoxyParams}{Parameters}
+{\em ship} & the ship used for alignment check and length \\
+\hline
+{\em row} & the gridboard row coordinate \\
+\hline
+{\em row} & the gridboard col coordinate \\
+\hline
+\end{DoxyParams}
+}\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classbattleship_1_1gameboard_1_1Gameboard_ab76d2b4c2974a48e88e9c24039991183}{}void {\bfseries place\+Ship} (\hyperlink{classbattleship_1_1ships_1_1Ship}{Ship} ship, int row, int col)\label{classbattleship_1_1gameboard_1_1Gameboard_ab76d2b4c2974a48e88e9c24039991183}
+
+\end{DoxyCompactItemize}
+\end{Indent}
+\begin{Indent}{\bf check\+Hit}\par
+{\em Help function to look for a hit on given position.
+
+check\+Hit
+
+
+\begin{DoxyParams}{Parameters}
+{\em row} & the gridboard row coordinate \\
+\hline
+{\em row} & the gridboard col coordinate \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+If target has been false is returned, false for miss or empty. 
+\end{DoxyReturn}
+}\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classbattleship_1_1gameboard_1_1Gameboard_ac894c0826a4929fd237e722831d2aaac}{}boolean {\bfseries check\+Hit} (int row, int col)\label{classbattleship_1_1gameboard_1_1Gameboard_ac894c0826a4929fd237e722831d2aaac}
+
+\end{DoxyCompactItemize}
+\end{Indent}
+\begin{Indent}{\bf display\+Defeat}\par
+{\em Set defeat state and repaint.
+
+display\+Defeat }\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classbattleship_1_1gameboard_1_1Gameboard_a204463ca6f43a5cf7cc016841288b72c}{}void {\bfseries display\+Defeat} ()\label{classbattleship_1_1gameboard_1_1Gameboard_a204463ca6f43a5cf7cc016841288b72c}
+
+\end{DoxyCompactItemize}
+\end{Indent}
+\begin{Indent}{\bf display\+Victory}\par
+{\em Set victory state and repaint.
+
+display\+Victory }\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classbattleship_1_1gameboard_1_1Gameboard_a2dd6dd249dd78d850fd0fb1ef43fd815}{}void {\bfseries display\+Victory} ()\label{classbattleship_1_1gameboard_1_1Gameboard_a2dd6dd249dd78d850fd0fb1ef43fd815}
+
+\end{DoxyCompactItemize}
+\end{Indent}
+\begin{Indent}{\bf randomize\+Ship\+Placement}\par
+{\em Takes a vector of ships to randomized onto grid.
+
+randmize\+Ship\+Placement
+
+
+\begin{DoxyParams}{Parameters}
+{\em ships} & Vector of Ship to be placed \\
+\hline
+\end{DoxyParams}
+}\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classbattleship_1_1gameboard_1_1Gameboard_a20f510263c4c5f88fdcb46138c51da01}{}void {\bfseries randomize\+Ship\+Placement} (Vector$<$ \hyperlink{classbattleship_1_1ships_1_1Ship}{Ship} $>$ ships)\label{classbattleship_1_1gameboard_1_1Gameboard_a20f510263c4c5f88fdcb46138c51da01}
+
+\end{DoxyCompactItemize}
+\end{Indent}
+\begin{Indent}{\bf check\+Fire}\par
+{\em checks whether specified grid is not hit or missed
+
+check\+Fire
+
+
+\begin{DoxyParams}{Parameters}
+{\em integer} & row and integer column where fire will be checked. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+boolean true if is hit or is, empty false 
+\end{DoxyReturn}
+}\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classbattleship_1_1gameboard_1_1Gameboard_a19e6465d39ed319f420eb9c6af3d92e3}{}boolean {\bfseries check\+Fire} (int row, int col)\label{classbattleship_1_1gameboard_1_1Gameboard_a19e6465d39ed319f420eb9c6af3d92e3}
+
+\end{DoxyCompactItemize}
+\end{Indent}
+\subsection*{Protected Member Functions}
+\begin{Indent}{\bf paint\+Component}\par
+{\em paint\+Component
+
+
+\begin{DoxyParams}{Parameters}
+{\em Graphics} & g to draw \\
+\hline
+\end{DoxyParams}
+}\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classbattleship_1_1gameboard_1_1Gameboard_adf366958db57dcee1cafe3b894521e82}{}void {\bfseries paint\+Component} (Graphics g)\label{classbattleship_1_1gameboard_1_1Gameboard_adf366958db57dcee1cafe3b894521e82}
+
+\end{DoxyCompactItemize}
+\end{Indent}
+
+
+\subsection{Detailed Description}
+Class describes a battleship gameboard. 
+
+\hyperlink{classbattleship_1_1gameboard_1_1Gameboard}{Gameboard} 
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+src/battleship/gameboard/\hyperlink{Gameboard_8java}{Gameboard.\+java}\end{DoxyCompactItemize}

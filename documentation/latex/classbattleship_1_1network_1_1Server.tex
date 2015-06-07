@@ -1,0 +1,202 @@
+\hypertarget{classbattleship_1_1network_1_1Server}{}\section{battleship.\+network.\+Server Class Reference}
+\label{classbattleship_1_1network_1_1Server}\index{battleship.\+network.\+Server@{battleship.\+network.\+Server}}
+
+
+Battleship server to handle message and relay game play events.  
+
+
+Inheritance diagram for battleship.\+network.\+Server\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{classbattleship_1_1network_1_1Server}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classbattleship_1_1network_1_1Server_af912a2e659b7b3d611e3764736d32f98}{Server} (int port\+Number)
+\begin{DoxyCompactList}\small\item\em \hyperlink{classbattleship_1_1network_1_1Server}{Server} one-\/argument constructor, sets up G\+U\+I for server and instantiates the list of players. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\begin{Indent}{\bf listen}\par
+{\em Listen for clients that connect to server, adds proxie\textquotesingle{}s to players a Array\+List
+
+listen }\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classbattleship_1_1network_1_1Server_ae6f829869679e8b59fd1d3e1552242a1}{}void {\bfseries listen} ()\label{classbattleship_1_1network_1_1Server_ae6f829869679e8b59fd1d3e1552242a1}
+
+\end{DoxyCompactItemize}
+\end{Indent}
+\begin{Indent}{\bf remove\+Player\+Proxy}\par
+{\em Function to remove a client proxy
+
+remove\+Player\+Proxy
+
+
+\begin{DoxyParams}{Parameters}
+{\em pp} & the instance of \hyperlink{classbattleship_1_1network_1_1PlayerProxy}{Player\+Proxy} to remove \\
+\hline
+\end{DoxyParams}
+}\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classbattleship_1_1network_1_1Server_a90a61668595ca6e8d6978954cd1e65f9}{}void {\bfseries remove\+Player\+Proxy} (int id)\label{classbattleship_1_1network_1_1Server_a90a61668595ca6e8d6978954cd1e65f9}
+
+\item 
+\hypertarget{classbattleship_1_1network_1_1Server_a65d8cc715530166518673b3910b845fa}{}void {\bfseries remove\+Player\+Proxy} (\hyperlink{classbattleship_1_1network_1_1PlayerProxy}{battleship.\+network.\+Player\+Proxy} pp)\label{classbattleship_1_1network_1_1Server_a65d8cc715530166518673b3910b845fa}
+
+\item 
+synchronized void \hyperlink{classbattleship_1_1network_1_1Server_a859ba33289507bcd49cce3455f2148c4}{send\+Message} (\hyperlink{classbattleship_1_1game_1_1Message}{Message} msg)
+\begin{DoxyCompactList}\small\item\em Send message to receiver. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\end{Indent}
+\begin{Indent}{\bf sends\+Message\+Toall\+Players}\par
+{\em sends a message to all connected players.
+
+send\+Message\+To\+All\+Players
+
+
+\begin{DoxyParams}{Parameters}
+{\em msg} & Message to send \\
+\hline
+\end{DoxyParams}
+}\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classbattleship_1_1network_1_1Server_ac4c47e47e69a1d1cb99f14a801088b4f}{}synchronized void {\bfseries send\+Message\+To\+All\+Players} (\hyperlink{classbattleship_1_1game_1_1Message}{Message} msg)\label{classbattleship_1_1network_1_1Server_ac4c47e47e69a1d1cb99f14a801088b4f}
+
+\end{DoxyCompactItemize}
+\end{Indent}
+\begin{Indent}{\bf check\+Deployment}\par
+{\em checks whether both sender and receiver is deployed
+
+check\+Deployment
+
+
+\begin{DoxyParams}{Parameters}
+{\em msg} & Message sent to receiver and sender. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+returns true if both are deployed, false otherwise 
+\end{DoxyReturn}
+}\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classbattleship_1_1network_1_1Server_a3db26371134888d25e90b0df9fe1046a}{}boolean {\bfseries check\+Deployment} (\hyperlink{classbattleship_1_1game_1_1Message}{Message} msg)\label{classbattleship_1_1network_1_1Server_a3db26371134888d25e90b0df9fe1046a}
+
+\end{DoxyCompactItemize}
+\end{Indent}
+\begin{Indent}{\bf randomize\+Player\+Turn}\par
+{\em Randomizes player turn if both players are deployed, and sends messages to both players
+
+randomize\+Player\+Turn
+
+
+\begin{DoxyParams}{Parameters}
+{\em msg} & the Message of type D\+E\+P\+L\+O\+Y\+E\+D to be sent to if all players are deployed \\
+\hline
+\end{DoxyParams}
+}\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classbattleship_1_1network_1_1Server_a528801be260464667d6f8f0f87e5661c}{}void {\bfseries randomize\+Player\+Turn} (\hyperlink{classbattleship_1_1game_1_1Message}{Message} msg)\label{classbattleship_1_1network_1_1Server_a528801be260464667d6f8f0f87e5661c}
+
+\end{DoxyCompactItemize}
+\end{Indent}
+\begin{Indent}{\bf send\+All\+Deployed}\par
+{\em Send out deployment message.
+
+send\+All\+Deployed
+
+
+\begin{DoxyParams}{Parameters}
+{\em msg} & the Message of type D\+E\+P\+L\+O\+Y\+E\+D to be sent to both players \\
+\hline
+\end{DoxyParams}
+}\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classbattleship_1_1network_1_1Server_ac96240a3bfd691ea65f958ceb7605bbf}{}synchronized void {\bfseries send\+All\+Deployed} (\hyperlink{classbattleship_1_1game_1_1Message}{Message} msg)\label{classbattleship_1_1network_1_1Server_ac96240a3bfd691ea65f958ceb7605bbf}
+
+\end{DoxyCompactItemize}
+\end{Indent}
+\begin{Indent}{\bf send\+All\+Players}\par
+{\em sends a Message of type L\+O\+G\+I\+N to all players so that they can update their lobby
+
+send\+All\+Players }\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classbattleship_1_1network_1_1Server_a130cdfb2bb6f46c44d3235a7d5a8d8be}{}synchronized void {\bfseries send\+All\+Players} ()\label{classbattleship_1_1network_1_1Server_a130cdfb2bb6f46c44d3235a7d5a8d8be}
+
+\end{DoxyCompactItemize}
+\end{Indent}
+\begin{Indent}{\bf get\+Player\+Count}\par
+{\em get\+Player\+Count
+
+\begin{DoxyReturn}{Returns}
+integer return number of connected players. 
+\end{DoxyReturn}
+}\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classbattleship_1_1network_1_1Server_ae9c3b4c8de669eed7573a6e4d9017926}{}int {\bfseries get\+Player\+Count} ()\label{classbattleship_1_1network_1_1Server_ae9c3b4c8de669eed7573a6e4d9017926}
+
+\end{DoxyCompactItemize}
+\end{Indent}
+\begin{Indent}{\bf get\+Number\+Of\+Players}\par
+{\em get\+Number\+Of\+Players
+
+\begin{DoxyReturn}{Returns}
+integer return number of connected players. 
+\end{DoxyReturn}
+}\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classbattleship_1_1network_1_1Server_ac14d2736f91b2cf268571079cca3f6b2}{}int {\bfseries get\+Number\+Of\+Current\+Players} ()\label{classbattleship_1_1network_1_1Server_ac14d2736f91b2cf268571079cca3f6b2}
+
+\end{DoxyCompactItemize}
+\end{Indent}
+
+
+\subsection{Detailed Description}
+Battleship server to handle message and relay game play events. 
+
+\hyperlink{classbattleship_1_1network_1_1Server}{Server}
+
+handles incoming connections, starts a new thread for each connection and handles communication between them 
+
+\subsection{Constructor \& Destructor Documentation}
+\hypertarget{classbattleship_1_1network_1_1Server_af912a2e659b7b3d611e3764736d32f98}{}\index{battleship\+::network\+::\+Server@{battleship\+::network\+::\+Server}!Server@{Server}}
+\index{Server@{Server}!battleship\+::network\+::\+Server@{battleship\+::network\+::\+Server}}
+\subsubsection[{Server}]{\setlength{\rightskip}{0pt plus 5cm}battleship.\+network.\+Server.\+Server (
+\begin{DoxyParamCaption}
+\item[{int}]{port\+Number}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{classbattleship_1_1network_1_1Server_af912a2e659b7b3d611e3764736d32f98}
+
+
+\hyperlink{classbattleship_1_1network_1_1Server}{Server} one-\/argument constructor, sets up G\+U\+I for server and instantiates the list of players. 
+
+\hyperlink{classbattleship_1_1network_1_1Server}{Server}
+
+\hyperlink{classbattleship_1_1network_1_1Server}{Server} 
+\begin{DoxyParams}{Parameters}
+{\em port\+Number} & the port number used by players to establish connection \\
+\hline
+\end{DoxyParams}
+
+
+\subsection{Member Function Documentation}
+\hypertarget{classbattleship_1_1network_1_1Server_a859ba33289507bcd49cce3455f2148c4}{}\index{battleship\+::network\+::\+Server@{battleship\+::network\+::\+Server}!send\+Message@{send\+Message}}
+\index{send\+Message@{send\+Message}!battleship\+::network\+::\+Server@{battleship\+::network\+::\+Server}}
+\subsubsection[{send\+Message}]{\setlength{\rightskip}{0pt plus 5cm}synchronized void battleship.\+network.\+Server.\+send\+Message (
+\begin{DoxyParamCaption}
+\item[{{\bf Message}}]{msg}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{classbattleship_1_1network_1_1Server_a859ba33289507bcd49cce3455f2148c4}
+
+
+Send message to receiver. 
+
+send\+Message
+
+
+\begin{DoxyParams}{Parameters}
+{\em msg} & Message to be sent. \\
+\hline
+\end{DoxyParams}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+src/battleship/network/\hyperlink{Server_8java}{Server.\+java}\end{DoxyCompactItemize}
