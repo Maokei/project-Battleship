@@ -315,8 +315,10 @@ public class Player {
 				if (!ship.isAlive()) {
 					sinkShip(ship);
 					screen.setShips(--remainingShips);
-					if (remainingShips == 0)
+					if (remainingShips == 0) {
 						battleLost();
+						return;
+					}
 				}
 
 				if (mode == GameMode.SinglePlayer) {

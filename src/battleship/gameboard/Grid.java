@@ -58,6 +58,13 @@ public class Grid extends JLabel {
 		flag = occupied;
 	}
 	
+	/**
+	 * getOccupied
+	 * 
+	 * @name getOccupied
+	 * @brief checks whether grid is occupied
+	 * @return true if occupied false otherwise
+	 * */
 	public boolean getOccupied() {
 		return flag == occupied;
 	}
