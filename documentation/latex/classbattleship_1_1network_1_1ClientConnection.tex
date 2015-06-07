@@ -1,0 +1,153 @@
+\hypertarget{classbattleship_1_1network_1_1ClientConnection}{}\section{battleship.\+network.\+Client\+Connection Class Reference}
+\label{classbattleship_1_1network_1_1ClientConnection}\index{battleship.\+network.\+Client\+Connection@{battleship.\+network.\+Client\+Connection}}
+
+
+Class describes the connection. Client uses this connection class to talk to server and handle messages.  
+
+
+Inheritance diagram for battleship.\+network.\+Client\+Connection\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{classbattleship_1_1network_1_1ClientConnection}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classbattleship_1_1network_1_1ClientConnection_a1d68fb426f1ba3e2aa565fdbf384830d}{Client\+Connection} (String address, int port\+Number)
+\begin{DoxyCompactList}\small\item\em Two-\/arguments constructor that receives ip-\/address and port number. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\begin{Indent}{\bf open\+Connection}\par
+{\em Try to open a connection given that ip and port are set already.
+
+open\+Connection }\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classbattleship_1_1network_1_1ClientConnection_a95151b03aa520068d1ee0b0af7d0ea8c}{}boolean {\bfseries open\+Connection} ()\label{classbattleship_1_1network_1_1ClientConnection_a95151b03aa520068d1ee0b0af7d0ea8c}
+
+\end{DoxyCompactItemize}
+\end{Indent}
+\begin{Indent}{\bf set\+Player}\par
+{\em set\+Player
+
+
+\begin{DoxyParams}{Parameters}
+{\em valid\+Move} & \\
+\hline
+{\em Takes} & and sets a Player pointer. \\
+\hline
+\end{DoxyParams}
+}\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classbattleship_1_1network_1_1ClientConnection_ac83c584d509e8ba2622b1532dc1c9ee0}{}void {\bfseries set\+Player} (\hyperlink{classbattleship_1_1game_1_1Player}{Player} player)\label{classbattleship_1_1network_1_1ClientConnection_ac83c584d509e8ba2622b1532dc1c9ee0}
+
+\end{DoxyCompactItemize}
+\end{Indent}
+\begin{Indent}{\bf set\+Output}\par
+{\em receives a J\+Text\+Area to update chat output
+
+set\+Output
+
+
+\begin{DoxyParams}{Parameters}
+{\em output} & instance of J\+Text\+Field used to display chat messages \\
+\hline
+\end{DoxyParams}
+}\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classbattleship_1_1network_1_1ClientConnection_adb237d94753577d3ad7a3bf54690e703}{}void {\bfseries set\+Output} (J\+Text\+Area output)\label{classbattleship_1_1network_1_1ClientConnection_adb237d94753577d3ad7a3bf54690e703}
+
+\end{DoxyCompactItemize}
+\end{Indent}
+\begin{Indent}{\bf run}\par
+{\em Start the thread and listen for messages.
+
+run }\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classbattleship_1_1network_1_1ClientConnection_a756f268bedbe40b96ade6d26537819e7}{}void {\bfseries run} ()\label{classbattleship_1_1network_1_1ClientConnection_a756f268bedbe40b96ade6d26537819e7}
+
+\end{DoxyCompactItemize}
+\end{Indent}
+\begin{Indent}{\bf close\+Connection}\par
+{\em Attempt to safely close the connection.
+
+close\+Connection }\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classbattleship_1_1network_1_1ClientConnection_ab3c6a6152d8cc9e9f48958ef60be8dd1}{}void {\bfseries close\+Connection} ()\label{classbattleship_1_1network_1_1ClientConnection_ab3c6a6152d8cc9e9f48958ef60be8dd1}
+
+\end{DoxyCompactItemize}
+\end{Indent}
+\begin{Indent}{\bf get\+Connected\+Players}\par
+{\em Function meant to be used by lobby to populate players J\+List.
+
+get\+Connected\+Players
+
+\begin{DoxyReturn}{Returns}
+A Map of player names. 
+\end{DoxyReturn}
+}\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classbattleship_1_1network_1_1ClientConnection_aaaa08f160bc7c75616848475ce0cc243}{}Map$<$ String, String $>$ {\bfseries get\+Connected\+Players} ()\label{classbattleship_1_1network_1_1ClientConnection_aaaa08f160bc7c75616848475ce0cc243}
+
+\end{DoxyCompactItemize}
+\end{Indent}
+\begin{Indent}{\bf send\+Message}\par
+{\em send\+Message
+
+
+\begin{DoxyParams}{Parameters}
+{\em msg} & the Message object to be written out sent sent through stream. \\
+\hline
+\end{DoxyParams}
+}\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classbattleship_1_1network_1_1ClientConnection_ab980895b542043946e1edb67c1d62e41}{}void {\bfseries send\+Message} (\hyperlink{classbattleship_1_1game_1_1Message}{Message} message)\label{classbattleship_1_1network_1_1ClientConnection_ab980895b542043946e1edb67c1d62e41}
+
+\end{DoxyCompactItemize}
+\end{Indent}
+\begin{Indent}{\bf set\+Running}\par
+{\em Sets running state.
+
+set\+Running
+
+
+\begin{DoxyParams}{Parameters}
+{\em boolean} & running state to be set. \\
+\hline
+\end{DoxyParams}
+}\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classbattleship_1_1network_1_1ClientConnection_a120340f67be30e607e16bb03a81b2f84}{}void {\bfseries set\+Running} (boolean running)\label{classbattleship_1_1network_1_1ClientConnection_a120340f67be30e607e16bb03a81b2f84}
+
+\end{DoxyCompactItemize}
+\end{Indent}
+
+
+\subsection{Detailed Description}
+Class describes the connection. Client uses this connection class to talk to server and handle messages. 
+
+handles messages sent to this Player , Network\+Operation 
+
+\subsection{Constructor \& Destructor Documentation}
+\hypertarget{classbattleship_1_1network_1_1ClientConnection_a1d68fb426f1ba3e2aa565fdbf384830d}{}\index{battleship\+::network\+::\+Client\+Connection@{battleship\+::network\+::\+Client\+Connection}!Client\+Connection@{Client\+Connection}}
+\index{Client\+Connection@{Client\+Connection}!battleship\+::network\+::\+Client\+Connection@{battleship\+::network\+::\+Client\+Connection}}
+\subsubsection[{Client\+Connection}]{\setlength{\rightskip}{0pt plus 5cm}battleship.\+network.\+Client\+Connection.\+Client\+Connection (
+\begin{DoxyParamCaption}
+\item[{String}]{address, }
+\item[{int}]{port\+Number}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{classbattleship_1_1network_1_1ClientConnection_a1d68fb426f1ba3e2aa565fdbf384830d}
+
+
+Two-\/arguments constructor that receives ip-\/address and port number. 
+
+\hyperlink{classbattleship_1_1network_1_1ClientConnection}{Client\+Connection}  \hyperlink{classbattleship_1_1network_1_1ClientConnection}{Client\+Connection} 
+\begin{DoxyParams}{Parameters}
+{\em address} & the ip-\/address of the Player \\
+\hline
+{\em port\+Number} & the port to be used to connect to the server \\
+\hline
+\end{DoxyParams}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+src/battleship/network/\hyperlink{ClientConnection_8java}{Client\+Connection.\+java}\end{DoxyCompactItemize}

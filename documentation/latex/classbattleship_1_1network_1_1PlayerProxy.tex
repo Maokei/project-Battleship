@@ -1,0 +1,208 @@
+\hypertarget{classbattleship_1_1network_1_1PlayerProxy}{}\section{battleship.\+network.\+Player\+Proxy Class Reference}
+\label{classbattleship_1_1network_1_1PlayerProxy}\index{battleship.\+network.\+Player\+Proxy@{battleship.\+network.\+Player\+Proxy}}
+
+
+Client proxy class of the player.  
+
+
+Inheritance diagram for battleship.\+network.\+Player\+Proxy\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{classbattleship_1_1network_1_1PlayerProxy}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{Indent}{\bf Player\+Proxy}\par
+{\em receives instances of Socket, \hyperlink{classbattleship_1_1network_1_1Server}{Server} and an int id to handle communication with Player
+
+\hyperlink{classbattleship_1_1network_1_1PlayerProxy}{Player\+Proxy}
+
+\hyperlink{classbattleship_1_1network_1_1PlayerProxy}{Player\+Proxy}
+
+
+\begin{DoxyParams}{Parameters}
+{\em socket} & The socket that received the Player connection \\
+\hline
+{\em server} & the \hyperlink{classbattleship_1_1network_1_1Server}{Server} instance used to handle communication with all players \\
+\hline
+{\em id} & the unique player number \\
+\hline
+\end{DoxyParams}
+}\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classbattleship_1_1network_1_1PlayerProxy_a153d46a1568bccc516bf5f26c1eed4b8}{}{\bfseries Player\+Proxy} (Socket socket, \hyperlink{classbattleship_1_1network_1_1Server}{Server} server, int id)\label{classbattleship_1_1network_1_1PlayerProxy_a153d46a1568bccc516bf5f26c1eed4b8}
+
+\end{DoxyCompactItemize}
+\end{Indent}
+\begin{Indent}{\bf get\+Player\+Name}\par
+{\em Return player names.
+
+get\+Player\+Name
+
+\begin{DoxyReturn}{Returns}
+returns player name as string 
+\end{DoxyReturn}
+}\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classbattleship_1_1network_1_1PlayerProxy_a8d369eec164e5f488edef965b68415ab}{}String {\bfseries get\+Player\+Name} ()\label{classbattleship_1_1network_1_1PlayerProxy_a8d369eec164e5f488edef965b68415ab}
+
+\end{DoxyCompactItemize}
+\end{Indent}
+\begin{Indent}{\bf get\+Deployed}\par
+{\em returns boolean flag that is true if the player has deployed his ships, false otherwise
+
+get\+Deployed
+
+\begin{DoxyReturn}{Returns}
+deployed falg is true if player ships is deployed 
+\end{DoxyReturn}
+}\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classbattleship_1_1network_1_1PlayerProxy_aee98d9ae3714b8a0018e2c5b5531a82d}{}boolean {\bfseries get\+Deployed} ()\label{classbattleship_1_1network_1_1PlayerProxy_aee98d9ae3714b8a0018e2c5b5531a82d}
+
+\end{DoxyCompactItemize}
+\end{Indent}
+\begin{Indent}{\bf get\+Mode}\par
+{\em returns an instance of class Game\+Mode, representing single. or multiplayer
+
+get\+Mode
+
+\begin{DoxyReturn}{Returns}
+mode instance of Game\+Mode 
+\end{DoxyReturn}
+}\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classbattleship_1_1network_1_1PlayerProxy_a48401ef5c1eb9328fa7234a534a73ced}{}\hyperlink{enumbattleship_1_1game_1_1GameMode}{Game\+Mode} {\bfseries get\+Mode} ()\label{classbattleship_1_1network_1_1PlayerProxy_a48401ef5c1eb9328fa7234a534a73ced}
+
+\end{DoxyCompactItemize}
+\end{Indent}
+\begin{Indent}{\bf get\+Playing}\par
+{\em returns if player currently is engaged in single-\/or multiplayer game
+
+get\+Playing
+
+\begin{DoxyReturn}{Returns}
+boolean playing 
+\end{DoxyReturn}
+}\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classbattleship_1_1network_1_1PlayerProxy_ac7ebc73d91fd7646d6a1431ca2b08565}{}boolean {\bfseries is\+Playing} ()\label{classbattleship_1_1network_1_1PlayerProxy_ac7ebc73d91fd7646d6a1431ca2b08565}
+
+\end{DoxyCompactItemize}
+\end{Indent}
+\begin{Indent}{\bf set\+Playing}\par
+{\em sets the flag representing if player is playing or not
+
+set\+Playing
+
+
+\begin{DoxyParams}{Parameters}
+{\em playing} & sets the playing flag to true or false \\
+\hline
+\end{DoxyParams}
+}\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classbattleship_1_1network_1_1PlayerProxy_aa30d62bf84ca508f0cb9a1db6e4bd9f2}{}void {\bfseries set\+Playing} (boolean playing)\label{classbattleship_1_1network_1_1PlayerProxy_aa30d62bf84ca508f0cb9a1db6e4bd9f2}
+
+\end{DoxyCompactItemize}
+\end{Indent}
+\begin{Indent}{\bf set\+Has\+Opponent}\par
+{\em sets the flag representing if player has an opponent or not
+
+set\+Has\+Opponent
+
+
+\begin{DoxyParams}{Parameters}
+{\em has\+Opponent} & sets the has\+Opponent flag to true or false \\
+\hline
+\end{DoxyParams}
+}\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classbattleship_1_1network_1_1PlayerProxy_a274f820c15c434ae54f723b6bd8c0c52}{}void {\bfseries set\+Has\+Opponent} (boolean has\+Opponent)\label{classbattleship_1_1network_1_1PlayerProxy_a274f820c15c434ae54f723b6bd8c0c52}
+
+\end{DoxyCompactItemize}
+\end{Indent}
+\begin{Indent}{\bf get\+Has\+Opponent}\par
+{\em returns flag representing if player has an opponent
+
+get\+Has\+Opponent
+
+\begin{DoxyReturn}{Returns}
+has\+Opponent is true if player has an opponent, false otherwise 
+\end{DoxyReturn}
+}\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classbattleship_1_1network_1_1PlayerProxy_ad31c2bffc7850189530630ca25782440}{}boolean {\bfseries get\+Has\+Opponent} ()\label{classbattleship_1_1network_1_1PlayerProxy_ad31c2bffc7850189530630ca25782440}
+
+\end{DoxyCompactItemize}
+\end{Indent}
+\begin{Indent}{\bf run}\par
+{\em proxy run loop to handle messages from player
+
+run }\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classbattleship_1_1network_1_1PlayerProxy_a17c63f500958865bdf23b030e6739ab6}{}void {\bfseries run} ()\label{classbattleship_1_1network_1_1PlayerProxy_a17c63f500958865bdf23b030e6739ab6}
+
+\end{DoxyCompactItemize}
+\end{Indent}
+\begin{Indent}{\bf send\+Message}\par
+{\em Function to send messages to player
+
+send\+Message
+
+
+\begin{DoxyParams}{Parameters}
+{\em msg} & the Message to be sent to player \\
+\hline
+\end{DoxyParams}
+}\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classbattleship_1_1network_1_1PlayerProxy_a5a8de06e6bd545b779f9a6e4a3cdc834}{}void {\bfseries send\+Message} (\hyperlink{classbattleship_1_1game_1_1Message}{Message} msg)\label{classbattleship_1_1network_1_1PlayerProxy_a5a8de06e6bd545b779f9a6e4a3cdc834}
+
+\end{DoxyCompactItemize}
+\end{Indent}
+\subsection*{Protected Member Functions}
+\begin{Indent}{\bf close\+Connection}\par
+{\em Responsible to closing the connection between server and player
+
+close\+Connection }\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classbattleship_1_1network_1_1PlayerProxy_a0420927cda66f753c86974d71bc42dd6}{}void {\bfseries close\+Connection} ()\label{classbattleship_1_1network_1_1PlayerProxy_a0420927cda66f753c86974d71bc42dd6}
+
+\end{DoxyCompactItemize}
+\end{Indent}
+\subsection*{Protected Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classbattleship_1_1network_1_1PlayerProxy_af56071dec76443202ccba97fe464878e}{}String {\bfseries name}\label{classbattleship_1_1network_1_1PlayerProxy_af56071dec76443202ccba97fe464878e}
+
+\item 
+\hypertarget{classbattleship_1_1network_1_1PlayerProxy_a6c790c6b7ca9c9217a86b922c3561d42}{}int {\bfseries player\+Id}\label{classbattleship_1_1network_1_1PlayerProxy_a6c790c6b7ca9c9217a86b922c3561d42}
+
+\item 
+\hypertarget{classbattleship_1_1network_1_1PlayerProxy_a04a55a2889398447c80fef059e1d8a1b}{}\hyperlink{enumbattleship_1_1game_1_1GameMode}{Game\+Mode} {\bfseries mode}\label{classbattleship_1_1network_1_1PlayerProxy_a04a55a2889398447c80fef059e1d8a1b}
+
+\item 
+\hypertarget{classbattleship_1_1network_1_1PlayerProxy_a2a863508e38e4cd0db67228ab5163248}{}boolean {\bfseries playing}\label{classbattleship_1_1network_1_1PlayerProxy_a2a863508e38e4cd0db67228ab5163248}
+
+\item 
+\hypertarget{classbattleship_1_1network_1_1PlayerProxy_aeeb9899b054ab7ab0d9a88b3243b162a}{}boolean {\bfseries has\+Opponent}\label{classbattleship_1_1network_1_1PlayerProxy_aeeb9899b054ab7ab0d9a88b3243b162a}
+
+\item 
+\hypertarget{classbattleship_1_1network_1_1PlayerProxy_a78dcfe37587e0169c01fbb16c26d1da7}{}String {\bfseries opponent} = \char`\"{}\char`\"{}\label{classbattleship_1_1network_1_1PlayerProxy_a78dcfe37587e0169c01fbb16c26d1da7}
+
+\item 
+\hypertarget{classbattleship_1_1network_1_1PlayerProxy_a3b657e6985afe4624e230be29d5ebaf8}{}boolean {\bfseries deployed}\label{classbattleship_1_1network_1_1PlayerProxy_a3b657e6985afe4624e230be29d5ebaf8}
+
+\item 
+\hypertarget{classbattleship_1_1network_1_1PlayerProxy_a54e7c20ba8031adb706784c02e37a7f5}{}boolean {\bfseries running} = true\label{classbattleship_1_1network_1_1PlayerProxy_a54e7c20ba8031adb706784c02e37a7f5}
+
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Client proxy class of the player. 
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+src/battleship/network/\hyperlink{PlayerProxy_8java}{Player\+Proxy.\+java}\end{DoxyCompactItemize}

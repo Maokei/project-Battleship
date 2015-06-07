@@ -1,0 +1,273 @@
+\hypertarget{classbattleship_1_1network_1_1AIPlayer}{}\section{battleship.\+network.\+A\+I\+Player Class Reference}
+\label{classbattleship_1_1network_1_1AIPlayer}\index{battleship.\+network.\+A\+I\+Player@{battleship.\+network.\+A\+I\+Player}}
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class {\bfseries Game\+Timer}
+\end{DoxyCompactItemize}
+\subsection*{Public Member Functions}
+\begin{Indent}{\bf A\+I\+Player}\par
+{\em sets the \hyperlink{classbattleship_1_1network_1_1PlayerProxy}{Player\+Proxy} instance
+
+\hyperlink{classbattleship_1_1network_1_1AIPlayer}{A\+I\+Player}
+
+One argument constructor 
+\begin{DoxyParams}{Parameters}
+{\em player} & instance of \hyperlink{classbattleship_1_1network_1_1PlayerProxy}{Player\+Proxy} used to send messages to player \\
+\hline
+\end{DoxyParams}
+}\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classbattleship_1_1network_1_1AIPlayer_a2f357b9bcb42d6691bf93a2459257d30}{}{\bfseries A\+I\+Player} (\hyperlink{classbattleship_1_1network_1_1PlayerProxy}{Player\+Proxy} player)\label{classbattleship_1_1network_1_1AIPlayer_a2f357b9bcb42d6691bf93a2459257d30}
+
+\end{DoxyCompactItemize}
+\end{Indent}
+\begin{Indent}{\bf init}\par
+{\em initiates the A\+I player Grid and ships at random
+
+init }\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classbattleship_1_1network_1_1AIPlayer_a8529d0c45bbf466c528176252e166c7e}{}void {\bfseries init} ()\label{classbattleship_1_1network_1_1AIPlayer_a8529d0c45bbf466c528176252e166c7e}
+
+\end{DoxyCompactItemize}
+\end{Indent}
+\begin{Indent}{\bf fire}\par
+{\em fires on enemy\+Grid at random or based on probable targets
+
+fire }\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classbattleship_1_1network_1_1AIPlayer_ab8232987875c1f713151b7579f4fd758}{}void {\bfseries fire} ()\label{classbattleship_1_1network_1_1AIPlayer_ab8232987875c1f713151b7579f4fd758}
+
+\end{DoxyCompactItemize}
+\end{Indent}
+\begin{Indent}{\bf check\+Hit}\par
+{\em checks whether ai\+Player\+Grid is occupied
+
+check\+Hit
+
+
+\begin{DoxyParams}{Parameters}
+{\em row} & the ai\+Player\+Grid row coordinate \\
+\hline
+{\em row} & the ai\+Player\+Grid col coordinate \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+true if occupied, false otherwise 
+\end{DoxyReturn}
+}\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classbattleship_1_1network_1_1AIPlayer_a9c6a0c8fcdd661c4b941215933a786b7}{}boolean {\bfseries check\+Hit} (int row, int col)\label{classbattleship_1_1network_1_1AIPlayer_a9c6a0c8fcdd661c4b941215933a786b7}
+
+\end{DoxyCompactItemize}
+\end{Indent}
+\begin{Indent}{\bf register\+Fire}\par
+{\em checks if A\+I enemy\+Grid is hit or missed, calls appropriate function based on check
+
+register\+Fire
+
+
+\begin{DoxyParams}{Parameters}
+{\em row} & the ai\+Player\+Grid row coordinate \\
+\hline
+{\em row} & the ai\+Player\+Grid col coordinate \\
+\hline
+\end{DoxyParams}
+}\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classbattleship_1_1network_1_1AIPlayer_ab64057dd37c05518f4c451e1ca496c03}{}void {\bfseries register\+Fire} (int row, int col)\label{classbattleship_1_1network_1_1AIPlayer_ab64057dd37c05518f4c451e1ca496c03}
+
+\end{DoxyCompactItemize}
+\end{Indent}
+\begin{Indent}{\bf register\+Player\+Hit}\par
+{\em register a hit on enemy\+Grid, starts a game\+Timer to fire again
+
+register\+Player\+Hit
+
+
+\begin{DoxyParams}{Parameters}
+{\em row} & the ai\+Player\+Grid row coordinate \\
+\hline
+{\em row} & the ai\+Player\+Grid col coordinate \\
+\hline
+\end{DoxyParams}
+}\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classbattleship_1_1network_1_1AIPlayer_a840767eda7e4d46aa5951a400a0d5a44}{}void {\bfseries register\+Player\+Hit} (int row, int col)\label{classbattleship_1_1network_1_1AIPlayer_a840767eda7e4d46aa5951a400a0d5a44}
+
+\end{DoxyCompactItemize}
+\end{Indent}
+\begin{Indent}{\bf register\+Enemy\+Hit}\par
+{\em registers a hit on ai\+Player\+Grid and checks whether a ship is sunk, send message to player
+
+register\+Enemy\+Hit
+
+
+\begin{DoxyParams}{Parameters}
+{\em ship} & the ship that was hit \\
+\hline
+{\em row} & the ai\+Player\+Grid row coordinate \\
+\hline
+{\em col} & the ai\+Player\+Grid col coordinate \\
+\hline
+\end{DoxyParams}
+}\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classbattleship_1_1network_1_1AIPlayer_a2b128cba18d7b9cf0b99f17760e2fb28}{}void {\bfseries register\+Enemy\+Hit} (\hyperlink{classbattleship_1_1ships_1_1Ship}{Ship} ship, int row, int col)\label{classbattleship_1_1network_1_1AIPlayer_a2b128cba18d7b9cf0b99f17760e2fb28}
+
+\end{DoxyCompactItemize}
+\end{Indent}
+\begin{Indent}{\bf sink\+Ship}\par
+{\em sends message about the ship sunk
+
+sink\+Ship
+
+
+\begin{DoxyParams}{Parameters}
+{\em ship} & the ship that was sunk \\
+\hline
+\end{DoxyParams}
+}\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classbattleship_1_1network_1_1AIPlayer_afe6d84713f22c192fa1dc057bc7354a8}{}void {\bfseries sink\+Ship} (\hyperlink{classbattleship_1_1ships_1_1Ship}{Ship} ship)\label{classbattleship_1_1network_1_1AIPlayer_afe6d84713f22c192fa1dc057bc7354a8}
+
+\end{DoxyCompactItemize}
+\end{Indent}
+\begin{Indent}{\bf register\+Player\+Miss}\par
+{\em register player miss and sends message to player
+
+register\+Player\+Miss
+
+
+\begin{DoxyParams}{Parameters}
+{\em row} & the enemy\+Grid row coordinate \\
+\hline
+{\em col} & the enemy\+Grid col coordinate \\
+\hline
+\end{DoxyParams}
+}\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classbattleship_1_1network_1_1AIPlayer_a85fc11efd77fb58bef0b3db6d94c46e2}{}void {\bfseries register\+Player\+Miss} (int row, int col)\label{classbattleship_1_1network_1_1AIPlayer_a85fc11efd77fb58bef0b3db6d94c46e2}
+
+\end{DoxyCompactItemize}
+\end{Indent}
+\begin{Indent}{\bf register\+Enemy\+Miss}\par
+{\em register Player miss and sends message to player
+
+register\+Enemy\+Miss
+
+
+\begin{DoxyParams}{Parameters}
+{\em row} & the enemy\+Grid row coordinate \\
+\hline
+{\em col} & the enemy\+Grid col coordinate \\
+\hline
+\end{DoxyParams}
+}\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classbattleship_1_1network_1_1AIPlayer_af84a005399ea08e7367b084f5184c4ef}{}void {\bfseries register\+Enemy\+Miss} (int row, int col)\label{classbattleship_1_1network_1_1AIPlayer_af84a005399ea08e7367b084f5184c4ef}
+
+\end{DoxyCompactItemize}
+\end{Indent}
+\begin{Indent}{\bf battle\+Lost}\par
+{\em sends message to player that A\+I lost the game, sets A\+I turn to false
+
+battle\+Lost }\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classbattleship_1_1network_1_1AIPlayer_ac40408f4175e7d5d2797a2ab143995ce}{}void {\bfseries battle\+Lost} ()\label{classbattleship_1_1network_1_1AIPlayer_ac40408f4175e7d5d2797a2ab143995ce}
+
+\end{DoxyCompactItemize}
+\end{Indent}
+\begin{Indent}{\bf get\+Name}\par
+{\em returns the name of the player as a String
+
+get\+Name
+
+\begin{DoxyReturn}{Returns}
+player name 
+\end{DoxyReturn}
+}\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classbattleship_1_1network_1_1AIPlayer_a67ca4a45ccd307e73528896f8ae0b5c1}{}String {\bfseries get\+Name} ()\label{classbattleship_1_1network_1_1AIPlayer_a67ca4a45ccd307e73528896f8ae0b5c1}
+
+\end{DoxyCompactItemize}
+\end{Indent}
+\begin{Indent}{\bf set\+Player\+Turn}\par
+{\em sets player turn to true and starts game timer
+
+set\+Player\+Turn
+
+
+\begin{DoxyParams}{Parameters}
+{\em player\+Turn} & sets the player\+Turn to this value \\
+\hline
+\end{DoxyParams}
+}\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classbattleship_1_1network_1_1AIPlayer_a30bc4f29a484c7206e17868e2e4080e5}{}void {\bfseries set\+Player\+Turn} (boolean player\+Turn)\label{classbattleship_1_1network_1_1AIPlayer_a30bc4f29a484c7206e17868e2e4080e5}
+
+\end{DoxyCompactItemize}
+\end{Indent}
+\begin{Indent}{\bf place\+Enemy\+Ship}\par
+{\em sets enemy\+Ship\+Down flag to true, adds ship to ships\+Down Vector
+
+place\+Enemy\+Ship
+
+
+\begin{DoxyParams}{Parameters}
+{\em ship} & the ship that was sunk \\
+\hline
+{\em row} & the ai\+Player\+Grid row coordinate \\
+\hline
+{\em col} & the ai\+Player\+Grid col coordinate \\
+\hline
+\end{DoxyParams}
+}\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classbattleship_1_1network_1_1AIPlayer_ac55abc5b74e837e313436b9e776e5370}{}void {\bfseries place\+Enemy\+Ship} (\hyperlink{classbattleship_1_1ships_1_1Ship}{Ship} ship, int row, int col)\label{classbattleship_1_1network_1_1AIPlayer_ac55abc5b74e837e313436b9e776e5370}
+
+\end{DoxyCompactItemize}
+\end{Indent}
+\begin{Indent}{\bf set\+Ship\+Positions}\par
+{\em adds positions of ship sunk
+
+set\+Ship\+Positions
+
+
+\begin{DoxyParams}{Parameters}
+{\em ship} & the ship that was sunk \\
+\hline
+{\em row} & the ai\+Player\+Grid row coordinate \\
+\hline
+{\em col} & the ai\+Player\+Grid col coordinate \\
+\hline
+\end{DoxyParams}
+}\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classbattleship_1_1network_1_1AIPlayer_afcbc31f68d86824a803c0f9b11181fa4}{}void {\bfseries set\+Ship\+Positions} (\hyperlink{classbattleship_1_1ships_1_1Ship}{Ship} ship, int row, int col)\label{classbattleship_1_1network_1_1AIPlayer_afcbc31f68d86824a803c0f9b11181fa4}
+
+\end{DoxyCompactItemize}
+\end{Indent}
+\begin{Indent}{\bf check\+Enemy\+Down\+Probable\+Targets}\par
+{\em removes grids and surrounding grids from valid, and probable targets, from ship that was sunk
+
+check\+Enemy\+Down\+Probable\+Targets }\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classbattleship_1_1network_1_1AIPlayer_a8f8b691382bca38dd28164c466cc53fe}{}void {\bfseries check\+Enemy\+Down\+Probable\+Targets} ()\label{classbattleship_1_1network_1_1AIPlayer_a8f8b691382bca38dd28164c466cc53fe}
+
+\end{DoxyCompactItemize}
+\end{Indent}
+\subsection*{Protected Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classbattleship_1_1network_1_1AIPlayer_acb6b06315b68f923dd798fd6a43a9671}{}boolean {\bfseries running} = true\label{classbattleship_1_1network_1_1AIPlayer_acb6b06315b68f923dd798fd6a43a9671}
+
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+\hyperlink{classbattleship_1_1network_1_1AIPlayer}{A\+I\+Player} 
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+src/battleship/network/\hyperlink{AIPlayer_8java}{A\+I\+Player.\+java}\end{DoxyCompactItemize}

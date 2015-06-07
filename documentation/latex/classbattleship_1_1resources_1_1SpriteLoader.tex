@@ -1,0 +1,119 @@
+\hypertarget{classbattleship_1_1resources_1_1SpriteLoader}{}\section{battleship.\+resources.\+Sprite\+Loader Class Reference}
+\label{classbattleship_1_1resources_1_1SpriteLoader}\index{battleship.\+resources.\+Sprite\+Loader@{battleship.\+resources.\+Sprite\+Loader}}
+
+
+Describes a class that reads images form file to create Buffered\+Images.  
+
+
+\subsection*{Public Member Functions}
+\begin{Indent}{\bf load\+Sprites}\par
+{\em loads all sprites in a spritesheet
+
+load\+Sprites
+
+
+\begin{DoxyParams}{Parameters}
+{\em String} & filename of spritesheet to load. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+true if the number of sprites specified is loaded, false otherwise 
+\end{DoxyReturn}
+}\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classbattleship_1_1resources_1_1SpriteLoader_a13b5ec4502866cca8078d3099d145f68}{}boolean {\bfseries load\+Sprites} (String filename)\label{classbattleship_1_1resources_1_1SpriteLoader_a13b5ec4502866cca8078d3099d145f68}
+
+\end{DoxyCompactItemize}
+\end{Indent}
+\begin{Indent}{\bf add\+Name}\par
+{\em adds a trivial name to be used when retrieving a Buffered\+Image
+
+add\+Name
+
+
+\begin{DoxyParams}{Parameters}
+{\em name} & the name to add \\
+\hline
+\end{DoxyParams}
+}\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classbattleship_1_1resources_1_1SpriteLoader_a395be774e574e354dbd05f1d99f0f03a}{}void {\bfseries add\+Name} (String name)\label{classbattleship_1_1resources_1_1SpriteLoader_a395be774e574e354dbd05f1d99f0f03a}
+
+\end{DoxyCompactItemize}
+\end{Indent}
+\begin{Indent}{\bf get\+Sprite}\par
+{\em returns a Buffered\+Image based on name
+
+get\+Sprite
+
+
+\begin{DoxyParams}{Parameters}
+{\em Request} & sprite by String name. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Buffered\+Image requested. 
+\end{DoxyReturn}
+}\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classbattleship_1_1resources_1_1SpriteLoader_ac5b13477f8f16546bd99ec601910ed3c}{}Buffered\+Image {\bfseries get\+Sprite} (String name)\label{classbattleship_1_1resources_1_1SpriteLoader_ac5b13477f8f16546bd99ec601910ed3c}
+
+\end{DoxyCompactItemize}
+\end{Indent}
+\subsection*{Static Public Member Functions}
+\begin{Indent}{\bf get\+Transparent\+Image}\par
+{\em creates a buffered\+Image with transparency, if original is not
+
+get\+Transparent\+Image
+
+
+\begin{DoxyParams}{Parameters}
+{\em Image} & img, creates a transparent image of image. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Buffered\+Image with transparency. 
+\end{DoxyReturn}
+}\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classbattleship_1_1resources_1_1SpriteLoader_a5ae9521449c9d830c53ee733f010972f}{}static Buffered\+Image {\bfseries get\+Transparent\+Image} (Image img)\label{classbattleship_1_1resources_1_1SpriteLoader_a5ae9521449c9d830c53ee733f010972f}
+
+\end{DoxyCompactItemize}
+\end{Indent}
+\begin{Indent}{\bf get\+Instance}\par
+{\em returns a new instance if null, otherwise returns instance
+
+get\+Instance
+
+
+\begin{DoxyParams}{Parameters}
+{\em width} & the width of the spritesheet \\
+\hline
+{\em height} & the height of the spritesheet \\
+\hline
+{\em rows} & the number of rows \\
+\hline
+{\em the} & number of columns \\
+\hline
+{\em num\+Of\+Sprites} & the number of images to load \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+\hyperlink{classbattleship_1_1resources_1_1SpriteLoader}{Sprite\+Loader} instance. 
+\end{DoxyReturn}
+}\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classbattleship_1_1resources_1_1SpriteLoader_addcd6e24da690a8bd04679a6741b0e0a}{}static \hyperlink{classbattleship_1_1resources_1_1SpriteLoader}{Sprite\+Loader} {\bfseries get\+Instance} (int width, int height, int rows, int cols, int num\+Of\+Sprites)\label{classbattleship_1_1resources_1_1SpriteLoader_addcd6e24da690a8bd04679a6741b0e0a}
+
+\end{DoxyCompactItemize}
+\end{Indent}
+
+
+\subsection{Detailed Description}
+Describes a class that reads images form file to create Buffered\+Images. 
+
+implements a Singleton design pattern that loads and stores Buffered\+Image objects to be used in-\/game 
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+src/battleship/resources/\hyperlink{SpriteLoader_8java}{Sprite\+Loader.\+java}\end{DoxyCompactItemize}
