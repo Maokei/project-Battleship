@@ -505,7 +505,7 @@ public class PlayerProxy extends Thread {
 		int row = Integer.parseInt(tokens[1]);
 		int col = Integer.parseInt(tokens[2]);
 
-		if (isOccupied(row, col) && !isHit(row, col)) {
+		if (isOccupied(row, col)) {
 			return true;
 		}
 		return false;
@@ -523,7 +523,7 @@ public class PlayerProxy extends Thread {
 		int row = Integer.parseInt(tokens[1]);
 		int col = Integer.parseInt(tokens[2]);
 
-		if (isEmpty(row, col) && !isMissed(row, col)) {
+		if (isEmpty(row, col)) {
 			return true;
 		}
 		return false;

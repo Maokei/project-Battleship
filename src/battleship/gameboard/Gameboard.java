@@ -6,6 +6,7 @@
 package battleship.gameboard;
 
 import static battleship.game.Constants.GRID_SIZE;
+
 import static battleship.game.Constants.SIZE;
 
 import java.awt.Dimension;
@@ -310,7 +311,7 @@ public class Gameboard extends JPanel {
 	 * @return If target has been false is returned, false for miss or empty.
 	 * */
 	public boolean checkHit(int row, int col) {
-		if (!(gridboard[row][col].isEmpty() || gridboard[row][col].isHit() || gridboard[row][col].isMiss())) {
+		if (gridboard[row][col].getOccupied()) {
 				return true;
 		}
 		return false;

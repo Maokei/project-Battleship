@@ -758,7 +758,7 @@ public class Player {
 		case "HIT":
 			row = Integer.parseInt(tokens[1]);
 			col = Integer.parseInt(tokens[2]);
-			screen.setMessage("Enemy Missed an illegal shot at " + row + ","
+			screen.setMessage("Enemy Hit an illegal shot at " + row + ","
 					+ col);
 			break;
 		case "MISS":

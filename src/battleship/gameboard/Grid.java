@@ -6,6 +6,10 @@
 package battleship.gameboard;
 
 import java.awt.AlphaComposite;
+import static battleship.game.Constants.empty;
+import static battleship.game.Constants.hit;
+import static battleship.game.Constants.miss;
+import static battleship.game.Constants.occupied;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -28,9 +32,7 @@ public class Grid extends JLabel {
 	private int col, row;
 	private int delay = 40;
 	private float dir = -0.02f, alpha = 1.0f;
-	private boolean empty = true;
-	private boolean hit = false;
-	private boolean miss = false;
+	private char flag = empty;
 
 	/**
 	 * Grid 
@@ -43,6 +45,7 @@ public class Grid extends JLabel {
 		setPreferredSize(new Dimension(32, 32));
 		this.row = row;
 		this.col = col;
+		flag = empty;
 	}
 
 	/**
@@ -52,7 +55,11 @@ public class Grid extends JLabel {
 	 * @brief Set occupied state.
 	 * */
 	public void setOccupied() {
-		empty = false;
+		flag = occupied;
+	}
+	
+	public boolean getOccupied() {
+		return flag == occupied;
 	}
 
 	/**
@@ -62,7 +69,7 @@ public class Grid extends JLabel {
 	 * @return return empty state.
 	 * */
 	public boolean isEmpty() {
-		return empty;
+		return flag == empty;
 	}
 
 	/**
@@ -72,7 +79,7 @@ public class Grid extends JLabel {
 	 * @brief sets the Grid value hit to true
 	 * */
 	public void setHit() {
-		hit = true;
+		flag = hit;
 	}
 	
 	/**
@@ -83,7 +90,7 @@ public class Grid extends JLabel {
 	 * @return true if hit false otherwise
 	 * */
 	public boolean isHit() {
-		return hit;
+		return flag == hit;
 	}
 	
 	/**
@@ -92,7 +99,7 @@ public class Grid extends JLabel {
 	 * @brief sets the Grid value miss to true
 	 * */
 	public void setMiss() {
-		miss = true;
+		flag = miss;
 	}
 	
 	/**
@@ -103,7 +110,7 @@ public class Grid extends JLabel {
 	 * @return true if miss false otherwise
 	 * */
 	public boolean isMiss() {
-		return miss;
+		return flag == miss;
 	}
 
 	/**
