@@ -348,7 +348,7 @@ public class Player {
 				"SHIP_DOWN " + ship.getType() + " " + ship.getAlignment() + " "
 						+ Integer.toString(row) + " " + Integer.toString(col)));
 
-		playerBoard.placeShip(ship, row, col);
+		playerBoard.placeShipDown(ship, row, col);
 		for (Grid pos : ship.getPosition()) {
 			playerBoard.fadeGridOut(pos.getRow(), pos.getCol());
 		}
@@ -405,7 +405,7 @@ public class Player {
 	 * */
 	public void placeEnemyShip(Ship ship, int row, int col) {
 		AudioLoader.getAudio("ship_down").playAudio();
-		enemyBoard.placeShip(ship, row, col);
+		enemyBoard.placeShipDown(ship, row, col);
 		for (Grid pos : ship.getPosition()) {
 			enemyBoard.fadeGridIn(pos.getRow(), pos.getCol());
 		}

@@ -382,4 +382,26 @@ public class Gameboard extends JPanel {
 		}
 		return false;
 	}
+
+	public void placeShipDown(Ship ship, int row, int col) {
+		int counter;
+		if (ship.getAlignment() == Alignment.HORIZONTAL) {
+			counter = col;
+			for (int i = 0; i < ship.getLength(); i++) {
+				gridboard[row][counter].setHit();
+				addShipSprite(ship, row, counter, i);
+				ship.addPositionGrid(row, counter);
+				counter++;
+			}
+		} else if (ship.getAlignment() == Alignment.VERTICAL) {
+			counter = row;
+			for (int i = 0; i < ship.getLength(); i++) {
+				gridboard[counter][col].setHit();
+				addShipSprite(ship, counter, col, i);
+				ship.addPositionGrid(counter, col);
+				counter++;
+			}
+		}
+		
+	}
 }
